@@ -1,0 +1,14 @@
+# Generated datasets and results
+/data/
+/results/
+/runs/
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+.venv/
+
+# OS / editor
+.DS_Store

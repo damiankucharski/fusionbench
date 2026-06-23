@@ -1,63 +1,68 @@
-# Manufactured Fusion Benchmark — Design
+# Design rationale
 
-Purpose: the manufactured-dataset benchmark requested in the IEEE TEVC R2 revision.
-Goal: **remove the validation-test reliability confound by construction**, so the benchmark
-isolates "can OKAPI recover the correct recombination when the validation signal is
-trustworthy?" — the clean complement to the STARCOP/MedMNIST fragility sweeps and the
-PMLB regime map.
+`fusionbench` is a controlled, **method-agnostic** benchmark for stacking /
+prediction-fusion methods. Goal: isolate individual *base-model pathologies* and
+evaluate fusion methods in a **guaranteed-reliable validation environment**, so a
+performance difference reflects a method's expressiveness on a pathology rather
+than validation-test (optimizer's-curse) luck. It is a scientific instrument, not
+an advocacy harness for any one method.
 
-Features are calibrated probability vectors `[N, C]` only (no logits, no hard decisions),
-matching OKAPI's `ValueNode.Value`. OKAPI operators available: Mean, Max, Min,
-WeightedMean, CloseThreshold(τ), FarThreshold(τ).
+## Two non-negotiable methodological choices
 
-## Core principle: reliability by construction
+1. **Generate in the natural causal direction.** Draw the label `y` from a prior,
+   then emit each base model as a *calibrated noisy observation of `y`* with a
+   pathology-specific error process. The generators describe conditions and error
+   structure only — they never apply any fusion operator (mean/max/min/far) to the
+   predictions. This avoids the circularity that would make the benchmark
+   "partial" toward operator-based methods like OKAPI.
 
-1. **One i.i.d. generative process, large N.** 100,000 rows from a fixed stochastic
-   process, stratified split into **Train = 50k** (OKAPI fitness/selection set) and
-   **Test = 50k**. No distribution shift — identical parameters across splits.
-2. **Tight estimates.** ~50k selection points ⇒ SE(acc/F1) ≈ √(0.25/50000) ≈ 0.0022.
-   Engineer every optimal-vs-suboptimal gap to exceed ~0.005 so the validation *ranking*
-   of fusion rules provably equals the test ranking. Nothing to overfit.
-3. **Known oracle.** Each dataset ships (a) the Bayes/oracle fusion rule, (b) the explicit
-   OKAPI tree achieving it, (c) the predicted baseline ranking. Report **regret =
-   oracle − method**, not a bare horse-race.
+2. **The ceiling is the analytic Bayes posterior** `P(y | predictions)`, derived
+   from the DGP, not from any method. For calibrated, conditionally-independent
+   models this is the **sum of logits** (binary) / **product of probabilities**
+   (multiclass); for correlated evidence it is the Gaussian linear discriminant;
+   for logical-gate DGPs it is a product / noisy-OR. Methods are scored by
+   **regret to this oracle**. Tests assert the oracle is never beaten.
 
-## Generative skeleton
+Calibration is exact in the binary construction `p = sigmoid(2 s t)`,
+`t | y ~ N((2y-1)s, 1)`, giving accuracy `Phi(s)` (so `s = Phi^{-1}(acc)`).
 
-Per row: draw latent label Y. Each base model m emits a calibrated proba
-`p_m = σ(α_m · s(Y) + ε_m)` where s(Y) is true signal, α_m competence, ε_m model noise.
-The engineered structure lives in error masks, competence regions, and calibration —
-that is the "fault" each dataset injects against naive aggregation.
+## Reliability by construction
 
-## Datasets
+100k rows per dataset, identical generative parameters across a 50k *fit* / 50k
+*test* split. At that N the fit ranking of methods provably transfers to test;
+`eval/reliability.py` verifies selection-top-1 agreement and fit->test rank
+correlation per scenario.
 
-| # | Task | Engineered structure | Oracle OKAPI tree | Baselines that fail | Proves |
-|---|------|----------------------|-------------------|---------------------|--------|
-| D1 Committee | Binary | 10 calibrated models, equal ~85% acc, independent error masks | Mean(all) | none — all tie | OKAPI must not lose trivial case; abstains to mean-like tree |
-| D2 Dead weight | Multiclass(5) | 3 strong + 4 mediocre + 3 ~random | WeightedMean(strong)/pruned subset | Simple Average | WeightedMean + implicit selection/pruning |
-| D3 Confidence routing | Binary | Specialists: confident⇒correct, unsure⇒~0.5 | Far(τ=0.5) | Mean, Top-K | FarThreshold per-instance routing |
-| D4 FP veto (STARCOP) | Binary, imbalanced | Trigger-happy detector + precise negative-veto | Min(detector, veto) | Mean, Top-K, Stacking-LR | Min as logical veto/AND gate |
-| D5 Detection rescue | Binary, imbalanced | Each model detects a different positive subset | Max(all) | Mean | Max as OR/union gate |
-| D6 Compound ★ | Binary | Consensus core + FP-veto + missed-detection rescue | Max(Min(Mean(A,B,C), veto), rescue) — depth≥2 | everything except OKAPI (maybe TPOT) | Stateful sequential alternating-tree composition |
-| D7 Per-label experts | Multilabel(6) | Each model expert on a different label, ~0.5 elsewhere | Far(τ=0.5) per-cell | Mean, Top-K | Element-wise threshold routing across label columns |
-| D0 Saturated control | Multiclass | All models near-identical ~98%, redundant | 1-node tree (abstain) | over-fusers add gap | Parsimony / constructive growth declines to fuse |
+## Scenario taxonomy (impartial by design)
 
-★ D6 is the centerpiece: only a compositional method solves it; instantiates the STARCOP
-"trust A unless B vetoes" narrative with a guaranteed-reliable signal, so the win is
-attributable to expressiveness, not luck.
+Different pathologies are won by different methods — that spread is the point:
 
-## Method comparison set (per dataset)
+- **Conditionally independent** (logit-sum optimal → logistic stacker near-oracle):
+  Committee, DeadWeight, Needle, MulticlassCommittee.
+- **Correlated / redundant** (Gaussian discriminant → weighted-linear wins):
+  CorrelatedRedundancy, Saturated.
+- **Logical gates** (product / noisy-OR optima): HardVeto, HardRescue, WeakestLink,
+  Compound, TwoPathways.
+- **Input-dependent mixture** (routing → tree AutoML): GatedExperts.
+- **Calibration** (judged by log-loss → logit recalibration): Miscalibration.
 
-best-single-by-val · Simple Average · Top-K average · Stacking-LR · NSGA-III · OKAPI ·
-TPOT · Oracle (upper bound). Report test metric and regret-to-oracle.
+## Key empirical finding (and what it means for OKAPI)
 
-Claim: when verification reliability holds, OKAPI recovers the oracle recombination on
-D2–D7 where consensus methods structurally cannot, ties on D1, abstains on D0.
+With *calibrated probabilistic* detectors, the Bayes optimum is almost always a
+smooth function of the evidence, which a **logistic stacker approximates very
+well on accuracy**. Hard operators (min/max) are *information-losing* — dominated
+by the noisiest input — so they are competitive only when base models are
+**competent / near-deterministic** (exactly OKAPI's "base-pool suitability"
+precondition). Genuinely nonlinear, non-linearly-separable structure
+(`TwoPathways` DNF, `GatedExperts` mixture) leaves headroom no linear method
+reaches — the regime for compositional / tree-based meta-learning.
 
-## Why each fault defeats the right baseline
+Consequently the benchmark positions OKAPI honestly: decisive over naive
+baselines (best-single, full-average, top-k), competitive with learned stackers
+on accuracy, and differentiated by **parsimony / auditability / inference cost**
+and by **auto-discovering** the right rule per pathology. OKAPI's actual
+placement must be measured by running OKAPI itself on the GPU host; the
+`op_min/op_max/op_far/op_close` baselines are crude lower bounds on its operator
+class, not substitutes for its evolutionary search.
 
-- Linear methods (Avg, Stacking-LR) cannot express Min/Max/routing ⇒ D3–D7 nonlinear.
-- Mean dilutes minorities ⇒ D5 (lone correct high-proba), D3 (confident specialist).
-- Top-K can't gate per-instance ⇒ loses D3/D4/D7.
-- TPOT can learn meta-representations ⇒ where it ties OKAPI, that is the honest
-  learned-meta vs symbolic-fusion taxonomy point; OKAPI wins on parsimony/auditability.
+See `README.md` for usage.

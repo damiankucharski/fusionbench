@@ -1,0 +1,72 @@
+"""Averaging / selection baselines (no learned meta-model)."""
+
+from __future__ import annotations
+
+import numpy as np
+
+from fusionbench.eval.metrics import normalize_proba, score
+from fusionbench.methods.base import Method
+
+
+def _model_val_f1(fit_preds: np.ndarray, fit_y: np.ndarray, n_classes: int) -> np.ndarray:
+    return np.array([
+        score(fit_y, fit_preds[:, m, :], n_classes)["macro_f1"]
+        for m in range(fit_preds.shape[1])
+    ])
+
+
+class SimpleAverage(Method):
+    name = "simple_average"
+
+    def predict(self, preds):
+        return normalize_proba(preds.mean(axis=1))
+
+
+class BestSingle(Method):
+    name = "best_single"
+
+    def fit(self, fit_preds, fit_y, *, task, n_classes):
+        super().fit(fit_preds, fit_y, task=task, n_classes=n_classes)
+        self.best = int(np.argmax(_model_val_f1(fit_preds, fit_y, n_classes)))
+        return self
+
+    def predict(self, preds):
+        return normalize_proba(preds[:, self.best, :])
+
+
+class TopK(Method):
+    def __init__(self, k: int = 5):
+        self.k = k
+        self.name = f"top_{k}"
+
+    def fit(self, fit_preds, fit_y, *, task, n_classes):
+        super().fit(fit_preds, fit_y, task=task, n_classes=n_classes)
+        f1 = _model_val_f1(fit_preds, fit_y, n_classes)
+        k = min(self.k, fit_preds.shape[1])
+        self.idx = np.argsort(-f1)[:k]
+        return self
+
+    def predict(self, preds):
+        return normalize_proba(preds[:, self.idx, :].mean(axis=1))
+
+
+class ValWeighted(Method):
+    """Weighted average with weights softmax(beta * (val_f1 - 0.5))."""
+
+    name = "val_weighted"
+
+    def __init__(self, beta: float = 8.0):
+        self.beta = beta
+
+    def fit(self, fit_preds, fit_y, *, task, n_classes):
+        super().fit(fit_preds, fit_y, task=task, n_classes=n_classes)
+        f1 = _model_val_f1(fit_preds, fit_y, n_classes)
+        z = self.beta * (f1 - 0.5)
+        z -= z.max()
+        w = np.exp(z)
+        self.w = w / w.sum()
+        return self
+
+    def predict(self, preds):
+        fused = np.tensordot(self.w, preds, axes=(0, 1))  # [N, C]
+        return normalize_proba(fused)
