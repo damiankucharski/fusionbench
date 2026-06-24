@@ -32,6 +32,33 @@ def _stratified_subsample(y: np.ndarray, n: int, rng: np.random.Generator) -> np
     return out
 
 
+def add_optimism(ds: Dataset, *, delta_max: float = 0.3, seed: int = 0) -> Dataset:
+    """Inject realistic validation optimism (a verification gap).
+
+    Each base model's *fit* predictions are blended toward the truth by a random
+    per-model amount ``delta_i ~ U(0, delta_max)`` (test predictions untouched).
+    This models trained predictors that look optimistically better on the
+    validation split than they generalise — heterogeneously, so selecting or
+    weighting by fit performance overrates the most-optimistic models. Flexible
+    meta-learners exploit this spurious fit signal and lose test performance;
+    parameter-light rules are less affected. This is the controlled analogue of
+    the optimizer's-curse / verification-gap OKAPI's reliability programme studies.
+    """
+    rng = np.random.default_rng(seed)
+    deltas = rng.uniform(0.0, delta_max, ds.n_models)
+    onehot = np.eye(ds.n_classes)[ds.fit_y]
+    fp = ds.fit_preds.copy()
+    for i, d in enumerate(deltas):
+        fp[:, i, :] = (1.0 - d) * fp[:, i, :] + d * onehot
+    return Dataset(
+        name=ds.name, task=ds.task, n_classes=ds.n_classes, model_ids=ds.model_ids,
+        fit_preds=fp, fit_y=ds.fit_y, test_preds=ds.test_preds, test_y=ds.test_y,
+        fit_oracle=None, test_oracle=ds.test_oracle,
+        oracle_description=ds.oracle_description, expected_winners=ds.expected_winners,
+        meta=ds.meta,
+    )
+
+
 def degrade_fit(ds: Dataset, *, fit_n: int | None = None, label_noise: float = 0.0,
                 seed: int = 0) -> Dataset:
     """Return a copy of ``ds`` with a degraded fit split (test left intact)."""

@@ -11,7 +11,7 @@ from __future__ import annotations
 
 import pandas as pd
 
-from fusionbench.eval.degrade import degrade_fit
+from fusionbench.eval.degrade import add_optimism, degrade_fit
 from fusionbench.eval.runner import evaluate_dataset
 
 
@@ -26,6 +26,18 @@ def reliability_sweep(scenario, methods, *, fit_ns, noises=(0.0,), n_per_split=5
             df["fit_n"] = fit_n
             df["label_noise"] = noise
             frames.append(df)
+    return pd.concat(frames, ignore_index=True)
+
+
+def optimism_sweep(scenario, methods, *, deltas, n_per_split=50_000, seed=0) -> pd.DataFrame:
+    """Vary validation optimism (verification gap); test split stays clean."""
+    ds = scenario.build(n_per_split=n_per_split, seed=seed)
+    frames = []
+    for delta in deltas:
+        dd = add_optimism(ds, delta_max=delta, seed=seed) if delta > 0 else ds
+        df = evaluate_dataset(dd, methods)
+        df["optimism"] = delta
+        frames.append(df)
     return pd.concat(frames, ignore_index=True)
 
 

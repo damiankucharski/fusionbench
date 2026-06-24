@@ -37,16 +37,22 @@ best_single, simple_average, top_k, val_weighted, **op_min/op_max/op_far/op_clos
 runs on the numpy/CPU backend)*, nsga3 *(extra: nsga)*, tpot *(extra: tpot)*, plus
 the analytic **oracle** ceiling.
 
-## Results (two regimes)
+## Results
 
-With *large, clean* validation, the logistic stackers are strong generalists and
-OKAPI matches them — and the analytic oracle — on its target gating / selection /
-compound structures (hardrescue, hardveto, compound, needle, correlated) using
-tiny 4–9 node trees. With *small / noisy* validation (reliability sweep), flexible
-stackers overfit and collapse while parsimonious methods (OKAPI, top-k) stay
-robust — e.g. on `needle` at `fit_n=60`, OKAPI 0.918 vs stacking 0.779. OKAPI's
-honest losses are wide-averaging (committee), recalibration (miscalibration), and
-mixture routing (gated_experts). See `DESIGN.md` and `docs/sample_run/`.
+A regularized logistic stacker is a very strong baseline on *calibrated,
+stationary* probabilities, so OKAPI **ties** it on the monotone structured
+pathologies (committee, correlated, deadweight, needle, hardveto, hardrescue,
+weakest_link, compound — regret within ~0.01) while being far more parsimonious,
+and it **dominates** the naive consensus baselines (avg / top-k / best-single)
+everywhere.
+
+OKAPI's *clear* wins are on **genuinely non-linearly-separable** structures that
+linear methods provably cannot represent: `gated_experts` (mixture routing, OKAPI
+0.786 vs stacking 0.73) and `parity` (XOR, 0.692 vs 0.49) — robust across seeds.
+Its honest losses are `miscalibration` (needs a logistic recalibration link) and
+`two_pathways` (a depth-3 DNF its GP search still under-realises). Making OKAPI
+competitive required adapter-level search fixes (coherent single-channel binary,
+population seeding, multi-restart). See `DESIGN.md` and `docs/sample_run/`.
 
 ## Usage
 

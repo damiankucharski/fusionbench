@@ -4,36 +4,36 @@
 
 | scenario                                                       |   best_single |   okapi |   op_close |   op_far |   op_max |   op_min |   simple_average |   stacking_logit |   stacking_lr |   top_5 |   val_weighted |
 |:---------------------------------------------------------------|--------------:|--------:|-----------:|---------:|---------:|---------:|-----------------:|-----------------:|--------------:|--------:|---------------:|
-| committee_k10_accuracy0.75                                     |        0.2313 |  0.1214 |     0.4401 |   0.0442 |   0.5877 |   0.5849 |           0.0017 |           0.0002 |        0.0018 |  0.0524 |         0.0015 |
-| compound_acc_core0.74_acc_rescue0.92_acc_safe0.92              |        0.0767 |  0.0128 |     0.3625 |   0.1561 |   0.5274 |   0.3827 |           0.1306 |           0.0548 |        0.0086 |  0.1306 |         0.0721 |
-| correlatedredundancy_n_block8_n_diverse2_accuracy0.75_corr0.85 |        0.1353 |  0.0045 |     0.2721 |   0.0208 |   0.2803 |   0.2778 |           0.079  |          -0.0006 |        0.001  |  0.0845 |         0.0789 |
-| deadweight_n_good4_n_bad6_accuracy0.82                         |        0.1499 |  0.0039 |     0.4705 |   0.0144 |   0.624  |   0.6258 |           0.0073 |           0.0003 |        0.0032 |  0.0047 |         0.0037 |
-| gatedexperts_acc_select0.92_acc_expert0.9                      |        0.1666 |  0.1299 |     0.2644 |   0.2257 |   0.3352 |   0.3358 |           0.1688 |           0.1321 |        0.1338 |  0.1688 |         0.1383 |
-| hardrescue_n_detect3_accuracy0.9                               |        0.3087 | -0.0003 |     0.3439 |   0.2818 |  -0.0003 |   0.5957 |           0.2831 |           0.0823 |        0.0016 |  0.2831 |         0.2828 |
-| hardveto_acc_detect0.9_acc_veto0.93                            |        0.2293 |  0.0047 |     0.2975 |   0.2013 |   0.4685 |   0.0469 |           0.2011 |           0.0501 |        0.0043 |  0.2011 |         0.2011 |
-| miscalibration_k6_accuracy0.78                                 |        0.3893 |  0.289  |     0.5711 |   0.2938 |   0.7715 |   0.7786 |           0.2731 |           0.0002 |        0.0109 |  0.2532 |         0.2726 |
-| multiclasscommittee_k8_n_classes5_accuracy0.6                  |        0.23   |  0.1122 |     0.2563 |   0.1107 |   0.1465 |   0.1107 |           0.0235 |           0.0045 |        0.0222 |  0.0905 |         0.022  |
-| needle_n_good3_n_bad97_accuracy0.8                             |        0.1317 |  0.0078 |     0.4225 |   0.0083 |   0.5931 |   0.5956 |           0.0847 |           0.001  |        0.0056 |  0.0063 |         0.0053 |
-| parity_accuracy0.92                                            |        0.3531 |  0.1962 |     0.3546 |   0.3525 |   0.1979 |   0.5755 |           0.3525 |           0.3706 |        0.2717 |  0.3525 |         0.3517 |
-| saturated_k6_n_classes4_accuracy0.95_corr0.95                  |        0.0062 |  0.001  |     0.0036 |   0.0009 |   0.0013 |   0.0009 |           0.0001 |           0      |        0.0012 |  0.0003 |         0.0001 |
-| twopathways_accuracy0.9                                        |        0.217  |  0.0915 |     0.2658 |   0.183  |   0.4422 |   0.368  |           0.0865 |           0.0967 |        0.0728 |  0.0865 |         0.0875 |
-| weakestlink_m4_accuracy0.9                                     |        0.362  |  0.0889 |     0.3808 |   0.3464 |   0.6762 |  -0.0115 |           0.3465 |           0.0958 |        0.0023 |  0.3465 |         0.3463 |
+| committee_k10_accuracy0.75                                     |        0.2448 |  0.0035 |     0.4298 |   0.0456 |   0.5955 |   0.5948 |           0.0016 |           0.0009 |        0.0026 |  0.0548 |         0.0016 |
+| compound_acc_core0.78_acc_rescue0.9_acc_safe0.9_rep3           |        0.1749 |  0.0571 |     0.4248 |   0.2208 |   0.6313 |   0.4938 |           0.1407 |           0.0687 |        0.0534 |  0.1487 |         0.1034 |
+| correlatedredundancy_n_block8_n_diverse2_accuracy0.75_corr0.85 |        0.1331 |  0.0044 |     0.2635 |   0.0202 |   0.2819 |   0.2766 |           0.0807 |           0      |        0.003  |  0.0408 |         0.0791 |
+| deadweight_n_good4_n_bad6_accuracy0.82                         |        0.1555 |  0.0016 |     0.4593 |   0.0136 |   0.6295 |   0.6255 |           0.0044 |          -0.0002 |        0.0014 |  0.0016 |         0.0026 |
+| gatedexperts_acc_select0.92_acc_expert0.9                      |        0.1719 |  0.0916 |     0.2608 |   0.225  |   0.3319 |   0.3403 |           0.1678 |           0.1352 |        0.1388 |  0.1678 |         0.1388 |
+| hardrescue_n_detect3_accuracy0.88_rep2                         |        0.3966 |  0.0378 |     0.4541 |   0.3613 |   0.1309 |   0.7418 |           0.358  |           0.0879 |        0.0426 |  0.3613 |         0.3574 |
+| hardveto_acc_detect0.85_acc_veto0.88_rep3                      |        0.297  |  0.0394 |     0.4207 |   0.2388 |   0.6296 |   0.2259 |           0.2319 |           0.0523 |        0.0321 |  0.2398 |         0.2365 |
+| miscalibration_k6_accuracy0.78                                 |        0.5308 |  0.299  |     0.5672 |   0.3034 |   0.7829 |   0.7818 |           0.2701 |          -0.0001 |        0.0131 |  0.2502 |         0.2688 |
+| multiclasscommittee_k8_n_classes5_accuracy0.6                  |        0.2215 |  0.0213 |     0.2465 |   0.0961 |   0.1429 |   0.0961 |           0.0214 |           0.0041 |        0.0258 |  0.0883 |         0.0228 |
+| needle_n_good3_n_bad97_accuracy0.8                             |        0.1274 |  0.0061 |     0.424  |   0.009  |   0.5913 |   0.5934 |           0.0827 |           0.0046 |        0.0059 |  0.0065 |         0.0046 |
+| parity_accuracy0.92_rep2                                       |        0.4514 |  0.254  |     0.4497 |   0.4574 |   0.316  |   0.7007 |           0.4546 |           0.4527 |        0.4806 |  0.4546 |         0.453  |
+| saturated_k6_n_classes4_accuracy0.95_corr0.95                  |        0.0075 |  0.001  |     0.0044 |   0.0025 |   0.0007 |   0.0025 |          -0      |           0.0022 |        0.0025 |  0.0012 |        -0      |
+| twopathways_accuracy0.9_rep3                                   |        0.3343 |  0.1782 |     0.4361 |   0.298  |   0.6417 |   0.5793 |           0.1755 |           0.1653 |        0.1528 |  0.2264 |         0.1744 |
+| weakestlink_m4_accuracy0.85_rep2                               |        0.4227 |  0.0453 |     0.4572 |   0.4    |   0.7745 |   0.1507 |           0.3974 |           0.1076 |        0.054  |  0.3968 |         0.3965 |
 
 ## Per-scenario winners
 
 | scenario                                                       | primary_metric   | best_method    |   best_regret | expected_winners                   | as_expected   |
 |:---------------------------------------------------------------|:-----------------|:---------------|--------------:|:-----------------------------------|:--------------|
-| committee_k10_accuracy0.75                                     | macro_f1         | stacking_logit |        0.0002 | simple_average, stacking_logit     | True          |
-| deadweight_n_good4_n_bad6_accuracy0.82                         | macro_f1         | stacking_logit |        0.0003 | okapi, stacking_logit, top_5       | True          |
-| needle_n_good3_n_bad97_accuracy0.8                             | macro_f1         | stacking_logit |        0.001  | okapi, stacking_logit, top_5       | True          |
-| saturated_k6_n_classes4_accuracy0.95_corr0.95                  | macro_f1         | stacking_logit |        0      | best_single, okapi, simple_average | False         |
-| correlatedredundancy_n_block8_n_diverse2_accuracy0.75_corr0.85 | macro_f1         | stacking_logit |       -0.0006 | okapi, stacking_logit              | True          |
-| hardveto_acc_detect0.9_acc_veto0.93                            | macro_f1         | stacking_lr    |        0.0043 | okapi, op_min                      | False         |
-| hardrescue_n_detect3_accuracy0.9                               | macro_f1         | op_max         |       -0.0003 | okapi, op_max                      | True          |
-| weakestlink_m4_accuracy0.9                                     | macro_f1         | op_min         |       -0.0115 | okapi, op_min                      | True          |
-| twopathways_accuracy0.9                                        | macro_f1         | stacking_lr    |        0.0728 | okapi                              | False         |
-| parity_accuracy0.92                                            | macro_f1         | okapi          |        0.1962 |                                    |               |
-| compound_acc_core0.74_acc_rescue0.92_acc_safe0.92              | macro_f1         | stacking_lr    |        0.0086 | okapi                              | False         |
-| gatedexperts_acc_select0.92_acc_expert0.9                      | macro_f1         | okapi          |        0.1299 |                                    |               |
-| miscalibration_k6_accuracy0.78                                 | log_loss         | stacking_logit |        0.0002 | stacking_logit, stacking_lr        | True          |
-| multiclasscommittee_k8_n_classes5_accuracy0.6                  | macro_f1         | stacking_logit |        0.0045 | simple_average, stacking_lr        | False         |
+| committee_k10_accuracy0.75                                     | macro_f1         | stacking_logit |        0.0009 | simple_average, stacking_logit     | True          |
+| deadweight_n_good4_n_bad6_accuracy0.82                         | macro_f1         | stacking_logit |       -0.0002 | okapi, stacking_logit, top_5       | True          |
+| needle_n_good3_n_bad97_accuracy0.8                             | macro_f1         | val_weighted   |        0.0046 | okapi, stacking_logit, top_5       | False         |
+| saturated_k6_n_classes4_accuracy0.95_corr0.95                  | macro_f1         | val_weighted   |       -0      | best_single, okapi, simple_average | False         |
+| correlatedredundancy_n_block8_n_diverse2_accuracy0.75_corr0.85 | macro_f1         | stacking_logit |        0      | okapi, stacking_logit              | True          |
+| hardveto_acc_detect0.85_acc_veto0.88_rep3                      | macro_f1         | stacking_lr    |        0.0321 | okapi                              | False         |
+| hardrescue_n_detect3_accuracy0.88_rep2                         | macro_f1         | okapi          |        0.0378 | okapi                              | True          |
+| weakestlink_m4_accuracy0.85_rep2                               | macro_f1         | okapi          |        0.0453 | okapi                              | True          |
+| twopathways_accuracy0.9_rep3                                   | macro_f1         | stacking_lr    |        0.1528 | okapi                              | False         |
+| parity_accuracy0.92_rep2                                       | macro_f1         | okapi          |        0.254  |                                    |               |
+| compound_acc_core0.78_acc_rescue0.9_acc_safe0.9_rep3           | macro_f1         | stacking_lr    |        0.0534 | okapi                              | False         |
+| gatedexperts_acc_select0.92_acc_expert0.9                      | macro_f1         | okapi          |        0.0916 |                                    |               |
+| miscalibration_k6_accuracy0.78                                 | log_loss         | stacking_logit |       -0.0001 | stacking_logit, stacking_lr        | True          |
+| multiclasscommittee_k8_n_classes5_accuracy0.6                  | macro_f1         | stacking_logit |        0.0041 | simple_average, stacking_lr        | False         |

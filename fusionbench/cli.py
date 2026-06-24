@@ -52,6 +52,7 @@ def cmd_run(args):
 def cmd_sweep(args):
     from fusionbench.eval.sweep import (
         competence_sweep,
+        optimism_sweep,
         reliability_sweep,
         save_sweep,
         sweep_table,
@@ -67,6 +68,12 @@ def cmd_sweep(args):
                                n_per_split=args.n, seed=args.seed)
         save_sweep(df, "fit_n", args.out, title=f"{sc.name}: reliability sweep")
         print(sweep_table(df[df.label_noise == noises[0]], "fit_n").round(3).to_string())
+    elif args.kind == "optimism":
+        sc = SCENARIOS[args.scenario]()
+        deltas = args.deltas or [0.0, 0.1, 0.2, 0.4]
+        df = optimism_sweep(sc, methods, deltas=deltas, n_per_split=args.n, seed=args.seed)
+        save_sweep(df, "optimism", args.out, title=f"{sc.name}: validation-optimism sweep")
+        print(sweep_table(df, "optimism").round(3).to_string())
     else:
         cls = SCENARIOS[args.scenario]
         accs = args.accuracies or [0.6, 0.7, 0.8, 0.9, 0.95]
@@ -99,7 +106,8 @@ def main(argv=None):
     r.set_defaults(func=cmd_run)
 
     s = sub.add_parser("sweep")
-    s.add_argument("--kind", choices=["reliability", "competence"], default="reliability")
+    s.add_argument("--kind", choices=["reliability", "competence", "optimism"],
+                   default="reliability")
     s.add_argument("--scenario", required=True)
     s.add_argument("--out", default="results/sweep")
     s.add_argument("--n", type=int, default=50_000)
@@ -108,6 +116,7 @@ def main(argv=None):
     s.add_argument("--fit-ns", type=int, nargs="*", dest="fit_ns")
     s.add_argument("--noises", type=float, nargs="*")
     s.add_argument("--accuracies", type=float, nargs="*")
+    s.add_argument("--deltas", type=float, nargs="*")
     s.set_defaults(func=cmd_sweep)
 
     args = p.parse_args(argv)

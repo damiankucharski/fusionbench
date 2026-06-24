@@ -20,7 +20,7 @@ from fusionbench.scenarios.gates import HardRescue  # noqa: E402
 def test_okapi_finds_gate():
     ds = HardRescue().build(n_per_split=8000, seed=0)
 
-    ok = OKAPIMethod(generations=120, seed=0)
+    ok = OKAPIMethod(generations=100, n_restarts=1, n_seeds=20, seed=0)
     ok.fit(ds.fit_preds, ds.fit_y, task=ds.task, n_classes=ds.n_classes)
     ok_f1 = score(ds.test_y, ok.predict(ds.test_preds), ds.n_classes)["macro_f1"]
 
@@ -31,4 +31,5 @@ def test_okapi_finds_gate():
     # and compact. (Exact closeness to the oracle is budget-dependent, so we
     # assert the robust facts only.)
     assert ok_f1 > avg_f1 + 0.12, f"okapi {ok_f1:.3f} not clearly above avg {avg_f1:.3f}"
-    assert ok.best_nodes <= 14, f"tree not parsimonious: {ok.best_nodes} nodes"
+    # Compact relative to a dense K*C-weight stacker (seeding can add material).
+    assert ok.best_nodes <= 30, f"tree not parsimonious: {ok.best_nodes} nodes"

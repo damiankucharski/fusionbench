@@ -47,13 +47,17 @@ def _macro_f1_objective(prediction, gt):
 class OKAPIMethod(Method):
     name = "okapi"
 
-    def __init__(self, population_size: int = 30, generations: int = 100,
-                 population_multiplier: int = 2, tournament_size: int = 5, seed: int = 0):
+    def __init__(self, population_size: int = 30, generations: int = 150,
+                 population_multiplier: int = 3, tournament_size: int = 5, seed: int = 0,
+                 minimize_node_count: bool = True, n_restarts: int = 2, n_seeds: int = 30):
         self.population_size = population_size
         self.generations = generations
         self.population_multiplier = population_multiplier
         self.tournament_size = tournament_size
         self.seed = seed
+        self.minimize_node_count = minimize_node_count
+        self.n_restarts = n_restarts
+        self.n_seeds = n_seeds
         self._tmp = tempfile.TemporaryDirectory(prefix="okapi_")
 
     @classmethod
@@ -82,6 +86,32 @@ class OKAPIMethod(Method):
             np.save(d / f"m{k}.npy", arr[:, k, :].astype(np.float64))
         return d
 
+    def _seed_population(self, okapi, rng):
+        """Inject diverse depth-1 compositions (min/max/mean over random model
+        subsets) into the initial population. Standard GP diverse-init: gives
+        crossover the building blocks to assemble deep structures reliably,
+        without supplying any specific target rule."""
+        from okapi.node import MaxNode, MeanNode, MinNode, ValueNode
+        from okapi.tree import Tree
+
+        ids, models = okapi.ids, okapi.models
+        k = len(ids)
+        if k < 2:
+            return
+        ops = [MinNode, MaxNode, MeanNode]
+        seeds = []
+        for _ in range(self.n_seeds):
+            size = int(rng.integers(2, min(4, k) + 1))
+            pick = rng.choice(k, size=size, replace=False)
+            root = ValueNode(None, models[pick[0]], ids[pick[0]])
+            children = [ValueNode(None, models[j], ids[j]) for j in pick[1:]]
+            op_cls = ops[int(rng.integers(len(ops)))]
+            root.add_child(op_cls(children))
+            seeds.append(Tree.create_tree_from_root(root))
+        okapi.population += seeds
+        okapi.population_size = min(40, okapi.population_size + len(seeds))
+        okapi.fitnesses = None
+
     def fit(self, fit_preds, fit_y, *, task, n_classes):
         super().fit(fit_preds, fit_y, task=task, n_classes=n_classes)
         from okapi.functions import scale_vector_to_sum_1
@@ -108,26 +138,33 @@ class OKAPIMethod(Method):
         # multiclass scenario cannot leave softmax-normalisation active for a
         # later binary one (which would normalise the single channel to 1.0).
         post = scale_vector_to_sum_1 if task == "multiclass" else _identity
-        self.okapi = Okapi(
-            preds_source=fit_dir,
-            gt_path=gt_path,
-            population_size=pop,
-            population_multiplier=self.population_multiplier,
-            tournament_size=tournament,
-            minimize_node_count=True,
-            objective_functions=(_macro_f1_objective,),
-            objectives=(maximize,),
-            allowed_ops=(MEAN, MIN, MAX, WEIGHTED_MEAN, FAR_THRESHOLD, CLOSE_THRESHOLD),
-            backend="numpy",
-            seed=self.seed,
-            postprocessing_function=post,
-        )
-        self.okapi.train(self.generations)
+        ops = (MEAN, MIN, MAX, WEIGHTED_MEAN, FAR_THRESHOLD, CLOSE_THRESHOLD)
 
-        trees = self.okapi.pareto_trees
-        fits = np.asarray(self.okapi.pareto_fitnesses)
-        best = int(np.argmax(fits[:, 0]))  # best macro-F1 on the Pareto front
-        self.best_tree = trees[best]
+        best_tree, best_fit = None, -np.inf
+        for r in range(self.n_restarts):
+            okapi = Okapi(
+                preds_source=fit_dir,
+                gt_path=gt_path,
+                population_size=pop,
+                population_multiplier=self.population_multiplier,
+                tournament_size=tournament,
+                minimize_node_count=self.minimize_node_count,
+                objective_functions=(_macro_f1_objective,),
+                objectives=(maximize,),
+                allowed_ops=ops,
+                backend="numpy",
+                seed=self.seed + r,
+                postprocessing_function=post,
+            )
+            self._seed_population(okapi, np.random.default_rng(self.seed + r))
+            okapi.train(self.generations)
+            trees = okapi.pareto_trees
+            fits = np.asarray(okapi.pareto_fitnesses)
+            i = int(np.argmax(fits[:, 0]))
+            if fits[i, 0] > best_fit:
+                best_fit, best_tree, self.okapi = fits[i, 0], trees[i], okapi
+
+        self.best_tree = best_tree
         self.best_nodes = self.best_tree.nodes_count
         return self
 

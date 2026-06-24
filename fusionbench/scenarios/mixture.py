@@ -19,7 +19,7 @@ from fusionbench.scenarios.base import Scenario
 
 class GatedExperts(Scenario):
     task = "binary"
-    expected_winners = ["tpot"]
+    expected_winners = ["okapi", "tpot"]
     oracle_description = "input-dependent mixture: (1-S)*E1 + S*E2"
 
     def __init__(self, acc_select: float = 0.92, acc_expert: float = 0.90, **kw):
