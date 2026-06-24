@@ -20,6 +20,7 @@ from fusionbench.scenarios.gates import (
     Compound,
     HardRescue,
     HardVeto,
+    Parity,
     TwoPathways,
     WeakestLink,
 )
@@ -35,6 +36,7 @@ SCENARIOS: dict[str, type[Scenario]] = {
     "hardrescue": HardRescue,
     "weakest_link": WeakestLink,
     "two_pathways": TwoPathways,
+    "parity": Parity,
     "compound": Compound,
     "gated_experts": GatedExperts,
     "miscalibration": Miscalibration,

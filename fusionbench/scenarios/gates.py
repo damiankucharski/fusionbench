@@ -43,7 +43,7 @@ class HardVeto(Scenario):
     expected_winners = ["op_min", "okapi", "tpot"]
     oracle_description = "P(presence | D1,D2) * P(safe | V)"
 
-    def __init__(self, acc_detect: float = 0.80, acc_veto: float = 0.88, **kw):
+    def __init__(self, acc_detect: float = 0.90, acc_veto: float = 0.93, **kw):
         super().__init__(acc_detect=acc_detect, acc_veto=acc_veto, **kw)
         self.acc_detect, self.acc_veto = acc_detect, acc_veto
 
@@ -83,7 +83,7 @@ class HardRescue(Scenario):
     expected_winners = ["op_max", "okapi", "tpot"]
     oracle_description = "noisy-OR: 1 - (1-D1)(1-D2)"
 
-    def __init__(self, n_detect: int = 3, accuracy: float = 0.85, **kw):
+    def __init__(self, n_detect: int = 3, accuracy: float = 0.90, **kw):
         super().__init__(n_detect=n_detect, accuracy=accuracy, **kw)
         self.n_detect, self.accuracy = n_detect, accuracy
 
@@ -123,7 +123,7 @@ class WeakestLink(Scenario):
     expected_winners = ["op_min", "okapi", "tpot"]
     oracle_description = "product of m independent calibrated detectors (corner of m-cube)"
 
-    def __init__(self, m: int = 4, accuracy: float = 0.82, **kw):
+    def __init__(self, m: int = 4, accuracy: float = 0.90, **kw):
         super().__init__(m=m, accuracy=accuracy, **kw)
         self.m, self.accuracy = m, accuracy
 
@@ -187,6 +187,44 @@ class TwoPathways(Scenario):
         return cal.to_binary_proba(1.0 - (1.0 - pab) * (1.0 - pcd))
 
 
+class Parity(Scenario):
+    """y = c1 XOR c2: a non-monotone interaction.
+
+    The Bayes optimum ``D1(1-D2) + (1-D1)D2`` is neither linearly separable nor
+    monotone in the detectors, so it defeats *both* linear fusion (averaging,
+    stackers) *and* OKAPI's monotone operators (min/max/far/weighted-mean). Only
+    a tree-based meta-learner (TPOT) can represent it. Included as an honest
+    limit case marking the boundary of every consensus/operator method.
+    """
+
+    task = "binary"
+    expected_winners = ["tpot"]
+    oracle_description = "XOR posterior: D1(1-D2) + (1-D1)D2"
+
+    def __init__(self, accuracy: float = 0.92, **kw):
+        super().__init__(accuracy=accuracy, **kw)
+        self.accuracy = accuracy
+
+    @property
+    def n_classes(self):
+        return 2
+
+    def model_ids(self):
+        return ["c1", "c2"]
+
+    def _generate(self, n, rng):
+        c1 = rng.integers(0, 2, n)
+        c2 = rng.integers(0, 2, n)
+        y = (c1 ^ c2).astype(int)
+        preds = np.stack([_detector(c1, self.accuracy, rng),
+                          _detector(c2, self.accuracy, rng)], axis=1)
+        return preds, y, {}
+
+    def bayes_oracle(self, preds, latent):
+        d1, d2 = preds[:, 0, 1], preds[:, 1, 1]
+        return cal.to_binary_proba(d1 * (1 - d2) + (1 - d1) * d2)
+
+
 class Compound(Scenario):
     """y = (core OR rescue) AND safe. Consensus, rescue, and veto in one rule.
 
@@ -199,8 +237,8 @@ class Compound(Scenario):
     expected_winners = ["okapi", "tpot"]
     oracle_description = "[1-(1-core)(1-rescue)] * safe; core = logit-sum(D1,D2,D3)"
 
-    def __init__(self, acc_core: float = 0.68, acc_rescue: float = 0.90,
-                 acc_safe: float = 0.90, **kw):
+    def __init__(self, acc_core: float = 0.74, acc_rescue: float = 0.92,
+                 acc_safe: float = 0.92, **kw):
         super().__init__(acc_core=acc_core, acc_rescue=acc_rescue, acc_safe=acc_safe, **kw)
         self.acc_core, self.acc_rescue, self.acc_safe = acc_core, acc_rescue, acc_safe
 

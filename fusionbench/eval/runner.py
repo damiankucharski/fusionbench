@@ -24,8 +24,9 @@ def evaluate_dataset(ds: Dataset, methods=None) -> pd.DataFrame:
     # Oracle ceiling (analytic Bayes posterior), if present.
     oracle_test = None
     if ds.test_oracle is not None:
-        o_fit = score(ds.fit_y, ds.fit_oracle, ds.n_classes)
         o_test = score(ds.test_y, ds.test_oracle, ds.n_classes)
+        # fit_oracle is absent on degraded datasets; only the test ceiling matters.
+        o_fit = score(ds.fit_y, ds.fit_oracle, ds.n_classes) if ds.fit_oracle is not None else o_test
         oracle_test = o_test[primary]
         rows.append(_row(ds, "oracle", primary, o_fit, o_test, 0.0, 0.0, oracle_test))
 

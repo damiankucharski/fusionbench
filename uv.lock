@@ -579,7 +579,7 @@ tpot = [
 requires-dist = [
     { name = "matplotlib", specifier = ">=3.8" },
     { name = "numpy", specifier = ">=1.26" },
-    { name = "okapi", marker = "extra == 'okapi'", git = "https://github.com/damiankucharski/OKAPI" },
+    { name = "okapi", marker = "extra == 'okapi'", git = "https://github.com/damiankucharski/OKAPI?rev=dev" },
     { name = "pandas", specifier = ">=2.2" },
     { name = "pymoo", marker = "extra == 'nsga'", specifier = ">=0.6" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
@@ -1457,7 +1457,7 @@ wheels = [
 [[package]]
 name = "okapi"
 version = "0.1.0"
-source = { git = "https://github.com/damiankucharski/OKAPI#c1a34c5deb13cb70cd37b59c50fb2d4a2d00bf7a" }
+source = { git = "https://github.com/damiankucharski/OKAPI?rev=dev#08ba400189319f7950aeefed43425372effc2ed5" }
 dependencies = [
     { name = "graphviz" },
     { name = "loguru" },

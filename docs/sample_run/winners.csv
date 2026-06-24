@@ -1,14 +1,15 @@
 scenario,primary_metric,best_method,best_regret,expected_winners,as_expected
-committee_k10_accuracy0.75,macro_f1,stacking_logit,-2.000325983220197e-05,"simple_average, stacking_logit",True
-deadweight_n_good4_n_bad6_accuracy0.82,macro_f1,stacking_logit,0.0004001618695135267,"stacking_logit, top_5",True
-needle_n_good3_n_bad97_accuracy0.8,macro_f1,stacking_logit,0.000160113760544367,"stacking_logit, top_5",True
-saturated_k6_n_classes4_accuracy0.95_corr0.95,macro_f1,val_weighted,-1.9212316905270477e-05,"best_single, simple_average",False
-correlatedredundancy_n_block8_n_diverse2_accuracy0.75_corr0.85,macro_f1,stacking_logit,-0.00012010439343335122,stacking_logit,True
-hardveto_acc_detect0.8_acc_veto0.88,macro_f1,stacking_lr,0.006274254853017025,op_min,False
-hardrescue_n_detect3_accuracy0.85,macro_f1,stacking_lr,-0.0003049381987291211,op_max,False
-weakestlink_m4_accuracy0.82,macro_f1,stacking_lr,0.006928671538087738,op_min,False
-twopathways_accuracy0.9,macro_f1,stacking_lr,0.07429623040629263,,
-compound_acc_core0.68_acc_rescue0.9_acc_safe0.9,macro_f1,stacking_lr,0.007775093186364046,,
-gatedexperts_acc_select0.92_acc_expert0.9,macro_f1,stacking_lr,0.13595686604169654,,
-miscalibration_k6_accuracy0.78,log_loss,stacking_logit,0.00012710233119704595,"stacking_logit, stacking_lr",True
-multiclasscommittee_k8_n_classes5_accuracy0.6,macro_f1,stacking_logit,0.0035887844906975497,"simple_average, stacking_lr",False
+committee_k10_accuracy0.75,macro_f1,stacking_logit,0.0002499012444175941,"simple_average, stacking_logit",True
+deadweight_n_good4_n_bad6_accuracy0.82,macro_f1,stacking_logit,0.0002504632512030369,"okapi, stacking_logit, top_5",True
+needle_n_good3_n_bad97_accuracy0.8,macro_f1,stacking_logit,0.0009999566599705467,"okapi, stacking_logit, top_5",True
+saturated_k6_n_classes4_accuracy0.95_corr0.95,macro_f1,stacking_logit,2.8285652058368527e-06,"best_single, okapi, simple_average",False
+correlatedredundancy_n_block8_n_diverse2_accuracy0.75_corr0.85,macro_f1,stacking_logit,-0.0006000639255361317,"okapi, stacking_logit",True
+hardveto_acc_detect0.9_acc_veto0.93,macro_f1,stacking_lr,0.004262014583568896,"okapi, op_min",False
+hardrescue_n_detect3_accuracy0.9,macro_f1,op_max,-0.0003392457481486977,"okapi, op_max",True
+weakestlink_m4_accuracy0.9,macro_f1,op_min,-0.01151939186046047,"okapi, op_min",True
+twopathways_accuracy0.9,macro_f1,stacking_lr,0.07283342297546125,okapi,False
+parity_accuracy0.92,macro_f1,okapi,0.19616953068933463,,
+compound_acc_core0.74_acc_rescue0.92_acc_safe0.92,macro_f1,stacking_lr,0.008628228781849656,okapi,False
+gatedexperts_acc_select0.92_acc_expert0.9,macro_f1,okapi,0.12990562383338222,,
+miscalibration_k6_accuracy0.78,log_loss,stacking_logit,0.00023173108493654282,"stacking_logit, stacking_lr",True
+multiclasscommittee_k8_n_classes5_accuracy0.6,macro_f1,stacking_logit,0.004492086902803005,"simple_average, stacking_lr",False

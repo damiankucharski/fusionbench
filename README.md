@@ -32,18 +32,32 @@ Miscalibration (judged by log-loss → logit recalibration).
 
 ## Methods under test
 
-best_single, simple_average, top_k, val_weighted, stacking_lr, **stacking_logit**,
-nsga3 *(extra: nsga)*, tpot *(extra: tpot)*, okapi *(extra: okapi)*, plus the
-analytic **oracle** ceiling.
+best_single, simple_average, top_k, val_weighted, **op_min/op_max/op_far/op_close**
+(fixed operator atoms), stacking_lr, **stacking_logit**, **okapi** *(extra: okapi —
+runs on the numpy/CPU backend)*, nsga3 *(extra: nsga)*, tpot *(extra: tpot)*, plus
+the analytic **oracle** ceiling.
+
+## Results (two regimes)
+
+With *large, clean* validation, the logistic stackers are strong generalists and
+OKAPI matches them — and the analytic oracle — on its target gating / selection /
+compound structures (hardrescue, hardveto, compound, needle, correlated) using
+tiny 4–9 node trees. With *small / noisy* validation (reliability sweep), flexible
+stackers overfit and collapse while parsimonious methods (OKAPI, top-k) stay
+robust — e.g. on `needle` at `fit_n=60`, OKAPI 0.918 vs stacking 0.779. OKAPI's
+honest losses are wide-averaging (committee), recalibration (miscalibration), and
+mixture routing (gated_experts). See `DESIGN.md` and `docs/sample_run/`.
 
 ## Usage
 
 ```bash
 uv sync                       # core deps; add --extra nsga/tpot/okapi as needed
 uv run fusionbench list
-uv run fusionbench run --n 50000 --out results
+uv run fusionbench run --n 20000 --out results
+uv run fusionbench sweep --kind reliability --scenario needle --out results/sweep
 uv run fusionbench generate --n 50000 --out data   # write datasets to disk
 ```
 
-Heavy methods (nsga3 / tpot / okapi) are optional and skipped when their
-dependencies are absent; the full comparison is intended to run on the GPU host.
+OKAPI runs on the numpy/CPU backend (no GPU needed); these datasets are small
+enough to evaluate every method locally. Optional methods (okapi / nsga3 / tpot)
+are skipped when their dependencies are absent.

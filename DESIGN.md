@@ -46,23 +46,46 @@ Different pathologies are won by different methods — that spread is the point:
 - **Input-dependent mixture** (routing → tree AutoML): GatedExperts.
 - **Calibration** (judged by log-loss → logit recalibration): Miscalibration.
 
-## Key empirical finding (and what it means for OKAPI)
+## Two-regime finding (measured, with real OKAPI)
 
-With *calibrated probabilistic* detectors, the Bayes optimum is almost always a
-smooth function of the evidence, which a **logistic stacker approximates very
-well on accuracy**. Hard operators (min/max) are *information-losing* — dominated
-by the noisiest input — so they are competitive only when base models are
-**competent / near-deterministic** (exactly OKAPI's "base-pool suitability"
-precondition). Genuinely nonlinear, non-linearly-separable structure
-(`TwoPathways` DNF, `GatedExperts` mixture) leaves headroom no linear method
-reaches — the regime for compositional / tree-based meta-learning.
+OKAPI is wrapped as a real method (`methods/okapi.py`, numpy backend — runs on
+CPU). Binary predictions are fed as a single positive-probability channel so its
+min/max/threshold operators are coherent. Results at 20k fit / 20k test
+(regret-to-oracle; OKAPI 100 generations):
 
-Consequently the benchmark positions OKAPI honestly: decisive over naive
-baselines (best-single, full-average, top-k), competitive with learned stackers
-on accuracy, and differentiated by **parsimony / auditability / inference cost**
-and by **auto-discovering** the right rule per pathology. OKAPI's actual
-placement must be measured by running OKAPI itself on the GPU host; the
-`op_min/op_max/op_far/op_close` baselines are crude lower bounds on its operator
-class, not substitutes for its evolutionary search.
+**Large, clean validation (the main suite).** OKAPI matches the analytic oracle
+and ties/beats the strong logistic stackers on its target structures — with tiny
+(4–9 node) auditable trees:
 
-See `README.md` for usage.
+| scenario | okapi | stacking_lr | stacking_logit | simple_avg |
+|---|---|---|---|---|
+| hardrescue (OR/max) | **0.000** | 0.002 | 0.082 | 0.283 |
+| hardveto (AND/veto) | 0.005 | 0.004 | 0.050 | 0.201 |
+| compound (depth-2) | 0.013 | 0.009 | 0.055 | 0.131 |
+| needle (3/100) | 0.008 | 0.006 | 0.001 | 0.085 |
+| correlated | 0.004 | 0.001 | -0.001 | 0.079 |
+
+It loses where its representation lacks the primitive: `committee` /
+`multiclass_committee` (constructive growth struggles to assemble a wide equal
+mean), `miscalibration` (no logistic recalibration → stacker wins on log-loss),
+`gated_experts` (input-dependent mixture, ties stackers — needs routing/trees).
+
+**Small / noisy validation (reliability sweep).** This is OKAPI's protective
+regime. On `needle` as the fit split shrinks, the flexible stacker overfits the
+200-feature space and collapses, while parsimonious methods (OKAPI, top-k) hold:
+
+| fit_n | okapi | top_5 | stacking_logit | stacking_lr |
+|---|---|---|---|---|
+| 50000 | 0.907 | 0.924 | **0.929** | 0.926 |
+| 60 | **0.918** | 0.923 | 0.779 | 0.787 |
+
+So OKAPI is *not* an ideal-case-only method: at competent base accuracy it
+discovers the correct gating/selection/compound rule and matches the oracle, and
+under weak validation its parsimony keeps it robust where stackers fail. Its
+honest losses are wide-averaging, recalibration, and mixture routing.
+
+The `op_min/op_max/op_far/op_close` baselines are the operator *atoms* (one op
+over all models, no selection/composition) — useful references but weak lower
+bounds; OKAPI's value is searching, composing and pruning them automatically.
+
+See `README.md` for usage and `docs/sample_run/` for full tables.

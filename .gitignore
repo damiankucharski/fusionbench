@@ -12,3 +12,6 @@ __pycache__/
 
 # OS / editor
 .DS_Store
+
+# Vendored OKAPI source (cloned for local testing)
+/vendor/

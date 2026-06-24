@@ -6,12 +6,11 @@
    (essentially) the test-best method, and the fit->test ranking is preserved.
 """
 
-import numpy as np
 import pytest
 
 from fusionbench.eval.reliability import reliability_summary
-from fusionbench.eval.report import add_primary
 from fusionbench.eval.runner import evaluate_dataset
+from fusionbench.methods.registry import CORE, default_methods
 from fusionbench.scenarios.registry import default_suite
 
 N = 8000
@@ -19,9 +18,12 @@ N = 8000
 
 @pytest.fixture(scope="module")
 def results():
+    # Core methods only: fast, deterministic, and independent of the optional
+    # okapi/nsga3/tpot dependencies (those are validated separately).
+    methods = default_methods(CORE)
     frames = []
     for sc in default_suite():
-        frames.append(evaluate_dataset(sc.build(n_per_split=N, seed=0)))
+        frames.append(evaluate_dataset(sc.build(n_per_split=N, seed=0), methods))
     import pandas as pd
     return pd.concat(frames, ignore_index=True)
 
