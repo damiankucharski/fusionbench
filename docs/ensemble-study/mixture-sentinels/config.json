@@ -1,0 +1,17 @@
+{
+  "primary": {
+    "reduction": 0.03042793458367082,
+    "lo": 0.01485673327871012,
+    "hi": 0.04599913588863152
+  },
+  "source_draws": 0,
+  "target_fit": 1024,
+  "target_density_validation": 1024,
+  "test": 8192,
+  "sentinel_replications": 16,
+  "development_banks": 4,
+  "confirmation_banks": 24,
+  "compute_seconds": 13.771647083000062,
+  "compute_started_utc": "2026-11-20T23:52:52.254365+00:00",
+  "compute_ended_utc": "2026-11-20T23:53:06.026013+00:00"
+}
