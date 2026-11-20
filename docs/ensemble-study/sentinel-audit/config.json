@@ -1,0 +1,54 @@
+{
+  "data_seeds": [
+    900,
+    901,
+    902,
+    903,
+    904,
+    905,
+    906,
+    907
+  ],
+  "gp_seeds": [
+    110,
+    111,
+    112,
+    113,
+    114,
+    115,
+    116,
+    117,
+    118,
+    119,
+    120,
+    121
+  ],
+  "generations": 10,
+  "fit_n": 384,
+  "select_n": 256,
+  "recalibrate_n": 2048,
+  "clean_reference_batches": 399,
+  "test_batches": 512,
+  "budgets": [
+    4,
+    8,
+    16,
+    32,
+    64
+  ],
+  "scenarios": [
+    "clean",
+    "independent_05",
+    "independent_15",
+    "independent_40",
+    "full",
+    "high_confidence",
+    "low_confidence"
+  ],
+  "alpha": 0.05,
+  "primary_lr_minus_brier": {
+    "mean": 0.1259765625,
+    "lo": 0.08992677773039993,
+    "hi": 0.16202634726960008
+  }
+}
