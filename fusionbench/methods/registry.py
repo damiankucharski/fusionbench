@@ -14,6 +14,7 @@ from fusionbench.methods.base import Method
 from fusionbench.methods.nsga3 import NSGA3
 from fusionbench.methods.okapi import OKAPIMethod
 from fusionbench.methods.operators import OpClose, OpFar, OpMax, OpMin
+from fusionbench.methods.shrinkage import ShrunkOKAPI
 from fusionbench.methods.stacking import StackingLogit, StackingLR
 from fusionbench.methods.tpot import TPOTMethod
 
@@ -31,6 +32,7 @@ FACTORIES: dict[str, Callable[[], Method]] = {
     "nsga3": NSGA3,
     "tpot": TPOTMethod,
     "okapi": OKAPIMethod,
+    "okapi_shrunk": ShrunkOKAPI,
 }
 
 # Methods considered "core" (no heavy optional deps) — always run locally.

@@ -1,0 +1,34 @@
+Crossed-seed stability of actual OKAPI genetic programming
+
+Reproduction
+
+Use both patched repositories and their declared dependencies, including OKAPI's CPU torch dependency. From the FusionBench checkout, point PYTHONPATH at the modified OKAPI checkout or install the latter in editable mode. The executable is also available as fusionbench stability. Paths below are relative to the directory where the raw CSVs will be written.
+
+    export OKAPI_LOG_LEVEL=ERROR OMP_NUM_THREADS=1 OPENBLAS_NUM_THREADS=1
+    python -m fusionbench.eval.search_stability --out study
+    python -m fusionbench.eval.search_stability --out study/confirmation --data-seeds 10 11 12 13 14 15 16 17 --search-seeds 10 11 12 13
+    python -m fusionbench.eval.search_stability --out study/all_fit --data-seeds 10 11 12 13 14 15 16 17 --search-seeds 10 11 12 13 --full-fit
+    python -m fusionbench.eval.search_stability --out study/long_search --data-seeds 10 11 12 13 14 15 16 17 --search-seeds 10 --generations 48
+    python -m fusionbench.eval.search_stability --out study/long_archive --data-seeds 10 11 12 13 14 15 16 17 --search-seeds 10 --generations 48 --checkpoints 12 24 36
+    cp summarize.py study/
+    python study/summarize.py
+
+Design
+
+Four fixed synthetic scenario families use the existing generators, with independently drawn fit (96 rows), selection (384), IID test (4,096) and shifted test (4,096). Each data seed fixes all four datasets across search seeds. The shift reduces detector accuracy from .90 to .78 on TwoPathways, .92 to .78 on Parity and .85 to .76 on WeakestLink. The latter has four required conditions and a true positive rate of 1/16. On CorrelatedRedundancy the redundant block's correlation falls from .85 to .10; simple averaging can improve under this shift. All model IDs retain their meaning. Labels originate from the generator. Oracle accuracy measures the Bayes decision on each finite test sample. Signed accuracy regret equals the oracle accuracy minus the measured accuracy. Bayes targets maximize accuracy under the generator; they do not maximize macro-F1.
+
+The GP uses the original six operator types, native NumPy-backend selection, crossover, mutation, Pareto survival and parsimony. Each restart begins with single providers and eight seeded random shallow compositions. Population size after seeding is 14–18 depending on the number of experts. The offspring multiplier is 2, tournament size 3 and the short run uses 12 generations. Fit fitness is binary macro-F1. This matches the incumbent winner criterion at a reduced computational budget. Counts record each objective call, including reevaluated survivors. A fitness call on 480 records costs more than on 96. Measured wall times depend on concurrent work in the shared environment and are unsuitable for a speedup claim.
+
+Compare the Pareto fit winner, any final-pool candidate with highest validation score, or the smallest candidate within one paired between-group standard error of the validation winner. Group score is binary macro-F1 averaged across eight disjoint equal-sized held-out groups (both classes included). Compactness is a heuristic. Some rare-event groups contain few true positives. Every strategy sees an unchanged candidate pool on a given run. The best single is chosen on fit. The logit stacker uses FusionBench's regularized implementation. The simple mean has no free parameters. For pooled restarts each fit champion competes on fit score as in the original adapter. Independent selection reuses the union of final populations. The additional fallback policy also offers the average, single and stacker to the same selection metric. No test labels enter these policies. Pool-F1 gaps in search.csv describe hindsight potential only. Do not use them to select a winner.
+
+Protocols and result files
+
+The root contains exploratory 4 data x 4 search seeds x 4 scenarios. confirmation/ contains 8 fresh data x 4 fresh search seeds x 4 scenarios. The same fresh seeds are used for all_fit/, fitting directly on 96 + 384 rows, and for the one-start controls in long_search/ and long_archive/. The two long protocols use search seed 10, 48 generations each. The latter retains archived populations from generations 12, 24, 36 and the final one. They reproduce the same evolutionary trajectory with the same number of fitness calls. The four-start condition uses 4 x 12 generations. Each directory has candidate-level fit/selection/test scores and complexities in candidates.csv, each search outcome in search.csv, and aggregated restart decisions in restarts.csv. Search durations and counts are repeated on every method and domain row, so use one row per run for totaling. The archive contains repeated survivors by design. Ties go to the smaller, then the earlier tree for independent selection.
+
+paired_intervals.csv compares methods within data seed, averaging the four preselected scenarios equally, then reports two-sided 95% t intervals with seven degrees of freedom across the eight data seeds. Intervals quantify variation within these four simulator configurations. They are pointwise, do not correct for multiple comparisons and cannot be generalized to unseen tasks without new experiments. seed_dispersions.csv includes the average of the four-restart within-data standard deviations and the standard deviation across data seeds of their four-restart mean. These statistics describe two distinct sources of variation without assuming a noise-free variance-components model. Single search SD ranges from 1.17 to 3.70 macro-F1 percentage points depending on scenario.
+
+Interpretation
+
+At four short restarts, held-out selection improves over selecting on the 96 GP training labels by 1.39 macro-F1 points IID (95% paired interval 0.78 to 2.01) and 0.97 points under shift (0.56 to 1.38). However fitting GP on all 480 available labels almost closes the gap. The held-out advantage then has an interval spanning zero in both domains. Compact selection gives mean IID F1 .7652 at 6.13 nodes; selection by validation score gives .7766 at 12.09 nodes. Some operating conditions prefer the smaller candidate despite the score tradeoff.
+
+Matched on total generations, four short restarts reach .7766 vs .7633 IID for a single long run evaluated only at the end. They consume 1,771 vs 2,011 actual objective calls on average. Keeping equally many snapshots in the one long run raises it to .7698, cutting the gap to 0.68 points (−0.17 to 1.53). A roughly one-point difference observed between restart policies cannot be assigned solely to independent initialization. Under the specified shifts the residual estimate is 0.52 points (0.03 to 1.01). The archive comparison was introduced after examining the final-only results, evaluated on the same cases, and needs a new independent benchmark for confirmation.

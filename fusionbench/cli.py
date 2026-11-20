@@ -4,7 +4,7 @@ from __future__ import annotations
 
 import argparse
 
-from fusionbench.methods.registry import FACTORIES, default_methods
+from fusionbench.methods.registry import CORE, FACTORIES, default_methods
 from fusionbench.scenarios.registry import SCENARIOS, default_suite
 
 
@@ -49,6 +49,25 @@ def cmd_run(args):
     print(f"\nreport written to {out}")
 
 
+def cmd_evaluate(args):
+    from fusionbench.eval.report import save_report
+    from fusionbench.eval.runner import evaluate_dataset
+    from fusionbench.store import load_dataset
+
+    ds = load_dataset(args.dataset)
+    methods = default_methods(args.methods)
+    available = {m.name for m in methods}
+    missing = set(args.methods) - available
+    if missing:
+        raise SystemExit(f"Install optional dependencies for: {', '.join(sorted(missing))}")
+    results = evaluate_dataset(ds, methods)
+    out = save_report(results, args.out)
+    print(f"report written to {out}")
+    failures = results.loc[results.error != "", ["method", "error"]]
+    if not failures.empty:
+        raise SystemExit(failures.to_string(index=False))
+
+
 def cmd_sweep(args):
     from fusionbench.eval.sweep import (
         competence_sweep,
@@ -84,6 +103,19 @@ def cmd_sweep(args):
     print(f"\nsweep written to {args.out}")
 
 
+def cmd_stability(args):
+    from fusionbench.eval.search_stability import run_search_stability
+
+    options = {key: value for key, value in vars(args).items() if key not in {"cmd", "func"}}
+    run_search_stability(**options)
+
+
+def cmd_transfer(args):
+    from fusionbench.eval.mechanism_transfer import run_study
+
+    run_study(args.out, args.seeds, rescue_rates=args.rescue_rates, followup=args.followup)
+
+
 def main(argv=None):
     p = argparse.ArgumentParser(prog="fusionbench")
     sub = p.add_subparsers(dest="cmd", required=True)
@@ -105,6 +137,12 @@ def main(argv=None):
     r.add_argument("--methods", nargs="*")
     r.set_defaults(func=cmd_run)
 
+    e = sub.add_parser("evaluate", help="compare fusion methods on saved predictions")
+    e.add_argument("--dataset", required=True, help="directory containing meta.json")
+    e.add_argument("--methods", nargs="+", choices=FACTORIES, default=CORE)
+    e.add_argument("--out", default="results/external")
+    e.set_defaults(func=cmd_evaluate)
+
     s = sub.add_parser("sweep")
     s.add_argument("--kind", choices=["reliability", "competence", "optimism"],
                    default="reliability")
@@ -118,6 +156,19 @@ def main(argv=None):
     s.add_argument("--accuracies", type=float, nargs="*")
     s.add_argument("--deltas", type=float, nargs="*")
     s.set_defaults(func=cmd_sweep)
+
+    from fusionbench.eval.search_stability import add_stability_arguments
+
+    stability = sub.add_parser("stability", help="cross dataset seeds with GP seeds and compare tree selectors")
+    add_stability_arguments(stability)
+    stability.set_defaults(func=cmd_stability)
+
+    transfer = sub.add_parser("transfer", help="train one MLP using symmetries of a fitted ensemble")
+    transfer.add_argument("--out", required=True)
+    transfer.add_argument("--seeds", nargs="+", type=int, default=list(range(8)))
+    transfer.add_argument("--rescue-rates", nargs="+", type=float, default=[0., 0.03125, 0.5])
+    transfer.add_argument("--followup", action="store_true", help="compare algebraic training losses")
+    transfer.set_defaults(func=cmd_transfer)
 
     args = p.parse_args(argv)
     args.func(args)

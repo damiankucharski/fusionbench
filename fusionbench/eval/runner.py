@@ -41,7 +41,8 @@ def evaluate_dataset(ds: Dataset, methods=None) -> pd.DataFrame:
             fit_m = score(ds.fit_y, fit_pred, ds.n_classes)
             test_m = score(ds.test_y, test_pred, ds.n_classes)
         except Exception as exc:  # noqa: BLE001 — record and continue
-            rows.append({"scenario": ds.name, "method": method.name, "error": repr(exc)})
+            rows.append({"scenario": ds.name, "method": method.name, "primary_metric": primary,
+                         "regret": np.nan, "error": repr(exc)})
             continue
         rows.append(_row(ds, method.name, primary, fit_m, test_m,
                          ft.elapsed, pt.elapsed, oracle_test))

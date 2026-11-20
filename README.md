@@ -67,3 +67,38 @@ uv run fusionbench generate --n 50000 --out data   # write datasets to disk
 OKAPI runs on the numpy/CPU backend (no GPU needed); these datasets are small
 enough to evaluate every method locally. Optional methods (okapi / nsga3 / tpot)
 are skipped when their dependencies are absent.
+
+## Evaluate predictions from your own models
+
+Export probabilities on two disjoint sets. Each base model should have been trained on other examples, or its fit-set probabilities should be out-of-fold predictions. Keep all arrays in identical sample order within each split and identical class order across models. The CLI fits fusion methods on the fit split and scores them on the test split.
+
+```text
+my_data/
+  meta.json
+  gt/fit.npy       gt/test.npy
+  fit/model1.npy   fit/model2.npy
+  test/model1.npy  test/model2.npy
+```
+
+Each prediction file has shape `[N, C]`, finite probabilities and rows summing to one. Each ground truth file contains `N` integer labels from 0 to `C-1`. Example metadata follows.
+
+```json
+{"name":"my_data","task":"binary","n_classes":2,"model_ids":["model1","model2"],"knobs":{"primary_metric":"log_loss"}}
+```
+
+```sh
+fusionbench evaluate --dataset my_data --methods simple_average stacking_lr --out results/my_data
+```
+
+The report ranks methods on the held-out primary metric. It includes regret when `oracle/test.npy` contains an analytic posterior for the test set. The default primary metric is macro-F1. For a reproducible multiclass example using the bundled scikit-learn digits data, run the following from the repository root.
+
+```sh
+python examples/digits_predictions.py --out data
+fusionbench evaluate --dataset data/digits --methods best_single simple_average stacking_lr okapi --out results/digits
+```
+
+The example needs the OKAPI extra for its last method. The 898 base-training, 449 fusion-fit and 450 test images come from a single stratified split.
+
+## Research branch
+
+Crossed-seed experiments measure when a reliable validation ranking breaks under a controlled distribution shift. Single-model experiments test which ensemble mechanisms can be recovered from raw inputs and labels. [Results, controls, data and reproduction commands](docs/ensemble-study/README.md)
