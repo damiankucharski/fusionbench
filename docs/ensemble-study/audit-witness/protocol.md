@@ -1,0 +1,11 @@
+# Protokół badania informacji utraconej przy wyborze drzewa
+
+Czy po ustaleniu wyniku zwycięskiego drzewa inne wyniki nadal pomagają przewidzieć etykietę na jego najtrudniejszych przykładach? Badamy tę możliwość na tych samych audytowanych przypadkach i porównujemy użyteczność predykcyjną z mocą wykrywania lokalnych zmian.
+
+- Dwie rozłączne serie obejmują cztery banki (dane 1200–1203, seedy GP 240–247) i osiem banków (dane 1300–1307, seedy GP 260–267). W każdym tworzymy osiem kandydatów OKAPI, po 10 pokoleń ze wspólnymi 384 przykładami. Wybieramy drzewo o najniższym Brier na 256 osobnych przykładach.
+- Wszystkie odczyty diagnostyczne uczymy na tych samych 2048 dalszych źródłowych etykietach. Porównamy logistyczną rekalibrację zwycięskiego drzewa, logistyczne złożenie logitów wszystkich ośmiu drzew, logistyczny model na siedmiu oryginalnych logitach ekspertów oraz model używający zarówno zwycięskiego drzewa, jak i tych siedmiu logitów. Dodatkowa kontrola zachowuje wynik zwycięzcy i permutuje wektor oryginalnych logitów razem wewnątrz 40 przedziałów kwantylowych wyniku zwycięzcy. Uczymy tę kontrolę i oceniamy na niezależnych permutacjach. Wszystkie modele mają ten sam ustalony parametr regularyzacji C=1.
+- Granice trzech warstw pewności definiuje wyłącznie zwycięskie drzewo po rekalibracji na źródle, przy kwantylach 15 i 85%. Każda metoda dostaje identyczne 16 rekordów z partii 256, w przydziale 8/4/4 z poprzedniego badania. Potwierdzenie nie posłuży do zmiany przydziału.
+- Pierwotny wynik to różnica czystej trafności w najniższej warstwie między modelem zwycięzca + oryginalne logity a samym zwycięzcą, z przedziałem t na ośmiu sparowanych średnich niezależnych banków. Drugi wynik to moc licznika błędów ze wszystkich 16 etykiet przy odwróceniu etykiet całej dolnej warstwy. Podamy także globalną trafność i Brier, skuteczność po permutacji, wyniki dla samej dolnej podpróby oraz dla 15% niezależnych odwróceń. Kontrolą jest niezmienione wdrożenie.
+- Każdy monitor ma własny próg 5% skalibrowany losową rangą na 399 niezależnych czystych partiach. Test ma 512 osobnych partii na bank. Modele nie dostają żadnych etykiet testowych przed oceną. Wynik ujemny pozostaje częścią raportu, także gdy oryginalne logity nie pomogą albo przewyższą bank drzew GP.
+
+Użyjemy wyłącznie istniejącego środowiska CPU. Zapiszemy osobno czas obliczeń i czas cyklu.
