@@ -1,0 +1,2522 @@
+[
+  {
+    "phase": "development",
+    "seed": 2600,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.457349702418009,
+      0.34687495095630977,
+      0.6248496659676921,
+      0.4092047649879098,
+      0.5129523124703705,
+      0.38475961318354185
+    ],
+    "intercept": -0.036972941242542134
+  },
+  {
+    "phase": "development",
+    "seed": 2600,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.4526293414380447,
+      0.34575142173013673,
+      0.6228257756298521,
+      0.4078793492676749,
+      0.5112908580669762,
+      0.38351337539879843
+    ],
+    "intercept": -0.03106240685513284
+  },
+  {
+    "phase": "development",
+    "seed": 2600,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.897199348403639,
+      0.2927209683715992,
+      1.8535055137783403,
+      1.3227381321269462,
+      1.7325341444421216,
+      0.9225046951468502
+    ],
+    "intercept": -1.9409916754117278
+  },
+  {
+    "phase": "development",
+    "seed": 2600,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.888774128797277,
+      0.2918697192356789,
+      1.8481154148872199,
+      1.318891534808395,
+      1.7274958371366587,
+      0.9198219993051593
+    ],
+    "intercept": -1.9220015224239582
+  },
+  {
+    "phase": "development",
+    "seed": 2600,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.0003076529404126276,
+      -0.00026341033513948653,
+      -4.419473918927818e-05,
+      6.734968715620845e-05,
+      0.00016884419279718726,
+      0.00029536264933930116
+    ],
+    "intercept": 0.2993633992593008
+  },
+  {
+    "phase": "development",
+    "seed": 2600,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.00023503943924045752,
+      -0.00020123915402300093,
+      -3.376371668183757e-05,
+      5.1453539436302244e-05,
+      0.00012899289810405375,
+      0.0002256499527687785
+    ],
+    "intercept": 0.2994364757940339
+  },
+  {
+    "phase": "development",
+    "seed": 2600,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.06267101562169115
+    ],
+    "intercept": -0.00013290396471373226
+  },
+  {
+    "phase": "development",
+    "seed": 2600,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.2398675960654628
+    ],
+    "intercept": -0.06754686118813452
+  },
+  {
+    "phase": "development",
+    "seed": 2601,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.3947672976095054,
+      0.5355115322054137,
+      0.6673109773801896,
+      0.6354617046863149,
+      0.8259332236507196,
+      0.4586702926177803
+    ],
+    "intercept": -0.6143748007358141
+  },
+  {
+    "phase": "development",
+    "seed": 2601,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.3372063123610283,
+      0.5134113786826752,
+      0.6397715610266796,
+      0.6092366835862991,
+      0.7918475878717135,
+      0.4397413185928398
+    ],
+    "intercept": -0.5329005219320606
+  },
+  {
+    "phase": "development",
+    "seed": 2601,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.2113480231370937,
+      0.5886365288472826,
+      2.075334683654756,
+      1.1805016971837314,
+      1.8042863649976102,
+      1.061528974962616
+    ],
+    "intercept": -1.806763252043873
+  },
+  {
+    "phase": "development",
+    "seed": 2601,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.211207707832917,
+      0.5885991784561497,
+      2.0752029987212404,
+      1.1804267915365927,
+      1.8041718787261243,
+      1.061461618418347
+    ],
+    "intercept": -1.8063537465420945
+  },
+  {
+    "phase": "development",
+    "seed": 2601,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      4.904488004786761e-07,
+      -4.356226443112345e-07,
+      -3.443086870589721e-07,
+      9.047112098966264e-08,
+      6.933671083192511e-07,
+      1.2738919642939622e-06
+    ],
+    "intercept": 0.5379066966583681
+  },
+  {
+    "phase": "development",
+    "seed": 2601,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      3.7226491723363304e-07,
+      -3.3065026863424623e-07,
+      -2.6134031679908635e-07,
+      6.867021457567022e-08,
+      5.262858201285619e-07,
+      9.669210857272768e-07
+    ],
+    "intercept": 0.5379068170014187
+  },
+  {
+    "phase": "development",
+    "seed": 2601,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.06005265274438889
+    ],
+    "intercept": -1.629635547108297e-05
+  },
+  {
+    "phase": "development",
+    "seed": 2601,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.089191072703993
+    ],
+    "intercept": -0.029376866948862095
+  },
+  {
+    "phase": "development",
+    "seed": 2602,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.4875654544513182,
+      0.5335620819703625,
+      0.727089817239879,
+      0.13395878581890322,
+      0.7099055353882971,
+      0.5369953365089581
+    ],
+    "intercept": -0.0018558915077471205
+  },
+  {
+    "phase": "development",
+    "seed": 2602,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.4647075985406326,
+      0.5253633938705623,
+      0.7159173916992995,
+      0.13190038185754727,
+      0.6989971626578422,
+      0.528743893192698
+    ],
+    "intercept": 0.03051047182410782
+  },
+  {
+    "phase": "development",
+    "seed": 2602,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.5202928358936996,
+      0.718362252402631,
+      1.9241922252436898,
+      1.0181986031001498,
+      1.677000885884704,
+      1.3126696617574278
+    ],
+    "intercept": -1.6113172560316276
+  },
+  {
+    "phase": "development",
+    "seed": 2602,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.518888673342156,
+      0.7179620221758491,
+      1.9231201757476235,
+      1.0176313212636323,
+      1.6760665572188722,
+      1.3119383175440344
+    ],
+    "intercept": -1.6077055181720814
+  },
+  {
+    "phase": "development",
+    "seed": 2602,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      -0.0037792352846683576,
+      0.00010265173269253817,
+      -0.002307347854383327,
+      0.006496495154185529,
+      0.0014420791398389473,
+      0.007659705861415336
+    ],
+    "intercept": 2.0702903275473323
+  },
+  {
+    "phase": "development",
+    "seed": 2602,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      -0.005372672489376537,
+      0.00014593273471525374,
+      -0.003280193850580841,
+      0.009235609366227509,
+      0.0020501022927966214,
+      0.01088926405966114
+    ],
+    "intercept": 2.0728851854821286
+  },
+  {
+    "phase": "development",
+    "seed": 2602,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.062199971306459864
+    ],
+    "intercept": -0.00010685688279282778
+  },
+  {
+    "phase": "development",
+    "seed": 2602,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.9984093827495747
+    ],
+    "intercept": -0.0499850505303391
+  },
+  {
+    "phase": "development",
+    "seed": 2603,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.7908143134161966,
+      0.6305021596646798,
+      0.8143335691121516,
+      0.39991429377447846,
+      0.622701230718771,
+      0.2004674219348615
+    ],
+    "intercept": 0.40569968660579936
+  },
+  {
+    "phase": "development",
+    "seed": 2603,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.7170664649501327,
+      0.571704314279697,
+      0.7383924187853674,
+      0.36262005385450435,
+      0.5646308654970039,
+      0.18177271597870615
+    ],
+    "intercept": 0.539245180127778
+  },
+  {
+    "phase": "development",
+    "seed": 2603,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.9592461502052443,
+      0.5643052599748907,
+      1.9686997892328544,
+      1.0557784512282322,
+      1.068239169833892,
+      1.1161855767788575
+    ],
+    "intercept": -1.6317246102288352
+  },
+  {
+    "phase": "development",
+    "seed": 2603,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.9575758613698255,
+      0.563824180670279,
+      1.9670214410182096,
+      1.0548783831282758,
+      1.0673284787710342,
+      1.1152340106334022
+    ],
+    "intercept": -1.6271386188821926
+  },
+  {
+    "phase": "development",
+    "seed": 2603,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      9.953028599580206e-10,
+      2.7386239061213254e-10,
+      1.146768581286297e-09,
+      4.5451169082275235e-10,
+      1.307991357218687e-09,
+      -5.833832274791353e-10
+    ],
+    "intercept": 2.017419374605315
+  },
+  {
+    "phase": "development",
+    "seed": 2603,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      7.630679121028315e-10,
+      2.099618226925462e-10,
+      8.791919949111458e-10,
+      3.4846005260858336e-10,
+      1.0027965096408035e-09,
+      -4.472618730012398e-10
+    ],
+    "intercept": 2.0174193749812805
+  },
+  {
+    "phase": "development",
+    "seed": 2603,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.06016513375761406
+    ],
+    "intercept": 1.9608270866045907e-05
+  },
+  {
+    "phase": "development",
+    "seed": 2603,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.0324734912152906
+    ],
+    "intercept": 0.02951983996164787
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2700,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.0409169499920075,
+      0.5001370499419712,
+      0.7626323210376529,
+      0.10932800308620291,
+      1.1113491967868436,
+      0.260718446973206
+    ],
+    "intercept": -0.7104437228032683
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2700,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.0313322074263658,
+      0.49778826016331224,
+      0.7590507767374736,
+      0.10881456682668193,
+      1.1061299761067587,
+      0.2594940369371378
+    ],
+    "intercept": -0.6978033580120349
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2700,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      3.1360845916686713,
+      0.1476096869665038,
+      2.027671678542105,
+      1.0580785515629754,
+      1.7741927899969483,
+      0.78761170972441
+    ],
+    "intercept": -2.497676742682339
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2700,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      3.1325526890999136,
+      0.14744344686126065,
+      2.0253880861833196,
+      1.05688692861883,
+      1.7721946691270238,
+      0.7867246903410205
+    ],
+    "intercept": -2.490040741977233
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2700,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.285583956455323e-05,
+      1.7005056358140272e-05,
+      -8.215573068569208e-08,
+      1.6692157835786773e-06,
+      2.328915858685317e-06,
+      -8.022159471448793e-06
+    ],
+    "intercept": 0.6931237242366524
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2700,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.778351848710574e-05,
+      1.3231180297059188e-05,
+      -6.392318039091224e-08,
+      1.2987722311578252e-06,
+      1.8120672448224567e-06,
+      -6.241828083544683e-06
+    ],
+    "intercept": 0.6931252526929969
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2700,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.06202742457200512
+    ],
+    "intercept": -9.779643531117191e-05
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2700,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.189108602504745
+    ],
+    "intercept": -0.058408123345170725
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2701,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.656928993333151,
+      0.6875796591786661,
+      0.5863011165662014,
+      0.35075803910405795,
+      0.3861990207440599,
+      0.4021679990010319
+    ],
+    "intercept": -0.813130179803145
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2701,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.6385982406491246,
+      0.6799729043124743,
+      0.5798148152163023,
+      0.346877571749922,
+      0.38192646666083907,
+      0.39771877869238864
+    ],
+    "intercept": -0.7929340330041708
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2701,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.208223703109055,
+      0.4459126586189336,
+      1.858329579643181,
+      1.172851798752585,
+      1.5911384990041801,
+      0.713200954683269
+    ],
+    "intercept": -1.5009497263988596
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2701,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.2073818189894023,
+      0.44574265465352253,
+      1.8576210924731629,
+      1.1724046496242222,
+      1.5905318782924323,
+      0.7129290471962589
+    ],
+    "intercept": -1.4988008954894516
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2701,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.0026647252944884798,
+      -0.0025186027745469903,
+      -0.0025973966251816648,
+      0.0007323053913650952,
+      0.0033774292746851283,
+      0.004136457431890152
+    ],
+    "intercept": 0.9539040912629256
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2701,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.0022856979475920657,
+      -0.002160359720564294,
+      -0.0022279460278849983,
+      0.0006281431461306072,
+      0.0028970277638945313,
+      0.0035480926615319977
+    ],
+    "intercept": 0.9541513408232144
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2701,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.0594550722523943
+    ],
+    "intercept": 2.70914407273263e-06
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2701,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.0313550205517736
+    ],
+    "intercept": 0.015258600815222356
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2702,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.2482346088677223,
+      0.695596109496666,
+      0.6458869335464129,
+      0.15994215706454923,
+      0.7009097141167827,
+      0.4259528216362326
+    ],
+    "intercept": -0.09095537354670924
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2702,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.243787584990248,
+      0.6931179435445012,
+      0.6435858640237253,
+      0.15937233903000045,
+      0.6984126176475075,
+      0.4244353005267898
+    ],
+    "intercept": -0.08480230688326484
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2702,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.314156411036956,
+      0.9056103926979931,
+      1.6082131702554123,
+      1.1489717115337228,
+      1.8443495027850512,
+      1.2230511960400048
+    ],
+    "intercept": -1.1777002572868795
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2702,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.3140123428696717,
+      0.9055540137821483,
+      1.6081130506943764,
+      1.1489001821211242,
+      1.8442346825199076,
+      1.222975054797577
+    ],
+    "intercept": -1.1773455973035016
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2702,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.3027204498358475,
+      0.030390007856948384,
+      -0.08532853909461859,
+      -0.2352923490767899,
+      0.2467669307903233,
+      -0.007922122460206984
+    ],
+    "intercept": -0.1524007628487577
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2702,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.26182577148691905,
+      0.0262846043501644,
+      -0.07380145804624345,
+      -0.2035065713446386,
+      0.21343104526526302,
+      -0.0068519184154301515
+    ],
+    "intercept": -0.11378350361208261
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2702,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.06260902797006583
+    ],
+    "intercept": 0.0001293698822966657
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2702,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.0754115147279708
+    ],
+    "intercept": 0.05761407483025237
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2703,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.1958202104343383,
+      0.4111497981528902,
+      0.7384100608773508,
+      0.312715458811801,
+      0.7941935980806124,
+      0.5787197545335667
+    ],
+    "intercept": -0.7149500087672891
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2703,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.1929807560266412,
+      0.4101735300681044,
+      0.7366567189587657,
+      0.3119729213633366,
+      0.792307799117727,
+      0.5773455944855151
+    ],
+    "intercept": -0.7105966398382659
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2703,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.78580176297359,
+      0.41506141809270014,
+      1.79759146228623,
+      1.2303704562932238,
+      1.5080684361981567,
+      0.9236345881072462
+    ],
+    "intercept": -1.8589962639732631
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2703,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.785649418836156,
+      0.41503872007643705,
+      1.7974931593400472,
+      1.2303031723506335,
+      1.5079859660855457,
+      0.9235840782983646
+    ],
+    "intercept": -1.8586754149511195
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2703,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.0018740280366868103,
+      0.001366624901261885,
+      0.00421780720394987,
+      -0.0015702569172117075,
+      0.0046648457783904605,
+      0.002648758506594299
+    ],
+    "intercept": 0.947161228633411
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2703,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.0015641911490450373,
+      0.0011406780116255206,
+      0.003520468513619873,
+      -0.0013106431299564271,
+      0.00389359728636648,
+      0.00221083384605999
+    ],
+    "intercept": 0.9482462876321721
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2703,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.06075585310173923
+    ],
+    "intercept": -4.0025823594677656e-05
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2703,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.1223554482685987
+    ],
+    "intercept": -0.04087279536561393
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2704,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.2914758011469421,
+      0.39646893793949994,
+      0.6909467162968563,
+      0.3597173907915835,
+      0.4443118572084982,
+      0.3020589566415673
+    ],
+    "intercept": 0.7146008212517806
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2704,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.2717588781213782,
+      0.36964973888208214,
+      0.6442075250282017,
+      0.3353842554942941,
+      0.41425631690822856,
+      0.2816261345210047
+    ],
+    "intercept": 0.7761451767374948
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2704,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.6662801259665956,
+      0.743704194994966,
+      1.8836652299646364,
+      1.2114402839066734,
+      1.5368894459057723,
+      1.2154645911739932
+    ],
+    "intercept": -1.1673000924451058
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2704,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.6661806049665964,
+      0.7436597761820448,
+      1.883552725323653,
+      1.2113679288766788,
+      1.536797652952018,
+      1.2153919957864037
+    ],
+    "intercept": -1.1669922997576672
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2704,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.005541375505409904,
+      -0.0037146531106011294,
+      0.009084233938653359,
+      0.001920255493809011,
+      0.009363448209812402,
+      -0.005610977337980437
+    ],
+    "intercept": 1.2294790850894954
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2704,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.004446521039483236,
+      -0.0029807189919803063,
+      0.007289388220735976,
+      0.0015408550541411896,
+      0.00751343586558888,
+      -0.004502371073939359
+    ],
+    "intercept": 1.2321279905419638
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2704,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.0592730923101988
+    ],
+    "intercept": -4.384852229318871e-07
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2704,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.0740482131540563
+    ],
+    "intercept": -0.008682943780444133
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2705,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.128272866281212,
+      0.6375873428377999,
+      0.11978345338984185,
+      0.4567321937787773,
+      0.9453500054998998,
+      0.3018991648858598
+    ],
+    "intercept": -0.42986713941409005
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2705,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.0776805620399288,
+      0.6089976161916557,
+      0.11441230506386586,
+      0.4362521000044709,
+      0.9029600513300463,
+      0.2883618594550936
+    ],
+    "intercept": -0.37491000676057973
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2705,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.0993202251327965,
+      0.8014949290336663,
+      1.8030776726571727,
+      1.031824517794037,
+      1.7973280287563411,
+      1.0768812721988061
+    ],
+    "intercept": -1.4780611622885127
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2705,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.0970186927750936,
+      0.8006162319718166,
+      1.801100917726033,
+      1.0306933051820955,
+      1.7953575772901635,
+      1.0757006628455033
+    ],
+    "intercept": -1.4715696627332653
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2705,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.5993583845940362e-07,
+      -1.831213550098396e-07,
+      -5.366797919563772e-08,
+      -3.537902437478923e-08,
+      -1.0767851316176688e-07,
+      3.05954014382115e-07
+    ],
+    "intercept": 1.2004666426412844
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2705,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.2358838963841343e-07,
+      -1.4150470333648744e-07,
+      -4.147124989512794e-08,
+      -2.733869213789897e-08,
+      -8.320720464225025e-08,
+      2.364220821619756e-07
+    ],
+    "intercept": 1.200466675557055
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2705,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.059830793245158956
+    ],
+    "intercept": 1.0395608154070571e-05
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2705,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.0277734090342083
+    ],
+    "intercept": 0.02378773435499418
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2706,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.0020676471055332,
+      0.4485114057551968,
+      0.7626608114389817,
+      0.5335724449709193,
+      0.3871814873836508,
+      0.5009068608982349
+    ],
+    "intercept": 0.22586999039193567
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2706,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.9966264242585945,
+      0.44607599082571875,
+      0.7585195666401366,
+      0.5306751489785191,
+      0.38507909363693227,
+      0.49818693888141236
+    ],
+    "intercept": 0.23426771927075207
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2706,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.439851352729282,
+      0.4860537467408112,
+      2.063843569746168,
+      1.0394532448204536,
+      1.7117503334793218,
+      0.9363074214178272
+    ],
+    "intercept": -1.9827843785987191
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2706,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.439814416127394,
+      0.48604638843444564,
+      2.0638123254786795,
+      1.0394375086688874,
+      1.7117244195069279,
+      0.9362932467778715
+    ],
+    "intercept": -1.9826876385154568
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2706,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      -0.0005241094812351201,
+      0.00012832389912481116,
+      0.0025338210770309367,
+      0.0010386761774666183,
+      -0.0025484076176748127,
+      -0.00035740231054546504
+    ],
+    "intercept": 0.22158970094316027
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2706,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      -0.000434074091395446,
+      0.00010627947387186233,
+      0.002098542615903231,
+      0.0008602447277340065,
+      -0.002110623373079522,
+      -0.0002960051072670044
+    ],
+    "intercept": 0.2216354521368097
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2706,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.059494065988268514
+    ],
+    "intercept": 3.3437142206015503e-06
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2706,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.133831817319811
+    ],
+    "intercept": 0.018091919528397296
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2707,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.9359176141026323,
+      0.5708480358037852,
+      0.7154521070000157,
+      0.3657377637229784,
+      0.44855747779623945,
+      0.2853267901356118
+    ],
+    "intercept": -0.15896696002488908
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2707,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.8871874802342561,
+      0.5411258671170789,
+      0.678200882720034,
+      0.3466950083368329,
+      0.4252025738909102,
+      0.27047076812039006
+    ],
+    "intercept": -0.08155699874076272
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2707,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.9700428391822842,
+      0.6908409415075991,
+      2.0396298343286374,
+      1.1543714964911838,
+      1.2866422831189241,
+      1.1837234234289362
+    ],
+    "intercept": -1.4567705304631478
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2707,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.967284039758791,
+      0.6898735048847754,
+      2.036773586992706,
+      1.1527549431068225,
+      1.2848405009859103,
+      1.1820657663297196
+    ],
+    "intercept": -1.4485261509627412
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2707,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      3.364831345949629e-05,
+      -6.061909092913084e-06,
+      -4.866944326689799e-05,
+      6.442314744313226e-05,
+      -1.2256930924358307e-05,
+      9.408788873155067e-05
+    ],
+    "intercept": 1.6069221059750527
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2707,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.6620311407502103e-05,
+      -4.795779971901468e-06,
+      -3.850403192879599e-05,
+      5.09673166487815e-05,
+      -9.696869904027133e-06,
+      7.443609025823017e-05
+    ],
+    "intercept": 1.6069143885721995
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2707,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.06331206384290215
+    ],
+    "intercept": -0.00017124257472227004
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2707,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.0901072272952768
+    ],
+    "intercept": -0.0641129004860284
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2708,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.7512035323660042,
+      0.473951545113749,
+      0.6939298044231087,
+      0.2658341309343398,
+      0.5105942538271524,
+      0.7298162437421943
+    ],
+    "intercept": 0.23387892315370395
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2708,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.7518131143585752,
+      0.4743361443798661,
+      0.6944929102854471,
+      0.2660498483694242,
+      0.5110085876917216,
+      0.730408470510178
+    ],
+    "intercept": 0.2327139104044118
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2708,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.8451153274430334,
+      0.700884059679238,
+      1.9035842939718983,
+      1.0535199988758035,
+      1.3650368705958023,
+      1.1008584720740724
+    ],
+    "intercept": -1.2602021900452822
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2708,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.8441935350110197,
+      0.7005339083297142,
+      1.9026332913056776,
+      1.0529936758067275,
+      1.3643549182874453,
+      1.1003084994012624
+    ],
+    "intercept": -1.2575591614558848
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2708,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.1407495766710059,
+      -0.008024228418936626,
+      0.13767525468256395,
+      -0.03398653203595162,
+      0.0717313499479579,
+      0.020041515248436885
+    ],
+    "intercept": -0.03679022004343652
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2708,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.11797429021331539,
+      -0.006725793957066806,
+      0.11539743731576531,
+      -0.02848702702051858,
+      0.06012419572624205,
+      0.01679851259347153
+    ],
+    "intercept": 0.001146211367064609
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2708,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.05945764089016392
+    ],
+    "intercept": 2.74956371409485e-06
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2708,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.1510118099560582
+    ],
+    "intercept": 0.017221594991366638
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2709,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.3588517015068389,
+      0.5707760844538986,
+      1.0380617041370843,
+      0.4965070202127746,
+      0.2806195240040732,
+      0.41093792956195374
+    ],
+    "intercept": -0.4671600977584296
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2709,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.3411501461260735,
+      0.5633406708191562,
+      1.0245390314833593,
+      0.4900390984333126,
+      0.27696393595162155,
+      0.405584703370949
+    ],
+    "intercept": -0.43994855913782627
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2709,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.1460954717532386,
+      0.6712151343707843,
+      1.9091927304736778,
+      1.252774786102762,
+      1.3949725105355804,
+      1.0858706613774087
+    ],
+    "intercept": -1.7069878203846507
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2709,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.146044034576378,
+      0.671199046823873,
+      1.9091469713332152,
+      1.2527447598531907,
+      1.3949390761200644,
+      1.0858446354517255
+    ],
+    "intercept": -1.7068461827867019
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2709,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.0018176191422329749,
+      -0.00015719471760075715,
+      -0.0007940596564339716,
+      -0.0005284418242403869,
+      0.0013215587944109455,
+      0.001236331360072519
+    ],
+    "intercept": 1.2517811157566148
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2709,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.0016088274956719045,
+      -0.0001391376102805495,
+      -0.0007028452654307565,
+      -0.0004677392072667678,
+      0.0011697500737053858,
+      0.0010943127961353537
+    ],
+    "intercept": 1.2519276674176105
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2709,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.06045401990097865
+    ],
+    "intercept": 2.8995373817002068e-05
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2709,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.122278377226532
+    ],
+    "intercept": 0.03672087327320473
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2710,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.734859788669895,
+      0.7178423281392011,
+      0.8214607816721771,
+      0.5177159574065788,
+      0.4791625678158727,
+      0.5221518239584453
+    ],
+    "intercept": 0.07864686925807707
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2710,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.7174110162753322,
+      0.7106224551092964,
+      0.8131987409562258,
+      0.5125089038078864,
+      0.47434327426810796,
+      0.5169001555578294
+    ],
+    "intercept": 0.10153471704083916
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2710,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.3055104280791134,
+      0.6737521830160781,
+      1.7151326796256874,
+      1.3312714650099533,
+      1.8705929059370663,
+      1.0947018243858486
+    ],
+    "intercept": -1.50321441427403
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2710,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.3052167162672177,
+      0.6736663499736281,
+      1.7149141793227443,
+      1.331101866924709,
+      1.8703546006901974,
+      1.0945623642244848
+    ],
+    "intercept": -1.5024030430569821
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2710,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.0797691289788773e-10,
+      6.980078691460807e-11,
+      -6.153153258867776e-11,
+      1.1253422409125623e-10,
+      -1.254756095798691e-10,
+      -1.0921518664782436e-10
+    ],
+    "intercept": 1.2004670912264614
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2710,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      8.037624176456504e-11,
+      5.1958560157309115e-11,
+      -4.580306295817914e-11,
+      8.376862941896064e-11,
+      -9.340198437313372e-11,
+      -8.129799242055705e-11
+    ],
+    "intercept": 1.20046709119614
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2710,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.06129593107584753
+    ],
+    "intercept": -6.249691899150442e-05
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2710,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.1653700432832643
+    ],
+    "intercept": -0.04930081272899893
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2711,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.2047948662199788,
+      0.4648293536619594,
+      0.5996107124149401,
+      0.4924264642429632,
+      0.6001744659983939,
+      0.5758942454032572
+    ],
+    "intercept": -0.22198885512401012
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2711,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.202406260340795,
+      0.4639077908647524,
+      0.5984219343805602,
+      0.4914501878821194,
+      0.5989845702757156,
+      0.5747524872343547
+    ],
+    "intercept": -0.21861518405367542
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2711,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.453114174335159,
+      0.43218175705093176,
+      1.973313700427849,
+      1.112126296060322,
+      1.6986118604615283,
+      1.1794928632655715
+    ],
+    "intercept": -1.8972401680329742
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2711,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.4530079747340348,
+      0.4321630471471318,
+      1.9732282722280239,
+      1.1120781501687538,
+      1.698538324584587,
+      1.1794418009575391
+    ],
+    "intercept": -1.8969563154901454
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2711,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.002163319030814473,
+      0.001806578288568479,
+      -0.0014096341788548661,
+      0.002402236322465364,
+      -0.002887387338873938,
+      -0.00046627861273782184
+    ],
+    "intercept": 0.9559081355877674
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2711,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.00177766337417901,
+      0.0014845189315262869,
+      -0.0011583381900901434,
+      0.0019739887948757124,
+      -0.002372651766231602,
+      -0.0003831549578311411
+    ],
+    "intercept": 0.9554016508188891
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2711,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.05963403136057526
+    ],
+    "intercept": -5.958338806095727e-06
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2711,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.1558962341138548
+    ],
+    "intercept": -0.022380016616878235
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2712,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.1859460546140004,
+      0.4723464299503371,
+      0.7797434576736727,
+      0.37790040306322437,
+      0.8973321172583039,
+      0.1827874819353905
+    ],
+    "intercept": 0.18041174771816548
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2712,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.101061702822466,
+      0.4385381295041337,
+      0.7239331468160999,
+      0.3508520979308109,
+      0.8331053720207328,
+      0.1697044273906014
+    ],
+    "intercept": 0.316806200003386
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2712,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.25337580049387,
+      0.7781400124846936,
+      2.142966642537992,
+      1.1757131772977647,
+      1.8451569022028622,
+      0.85714425930197
+    ],
+    "intercept": -1.7202710741150113
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2712,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.2498932979363806,
+      0.7769374280853365,
+      2.139654772937006,
+      1.173896159405802,
+      1.8423052856950957,
+      0.855819576985553
+    ],
+    "intercept": -1.7102645963308092
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2712,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.019498037524658757,
+      -0.00031701263579856525,
+      0.0018862116926467412,
+      -0.004946561082015161,
+      0.01802589880090993,
+      0.0018365191576184823
+    ],
+    "intercept": 0.6675166153527818
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2712,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.01630885795186604,
+      -0.00026516073936399545,
+      0.001577695115399204,
+      -0.004137481114947538,
+      0.015077508319848077,
+      0.0015361304967026264
+    ],
+    "intercept": 0.6710778794492285
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2712,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.0591969665092166
+    ],
+    "intercept": 4.1714604815908714e-10
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2712,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.1526365508188965
+    ],
+    "intercept": 0.0009202026808924705
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2713,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.6889797133893847,
+      0.19938981147201026,
+      0.47154478833673324,
+      0.5327187181277382,
+      0.3393534970633592,
+      0.6573370916233872
+    ],
+    "intercept": -0.8916578071482548
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2713,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.6832089095203184,
+      0.19870854840746704,
+      0.46993364258560355,
+      0.53089855698825,
+      0.3381940145317991,
+      0.6550911419523822
+    ],
+    "intercept": -0.8857282630302912
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2713,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.5387790740301384,
+      0.35869170959077046,
+      1.8221996240356013,
+      1.2318540065403334,
+      1.6503208547350432,
+      1.1351585369826769
+    ],
+    "intercept": -1.8780770295742384
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2713,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.5386501094950487,
+      0.3586734888207786,
+      1.8221070602005833,
+      1.2317914309972793,
+      1.650237021973084,
+      1.1351008733622094
+    ],
+    "intercept": -1.8777766403117289
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2713,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.1327514647728148,
+      0.020080912963794162,
+      -0.0064312899548136316,
+      -0.0034508155932314317,
+      -0.023047366852170587,
+      0.030425319098843183
+    ],
+    "intercept": 0.5957082746945972
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2713,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.10019968012127604,
+      0.01515690285571451,
+      -0.004854283132335475,
+      -0.002604646353176126,
+      -0.01739595710056607,
+      0.02296477290483457
+    ],
+    "intercept": 0.6100285356943096
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2713,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.05981972314064897
+    ],
+    "intercept": 1.0124860446149688e-05
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2713,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.047016565274135
+    ],
+    "intercept": 0.024048342135497506
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2714,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.0786914574632267,
+      0.43977422751734657,
+      0.6951450835616838,
+      0.46818390910222507,
+      0.739615907227548,
+      0.4617844279436726
+    ],
+    "intercept": -0.8853415078653653
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2714,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.077627644624411,
+      0.4393405191884483,
+      0.6944595267607875,
+      0.46772218295246837,
+      0.7388864929984306,
+      0.46132901300568196
+    ],
+    "intercept": -0.8837725639981582
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2714,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.7853367233150417,
+      0.8691291608108042,
+      1.5282573935093922,
+      1.1072748702920692,
+      1.6189590172595898,
+      1.081550199415511
+    ],
+    "intercept": -1.1438689958101689
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2714,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.7846764793465266,
+      0.8688077439717329,
+      1.5276922212854491,
+      1.1068653836417073,
+      1.618360302231517,
+      1.081150226129528
+    ],
+    "intercept": -1.1421181899164905
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2714,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.395299495851722e-06,
+      2.220613433753483e-06,
+      1.9770711298244404e-05,
+      2.380302516161294e-05,
+      7.68258820069088e-06,
+      1.1208410200316226e-06
+    ],
+    "intercept": 0.6931572153999621
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2714,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.9600602976142534e-06,
+      1.81711566148073e-06,
+      1.617826344404712e-05,
+      1.9477883522787148e-05,
+      6.286619331391569e-06,
+      9.171779926085044e-07
+    ],
+    "intercept": 0.6931584980499345
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2714,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.05979015584874515
+    ],
+    "intercept": 9.413487744636129e-06
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2714,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.033282300606341
+    ],
+    "intercept": 0.023145960610209664
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2715,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      1.1114188638110671,
+      0.7297666334066134,
+      0.963062528449095,
+      0.5937313759629684,
+      0.8378247540675084,
+      0.12735363625364074
+    ],
+    "intercept": 0.14774845030360484
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2715,
+    "condition": "weak",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.093917119468814,
+      0.7182748462296409,
+      0.9478969822204453,
+      0.5843817643193023,
+      0.8246313531574142,
+      0.12534817201747994
+    ],
+    "intercept": 0.1766130001388473
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2715,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      2.228667051384656,
+      0.7651405138491251,
+      2.2148674404279545,
+      1.4616189646551812,
+      1.7952201224964877,
+      1.219523030459875
+    ],
+    "intercept": -1.4963267649176402
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2715,
+    "condition": "pair",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      2.2282688876138343,
+      0.7650038172384701,
+      2.2144717420344224,
+      1.4613578382935248,
+      1.7948993964315585,
+      1.2193051558840786
+    ],
+    "intercept": -1.4951749544309898
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2715,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.019865975912830687,
+      0.0005210920861031606,
+      0.009941656733416987,
+      0.00028633390010403617,
+      0.0067677771136139585,
+      0.0028349585093812094
+    ],
+    "intercept": 1.3389849980698287
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2715,
+    "condition": "zero_signal",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      0.023318113607379454,
+      0.0006116429677039956,
+      0.011669231965879006,
+      0.0003360905319510471,
+      0.007943822961284685,
+      0.0033275931111575964
+    ],
+    "intercept": 1.335183837750743
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2715,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "tangent",
+    "weights": [
+      0.06326996591100972
+    ],
+    "intercept": 0.00016862765137236248
+  },
+  {
+    "phase": "confirmation",
+    "seed": 2715,
+    "condition": "plateau",
+    "budget": 16,
+    "repetition": 0,
+    "method": "secant",
+    "weights": [
+      1.1102810755118384
+    ],
+    "intercept": 0.06503847190687287
+  }
+]

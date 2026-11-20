@@ -1,0 +1,21 @@
+{
+  "primary": {
+    "difference": 0.0005759995635968921,
+    "lo": -2.4280175749390415e-05,
+    "hi": 0.0011762793029431746,
+    "margin": 0.002
+  },
+  "latency": {
+    "batch": 1024,
+    "repeats": 17,
+    "nonconstant_components": 24,
+    "median_ms": {
+      "dense_pool": 0.33646499999999996,
+      "grouped_constants_pool": 0.185949,
+      "single": 0.010440999999999999
+    }
+  },
+  "compute_seconds": 14.313913050999872,
+  "compute_started_utc": "2026-11-20T23:56:57.912707+00:00",
+  "compute_ended_utc": "2026-11-20T23:57:12.226620+00:00"
+}
