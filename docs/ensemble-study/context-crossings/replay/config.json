@@ -1,0 +1,57 @@
+{
+  "seeds": [
+    210,
+    211,
+    212,
+    213
+  ],
+  "steps": 1440,
+  "batches_per_cell": 256,
+  "source": [
+    [
+      0.25,
+      0.25
+    ],
+    [
+      0.25,
+      0.55
+    ],
+    [
+      0.55,
+      0.25
+    ],
+    [
+      0.55,
+      0.55
+    ],
+    [
+      0.55,
+      0.85
+    ],
+    [
+      0.85,
+      0.55
+    ],
+    [
+      0.85,
+      0.85
+    ]
+  ],
+  "held": [
+    [
+      0.25,
+      0.85
+    ],
+    [
+      0.85,
+      0.25
+    ]
+  ],
+  "anchor": 0.75,
+  "train_support": 32,
+  "unique_steps": 360,
+  "paired_only": true,
+  "support_dropout": 0.2,
+  "training_batches_per_step": 24,
+  "training_queries_per_batch": 24
+}
