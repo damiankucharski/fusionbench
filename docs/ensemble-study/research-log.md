@@ -30,6 +30,10 @@ Across eight banks of OKAPI trees and twelve target seeds, a diagnostic detected
 
 The preregistered audit used eight independent banks of twelve GP searches. With sixteen randomly audited deployment labels, a likelihood-ratio alarm detected 74.0% of batches with 15% random label reversal, compared with 61.4% for Brier at a common nominal 5% clean alarm rate. Ordinary log loss reached 72.8%. With reversals confined to the least certain 15% of records, even sixty-four labels gave the likelihood-ratio test 6.2% power, compared with 38.8% for the error count. The next comparison is confidence-stratified versus random label sampling at equal total budget, including shifts near the decision boundary. [Protocol and independent results](sentinel-audit/README.md)
 
+### Equal-budget confidence sampling for invisible changes
+
+In eight independent banks, fixed allocation of a 16-label budget across confidence strata detected 29.7% of batches with silent reversals in the least confident 15% of records. Simple random sampling detected 12.1%, for a paired difference of 17.6 percentage points [0.4, 34.8]. The ranking reversed in a middle-confidence shift (15.1% versus 51.8%). With fixed allocation, conditional detection ranged from 5.9% to 69.1% across banks. The next study will examine whether alternative trees or the original input experts retain label information where the selected tree is uncertain. Computation took 11.77 s and the research cycle through report preparation took 225 s. [Protocol, timing, and full results](stratified-audit/README.md)
+
 ### Pausing or redirecting future experiments
 
 The scheduled worker reads [the research settings](research-state.json) on this branch before starting an experiment, before expensive computation and before publishing. Set `enabled` to `false` to skip new experiments. Change `objective` to redirect subsequent work. Changes take effect when a worker next reads the file. A process already computing can continue until that check.

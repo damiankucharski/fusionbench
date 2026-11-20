@@ -1,0 +1,23 @@
+{
+  "phases": [
+    "development",
+    "confirmation"
+  ],
+  "pool_size": 256,
+  "budgets": [
+    8,
+    16,
+    32
+  ],
+  "clean_batches": 399,
+  "test_batches": 512,
+  "alpha": 0.05,
+  "compute_seconds": 11.77251490899971,
+  "compute_started_utc": "2026-11-20T23:22:02.912860+00:00",
+  "compute_ended_utc": "2026-11-20T23:22:14.685375+00:00",
+  "primary": {
+    "difference": 0.176025390625,
+    "lo": 0.004243013971335974,
+    "hi": 0.347807767278664
+  }
+}
