@@ -1,0 +1,22 @@
+{
+  "seeds": [
+    500,
+    501,
+    502,
+    503,
+    504,
+    505,
+    506,
+    507,
+    508,
+    509,
+    510,
+    511
+  ],
+  "source_per_regime": 384,
+  "calibration_per_regime": 384,
+  "target_batches_per_regime": 200,
+  "gp_generations": 8,
+  "compute_seconds": 2.3613032819998807,
+  "compute_start_utc": "2026-11-20T23:25:36.031012+00:00"
+}
