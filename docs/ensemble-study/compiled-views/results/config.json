@@ -1,0 +1,13 @@
+{
+  "fold_seed": 7813,
+  "folds": 5,
+  "logistic_C": 1.0,
+  "gp_seeds": [
+    31,
+    47,
+    67
+  ],
+  "gp_generations": 12,
+  "compute_start_utc": "2026-11-20T23:37:25.295935+00:00",
+  "compute_seconds": 6.176656687000104
+}

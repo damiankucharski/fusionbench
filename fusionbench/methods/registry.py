@@ -11,6 +11,7 @@ from collections.abc import Callable
 
 from fusionbench.methods.averaging import BestSingle, SimpleAverage, TopK, ValWeighted
 from fusionbench.methods.base import Method
+from fusionbench.methods.clr import StackingCLR
 from fusionbench.methods.nsga3 import NSGA3
 from fusionbench.methods.okapi import OKAPIMethod
 from fusionbench.methods.operators import OpClose, OpFar, OpMax, OpMin
@@ -28,6 +29,7 @@ FACTORIES: dict[str, Callable[[], Method]] = {
     "op_far": OpFar,
     "op_close": OpClose,
     "stacking_lr": StackingLR,
+    "stacking_clr": StackingCLR,
     "stacking_logit": StackingLogit,
     "nsga3": NSGA3,
     "tpot": TPOTMethod,

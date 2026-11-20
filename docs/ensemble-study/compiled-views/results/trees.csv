@@ -1,0 +1,16 @@
+fold,search_seed,tree,nodes
+0,31,VN[m0.npy]_MIN_VN[m2.npy],3
+0,47,VN[m2.npy]_MIN_VN[m2.npy]_VN[m0.npy]_MAX_VN[m0.npy],6
+0,67,VN[m2.npy]_MIN_VN[m2.npy]_VN[m1.npy]_THFAR[0.1]_VN[m2.npy]_THFAR[0.1]_VN[m1.npy],8
+1,31,VN[m0.npy]_THFAR[0.5]_VN[m2.npy],3
+1,47,VN[m2.npy]_MIN_VN[m2.npy]_VN[m0.npy]_MAX_VN[m0.npy],6
+1,67,VN[m2.npy]_MIN_VN[m2.npy]_VN[m2.npy]_THFAR[0.2]_MIN_VN[m2.npy]_VN[m0.npy]_VN[m2.npy]_VN[m1.npy]_MIN_THFAR[0.0]_VN[m2.npy]_VN[m1.npy]_VN[m1.npy]_THFAR[0.0]_VN[m1.npy],17
+2,31,VN[m1.npy]_MIN_VN[m0.npy]_VN[m2.npy]_MIN_VN[m0.npy]_MIN_VN[m2.npy],8
+2,47,VN[m2.npy]_MIN_VN[m2.npy]_VN[m0.npy]_MAX_VN[m0.npy],6
+2,67,VN[m2.npy]_MIN_VN[m2.npy]_VN[m1.npy]_THFAR[0.1]_VN[m1.npy],6
+3,31,VN[m1.npy]_MIN_VN[m0.npy]_VN[m2.npy]_MIN_VN[m0.npy]_MIN_VN[m2.npy],8
+3,47,VN[m2.npy]_MIN_VN[m0.npy],3
+3,67,VN[m2.npy]_MIN_VN[m2.npy]_VN[m1.npy]_THFAR[0.1]_VN[m2.npy]_THFAR[0.1]_VN[m1.npy],8
+4,31,VN[m2.npy]_MIN_MIN_VN[m0.npy]_VN[m0.npy]_MIN_MIN_VN[m1.npy]_VN[m0.npy]_MIN_MIN_VN[m0.npy]_VN[m2.npy]_VN[m2.npy],14
+4,47,VN[m2.npy]_MIN_VN[m0.npy],3
+4,67,VN[m2.npy]_MIN_VN[m2.npy]_VN[m1.npy]_THFAR[0.1]_VN[m2.npy]_THFAR[0.1]_VN[m1.npy],8
