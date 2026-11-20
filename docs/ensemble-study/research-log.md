@@ -97,3 +97,7 @@ Exact Brier search across 18 distinct rules recovered majority in 12/12 new prob
 ### Discovering three latent directions with a smooth majority training loss
 
 With the same median decoder on both 30-parameter networks, smooth training on 512 final labels improved matched axis cosine from 0.798 to 0.952 and sign-preserving gain-shift Brier from 0.1560 to 0.1030 on 12 independently rotated problems. Starting from three exact clones left their learned directions collinear. Next test estimates these axes directly from the first and third supervised Gaussian moments. Started 2026-11-20 23:49:24 UTC. Compute took 43.81 seconds and time through validated report was 161 seconds. [Study and frozen protocol](majority-routing/README.md)
+
+### Recovering three hidden majority axes from labeled first and third moments
+
+For three orthogonal signs on Gaussian inputs, the labeled mean identifies their sum and the third Hermite tensor identifies their plane and orientation up to permutation. At 2048 labels direct estimation gave mean axis cosine 0.989 and gain-shift accuracy 90.17%, versus 77.05% with randomized phase in the same plane. At 128 labels the first-moment linear classifier still won IID. Next test checks predictive transfer on genuine datasets without assuming majority labels. Started 2026-11-20 23:52:20 UTC. Compute took 37.82 seconds and time through validated report was 185 seconds. [Study, derivation and frozen protocol](majority-moments/README.md)
