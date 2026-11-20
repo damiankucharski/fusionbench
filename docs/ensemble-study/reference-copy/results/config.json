@@ -1,0 +1,37 @@
+{
+  "seeds": [
+    400,
+    401,
+    402,
+    403,
+    404,
+    405,
+    406,
+    407,
+    408,
+    409,
+    410,
+    411
+  ],
+  "generations": 8,
+  "fit_per_regime": 384,
+  "calibration_per_regime": 384,
+  "target_batches_per_regime": 200,
+  "strengths": [
+    [
+      0.85,
+      0.25
+    ],
+    [
+      0.25,
+      0.85
+    ]
+  ],
+  "reference_strength": 0.75,
+  "alias_parameters": [
+    0.6211764705882352,
+    0.17236024844720496
+  ],
+  "compute_start_utc": "2026-11-20T23:21:46.700872+00:00",
+  "compute_seconds": 7.5154744579999715
+}

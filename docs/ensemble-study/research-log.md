@@ -33,3 +33,7 @@ The preregistered audit used eight independent banks of twelve GP searches. With
 ### Pausing or redirecting future experiments
 
 The scheduled worker reads [the research settings](research-state.json) on this branch before starting an experiment, before expensive computation and before publishing. Set `enabled` to `false` to skip new experiments. Change `objective` to redirect subsequent work. Changes take effect when a worker next reads the file. A process already computing can continue until that check.
+
+### When a reference copies a weak expert
+
+With 32 unlabeled observations and 12 independent source/calibration/target draws, an OKAPI selector switched from Brier 0.0948 to 0.2541 when the weak expert and the reference acquired shared errors. The eight possible observable sign triples exactly match those of the opposite clean regime. A second independent, stable reference restored 0.0943. Falling back to the equal mixture on reference disagreement achieved 0.1453. The next study tests whether the identity of the faulty reference can be identified if either could be copying the weak expert. The round started at 2026-11-20 23:19:51 UTC. The 24 GP fits and the evaluation took 7.52 seconds. The elapsed time through validated code, results and report was 209 seconds. [Study and frozen protocol](reference-copy/README.md)
