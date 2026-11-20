@@ -1,0 +1,24 @@
+{
+  "seeds": [
+    700,
+    701,
+    702,
+    703,
+    704,
+    705,
+    706,
+    707,
+    708,
+    709,
+    710,
+    711
+  ],
+  "fit_per_regime": 384,
+  "calibration_per_regime": 384,
+  "test_batches_per_regime": 200,
+  "ordinary_support": 32,
+  "alpha": 0.05,
+  "gp_generations": 8,
+  "compute_start_utc": "2026-11-20T23:32:54.394347+00:00",
+  "compute_seconds": 2.7378756570001315
+}
