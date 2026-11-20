@@ -81,3 +81,7 @@ On five held-out folds a centered-log stack of two view-specific linear experts 
 ### Compiling evolved min/max programs into raw residual ReLU circuits
 
 All eight native trees compiled within 5.56e−16 on independent raw queries. Their total natural gate count fell from 17 to 16, while all artificial absorption shells disappeared. Only 2/8 GP programs recovered every majority corner. Reinitializing the selected topology gave Brier 0.1063 versus 0.1280 for a dense MLP and 0.0952 for the known median topology. Next test is whether exact signature enumeration solves search and how much view membership contributes to label-only training. Started 2026-11-20 23:39:56 UTC. Compute took 13.74 seconds and time through validated report was 333 seconds. [Study and frozen protocol](lattice-compile/README.md)
+
+### Exhaustive small-lattice search and the price of a wrong view partition
+
+Exact Brier search across 18 distinct rules recovered majority in 12/12 new problems, versus 0/12 for the previous GP budget. A single median network trained from raw inputs and final labels reached 97.96% with known matching blocks, but 77.20% with equally sparse crossed blocks. After rotation the old masks scored Brier 0.15987 versus 0.08403 with dense leaves. Next test asks whether smooth gradient routing helps a dense student recover independently useful latent directions. Started 2026-11-20 23:46:10 UTC. Compute took 56.18 seconds and time through validated report was 181 seconds. [Study and frozen protocol](lattice-views/README.md)

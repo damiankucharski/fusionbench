@@ -1,0 +1,13 @@
+seed,candidates,terms,gp_tree,gp_correct_corners,exact_correct_corners
+850,18,"((0, 1), (0, 2), (1, 2))",VN[m1.npy]_MAX_VN[m0.npy],6,8
+851,18,"((0, 1), (0, 2), (1, 2))",VN[m2.npy],6,8
+852,18,"((0, 1), (0, 2), (1, 2))",VN[m1.npy]_MIN_MAX_VN[m3.npy]_VN[m2.npy],7,8
+853,18,"((0, 1), (0, 2), (1, 2))",VN[m3.npy],6,8
+854,18,"((0, 1), (0, 2), (1, 2))",VN[m1.npy]_MIN_VN[m2.npy]_MAX_VN[m3.npy],7,8
+855,18,"((0, 1), (0, 2), (1, 2))",VN[m1.npy]_MIN_MAX_VN[m3.npy]_VN[m2.npy],7,8
+856,18,"((0, 1), (0, 2), (1, 2))",VN[m2.npy]_MIN_MAX_VN[m0.npy]_VN[m0.npy]_VN[m2.npy]_MIN_VN[m1.npy],7,8
+857,18,"((0, 1), (0, 2), (1, 2))",VN[m2.npy],6,8
+858,18,"((0, 1), (0, 2), (1, 2))",VN[m1.npy]_MIN_VN[m2.npy]_MAX_VN[m3.npy],7,8
+859,18,"((0, 1), (0, 2), (1, 2))",VN[m1.npy]_MIN_VN[m0.npy]_MAX_VN[m2.npy],7,8
+860,18,"((0, 1), (0, 2), (1, 2))",VN[m3.npy],6,8
+861,18,"((0, 1), (0, 2), (1, 2))",VN[m3.npy]_MAX_VN[m2.npy],6,8
