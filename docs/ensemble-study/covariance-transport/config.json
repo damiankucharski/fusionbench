@@ -1,0 +1,17 @@
+{
+  "primary_reduction": 0.05258420379893763,
+  "lo": 0.049290350074611106,
+  "hi": 0.05587805752326415,
+  "strengths_source": "estimated; unstable channel identity and q=.1 known",
+  "search_count": 96,
+  "source_train": 768,
+  "source_validation": 256,
+  "adapt_budgets": [
+    256,
+    1024
+  ],
+  "test": 8192,
+  "compute_seconds": 11.894490491999932,
+  "compute_started_utc": "2026-11-20T23:36:54.360006+00:00",
+  "compute_ended_utc": "2026-11-20T23:37:06.254496+00:00"
+}
