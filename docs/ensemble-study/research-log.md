@@ -38,6 +38,10 @@ In eight independent banks, fixed allocation of a 16-label budget across confide
 
 On the least confident 15% of the winning tree's examples, a linear readout of its score plus seven provider logits reached 76.6% accuracy versus 67.1% from its score alone (paired difference 9.54 points [6.76, 12.32] across eight new banks). Other GP scores gave 70.6%. Permuting provider vectors within winner-score bins removed the gain. For the same 16 audited labels, detection of localized reversals rose from 58.7% to 92.2%. Next, decompose the Gaussian generator's optimal rule into bounded unreliable-expert evidence and correlated stable evidence, and test learned compact alternatives. Computation took 15.49 s; the cycle through report preparation took 167 s. [Protocol, results, and timing](audit-witness/README.md)
 
+### A bounded-evidence single network from raw sensors
+
+In the registered polarity-fault generator, an unreliable sensor's optimum evidence saturates at log(9) when 10% of observations reverse sign. A label-only model with one learned input cap (two tied ReLU units and a linear skip) reached 93.36% versus 93.59% Bayes, 92.90% raw logistic, 92.89% MLP and 91.12% for a short OKAPI search. It chose the true channel in 8/8 new banks under correlated noise but 3/8 under independence. Turning off the fault made plain logistic preferable. Next, test whether covariance estimated from unlabeled deployment data can transport the signed stable-sensor evidence, including changes in class prevalence. Experiment computation took 56.27 s and independent export verification 4.61 s. The cycle through the report took 294 s. [Derivation, transferable weights and data](bounded-evidence/README.md)
+
 ### Pausing or redirecting future experiments
 
 The scheduled worker reads [the research settings](research-state.json) on this branch before starting an experiment, before expensive computation and before publishing. Set `enabled` to `false` to skip new experiments. Change `objective` to redirect subsequent work. Changes take effect when a worker next reads the file. A process already computing can continue until that check.

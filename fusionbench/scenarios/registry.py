@@ -25,6 +25,7 @@ from fusionbench.scenarios.gates import (
     WeakestLink,
 )
 from fusionbench.scenarios.mixture import GatedExperts
+from fusionbench.scenarios.polarity import PolarityFault
 
 SCENARIOS: dict[str, type[Scenario]] = {
     "committee": Committee,
@@ -32,6 +33,7 @@ SCENARIOS: dict[str, type[Scenario]] = {
     "needle": Needle,
     "saturated": Saturated,
     "correlated": CorrelatedRedundancy,
+    "polarity_fault": PolarityFault,
     "hardveto": HardVeto,
     "hardrescue": HardRescue,
     "weakest_link": WeakestLink,
