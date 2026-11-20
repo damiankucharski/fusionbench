@@ -85,3 +85,7 @@ All eight native trees compiled within 5.56e−16 on independent raw queries. Th
 ### Exhaustive small-lattice search and the price of a wrong view partition
 
 Exact Brier search across 18 distinct rules recovered majority in 12/12 new problems, versus 0/12 for the previous GP budget. A single median network trained from raw inputs and final labels reached 97.96% with known matching blocks, but 77.20% with equally sparse crossed blocks. After rotation the old masks scored Brier 0.15987 versus 0.08403 with dense leaves. Next test asks whether smooth gradient routing helps a dense student recover independently useful latent directions. Started 2026-11-20 23:46:10 UTC. Compute took 56.18 seconds and time through validated report was 181 seconds. [Study and frozen protocol](lattice-views/README.md)
+
+### Discovering three latent directions with a smooth majority training loss
+
+With the same median decoder on both 30-parameter networks, smooth training on 512 final labels improved matched axis cosine from 0.798 to 0.952 and sign-preserving gain-shift Brier from 0.1560 to 0.1030 on 12 independently rotated problems. Starting from three exact clones left their learned directions collinear. Next test estimates these axes directly from the first and third supervised Gaussian moments. Started 2026-11-20 23:49:24 UTC. Compute took 43.81 seconds and time through validated report was 161 seconds. [Study and frozen protocol](majority-routing/README.md)
