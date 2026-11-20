@@ -1,0 +1,9 @@
+seed,tree,nodes,match_corners,gates_original,gates_syntax,gates_compiled,active_affines,shell_gates_original,shell_gates_compiled,native_max_abs,shell_max_abs
+800,VN[m3.npy]_MIN_VN[m1.npy],3,6,1,1,1,2,4,1,4.440892098500626e-16,4.440892098500626e-16
+801,VN[m1.npy]_MIN_MAX_VN[m2.npy]_VN[m1.npy]_MAX_MIN_VN[m2.npy]_VN[m0.npy],9,8,4,4,4,3,10,4,5.551115123125783e-16,5.551115123125783e-16
+802,VN[m0.npy],1,6,0,0,0,1,2,0,3.3306690738754696e-16,3.3306690738754696e-16
+803,VN[m3.npy],1,6,0,0,0,1,2,0,4.440892098500626e-16,4.440892098500626e-16
+804,VN[m3.npy]_MAX_VN[m1.npy]_MIN_VN[m2.npy],5,7,2,2,2,3,6,2,4.440892098500626e-16,4.440892098500626e-16
+805,VN[m3.npy]_MIN_VN[m2.npy]_MAX_VN[m1.npy],5,7,2,2,2,3,6,2,5.551115123125783e-16,5.551115123125783e-16
+806,VN[m1.npy]_MIN_MAX_VN[m1.npy]_VN[m2.npy]_MIN_MAX_MIN_VN[m2.npy]_VN[m0.npy]_VN[m3.npy],11,8,5,5,5,3,12,5,4.440892098500626e-16,4.440892098500626e-16
+807,VN[m2.npy]_MIN_VN[m2.npy]_VN[m0.npy]_MAX_VN[m1.npy],6,7,3,2,2,3,8,2,4.440892098500626e-16,4.440892098500626e-16

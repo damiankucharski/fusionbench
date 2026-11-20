@@ -60,7 +60,10 @@ class OKAPIMethod(Method):
                  population_multiplier: int = 3, tournament_size: int = 5, seed: int = 0,
                  minimize_node_count: bool = True, n_restarts: int = 2, n_seeds: int = 30,
                  fitness: str = "macro_f1", max_depth: int | None = None,
-                 max_nodes: int | None = None):
+                 max_nodes: int | None = None, operator_family: str = "standard"):
+        if operator_family not in {"standard", "minmax"}:
+            raise ValueError("operator_family must be standard or minmax")
+        self.operator_family = operator_family
         if fitness not in {"macro_f1", "brier"}:
             raise ValueError("fitness must be macro_f1 or brier")
         if any(cap is not None and cap < 1 for cap in (max_depth, max_nodes)):
@@ -117,7 +120,7 @@ class OKAPIMethod(Method):
         max_inputs = min(k, 4) if self.max_nodes is None else min(k, 4, self.max_nodes - 1)
         if max_inputs < 2 or (self.max_depth is not None and self.max_depth < 3):
             return
-        ops = [MinNode, MaxNode, MeanNode]
+        ops = [MinNode, MaxNode] if self.operator_family == "minmax" else [MinNode, MaxNode, MeanNode]
         seeds = []
         for _ in range(self.n_seeds):
             size = int(rng.integers(2, max_inputs + 1))
@@ -158,7 +161,8 @@ class OKAPIMethod(Method):
         # multiclass scenario cannot leave softmax-normalisation active for a
         # later binary one (which would normalise the single channel to 1.0).
         post = scale_vector_to_sum_1 if task == "multiclass" else _identity
-        ops = (MEAN, MIN, MAX, WEIGHTED_MEAN, FAR_THRESHOLD, CLOSE_THRESHOLD)
+        ops = ((MIN, MAX) if self.operator_family == "minmax" else
+               (MEAN, MIN, MAX, WEIGHTED_MEAN, FAR_THRESHOLD, CLOSE_THRESHOLD))
 
         best_tree, best_fit = None, -np.inf
         # Older OKAPI versions can still run an unbounded search.

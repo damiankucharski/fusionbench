@@ -1,0 +1,21 @@
+{
+  "seeds": [
+    800,
+    801,
+    802,
+    803,
+    804,
+    805,
+    806,
+    807
+  ],
+  "generations": 30,
+  "fit_rows": 512,
+  "source_concept_rows": 512,
+  "test_rows": 4096,
+  "adam_steps": 600,
+  "batch_size": 64,
+  "lr": 0.015,
+  "compute_start_utc": "2026-11-20T23:42:55.971537+00:00",
+  "compute_seconds": 13.735210733999338
+}
