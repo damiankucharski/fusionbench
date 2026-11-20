@@ -101,3 +101,7 @@ With the same median decoder on both 30-parameter networks, smooth training on 5
 ### Recovering three hidden majority axes from labeled first and third moments
 
 For three orthogonal signs on Gaussian inputs, the labeled mean identifies their sum and the third Hermite tensor identifies their plane and orientation up to permutation. At 2048 labels direct estimation gave mean axis cosine 0.989 and gain-shift accuracy 90.17%, versus 77.05% with randomized phase in the same plane. At 128 labels the first-moment linear classifier still won IID. Next test checks predictive transfer on genuine datasets without assuming majority labels. Started 2026-11-20 23:52:20 UTC. Compute took 37.82 seconds and time through validated report was 185 seconds. [Study, derivation and frozen protocol](majority-moments/README.md)
+
+### Genuine-label falsification of the three-leaf majority prior
+
+The moment-initialized student lost to equal averaging of full-feature logistic, RBF and forest models on each of five Wisconsin folds, five digits-parity folds and nine held-out HAR stair-direction subjects. Brier was 0.03184 vs 0.02131, 0.08040 vs 0.02408 and 0.07105 vs 0.02198. A full-feature single logistic or RBF model beat that ensemble on each dataset; family choice was retrospective. Next test selects a single family without test labels on new tasks. Started 2026-11-20 23:55:47 UTC. Compute took 29.42 seconds and time through validated report was 187 seconds. [Study and frozen protocol](majority-transfer/README.md)
