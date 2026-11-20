@@ -1,0 +1,22 @@
+{
+  "source_fit_n": 384,
+  "select_n": 256,
+  "witness_fit_n": 2048,
+  "reference_batches": 399,
+  "test_batches": 512,
+  "pool_size": 256,
+  "quotas": [
+    8,
+    4,
+    4
+  ],
+  "alpha": 0.05,
+  "primary": {
+    "difference": 0.09537686284873009,
+    "lo": 0.0675776488195392,
+    "hi": 0.12317607687792098
+  },
+  "compute_seconds": 15.490976867999962,
+  "compute_started_utc": "2026-11-20T23:25:47.450475+00:00",
+  "compute_ended_utc": "2026-11-20T23:26:02.941453+00:00"
+}

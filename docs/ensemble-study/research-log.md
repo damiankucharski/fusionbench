@@ -34,6 +34,10 @@ The preregistered audit used eight independent banks of twelve GP searches. With
 
 In eight independent banks, fixed allocation of a 16-label budget across confidence strata detected 29.7% of batches with silent reversals in the least confident 15% of records. Simple random sampling detected 12.1%, for a paired difference of 17.6 percentage points [0.4, 34.8]. The ranking reversed in a middle-confidence shift (15.1% versus 51.8%). With fixed allocation, conditional detection ranged from 5.9% to 69.1% across banks. The next study will examine whether alternative trees or the original input experts retain label information where the selected tree is uncertain. Computation took 11.77 s and the research cycle through report preparation took 225 s. [Protocol, timing, and full results](stratified-audit/README.md)
 
+### Residual information from providers and alternate trees
+
+On the least confident 15% of the winning tree's examples, a linear readout of its score plus seven provider logits reached 76.6% accuracy versus 67.1% from its score alone (paired difference 9.54 points [6.76, 12.32] across eight new banks). Other GP scores gave 70.6%. Permuting provider vectors within winner-score bins removed the gain. For the same 16 audited labels, detection of localized reversals rose from 58.7% to 92.2%. Next, decompose the Gaussian generator's optimal rule into bounded unreliable-expert evidence and correlated stable evidence, and test learned compact alternatives. Computation took 15.49 s; the cycle through report preparation took 167 s. [Protocol, results, and timing](audit-witness/README.md)
+
 ### Pausing or redirecting future experiments
 
 The scheduled worker reads [the research settings](research-state.json) on this branch before starting an experiment, before expensive computation and before publishing. Set `enabled` to `false` to skip new experiments. Change `objective` to redirect subsequent work. Changes take effect when a worker next reads the file. A process already computing can continue until that check.
