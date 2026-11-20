@@ -1,0 +1,19 @@
+# Supervised single-network recovery on two real datasets
+
+Frozen before fitting any model or inspecting test scores. This is an external validity check of ensemble benefit with native features and labels.
+
+## Populations and splits
+
+Use scikit-learn's bundled Wisconsin Diagnostic Breast Cancer features and original binary labels, and UCI Human Activity Recognition Using Smartphones with its provided 561 features and six original classes (reindex 1–6 to 0–5). For Wisconsin, stratify one fixed random split (seed 6211) into approximately 50% base training, 15% fusion fitting, 15% model selection and 20% test. No patient-group identifiers are distributed by the sklearn loader. For HAR, preserve the official test subjects. Permute the official training subjects with seed 6211 and allocate 13, 4 and 4 to base, fusion and selection respectively. All windows from a subject stay together. HAR risks weight subjects equally. Windows from different subjects enter training in proportion to their count. Do not select seeds or methods on test scores.
+
+## Models and budgets
+
+Standardize from the corresponding training features. Train three 24-unit single-hidden-layer ReLU MLPs from initializations 11, 29 and 47 using raw features, categorical cross-entropy, Adam at 0.002, batch size up to 128 and 50 epochs of minibatch updates. Independent permutations vary between members. The reference is the member with lowest selection Brier. Compare equal-weight probability averaging with a genuine OKAPI tree fitted on the fusion split (20 generations, one restart, 10 seed trees, node cap 11, Brier fitness, search seed 61). Select the fusion with lowest selection Brier. Ties favor the mean. Report both fusions individually.
+
+The primary replacement is one 72-unit MLP trained with the original labels on the union of the base and fusion rows, with the same number and sizes of optimizer steps as one member. Draw one base-set-sized sample without replacement from this union each epoch. Its approximate training and inference multiply-add budget matches the three 24-unit models combined. A second 72-unit MLP uses base rows only. A 24-unit MLP trained on the union is a compact control. Use seed 83 for all three replacements. Report parameters, training row exposures and elapsed CPU/wall time. Fusion fitting and selection incur additional costs beyond MLP training. One experiment per dataset, no architecture tuning, transfer losses, distillation or use of test labels for decisions.
+
+## Endpoints and decision rules
+
+Primary risk is the mean sum of squared class-probability errors (Brier, range 0–2, for both datasets). Accuracy is secondary. Directly report how often the student reproduces ensemble repairs relative to the validation-chosen member and how often it introduces errors on examples that both member and ensemble got right. Also report retrospective test risks of all three members as a sensitivity check.
+
+The gated claims, per dataset, are (1) chosen fusion improves on its selected member, (2) primary student improves on that member, (3) primary student is within 0.01 Brier of the chosen ensemble or better. For each criterion compute paired differences with a one-sided percentile-bootstrap lower bound at 0.05/6 (three contrasts x two datasets), resampling test rows for Wisconsin and whole subject means for HAR, 20,000 replicates, seed 8833. Positive lower bounds support the first two criteria. For criterion 3 the lower bound of ensemble risk minus student risk must exceed −0.01. Claim recovery only if all three pass. Failure to detect an improvement or a difference is inconclusive. A direct equivalence claim would require a prespecified two-sided equivalence test; the planned criterion is one-sided noninferiority. Nine HAR test subjects make tail inference exploratory. Uncertainty is conditional on the trained models and fixed development splits.
