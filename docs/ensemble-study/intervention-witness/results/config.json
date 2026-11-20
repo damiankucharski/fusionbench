@@ -1,0 +1,32 @@
+{
+  "seeds": [
+    600,
+    601,
+    602,
+    603,
+    604,
+    605,
+    606,
+    607,
+    608,
+    609,
+    610,
+    611
+  ],
+  "target_batches_per_regime": 200,
+  "ordinary_support": 32,
+  "probes": [
+    1,
+    4,
+    16
+  ],
+  "jitter": [
+    0.0,
+    0.1
+  ],
+  "gp_generations": 8,
+  "fit_per_regime": 384,
+  "calibration_per_regime": 384,
+  "compute_start_utc": "2026-11-20T23:29:26.146518+00:00",
+  "compute_seconds": 1.2663818480000373
+}
