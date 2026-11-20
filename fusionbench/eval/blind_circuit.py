@@ -60,6 +60,25 @@ class RawCircuit:
     reduction: int | tuple
 
     @classmethod
+    def fit(cls, unlabelled, x, y, *, seed=0):
+        """Fit the four-input circuit using independent unlabeled and task-labeled rows."""
+        unlabelled, x = np.asarray(unlabelled, dtype=float), np.asarray(x, dtype=float)
+        labels = np.asarray(y)
+        if any(arr.ndim != 2 or arr.shape[1] != DIM for arr in (unlabelled, x)):
+            raise ValueError("this rule library requires four input features")
+        if len(x) == 0 or labels.shape != (len(x),) or not np.isin(labels, [0, 1]).all():
+            raise ValueError("supply one binary task label per training example")
+        if len(unlabelled) <= DIM or not np.isfinite(unlabelled).all() or not np.isfinite(x).all():
+            raise ValueError("supply finite inputs and more than four unlabeled observations")
+        offset = unlabelled.mean(axis=0)
+        if np.linalg.matrix_rank(unlabelled - offset) < DIM:
+            raise ValueError("the unlabeled inputs must span four directions")
+        matrix, _ = ica_components(unlabelled, seed)
+        matrix = matrix / (unlabelled @ matrix.T).std(axis=0)[:, None]
+        rule, _ = fit_rule((x - offset) @ matrix.T, labels.astype(bool))
+        return cls.from_axes(rule, matrix, offset)
+
+    @classmethod
     def from_axes(cls, rule, matrix, offset):
         rows = []
 
@@ -152,15 +171,20 @@ def make_y(s, flip):
             "parity": (a ^ b) ^ flip}
 
 
-def learn_axes(x, q, seed):
-    """Rows of each returned matrix are projections in raw coordinates."""
-    pca = PCA(n_components=DIM, whiten=True, svd_solver="full").fit(x)
+def ica_components(x, seed):
     with warnings.catch_warnings(record=True) as log:
         warnings.simplefilter("always", ConvergenceWarning)
         ica = FastICA(n_components=DIM, whiten="unit-variance", random_state=seed,
                       max_iter=256, tol=1e-4, whiten_solver="svd").fit(x)
     converged = not any(issubclass(msg.category, ConvergenceWarning) for msg in log)
-    return {"ica": (ica.components_, converged), "pca": (pca.components_, True),
+    return ica.components_, converged
+
+
+def learn_axes(x, q, seed):
+    """Rows of each returned matrix are projections in raw coordinates."""
+    pca = PCA(n_components=DIM, whiten=True, svd_solver="full").fit(x)
+    matrix, converged = ica_components(x, seed)
+    return {"ica": (matrix, converged), "pca": (pca.components_, True),
             "raw": (np.eye(DIM), True), "given": (q, True)}
 
 

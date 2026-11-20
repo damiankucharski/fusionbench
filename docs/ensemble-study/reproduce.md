@@ -15,6 +15,7 @@ python -m pytest -q
 ```sh
 python -m fusionbench.eval.seed_selection --out results/seed_selection/development --data-seeds 100 101 102 103 104 105 106 107
 python -m fusionbench.eval.seed_selection --out results/seed_selection/confirmation --data-seeds 300 301 302 303 304 305 306 307 --gp-seeds 40 41 42 43 44 45 46 47 48 49 50 51
+python -m fusionbench.eval.observer --bank results/seed_selection/confirmation --out results/observer
 fusionbench stability --out results/stability
 python -c "from fusionbench.eval.shrinkage import run_study; run_study('results/shrinkage', workers=2)"
 ```
@@ -46,3 +47,15 @@ python examples/digits_stability.py --out results/digits
 ```
 
 Rebuild the headline figure from the bundled measurements by running `python docs/ensemble-study/plot_results.py`. The compressed archive contains machine-readable results for each study, including the underlying per-seed numerators when recorded. The comparisons use independent data draws as units of replication. Per-example counts and multiple selectors on the same draw are paired measurements.
+
+## Fit the four-feature circuit on your own arrays
+
+```python
+from fusionbench.eval.blind_circuit import RawCircuit
+
+model = RawCircuit.fit(unlabelled_inputs, labelled_inputs, binary_labels, seed=0)
+decisions = model.score(new_inputs) > 0
+specification = model.to_dict()
+```
+
+Each input matrix has four columns. The fit routine discovers directions from the unlabeled matrix and chooses the logical rule using binary task labels. The score is a signed decision margin. Use the independent-half and out-of-library controls in the study before interpreting the recovered directions.

@@ -32,3 +32,17 @@ def test_compilation_preserves_signed_leaf_scores_and_drops_redundant_axes():
     data = net.to_dict()
     restored = RawCircuit(np.asarray(data["weights"]), np.asarray(data["bias"]), data["reduction"])
     np.testing.assert_array_equal(net.score(raw), restored.score(raw))
+
+
+def test_fit_from_raw_inputs_without_experts():
+    from fusionbench.eval.blind_circuit import draw_sources
+
+    rng = np.random.default_rng(16)
+    rotation, _ = np.linalg.qr(rng.normal(size=(4, 4)))
+    unlabelled = draw_sources(rng, 4096, True) @ rotation
+    sources = draw_sources(rng, 768, True)
+    x = sources @ rotation
+    a, b, c, _ = (sources > 0).T
+    labels = (a | b) & c
+    model = RawCircuit.fit(unlabelled, x[:256], labels[:256].astype(int), seed=16)
+    assert np.mean((model.score(x[256:]) > 0) == labels[256:]) > 0.94
