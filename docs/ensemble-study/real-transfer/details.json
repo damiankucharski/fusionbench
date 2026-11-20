@@ -1,0 +1,81 @@
+{
+  "wisconsin": {
+    "selected_member": "member11",
+    "chosen_fusion": "mean",
+    "split": {
+      "base": {
+        "n": 284,
+        "unit_count": 284,
+        "sha256_indices": "88ec84bffdb79bb6991e1d11d0bdf5ec3b97e34ac1b1dee624177dd5ede8a96e"
+      },
+      "fusion_fit": {
+        "n": 85,
+        "unit_count": 85,
+        "sha256_indices": "50c2e4fb047878230dfa48048324c4405fae38b924097d48e7385a53d91d1d26"
+      },
+      "selection": {
+        "n": 86,
+        "unit_count": 86,
+        "sha256_indices": "64cb99600c3ef7fd9e94debc2801b2faa10f1de23c59708a6f735804e1657794"
+      },
+      "test": {
+        "n": 114,
+        "unit_count": 114,
+        "sha256_indices": "fa82e930894f6b7a6ca7e9d810f79263f99213584b4dfe4d222a5c6bea9d1a23"
+      }
+    },
+    "repair_row_counts": {
+      "ensemble_repairs": 0,
+      "retained": 0,
+      "ensemble_harms": 0,
+      "both_correct": 111,
+      "student_new_errors": 1
+    },
+    "gp_nodes": 1,
+    "gp_fit_seconds": 1.5455729179998343,
+    "retrospective_lowest_member_test_brier": 0.06158014660437466
+  },
+  "har": {
+    "selected_member": "member29",
+    "chosen_fusion": "okapi",
+    "split": {
+      "base": {
+        "n": 4639,
+        "unit_count": 13,
+        "sha256_indices": "64abeaed6f2c5d1f0c5192fbab41f6c4a03174962ed81f34e18e413ba673dd7f"
+      },
+      "fusion_fit": {
+        "n": 1408,
+        "unit_count": 4,
+        "sha256_indices": "a85b6736ae630d4bd79368680b3fd23df55d29497a1af5765ec85ac2a4392023"
+      },
+      "selection": {
+        "n": 1305,
+        "unit_count": 4,
+        "sha256_indices": "58627f96f0abc6a1b0543f666e8707f080d94f7bb8486b6fa636d7c47c1f73d9"
+      },
+      "test": {
+        "n": 2947,
+        "unit_count": 9,
+        "sha256_indices": "8370b4a3cc2b2f46f2f6a851e3b023a4accc01639502af191d1a876c3211e7a9"
+      }
+    },
+    "repair_row_counts": {
+      "ensemble_repairs": 33,
+      "retained": 22,
+      "ensemble_harms": 16,
+      "both_correct": 2749,
+      "student_new_errors": 34
+    },
+    "gp_nodes": 3,
+    "gp_fit_seconds": 0.39272810800002844,
+    "retrospective_lowest_member_test_brier": 0.08914381789968333
+  },
+  "wall_seconds": 16.02035590100013,
+  "cpu_seconds": 15.971020447999997,
+  "python": "3.12.14",
+  "sklearn": "1.8.0",
+  "torch": "2.15.0+cpu",
+  "numpy": "2.3.5",
+  "har_sha256": "c00b803081a5c797cd5e4b83700a9810b38d53d9d84e01917e090e1fdbc81031"
+}
