@@ -19,3 +19,13 @@ The results of each experiment determine which comparisons to repeat on independ
 ### Joint predictor checkpoint
 
 The two-seed pilot completed. With paired observations and unit sensor gain, the joint raw-input model achieved 80.80% accuracy, the static predictor 74.26%, and the context-aware reference 82.74%. Breaking the pairing in the unlabeled support data reduced joint accuracy to 74.21%, with the static predictor at 74.26%. A separately trained observer also reached 80.73% with pairing. These preliminary results motivate an independent confirmation and a check on whether joint training offers any benefit over the separate observer.
+
+### Independent confirmation and stress tests
+
+Across eight fresh seeds, the raw-input network with 32 paired, unlabeled support observations reached 80.68% accuracy against 74.21% for the static predictor. Training the observer separately reached the same accuracy. Breaking the informative pairing removed the advantage. The next comparison will test whether the model can identify combinations of changes held out during training and how it compares with an ensemble on the same examples. [Protocol and results](context-student/README.md)
+
+Across eight banks of OKAPI trees and twelve target seeds, a diagnostic detected a strong new expert fault in 96 of 96 trials and a weaker fault in 43 of 96. When only the label mechanism changed, identical target predictions produced identical diagnostic decisions while Brier loss rose from 0.0718 to 0.3267. An open experiment is to measure how many randomly audited labels are needed to detect this invisible shift, including periods without an alarm. [Protocol and results](context-stress/README.md)
+
+### Pausing or redirecting future experiments
+
+The scheduled worker reads [the research settings](research-state.json) on this branch before starting an experiment, before expensive computation and before publishing. Set `enabled` to `false` to skip new experiments. Change `objective` to redirect subsequent work. Changes take effect when a worker next reads the file. A process already computing can continue until that check.
