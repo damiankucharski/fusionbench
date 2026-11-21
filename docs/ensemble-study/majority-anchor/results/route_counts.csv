@@ -1,0 +1,9 @@
+labels,condition,route,count
+512,clean,angular,16
+512,mixed,anchor,16
+512,nuisance,drop,16
+512,vote,anchor,16
+2048,clean,angular,16
+2048,mixed,anchor,16
+2048,nuisance,drop,16
+2048,vote,anchor,16
