@@ -1,0 +1,17 @@
+{
+  "n_dev": 11932,
+  "n_dev_positive": 1093,
+  "n_test": 5966,
+  "n_test_positive": 546,
+  "single": "boost",
+  "selected_pair": [
+    "lr",
+    "naive_bayes"
+  ],
+  "top_n": 2,
+  "passes": false,
+  "test_index_sha256": "6486e97e5eecd17aa0137edf6bd8530950c520aa88732bf668b848cfa088bc2d",
+  "sklearn": "1.8.0",
+  "numpy": "2.3.5",
+  "seconds": 14.898745869999402
+}
