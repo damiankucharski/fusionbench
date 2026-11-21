@@ -44,3 +44,5 @@ Refitting one native threshold and reassigning one provider on fresh switch/cont
 An insertion experiment adds a threshold gate to a terminal of the trained tree and compares active population admission with the same candidate kept in the archive, plus cost-matched ordinary search. [Gate grafts during evolution](native-graft/README.md)
 
 A slot-matched intervention separates a useful fitted operand from its functionally neutral duplicate, parent reordering and archive-only search. [Fitted versus neutral gates and actual lineage](matched-graft/README.md)
+
+A frozen-winner test bypasses traced gate occurrences or resets only their numerical cutoffs on new examples from each law. [Functional contribution of inherited operations](gate-necessity/README.md)

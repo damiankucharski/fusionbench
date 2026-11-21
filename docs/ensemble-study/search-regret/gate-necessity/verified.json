@@ -1,0 +1,13 @@
+{
+  "okapi_commit": "c3c4060e1474f502fdcb0784b2274e71d9feb5ea",
+  "protocol_commit": "6f1954a5ea91e609cb9a6b4f22060e42d9187a7b",
+  "matched_source_sha256": "85da9d4dd20b2489df1660a567f295cada5bbc8a790dee7c96ea645ba5baa5b5",
+  "ablations_sha256": "676ecb3f21222107710f702bb7e474cb4f87fa010f228ebe2a9a603bd24b8f3d",
+  "prediction_vectors": 3024,
+  "losses": 6048,
+  "frozen_fit_and_validation_winners": 192,
+  "program_intervention_target_rows": 2592,
+  "rows_with_changed_predictions": 855,
+  "paired_contrasts": 216,
+  "maximum_absolute_loss_difference": 0.0
+}
