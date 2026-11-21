@@ -7,6 +7,7 @@ import pandas as pd
 
 from fusionbench.eval.cost import Timer
 from fusionbench.eval.metrics import HIGHER_BETTER, METRIC_NAMES, score
+from fusionbench.methods.averaging import TopN
 from fusionbench.methods.registry import default_methods
 from fusionbench.types import Dataset
 
@@ -34,7 +35,8 @@ def evaluate_dataset(ds: Dataset, methods=None) -> pd.DataFrame:
         ft, pt = Timer(), Timer()
         try:
             with ft.measure():
-                method.fit(ds.fit_preds, ds.fit_y, task=ds.task, n_classes=ds.n_classes)
+                options = {"primary_metric": primary} if isinstance(method, TopN) else {}
+                method.fit(ds.fit_preds, ds.fit_y, task=ds.task, n_classes=ds.n_classes, **options)
             fit_pred = method.predict(ds.fit_preds)
             with pt.measure():
                 test_pred = method.predict(ds.test_preds)
@@ -46,6 +48,8 @@ def evaluate_dataset(ds: Dataset, methods=None) -> pd.DataFrame:
             continue
         rows.append(_row(ds, method.name, primary, fit_m, test_m,
                          ft.elapsed, pt.elapsed, oracle_test))
+        if isinstance(method, TopN):
+            rows[-1].update(n_selected=method.n_selected_, fit_metric=method.metric_)
 
     df = pd.DataFrame(rows)
     df["expected_winner"] = df["method"].isin(ds.expected_winners)

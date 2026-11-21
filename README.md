@@ -32,7 +32,7 @@ Miscalibration (judged by log-loss → logit recalibration).
 
 ## Methods under test
 
-best_single, simple_average, top_k, val_weighted, **op_min/op_max/op_far/op_close**
+best_single, simple_average, top_n, top_k, val_weighted, **op_min/op_max/op_far/op_close**
 (fixed operator atoms), stacking_lr, **stacking_logit**, **okapi** *(extra: okapi —
 runs on the numpy/CPU backend)*, nsga3 *(extra: nsga)*, tpot *(extra: tpot)*, plus
 the analytic **oracle** ceiling.
@@ -96,7 +96,7 @@ The report ranks methods on the held-out primary metric. It includes regret when
 
 ```sh
 python examples/digits_predictions.py --out data
-fusionbench evaluate --dataset data/digits --methods best_single simple_average stacking_lr okapi --out results/digits
+fusionbench evaluate --dataset data/digits --methods best_single simple_average top_n stacking_lr okapi --out results/digits
 ```
 
 The example needs the OKAPI extra for its last method. The 898 base-training, 449 fusion-fit and 450 test images come from a single stratified split.
@@ -104,3 +104,12 @@ The example needs the OKAPI extra for its last method. The 898 base-training, 44
 ## Research branch
 
 Crossed-seed experiments measure when a reliable validation ranking breaks under a controlled distribution shift. Single-model experiments test which ensemble mechanisms can be recovered from raw inputs and labels. [Results, controls, data and reproduction commands](docs/ensemble-study/README.md)
+
+
+### Ranked-prefix Top-N averaging
+
+`top_n` scores each provider on the fusion-fit labels, orders the providers once, then scores each equal-weight prefix from one provider through the full pool. It chooses N with the best fit score and freezes both ranking and N for prediction. Tied individual scores preserve input order. Tied prefix scores choose smaller N. The default selection metric is the dataset's primary metric when using the benchmark runner, and macro-F1 for standalone fitting. Use `TopN(metric="brier")` to specify a metric. `average_precision` uses the positive class for binary tasks and macro one-vs-rest for multiclass tasks. As for all benchmark methods, Brier sums squared errors across classes before averaging examples.
+
+`ranking_` holds zero-based provider indices, `prefix_scores_[n-1]` is the fit score of the first n providers, and `n_selected_` is the winning count. The `results.csv` row records `fit_metric` and `n_selected`. The fixed-size `top_5` comparator is available separately.
+
+The `run`, `evaluate` and `sweep` commands automatically include arithmetic averaging, learned Top-N, and a regularized logistic stacker when explicitly requesting `okapi` or `okapi_shrunk`. The default stacker uses raw probabilities (`stacking_lr`). Explicitly requesting `stacking_logit` or `stacking_clr` selects that regularized variant. The method name in results identifies the feature transform. Fit all learned references on the same development examples and preserve their selection for IID and shifted tests.

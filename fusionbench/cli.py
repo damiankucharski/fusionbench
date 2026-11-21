@@ -8,6 +8,19 @@ from fusionbench.methods.registry import CORE, FACTORIES, default_methods
 from fusionbench.scenarios.registry import SCENARIOS, default_suite
 
 
+def _comparison_names(names):
+    """Include the three reference methods in each explicit OKAPI comparison."""
+    if not names or not {"okapi", "okapi_shrunk"}.intersection(names):
+        return names
+    names = list(dict.fromkeys(names))
+    for name in ("simple_average", "top_n"):
+        if name not in names:
+            names.append(name)
+    if not {"stacking_lr", "stacking_logit", "stacking_clr"}.intersection(names):
+        names.append("stacking_lr")
+    return names
+
+
 def _scenarios(names):
     if not names:
         return default_suite()
@@ -38,7 +51,7 @@ def cmd_run(args):
     from fusionbench.eval.report import save_report
     from fusionbench.eval.runner import run_suite
 
-    methods = default_methods(args.methods or None)
+    methods = default_methods(_comparison_names(args.methods) or None)
     print(f"methods: {[m.name for m in methods]}")
     df = run_suite(_scenarios(args.scenarios), methods=methods,
                    n_per_split=args.n, seed=args.seed)
@@ -55,9 +68,10 @@ def cmd_evaluate(args):
     from fusionbench.store import load_dataset
 
     ds = load_dataset(args.dataset)
-    methods = default_methods(args.methods)
+    names = _comparison_names(args.methods)
+    methods = default_methods(names)
     available = {m.name for m in methods}
-    missing = set(args.methods) - available
+    missing = set(names) - available
     if missing:
         raise SystemExit(f"Install optional dependencies for: {', '.join(sorted(missing))}")
     results = evaluate_dataset(ds, methods)
@@ -77,7 +91,7 @@ def cmd_sweep(args):
         sweep_table,
     )
 
-    methods = default_methods(args.methods or None)
+    methods = default_methods(_comparison_names(args.methods) or None)
     print(f"methods: {[m.name for m in methods]}")
     if args.kind == "reliability":
         sc = SCENARIOS[args.scenario]()
