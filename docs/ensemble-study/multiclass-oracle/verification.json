@@ -1,0 +1,11 @@
+{
+  "replayed_affected_rows": 2460,
+  "affected_split_groups": 84,
+  "checked_predictions_and_label_brier_unchanged": 2460,
+  "affected_rows_by_archive": {
+    "full-suite-point/runs.csv.gz": 912,
+    "mutation-opportunity/runs.csv.gz": 1260,
+    "mutation-opportunity/refresh-independent-runs.csv.gz": 288
+  },
+  "minimum_observed_provider_probability": 0.0001096859264203844
+}

@@ -1,5 +1,7 @@
 # Does changing the operator family account for the improvement?
 
+A later audit corrected the two multiclass scenarios’ reference probabilities. The primary Brier estimates reported here use true test labels and were independently verified. Revised secondary distances to the reference are linked in the [multiclass correction and historical replay](../multiclass-oracle/README.md).
+
 Yes for the fixed 19-scenario IID panel. At 1,200 actual training fitness evaluations, the ordinary retype achieved **0.25551** full-class Brier versus **0.26753** when the same fourth mutation opportunity returned the unchanged genotype. The paired difference was **−0.01202**, with a 95% interval of **[−0.01756, −0.00648]** across six new data replicates. At a matched 10 completed generations the difference was −0.01219 [−0.01658, −0.00780]. Seventeen of the 19 IID point estimates favored the new operator family. Across the nine predefined shifts the mean difference was −0.00100 [−0.00479, +0.00279]. Regularized logistic stacking had the best suite-wide mean at 0.22610. [Frozen protocol](protocol.md) · [Independent refresh addendum](refresh-addendum.md) · [All aggregate contrasts](suite-contrasts.csv)
 
 ![Paired retype-minus-identity effects in 19 scenarios, compared at matched fitness calls and at matched generations.](retype-effects.png)
