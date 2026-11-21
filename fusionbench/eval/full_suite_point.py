@@ -196,6 +196,29 @@ def summarize(frame):
     return means, pd.DataFrame(extra)
 
 
+def score_spread(frame):
+    """Spread of each frozen method across data draws, averaging GP restarts first."""
+    keys = ["scenario", "split", "checkpoint", "selection", "method"]
+    metrics = ["brier", "conditional_excess", "log_loss", "accuracy", "macro_f1"]
+    bank = frame.groupby([*keys, "data_seed"])[metrics].mean().reset_index()
+    long = bank.melt(
+        id_vars=[*keys, "data_seed"],
+        value_vars=metrics,
+        var_name="metric",
+        value_name="score",
+    )
+    spread = (
+        long.groupby([*keys, "metric"])
+        .score.agg(["count", "mean", "std"])
+        .reset_index()
+    )
+    spread = spread.rename(columns={"count": "banks", "std": "sd_across_banks"})
+    half = (
+        t.ppf(0.975, spread.banks - 1) * spread.sd_across_banks / np.sqrt(spread.banks)
+    )
+    return spread.assign(low_95=spread["mean"] - half, high_95=spread["mean"] + half)
+
+
 def run(out, workers):
     out.mkdir(parents=True, exist_ok=True)
     with ProcessPoolExecutor(max_workers=workers) as pool:
@@ -210,6 +233,7 @@ def run(out, workers):
     means, paired = summarize(df)
     means.to_csv(out / "means.csv", index=False)
     paired.to_csv(out / "paired.csv", index=False)
+    score_spread(df).to_csv(out / "spread.csv", index=False)
 
 
 if __name__ == "__main__":

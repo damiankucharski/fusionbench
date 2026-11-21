@@ -1,0 +1,10 @@
+{
+  "scenario_data_cells": 152,
+  "vectors": 10032,
+  "bitwise_vectors": 10032,
+  "native_decodings": 6473,
+  "checked_metric_values": 50160,
+  "paired_contrasts": 1584,
+  "max_absolute_metric_error": 0.0,
+  "input_sha256": "41bc933baa1e053fd6a6b25aa3117d7d3331f7cdef64dc683328b2780239a4de"
+}

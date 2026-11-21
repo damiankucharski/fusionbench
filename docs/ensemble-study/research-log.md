@@ -28,6 +28,10 @@ Each change motivated by an individual mechanism also faces the remaining defaul
 
 Pair-marginal networks reproduce the fixed model average through three active inputs; adding quadruple units recovers the average through five. On 12 anonymous providers and 16 labels, extra input-frequency information improved balanced matching-law excess Brier by 0.02559; a uniform design removed the gain exactly. The next run checks the deployable operator-type mutation on the full default suite before changing the search further. [Study, proofs, controls and two PyTorch models](search-regret/matching-compression/README.md) · [Full-suite freeze](full-suite-point/protocol.md)
 
+### Regression results for operator-type mutation across the full suite
+
+Mean IID Brier was 0.25947 with point mutation and 0.26839 without across all 19 canonical scenarios; 15 point estimates favored the extension. Five unadjusted intervals favored enabling it and none favored disabling it. Logistic stacking was strongest on average at 0.22874. Both multiclass cases were included. The largest adverse point estimate was on the 100-provider Needle and remained uncertain. The next question separates actual relabeling from changes in native mutation frequencies on fresh data, with an omitted or external transfer task. [All cases, spreads, control methods and tested shifts](full-suite-point/README.md)
+
 ## Current research questions
 
 - **Search.** Within a stated tree family, how close does an optimizer get to the best attainable fit score for its budget? In small families, enumerate every admissible tree. In larger ones, record a feasible reference tree and the budget needed to match it. Measure variation across optimizer seeds on identical examples.

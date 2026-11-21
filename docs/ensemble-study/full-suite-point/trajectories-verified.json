@@ -1,0 +1,20 @@
+{
+  "champions": 2432,
+  "complete": true,
+  "maximum_absolute_error": {
+    "accuracy": 0.0,
+    "brier": 0.0,
+    "conditional_excess": 0.0,
+    "log_loss": 0.0,
+    "macro_f1": 0.0,
+    "raw_vs_half_full_brier": 5.551115123125783e-17
+  },
+  "metrics": 42240,
+  "objective_calls": 729600,
+  "okapi_sha": "db7b2b15c7064ad34f638e5e93a8cdb01e5271b8",
+  "path_digests": 1216,
+  "predictions": 8448,
+  "raw_vs_half_full_brier": 2432,
+  "scenarios": 19,
+  "trajectories": 608
+}
