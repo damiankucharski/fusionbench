@@ -1,0 +1,14 @@
+{
+  "exact_single_gate_fits": 24,
+  "brier_values": 18480,
+  "graft_neighborhoods": 192,
+  "immediate_cost_matches": 384,
+  "tail_cost_matches": 96,
+  "simple_gate_active_tail": 13,
+  "admitted_offers": 15,
+  "new_parameter_already_in_original_winner": 0,
+  "new_parameter_in_final_winner": 14,
+  "simple_gate_archive_only_tail": 5,
+  "simple_gate_matched_candidates_tail": 7,
+  "max_abs_brier_error": 0.0
+}
