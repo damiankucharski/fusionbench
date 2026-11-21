@@ -1,0 +1,52 @@
+{
+  "datasets": {
+    "spambase": {
+      "fit": {
+        "rows": 2759,
+        "groups": 2537,
+        "positive": 1087,
+        "sha256": "77be5e0e1ac53bed4aa35f7e1c142e9c5eed63bcd5f264849d308c355e220c20"
+      },
+      "validation": {
+        "rows": 921,
+        "groups": 844,
+        "positive": 363,
+        "sha256": "2acf72c1a3b02ec8a7c6c91e8cc009e55fbaa0739faf5dc1d963a686b853d909"
+      },
+      "test": {
+        "rows": 921,
+        "groups": 826,
+        "positive": 363,
+        "sha256": "f483447cdfccd35e3f49a8bbe2465ffdc3c317cce0a1635d2c269d3504ec38dd"
+      },
+      "full_C": 0.1,
+      "strong_feature_set": "log1p"
+    },
+    "har_stairs": {
+      "fit": {
+        "rows": 1687,
+        "groups": 17,
+        "positive": 811,
+        "sha256": "78996b9a3da478443eb51767fe694921a846d6e6293cd02a76b6180aa7b914c9"
+      },
+      "validation": {
+        "rows": 372,
+        "groups": 4,
+        "positive": 175,
+        "sha256": "e3b47067627d5ed9648d55fc3b6acfe39d7bdcb714d3a52148aa0ade956fd6f1"
+      },
+      "test": {
+        "rows": 891,
+        "groups": 9,
+        "positive": 420,
+        "sha256": "6cd147ff3dcd5c30505cca580bd00ce99e912d90644b8352d841e9f296196a5f"
+      },
+      "full_C": 0.01,
+      "strong_feature_set": "raw"
+    }
+  },
+  "bootstrap_repeats": 4000,
+  "compute_seconds": 9.238513621000493,
+  "compute_started_utc": "2026-11-21T00:00:46.753540+00:00",
+  "compute_ended_utc": "2026-11-21T00:00:55.992057+00:00"
+}
