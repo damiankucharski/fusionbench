@@ -11,6 +11,7 @@ from pathlib import Path
 
 import numpy as np
 
+from fusionbench.methods.averaging import TopN
 from fusionbench.methods.okapi import OKAPIMethod, _identity
 from fusionbench.methods.stacking import StackingLogit
 from fusionbench.scenarios.correlated import CorrelatedRedundancy
@@ -112,6 +113,7 @@ def _one_search(scenario_name, data_seed, search_seed, generations, fit_n, selec
         # Freeze the choices before generating any scores on evaluation splits.
         single_fit = [_macro_f1(train[0][:, j, 1] > .5, train[1]) for j in range(len(paths))]
         best_single = int(np.argmax(single_fit))
+        top_n = TopN(metric="macro_f1").fit(train[0], train[1], task="binary", n_classes=2)
         stacker = StackingLogit().fit(train[0], train[1], task="binary", n_classes=2)
         simple_selection = {}
         if not full_fit:
@@ -119,6 +121,7 @@ def _one_search(scenario_name, data_seed, search_seed, generations, fit_n, selec
             simple_selection = {
                 "average": sx[:, :, 1].mean(axis=1),
                 "single": sx[:, best_single, 1],
+                "top_n": top_n.predict(sx)[:, 1],
                 "stack_logit": stacker.predict(sx)[:, 1],
             }
         simple_f1 = {method: 1 - _group_losses(np.array([p > .5]), selection[1], groups).mean()
@@ -138,13 +141,16 @@ def _one_search(scenario_name, data_seed, search_seed, generations, fit_n, selec
                                        group_loss="" if full_fit else json.dumps(selected_loss[j].tolist()),
                                        accuracy=accuracy[j], macro_f1=f1[j]))
             for method, j in choices.items():
-                rows.append(dict(**common, method=method, candidate=j, nodes=sizes[j], accuracy=accuracy[j],
+                rows.append(dict(**common, method=method, candidate=j, nodes=sizes[j], n_selected="", accuracy=accuracy[j],
                                  macro_f1=f1[j], pool_f1_gap=f1.max()-f1[j], fit_f1=fit_f1[j],
                                  selection_f1="" if full_fit else 1-selected_loss[j].mean()))
             for method, p in (("average", x[:, :, 1].mean(axis=1)), ("single", x[:, best_single, 1]),
-                              ("stack_logit", stacker.predict(x)[:, 1]), ("bayes", oracle)):
-                rows.append(dict(**common, method=method, candidate="", nodes="", accuracy=np.mean((p > .5) == y),
-                                 macro_f1=_macro_f1(p > .5, y), pool_f1_gap="", fit_f1="", selection_f1=simple_f1.get(method, "")))
+                              ("stack_logit", stacker.predict(x)[:, 1]), ("top_n", top_n.predict(x)[:, 1]), ("bayes", oracle)):
+                rows.append(dict(**common, method=method, candidate="", nodes="",
+                                 n_selected=top_n.n_selected_ if method == "top_n" else "", accuracy=np.mean((p > .5) == y),
+                                 macro_f1=_macro_f1(p > .5, y), pool_f1_gap="",
+                                 fit_f1=top_n.prefix_scores_[top_n.n_selected_-1] if method == "top_n" else "",
+                                 selection_f1=simple_f1.get(method, "")))
     finally:
         adapter._tmp.cleanup()
     return rows, candidates
@@ -172,7 +178,7 @@ def summarize_restarts(out):
             best = validation.iloc[compact.best_index]
             selected["restart_holdout_best"] = best
             selected["restart_holdout_compact"] = validation.iloc[compact.index]
-            baselines = iid[iid.method.isin(["single", "average", "stack_logit"])].drop_duplicates("method")
+            baselines = iid[iid.method.isin(["single", "average", "top_n", "stack_logit"])].drop_duplicates("method")
             simple = baselines.iloc[np.argmax(baselines.selection_f1)]
             selected["restart_with_baselines"] = best if best.selection_f1 > simple.selection_f1 else simple
         for rule, winner in selected.items():
@@ -186,6 +192,7 @@ def summarize_restarts(out):
                     family = "gp"
                 rows.append(dict(scenario=scenario, data_seed=data_seed, domain=domain, policy=rule,
                                  model=family, chosen_search_seed=rec.search_seed, nodes=rec.nodes,
+                                 n_selected=rec.get("n_selected", "") if family == "top_n" else "",
                                  accuracy=rec.accuracy, macro_f1=rec.macro_f1,
                                  accuracy_regret=rec.oracle_accuracy - rec.accuracy,
                                  restarts=len(fit), total_fitness_calls=int(fit.fitness_calls.sum()),
