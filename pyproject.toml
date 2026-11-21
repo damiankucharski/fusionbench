@@ -16,7 +16,7 @@ dependencies = [
 [project.optional-dependencies]
 nsga = ["pymoo>=0.6"]
 tpot = ["tpot>=0.12"]
-okapi = ["torch>=2.2", "okapi @ git+https://github.com/damiankucharski/OKAPI@022330fcaea478b750cf117cb2ba7e34b7deab40"]
+okapi = ["torch>=2.2", "okapi @ git+https://github.com/damiankucharski/OKAPI@a7c23e8e8c8f0bfe608bc7740b1a74a26eef6e8b"]
 dev = ["pytest>=8.0"]
 
 [project.scripts]

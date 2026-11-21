@@ -48,6 +48,19 @@ probability = model.predict(X)
 tv_upper_bound = model.error_bound(X)
 ```
 
+FusionBench udostępnia tę samą funkcję na standardowych metodach `SimpleAverage` oraz `ValWeighted`. Druga wymaga wcześniejszego dopasowania na predykcjach walidacyjnych. Opcja instalacyjna `pip install ".[okapi]"` w katalogu repozytorium wskazuje konkretną rewizję OKAPI zawierającą kompilator. Dla dopasowanych regresji logistycznych scikit-learn albo potoków StandardScaler + LogisticRegression wystarczy:
+
+```python
+from fusionbench.methods.averaging import SimpleAverage
+
+fused = SimpleAverage().compile_estimators(estimators)
+p = fused.predict(raw_X)
+labels = fused.predict_labels(raw_X)
+tv_bound = fused.error_bound(raw_X)
+```
+
+Dla różnych podzbiorów cech ustaw `feature_indices` i `n_features` we wspólnej surowej przestrzeni. Można też podać od razu macierze przez `compile(W, biases)`. Wykonywanie `predict` respektuje tę samą normalizację co pozostałe metody FusionBench. Obcinanie prawdopodobieństw od dołu, a następnie renormalizacja nie powiększają TV. Istotnie, niech A i B będą sumami obu wektorów po obcięciu. Obie są ≥1. Jeśli A≥B, dodatnie różnice po renormalizacji są ograniczone przez dodatnie różnice po obcięciu podzielone przez A. Obcięcie jest niemalejące i nierozszerzające w każdej współrzędnej. Łącznie suma dodatnich różnic nie rośnie. Dla A<B wystarczy zamienić argumenty.
+
 Wersja z keep_sources=True umożliwia dodatkowo model.oscillation_bound(X). Macierz W ma wymiary eksperci × klasy × cechy. Warunkowanie na wejścia umożliwia wykonywanie osobnych decyzji co do dopuszczalnej niezgodności. Na ten moment nie zmierzono przewagi czasowej wersji z certyfikatem. Kolejny test sprawdzi, czy niskorzędowa postać tej samej macierzy i sprawdzanie marginesów logitów podnoszą pokrycie gwarancji decyzji przy rozsądnym koszcie obliczeń.
 
 Realny benchmark trwał 238,99 s na jednym rdzeniu CPU. Pliki results/results.csv, results/contrasts.csv i results/test_examples.csv.gz zawierają podsumowania i poszczególne wyniki. Pełne testy gałęzi OKAPI zakończyły się wynikiem 326 zaliczonych i 1 pominiętym w 15,37 s.
