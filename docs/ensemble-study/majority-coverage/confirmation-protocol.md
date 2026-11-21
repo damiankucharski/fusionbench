@@ -1,0 +1,3 @@
+# Separate Monte Carlo check of the primary rare-disagreement cell
+
+The initially frozen 24-bank simulation observed 80.60% unrevealed worlds at k=15, theta=45°, n=512, versus the analytically derived 82.51%. The 95% Monte Carlo t interval for this one diagnostic was 78.98–82.21%. The original Brier interval included the analytic risk. Freeze a supplementary check at the same primary cell before sampling any new observations: an independent 96 banks with 256 repetitions each, actual 512-row labeled training panels and 256 fresh Gaussian target rows per repetition, seeds 6100–6195. Report the raw first results and this new check separately, with no model, angle, cutoff or theoretical formula changes.
