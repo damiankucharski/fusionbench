@@ -1,0 +1,16 @@
+{
+  "okapi_commit": "4c784f6a217675d1305d378eaeb525738c37761d",
+  "protocol_commit": "8df5db69e8b92964fbf69daa1eeee21dc48d3c7a",
+  "input_sha256": "85da9d4dd20b2489df1660a567f295cada5bbc8a790dee7c96ea645ba5baa5b5",
+  "banks": 16,
+  "prediction_vectors": 12720,
+  "losses": 25440,
+  "decoded_program_split_rows": 11760,
+  "exact_single_gate_certificates": 48,
+  "matched_restarts": 96,
+  "admissions": 58,
+  "nonadmissions": 38,
+  "duplicate_vs_original_split_comparisons": 960,
+  "verified_parent_slots": 3456,
+  "max_absolute_loss_difference": 0.0
+}

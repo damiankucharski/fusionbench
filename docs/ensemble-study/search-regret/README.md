@@ -42,3 +42,5 @@ A native two-provider FAR switch, an affine logistic control and a shift that re
 Refitting one native threshold and reassigning one provider on fresh switch/control panels permits a matched comparison against continuing the same GP by either full-forward or threshold-candidate cost. [Local parameter updates](native-refinement/README.md)
 
 An insertion experiment adds a threshold gate to a terminal of the trained tree and compares active population admission with the same candidate kept in the archive, plus cost-matched ordinary search. [Gate grafts during evolution](native-graft/README.md)
+
+A slot-matched intervention separates a useful fitted operand from its functionally neutral duplicate, parent reordering and archive-only search. [Fitted versus neutral gates and actual lineage](matched-graft/README.md)

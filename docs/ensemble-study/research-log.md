@@ -8,6 +8,10 @@ The [literature index for the paper](literature/README.md) connects primary sour
 
 While the research switch is enabled and the user's instructions allow work, the FusionBench and OKAPI leads send the coordinator each published result and start the next falsifiable experiment in the same active run. Record the next question with the result and coordinate directly on code revisions and controls. If a run reaches a limit or a blocker, record the last verified result, the remaining question and the reason work stopped so the next run can resume. A completed round alone does not retire either research lead.
 
+### A fitted gate and its neutral duplicate both changed FAR search
+
+Using the same admission, slot and other parents, the fitted operand improved final FAR excess Brier by 0.00288 (0.00267 versus 0.00555 for the duplicate). A neutral duplicate also improved over matched reordering by 0.00334. The operand comparison was unresolved on the CLOSE and logistic laws. The next registered test bypasses genuinely inherited occurrences on fresh rows. [Report and reproducible evidence](search-regret/matched-graft/README.md) · [Frozen follow-up](search-regret/gate-necessity-protocol.md)
+
 ## Current research questions
 
 - **Search.** Within a stated tree family, how close does an optimizer get to the best attainable fit score for its budget? In small families, enumerate every admissible tree. In larger ones, record a feasible reference tree and the budget needed to match it. Measure variation across optimizer seeds on identical examples.

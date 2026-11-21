@@ -1,0 +1,15 @@
+{
+  "okapi": "4c784f6a217675d1305d378eaeb525738c37761d",
+  "boundaries": 96,
+  "checked_tails": 576,
+  "exact_checkpoints": 960,
+  "exact_winners": 1920,
+  "ordered_parent_records": 3456,
+  "ordinary_tail_calls": 172800,
+  "reconstructed_offers": 384,
+  "shadow_admissions": 384,
+  "status_admitted": 58,
+  "status_rejected": 13,
+  "status_unchanged": 25,
+  "unintervened_calls": 362373
+}
