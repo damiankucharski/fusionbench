@@ -28,3 +28,5 @@ python -m pytest -q tests/test_search_regret.py
 A follow-up on 12 new datasets measured the number of essential providers for every visited decision function. [Independent coverage analysis](coverage.md)
 
 Changing only the starting trees at equal fitness-call budgets tests whether broader initial coverage changes optimization and population error. [Starting-tree intervention](initialization.md)
+
+A separate confirmation repeats the diagnosis with four probability levels per provider and expected Brier risk. [Graded probability benchmark](graded.md)

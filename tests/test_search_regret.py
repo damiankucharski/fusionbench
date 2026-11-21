@@ -100,3 +100,30 @@ def test_starter_intervention_reaches_prespecified_arities(tmp_path):
         assert sorted(arities(decisions).tolist()) == expected
         if mode == "balanced":
             assert [tree.nodes_count for tree in trees] == [7] * 4
+
+
+def test_graded_exact_risk_and_fit_counts_match_raw_observations():
+    from fusionbench.eval.search_graded import (
+        IID,
+        SCORES,
+        brier,
+        conditional,
+        counts,
+        lattice,
+        risk,
+    )
+
+    rules, _ = lattice()
+    assert rules.shape == (166, 256)
+    task = conditional("matched", [0, 1, 3, 2])
+    np.testing.assert_allclose(risk(rules, task, IID).min(), risk(task, task, IID))
+    cells = np.array([2, 2, 18, 82, 150, 233, 251])
+    y = np.array([1, 0, 1, 1, 0, 1, 0], dtype=bool)
+    brute = ((rules[:, cells] - y) ** 2).mean(1)
+    np.testing.assert_allclose(brier(rules, counts(cells, y)), brute)
+    assert np.allclose(
+        brier(rules, counts(cells, y)) * len(y) * 400, np.round(brute * len(y) * 400)
+    )
+    assert risk(SCORES.mean(1), conditional("mean", range(4)), IID) == pytest.approx(
+        risk(conditional("mean", range(4)), conditional("mean", range(4)), IID)
+    )
