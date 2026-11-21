@@ -32,3 +32,5 @@ Changing only the starting trees at equal fitness-call budgets tests whether bro
 A separate confirmation repeats the diagnosis with four probability levels per provider and expected Brier risk. [Graded probability benchmark](graded.md)
 
 On continuous outputs, an integer minimum cut computes the fit optimum without enumerating the trees. The eight-provider study includes the mean, tuned Top-N, logistic stack and both native GP selection policies. [Exact Brier certificate on continuous predictions](continuous.md)
+
+A paired replay before and after OKAPI's tree identity correction measures its effect on observed search paths, exact regret and held-out predictions. [Structural key audit](structural-key/README.md)
