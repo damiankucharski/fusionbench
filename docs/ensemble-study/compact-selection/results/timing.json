@@ -1,0 +1,8 @@
+{
+  "round_start_utc": "2026-11-20T23:59:13+00:00",
+  "compute_seconds": 46.90212369400069,
+  "prior_aborted_attempt_seconds": 42.06,
+  "prior_attempt_measure": "elapsed wall from log creation to numerical guard traceback; includes interpreter startup",
+  "validated_report_utc": "2026-11-21T00:03:48.560048+00:00",
+  "start_to_report_seconds": 275.560048
+}

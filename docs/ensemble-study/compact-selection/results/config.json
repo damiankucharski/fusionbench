@@ -1,0 +1,14 @@
+{
+  "outer_folds": 5,
+  "inner_folds": 3,
+  "svc_calibration_folds": 3,
+  "outer_seed": 11801,
+  "inner_seed": 11802,
+  "deduplicate_split": true,
+  "acceptance_margin": 0.005,
+  "landmarks": 64,
+  "readout_C": 100.0,
+  "gamma": "1/d",
+  "compute_start_utc": "2026-11-21T00:02:15.735704+00:00",
+  "compute_seconds": 46.90212369400069
+}
