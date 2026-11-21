@@ -1,0 +1,31 @@
+{
+  "n_dev": 341,
+  "n_test": 228,
+  "seconds": 6.82278991399653,
+  "banks": [
+    {
+      "bank": 87300,
+      "pair": [
+        "forest",
+        "lda"
+      ]
+    },
+    {
+      "bank": 87301,
+      "pair": [
+        "forest",
+        "lda"
+      ]
+    },
+    {
+      "bank": 87302,
+      "pair": [
+        "forest",
+        "lda"
+      ]
+    }
+  ],
+  "test_index_sha256": "dee6a0a63e78c358bfacfd7eb7e58980886f92b5ca06b9bc0e68b028649ab5f2",
+  "sklearn": "1.8.0",
+  "numpy": "2.3.5"
+}
