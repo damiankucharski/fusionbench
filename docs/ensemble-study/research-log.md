@@ -34,6 +34,11 @@ The next joint comparison concerns two different trees with identical printable 
 
 ## Open experiments
 
+### A calibrated provider can require a negative weight
+
+At high class-conditional correlation, signed logistic fusion of two calibrated predictors reached .08481 IID Brier versus .11304 for the same fit with nonnegative slopes (24 independent banks). Changing correlation alone made the signed fit worse, .20536 versus .11327. For this law we also derive the population Brier minimum over predictors nondecreasing in the weaker provider. Started 2026-11-21 10:07:34 UTC. Compute took 1.71 seconds and time through validated report was 271 seconds. Can a signed OKAPI head match the linear reference and can an unlabeled target bank tell us when to stop subtracting? [Experiment, derivation and replication](calibrated-suppressor/README.md)
+
+
 1. Train one raw-input network for prediction and monitoring. Compare it with a static predictor, a context-aware reference and a condition where the shift is observationally invisible. Track the monitoring supervision and target batch size alongside predictive risk.
 2. Change the law inside a context. Test whether the unlabeled target statistics reveal a violation of the two-context mixture assumption and whether declining to adapt improves held-out risk. Include a failure designed to leave observed statistics unchanged.
 

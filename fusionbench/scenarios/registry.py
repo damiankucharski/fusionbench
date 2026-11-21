@@ -15,7 +15,7 @@ from __future__ import annotations
 from fusionbench.scenarios.base import Scenario
 from fusionbench.scenarios.calibration import Miscalibration, MulticlassCommittee
 from fusionbench.scenarios.committee import Committee, DeadWeight, Needle, Saturated
-from fusionbench.scenarios.correlated import CorrelatedRedundancy
+from fusionbench.scenarios.correlated import CalibratedSuppressor, CorrelatedRedundancy
 from fusionbench.scenarios.gates import (
     Compound,
     HardRescue,
@@ -33,6 +33,7 @@ SCENARIOS: dict[str, type[Scenario]] = {
     "needle": Needle,
     "saturated": Saturated,
     "correlated": CorrelatedRedundancy,
+    "calibrated_suppressor": CalibratedSuppressor,
     "polarity_fault": PolarityFault,
     "hardveto": HardVeto,
     "hardrescue": HardRescue,
