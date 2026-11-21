@@ -1,0 +1,9 @@
+# Independent confirmation of the search coverage diagnosis
+
+The first panel suggests that GP repeatedly visits functions involving few providers. We will test how much the distribution of explored function arities accounts for the empirical search gap on unseen data and GP seeds.
+
+Use 128 fit rows, 128 independent validation rows and the same three generators, finite family and population configuration as the original protocol. Use fresh data seeds 3100–3111 and GP seeds 71, 73 and 79. Analyze generations 4, 16 and 48 of MIN/MAX searches. The primary setting is TwoPathways at generation 48. Parity and the additive target check dependence on the task.
+
+For each visited function, count essential inputs by flipping each of four bits on the complete truth table. Record how many distinct functions of each arity the GP has seen, together with all empirical minimizers' arities. Compute the exact probability of hitting an empirical optimum and the expected excess count of train errors under two references. The first samples the same total number of distinct functions uniformly without replacement. The second samples uniformly without replacement within each arity, matching the observed counts. Calculate the distribution of the minimum empirical loss by multiplying the finite-population survival probabilities across strata.
+
+Compare observed GP regret with both exact references. A large drop in the discrepancy after conditioning identifies functional arity coverage as a candidate explanation at this budget. A persistent discrepancy points to within-arity selection. The reference conditions on an outcome of search; it is a diagnostic comparison and supplies no causal effect of changing the proposal mechanism. Group restarts within each training draw and report paired differences across data seeds.
