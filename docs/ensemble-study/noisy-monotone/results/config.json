@@ -1,0 +1,26 @@
+{
+  "seeds": [
+    1450,
+    1451,
+    1452,
+    1453,
+    1454,
+    1455,
+    1456,
+    1457,
+    1458,
+    1459,
+    1460,
+    1461
+  ],
+  "rules_per_bank": 6,
+  "source_positive_bit_probability": 0.2,
+  "source_sizes": [
+    12,
+    32
+  ],
+  "flips_per_task": 1,
+  "max_certificate_gap": 9.872860862181199e-10,
+  "compute_start_utc": "2026-11-21T00:24:24.594317+00:00",
+  "compute_seconds": 0.5415720219998548
+}
