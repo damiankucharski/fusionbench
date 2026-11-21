@@ -76,6 +76,10 @@ class CalibratedSuppressor(Scenario):
 
     The standard deviations of the two Gaussian logits are 2 and 1. Changing
     their class-conditional correlation preserves both marginal calibration curves.
+    Kahn (2004) derives the affine aggregate for class-conditional Gaussian
+    log odds with shared covariance. Here unequal marginal variances make the
+    weaker provider's joint coefficient negative when correlation exceeds 0.5.
+    See kahn2004aggregating in docs/ensemble-study/literature/README.md.
     """
 
     primary_metric = "brier"

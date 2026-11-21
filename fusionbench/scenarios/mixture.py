@@ -18,6 +18,14 @@ from fusionbench.scenarios.base import Scenario
 
 
 class GatedExperts(Scenario):
+    """Generate two regional specialists and an observed noisy selector.
+
+    Jacobs et al. (1991) trained a gate to allocate inputs among experts.
+    In this generator, a calibrated selector estimates the probability of the
+    active region, giving a known input-dependent mixture for comparison.
+    See jacobs1991adaptive in docs/ensemble-study/literature/README.md.
+    """
+
     task = "binary"
     expected_winners = ["okapi", "tpot"]
     oracle_description = "input-dependent mixture: (1-S)*E1 + S*E2"

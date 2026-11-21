@@ -1,4 +1,9 @@
-"""Test functional versus structural population diversity in native MIN/MAX GP."""
+"""Test functional versus structural population diversity in native MIN/MAX GP.
+
+Beadle and Johnson (2008) tested Boolean equivalence during crossover. Here
+exact MIN/MAX function signatures determine which trees survive a population
+merge. See beadle2008semantic in docs/ensemble-study/literature/README.md.
+"""
 
 from __future__ import annotations
 

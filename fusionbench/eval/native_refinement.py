@@ -1,4 +1,10 @@
-"""Evaluate native parameter edits against cost-matched continuation of the same GP."""
+"""Evaluate native parameter edits against cost-matched continuation of the same GP.
+
+Kommenda et al. (2020) studied local fitting of continuous constants in symbolic
+regression. This experiment changes a threshold in an OKAPI tree and compares
+its held-out gain with further search at matched cost.
+See kommenda2020parameter in docs/ensemble-study/literature/README.md.
+"""
 
 from __future__ import annotations
 

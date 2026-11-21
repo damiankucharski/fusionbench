@@ -2,7 +2,7 @@
 
 The current program uses FusionBench to improve how OKAPI finds and generalizes fusion trees. Earlier ensemble-compression studies below are prior results. The active objective and pause switch are in [the research settings](research-state.json).
 
-The [21 November literature review](literature/2026-11-21.md) connects seven primary studies to matched tests of weight fitting, validation selection and nonlinear expert interactions.
+The [literature index for the paper](literature/README.md) connects primary sources to benchmark assumptions, dated proposals and measured results. It includes the [21 November review](literature/2026-11-21.md) and a [BibTeX bibliography](literature/references.bib).
 
 ## Current research questions
 

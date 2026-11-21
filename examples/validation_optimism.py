@@ -1,4 +1,10 @@
-"""Does enlarging the GP menu improve independent risk and bias its validation score?"""
+"""Does enlarging the GP menu improve independent risk and bias its validation score?
+
+Cawley and Talbot (2010) studied bias from optimizing a noisy selection
+criterion. Here the same validation-selected tree is rescored on fresh cases
+to separate optimism on the selection set from the gain on an independent test.
+See cawley2010overfitting in docs/ensemble-study/literature/README.md.
+"""
 import argparse
 import json
 from pathlib import Path

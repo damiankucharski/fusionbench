@@ -1,4 +1,10 @@
-"""Out-of-fold portability test for signed binary OKAPI heads (frozen WDBC protocol)."""
+"""Out-of-fold portability test for signed binary OKAPI heads (frozen WDBC protocol).
+
+Ting and Witten (1999) trained a linear combiner on cross-validated class
+probabilities. Here the same out-of-fold principle supplies inputs for
+regularized logistic stacking and a signed OKAPI head with a maximum feature.
+See ting1999stacked in docs/ensemble-study/literature/README.md.
+"""
 import argparse
 from itertools import combinations
 import hashlib
