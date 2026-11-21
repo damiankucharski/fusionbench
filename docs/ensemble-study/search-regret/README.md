@@ -30,3 +30,5 @@ A follow-up on 12 new datasets measured the number of essential providers for ev
 Changing only the starting trees at equal fitness-call budgets tests whether broader initial coverage changes optimization and population error. [Starting-tree intervention](initialization.md)
 
 A separate confirmation repeats the diagnosis with four probability levels per provider and expected Brier risk. [Graded probability benchmark](graded.md)
+
+On continuous outputs, an integer minimum cut computes the fit optimum without enumerating the trees. The eight-provider study includes the mean, tuned Top-N, logistic stack and both native GP selection policies. [Exact Brier certificate on continuous predictions](continuous.md)
