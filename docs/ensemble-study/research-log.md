@@ -5,7 +5,15 @@ The current program uses FusionBench to improve how OKAPI finds and generalizes 
 ## Current research questions
 
 - **Search.** Within a stated tree family, how close does an optimizer get to the best attainable fit score for its budget? In small families, enumerate every admissible tree. In larger ones, record a feasible reference tree and the budget needed to match it. Measure variation across optimizer seeds on identical examples.
-- **Generalization.** For each selected tree, evaluate the same predictor on fit, validation, fresh IID examples and examples under controlled distribution shifts. Compare with the ordinary OKAPI search, arithmetic averaging and regularized logistic stacking on the same expert outputs. Document how each method uses the labeled rows. Test candidate changes on new data seeds and include settings in which the proposed improvement may hurt.
+- **Generalization.** For each selected tree, evaluate the same predictor on fit, validation, fresh IID examples and examples under controlled distribution shifts. Compare a proposed change with the existing OKAPI search and the three baselines below. Test candidate changes on new data seeds and include settings in which the proposed improvement may hurt.
+
+### Baselines for every OKAPI experiment
+
+1. **Arithmetic mean.** Average every provider's class probabilities with equal weights.
+2. **Ranked-prefix Top-N mean.** Fix the scoring metric and its direction before the run. Score providers individually on labeled development predictions and rank them once, best first. Score the arithmetic mean for every prefix from a single provider through all providers in that order. Keep the best-scoring prefix, including when the score falls and rises again as N increases. Break individual-score ties by the fixed input order and equal prefix scores by the smallest N. Save the chosen N and the scoring metric for each fit. The full prefix reproduces the arithmetic mean on the same inputs.
+3. **Logistic stacking.** Fit a regularized logistic regression on the provider predictions. State whether the inputs are probabilities or logits, and the regularization used.
+
+Use the same held-out examples and provider columns for all methods. Record which development rows were used to rank, select or fit, and count any separate validation labels in the budget. For learned base models, use out-of-fold or independent development predictions for fusion. Freeze provider order, N and stacking parameters for both IID and shifted tests. For earlier experiments, label any added comparator as a retrospective replay.
 
 The first paired study found that on TwoPathways, with 384 labeled fit examples, 48-generation OKAPI had IID Brier 0.16071, the stacker 0.13275 and a manually constructed feasible tree 0.06744. The tree used the known grouping of detectors. The first milestone is to measure the search gap in a small exactly enumerable problem, and to test whether OKAPI can discover useful compositions from anonymized expert outputs in the original setting at a matched budget. [Matched-baseline study](https://github.com/damiankucharski/OKAPI/blob/639c5ff/experiments/fit_gap/README.md)
 
