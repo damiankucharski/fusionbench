@@ -2,6 +2,8 @@
 
 The current program uses FusionBench to improve how OKAPI finds and generalizes fusion trees. Earlier ensemble-compression studies below are prior results. The active objective and pause switch are in [the research settings](research-state.json).
 
+The [21 November literature review](literature/2026-11-21.md) connects seven primary studies to matched tests of weight fitting, validation selection and nonlinear expert interactions.
+
 ## Current research questions
 
 - **Search.** Within a stated tree family, how close does an optimizer get to the best attainable fit score for its budget? In small families, enumerate every admissible tree. In larger ones, record a feasible reference tree and the budget needed to match it. Measure variation across optimizer seeds on identical examples.
