@@ -1,0 +1,11 @@
+{
+  "seed": -1,
+  "labels": 2,
+  "truth": 0,
+  "compatible": 4,
+  "both_endpoints_members": false,
+  "ambiguity": 0.875,
+  "endpoint_brier": 0.21875,
+  "minimax_brier": 0.1875,
+  "best_two_member_brier": 0.375
+}

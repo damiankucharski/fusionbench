@@ -1,0 +1,35 @@
+{
+  "seeds": [
+    1400,
+    1401,
+    1402,
+    1403,
+    1404,
+    1405,
+    1406,
+    1407,
+    1408,
+    1409,
+    1410,
+    1411
+  ],
+  "all_full_rules": 166,
+  "source_bit_probability": 0.2,
+  "target_bit_probability": 0.5,
+  "small_n": [
+    4,
+    12,
+    32,
+    64
+  ],
+  "larger_d": [
+    8,
+    16
+  ],
+  "larger_n": [
+    128,
+    512
+  ],
+  "compute_start_utc": "2026-11-21T00:20:31.389984+00:00",
+  "compute_seconds": 5.563087263999478
+}
