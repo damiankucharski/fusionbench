@@ -94,4 +94,30 @@ def test_machine_neighbors_of_breakpoints_match_the_adjacent_intervals():
                     da, db = (a - cut) ** 2, (b - cut) ** 2
                     return np.where(da <= db if close else da >= db, a, b)
 
-                np.testing.assert_array_equal(select(machine, close), select(interior, close))
+                np.testing.assert_array_equal(
+                    select(machine, close), select(interior, close)
+                )
+
+
+def test_close_control_reuses_anon_features_and_native_tie_priority():
+    from fusionbench.scenarios.native_switch import (
+        NativeCloseSwitch,
+        conditional_probability,
+    )
+
+    far = NativeSwitch(role_seed=905)
+    close = NativeCloseSwitch(role_seed=905)
+    sample = close.draw(40, np.random.default_rng(22))
+    partner = far.draw(40, np.random.default_rng(22))
+    np.testing.assert_array_equal(sample.preds, partner.preds)
+    np.testing.assert_array_equal(sample.uniform, partner.uniform)
+    a, b = sample.preds[:, sample.parent, 1], sample.preds[:, sample.child, 1]
+    expected = np.where(abs(a - 37 / 64) <= abs(b - 37 / 64), a, b)
+    np.testing.assert_array_equal(sample.probability(0), expected)
+    np.testing.assert_array_equal(close.bayes_oracle(sample.preds, {})[:, 1], expected)
+    np.testing.assert_array_equal(sample.probability(1), partner.probability(1))
+    assert (
+        conditional_probability(36 / 64, 38 / 64, 0, close=True, threshold=37 / 64)
+        == 36 / 64
+    )
+    assert SCENARIOS["native_close_switch"] is NativeCloseSwitch

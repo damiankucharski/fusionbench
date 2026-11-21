@@ -15,10 +15,13 @@ def farther(a, b, threshold):
     return np.where(np.abs(a - threshold) >= np.abs(b - threshold), a, b)
 
 
-def conditional_probability(a, b, mixing):
+def conditional_probability(a, b, mixing, *, close=False, threshold=27 / 64):
     if not 0 <= mixing <= 1:
         raise ValueError("mixing must lie in [0, 1]")
-    switch = farther(a, b, 27 / 64)
+    if close:
+        switch = np.where(np.abs(a - threshold) <= np.abs(b - threshold), a, b)
+    else:
+        switch = farther(a, b, threshold)
     linear = expit(0.2 + 0.7 * logit(a) + 0.7 * logit(b))
     return (1 - mixing) * switch + mixing * linear
 
@@ -29,10 +32,16 @@ class SwitchDraw:
     uniform: np.ndarray
     parent: int
     child: int
+    close: bool = False
+    threshold: float = 27 / 64
 
     def probability(self, mixing):
         return conditional_probability(
-            self.preds[:, self.parent, 1], self.preds[:, self.child, 1], mixing
+            self.preds[:, self.parent, 1],
+            self.preds[:, self.child, 1],
+            mixing,
+            close=self.close,
+            threshold=self.threshold,
         )
 
     def labels(self, mixing):
@@ -42,6 +51,8 @@ class SwitchDraw:
 class NativeSwitch(Scenario):
     """Mix a FAR gate and a logistic control, keeping the input distribution fixed."""
 
+    close = False
+    threshold = 27 / 64
     primary_metric = "brier"
     oracle_description = (
         "Mixture of an ordered two-provider FAR gate and an affine logit posterior"
@@ -67,6 +78,8 @@ class NativeSwitch(Scenario):
             np.stack((1 - scores, scores), axis=-1),
             rng.random(n),
             *map(int, self.roles),
+            close=self.close,
+            threshold=self.threshold,
         )
 
     def _generate(self, n, rng):
@@ -75,8 +88,28 @@ class NativeSwitch(Scenario):
 
     def bayes_oracle(self, preds, latent):
         a, b = self.roles
-        score = conditional_probability(preds[:, a, 1], preds[:, b, 1], self.mixing)
+        score = conditional_probability(
+            preds[:, a, 1],
+            preds[:, b, 1],
+            self.mixing,
+            close=self.close,
+            threshold=self.threshold,
+        )
         return np.stack((1 - score, score), axis=1)
+
+
+class NativeCloseSwitch(NativeSwitch):
+    """Nearest-operand control on exactly the FAR panel's anonymous features.
+
+    The new direction/cutoff forms a preregistered transport test in
+    docs/ensemble-study/search-regret/matched-graft-protocol.md.
+    """
+
+    close = True
+    threshold = 37 / 64
+    oracle_description = (
+        "Mixture of an ordered two-provider CLOSE gate and an affine logit posterior"
+    )
 
 
 def draw_native_switch(seed, split, n):
