@@ -36,7 +36,7 @@ def observations(seed, split, n):
     return clean, flipped, y
 
 
-def search_champion(train, y, seed, generations):
+def search_champion(train, y, seed, generations, *, objective=_brier_objective):
     from okapi.okapi import Okapi
     from okapi.pareto import maximize
 
@@ -47,7 +47,7 @@ def search_champion(train, y, seed, generations):
         np.save(gt, y)
         paths = [directory / key for key in _tensor_map(train)]
         search = Okapi(paths, gt, population_size=len(paths), population_multiplier=2,
-                       tournament_size=3, minimize_node_count=True, objective_functions=(_brier_objective,),
+                       tournament_size=3, minimize_node_count=True, objective_functions=(objective,),
                        objectives=(maximize,), backend='numpy', seed=seed, postprocessing_function=_identity)
         adapter._seed_population(search, np.random.default_rng(seed))
         for _ in range(generations):
