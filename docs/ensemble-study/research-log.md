@@ -17,6 +17,12 @@ Use the same held-out examples and provider columns for all methods. Record whic
 
 The first paired study found that on TwoPathways, with 384 labeled fit examples, 48-generation OKAPI had IID Brier 0.16071, the stacker 0.13275 and a manually constructed feasible tree 0.06744. The tree used the known grouping of detectors. The first milestone is to measure the search gap in a small exactly enumerable problem, and to test whether OKAPI can discover useful compositions from anonymized expert outputs in the original setting at a matched budget. [Matched-baseline study](https://github.com/damiankucharski/OKAPI/blob/639c5ff/experiments/fit_gap/README.md)
 
+## How the two projects evaluate an OKAPI change
+
+The FusionBench and OKAPI leads exchange failure cases, exact revisions and run configurations directly. For a joint comparison, FusionBench owns the scenario, held-out seeds, scoring and reference methods. OKAPI Lab owns the implementation, its regression test and the before/after revisions. Both teams use one protocol and one set of results. The published report links the algorithm change to its measured effect, including null results. A baseline implementation published in FusionBench can be imported by OKAPI experiments on the same data splits, as in the [ranked-prefix replay](https://github.com/damiankucharski/OKAPI/blob/ec1ba02/experiments/fit_gap/README.md).
+
+The next joint comparison concerns two different trees with identical printable representations. The OKAPI regression test asks whether both candidates survive duplicate filtering. The FusionBench experiment asks whether that correction also reduces the gap to the minimum achievable training Brier at fixed search cost, and whether held-out risk changes. The exact reference applies to trees using only MIN and MAX. [OKAPI collision study](https://github.com/damiankucharski/OKAPI/blob/7676602/experiments/structural_key/protocol.md) · [FusionBench exact reference](https://github.com/damiankucharski/fusionbench/blob/1f12dbf/docs/ensemble-study/search-regret/continuous.md)
+
 ## Starting evidence
 
 - An ICA projection and a compact logical rule recovered a single predictor in a four-factor bimodal simulator. Isotropic Gaussian sources removed the information needed to recover those axes. A task outside the rule library required a more flexible classifier.
