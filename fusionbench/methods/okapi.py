@@ -11,14 +11,17 @@ Implementation notes (verified against the installed package):
   numpy/sklearn macro-F1 so no torch metrics are needed (torch itself is still
   imported by ``okapi.fitness`` at module load).
 - the evolved tree is evaluated on a fresh split via
-  ``tree.do_pred_on_another_tensors(preds_directory=...)``.
+  ``tree.do_pred_on_another_tensors(current_tensors=...)`` under the fitted task's
+  postprocessing rule.
 """
 
 from __future__ import annotations
 
 import shutil
 import tempfile
+from contextlib import contextmanager
 from pathlib import Path
+from threading import RLock
 
 import numpy as np
 
@@ -28,6 +31,31 @@ from fusionbench.methods.base import Method
 
 def _identity(x):
     return x
+
+
+_legacy_postprocessing_lock = RLock()
+
+
+@contextmanager
+def _task_postprocessing(task):
+    from okapi import globals as state
+    from okapi.functions import scale_vector_to_sum_1
+
+    function = scale_vector_to_sum_1 if task == "multiclass" else _identity
+    scoped = getattr(state, "use_postprocessing_function", None)
+    if scoped is not None:
+        with scoped(function):
+            yield
+    else:
+        # Older OKAPI stores the callable on its process-wide Postprocessor.
+        with _legacy_postprocessing_lock:
+            wrapper = state.postprocessing_function
+            previous = wrapper._postprocessing_function
+            wrapper.set_postprocessing_function(function)
+            try:
+                yield
+            finally:
+                wrapper.set_postprocessing_function(previous)
 
 
 def _macro_f1_objective(prediction, gt):
@@ -60,10 +88,12 @@ class OKAPIMethod(Method):
                  population_multiplier: int = 3, tournament_size: int = 5, seed: int = 0,
                  minimize_node_count: bool = True, n_restarts: int = 2, n_seeds: int = 30,
                  fitness: str = "macro_f1", max_depth: int | None = None,
-                 max_nodes: int | None = None, operator_family: str = "standard"):
+                 max_nodes: int | None = None, operator_family: str = "standard",
+                 operator_point_mutation: bool = False):
         if operator_family not in {"standard", "minmax"}:
             raise ValueError("operator_family must be standard or minmax")
         self.operator_family = operator_family
+        self.operator_point_mutation = operator_point_mutation
         if fitness not in {"macro_f1", "brier"}:
             raise ValueError("fitness must be macro_f1 or brier")
         if any(cap is not None and cap < 1 for cap in (max_depth, max_nodes)):
@@ -136,7 +166,10 @@ class OKAPIMethod(Method):
 
     def fit(self, fit_preds, fit_y, *, task, n_classes):
         super().fit(fit_preds, fit_y, task=task, n_classes=n_classes)
-        from okapi.functions import scale_vector_to_sum_1
+        with _task_postprocessing(task):
+            return self._fit_tree(fit_preds, fit_y)
+
+    def _fit_tree(self, fit_preds, fit_y):
         from okapi.okapi import Okapi
         from okapi.operators import (
             CLOSE_THRESHOLD,
@@ -157,16 +190,14 @@ class OKAPIMethod(Method):
         # cannot exceed the number of models (complexity grows via evolution).
         pop = max(2, min(self.population_size, fit_preds.shape[1]))
         tournament = max(2, min(self.tournament_size, pop))
-        # OKAPI's postprocessing is a global; always set it explicitly so a prior
-        # multiclass scenario cannot leave softmax-normalisation active for a
-        # later binary one (which would normalise the single channel to 1.0).
-        post = scale_vector_to_sum_1 if task == "multiclass" else _identity
         ops = ((MIN, MAX) if self.operator_family == "minmax" else
                (MEAN, MIN, MAX, WEIGHTED_MEAN, FAR_THRESHOLD, CLOSE_THRESHOLD))
 
         best_tree, best_fit = None, -np.inf
         # Older OKAPI versions can still run an unbounded search.
         caps = {k: v for k, v in (("max_nodes", self.max_nodes), ("max_depth", self.max_depth)) if v is not None}
+        if self.operator_point_mutation:
+            caps["operator_point_mutation"] = True
         for r in range(self.n_restarts):
             okapi = Okapi(
                 preds_source=fit_dir,
@@ -180,7 +211,7 @@ class OKAPIMethod(Method):
                 allowed_ops=ops,
                 backend="numpy",
                 seed=self.seed + r,
-                postprocessing_function=post,
+                postprocessing_function=None,
                 **caps,
             )
             self._seed_population(okapi, np.random.default_rng(self.seed + r))
@@ -196,8 +227,10 @@ class OKAPIMethod(Method):
         return self
 
     def predict(self, preds):
-        q_dir = self._write_split(preds, "query")
-        out = self.best_tree.do_pred_on_another_tensors(preds_directory=str(q_dir))
+        data = self._to_okapi(np.asarray(preds, dtype=np.float64))
+        providers = {f"m{i}.npy": data[:, i, :] for i in range(data.shape[1])}
+        with _task_postprocessing(self.task):
+            out = self.best_tree.do_pred_on_another_tensors(current_tensors=providers)
         arr = np.asarray(out)
         if arr.ndim == 1:
             arr = arr[:, None]
