@@ -1,0 +1,46 @@
+{
+  "referenced_file_sha256": {
+    "wine-inputs.npz": "4611c30f605fa17cbe2e59233a39b6b06935c40a5151aeeb865fa7203d8ade11",
+    "wine-manifest.json": "5de7d530aa7ecdacc883fa20158fdc1be4828753b6a47583816fbc70ae4eec4a",
+    "wine-runs.csv.gz": "9b4f91f27164eb3954a998f62da71d42a43b8e0c10751ba301b54017416657e8",
+    "wine-refresh-independent-runs.csv.gz": "0398125e9596143031fd18f5198bd2b03b8251b5bd1203143a9c87739a5f6df9"
+  },
+  "paired_on": [
+    "scenario",
+    "data_seed",
+    "gp_seed",
+    "split",
+    "checkpoint",
+    "selection"
+  ],
+  "excluded_from_parity": [
+    "method",
+    "search_seconds"
+  ],
+  "versus_refresh_independent": {
+    "refresh": {
+      "paired_rows": 120,
+      "compared_columns": 36,
+      "rows_with_identical_values_in_every_compared_column": 120,
+      "unequal_rows_by_column": {}
+    },
+    "identity": {
+      "paired_rows": 120,
+      "compared_columns": 36,
+      "rows_with_identical_values_in_every_compared_column": 120,
+      "unequal_rows_by_column": {}
+    }
+  },
+  "sum_over_ten_unique_trajectories_by_endpoint": {
+    "calls": {
+      "point_original_parametric": 0,
+      "point_opportunities": 282,
+      "point_program_changes": 0
+    },
+    "generation": {
+      "point_original_parametric": 0,
+      "point_opportunities": 245,
+      "point_program_changes": 0
+    }
+  }
+}

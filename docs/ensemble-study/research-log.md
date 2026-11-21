@@ -32,6 +32,10 @@ Pair-marginal networks reproduce the fixed model average through three active in
 
 Mean IID Brier was 0.25947 with point mutation and 0.26839 without across all 19 canonical scenarios; 15 point estimates favored the extension. Five unadjusted intervals favored enabling it and none favored disabling it. Logistic stacking was strongest on average at 0.22874. Both multiclass cases were included. The largest adverse point estimate was on the 100-provider Needle and remained uncertain. The next question separates actual relabeling from changes in native mutation frequencies on fresh data, with an omitted or external transfer task. [All cases, spreads, control methods and tested shifts](full-suite-point/README.md)
 
+### What adding an operator-type mutation changed
+
+Across all 19 canonical families, native retype lowered IID full-class Brier by 0.01202 versus a genotype-preserving fourth opportunity. Same-family refresh produced little change; in 134/228 synthetic searches the previous family at every chosen site lacked parameters. The same direction held on external Wine at equal fitness calls, although three simple baselines had lower losses there. The next question concerns whether rounding native fitness to three decimal places suppresses useful variation, and whether any fit improvement survives independent testing. [Paired regression and external test](mutation-opportunity/README.md) · [Native selection-precision witness](https://github.com/damiankucharski/OKAPI/blob/630fd1f/experiments/selection_precision/README.md)
+
 ## Current research questions
 
 - **Search.** Within a stated tree family, how close does an optimizer get to the best attainable fit score for its budget? In small families, enumerate every admissible tree. In larger ones, record a feasible reference tree and the budget needed to match it. Measure variation across optimizer seeds on identical examples.
