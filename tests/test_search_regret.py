@@ -1,7 +1,12 @@
+from importlib.util import find_spec
+
 import numpy as np
 import pytest
 
 pytest.importorskip("okapi")
+requires_lattice = pytest.mark.skipif(
+    find_spec("okapi.lattice_search") is None, reason="uses the OKAPI lattice enumeration reference"
+)
 
 from fusionbench.eval.search_regret import (
     CUBE,
@@ -17,6 +22,7 @@ from fusionbench.eval.search_regret import (
 )
 
 
+@requires_lattice
 def test_family_is_complete_and_population_mismatch_is_exact():
     tables, codes = family()
     assert len(set(codes)) == 166
@@ -37,6 +43,7 @@ def test_family_is_complete_and_population_mismatch_is_exact():
     assert SHIFT.sum() == pytest.approx(1.0)
 
 
+@requires_lattice
 def test_fitness_uses_only_fit_rows_even_with_unobserved_cells():
     ix = np.array([1, 1, 1, 3, 8])
     y = np.array([1, 0, 0, 1, 1], dtype=bool)
@@ -49,6 +56,7 @@ def test_fitness_uses_only_fit_rows_even_with_unobserved_cells():
     assert objective.calls == len(objective.errors) == 166
 
 
+@requires_lattice
 def test_erm_ties_and_signed_risk_decomposition():
     p = Problem("parity", seed=12, n_fit=32, max_fit=128, n_val=70, n_test=100)
     tables, codes = family()
@@ -87,6 +95,7 @@ def test_matched_sampling_agrees_with_enumerating_all_subsets():
     )
 
 
+@requires_lattice
 def test_starter_intervention_reaches_prespecified_arities(tmp_path):
     from fusionbench.eval.search_coverage import arities
     from fusionbench.eval.search_initialization import starters
@@ -102,6 +111,7 @@ def test_starter_intervention_reaches_prespecified_arities(tmp_path):
             assert [tree.nodes_count for tree in trees] == [7] * 4
 
 
+@requires_lattice
 def test_graded_exact_risk_and_fit_counts_match_raw_observations():
     from fusionbench.eval.search_graded import (
         IID,
