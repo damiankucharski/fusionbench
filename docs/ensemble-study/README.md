@@ -4,6 +4,18 @@ This research branch investigates two possible functions of an ensemble. Its mem
 
 ![Changes in seed rankings and single-model accuracy](results.png)
 
+## What can one network preserve?
+
+| Goal | Sufficient structure or observed outcome |
+|---|---|
+| Reproduce every binary top-1 decision | The equal-weight average of two probabilities σ(a) and σ(b) is above one-half exactly when a+b>0. If their logits are affine in common raw features, average their coefficients and deploy one affine threshold. On 54,360 pair–record comparisons from Spambase and UCI HAR, all decisions agreed. Probabilities differed, with RMSE up to 0.091 on the selected pairs. [Proof, counterexamples and source-model controls](binary-pair-decisions/README.md) |
+| Reproduce the full probability vector exactly | For a stacker trained on centered log probabilities of affine softmax experts, the classwise normalization terms cancel and the remaining affine maps compose. On handwritten digits the largest discrepancy was 1.23×10⁻¹⁵. A full classifier trained on the original labels still had better Brier loss on every fold. [Exact compilation](compiled-views/README.md) |
+| Approximate an arithmetic probability pool with a smaller model | Related sigmoid units can be grouped into a single hidden layer. The within-group logit variance bounds the probability error on each input. On 16 weak-signal banks four merged units had probability RMSE 0.00044, versus 0.01605 keeping four high-weight candidates. For eight distinct directions, four merged units had RMSE 0.104 and the width selector retained all eight. [Width study and error guarantee](width-certificate/README.md) |
+| Know when multiclass probabilities or labels are preserved | An affine softmax parameters-only average has a total-variation bound derived from the dispersion of class-relative source logits. It has the same sharp constant for any number of classes. On overlapping HAR views the predicted class always agreed, but the proof guaranteed TV≤0.05 for only 0.16% of cases. [Proof, empirical coverage and public sklearn interface](softmax-certificate/README.md) |
+| Learn a raw-input model when provider parameters are unavailable | In a controlled faulty-sensor task, one learned input cap and a linear skip gave 93.36% versus 93.59% Bayes and 92.90% direct linear classification. The gain disappeared when the fault was removed. A separate real HAR study found that a single MLP retained 22 of 33 ensemble repairs and introduced 34 new errors. [Controlled mechanism](bounded-evidence/README.md) · [Real raw-feature test](real-transfer/README.md) |
+
+A competitive single model matters before claiming that any ensemble improvement transferred. On disjoint Spambase views the selected two-member pair reached 89.58% accuracy versus 83.93% for the validation-selected member, but a single log-transformed logistic classifier reached 93.92%. Also check the requested deployment output and actual cost. A model preserving the winner may return different probabilities. On one CPU, verifying a multiclass winner and falling back to the full pool beat a simpler check of individual expert unanimity in only one nonduplicate workload. [Binary comparisons](binary-pair-decisions/README.md) · [Measured inference costs](softmax-routing/README.md)
+
 ## Selecting across search seeds
 
 We fitted 12 independent OKAPI trees to the same 384 cases for each dataset. One expert reversed its prediction in 10% of the source cases. We varied that frequency on the test population while keeping the six other experts and the labels fixed within each counterfactual pair. The confirmation used eight new data draws and twelve new search seeds per draw. Brier here is the mean squared error of the positive-class probability.
