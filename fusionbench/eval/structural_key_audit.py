@@ -8,6 +8,7 @@ import json
 import time
 from concurrent.futures import ProcessPoolExecutor
 from contextlib import contextmanager
+from dataclasses import dataclass
 from fractions import Fraction
 from importlib import import_module
 from pathlib import Path
@@ -198,10 +199,49 @@ def fit_gp(paths, gt, gp_seed, policy, tensors, labels):
     return checkpoints, audit.collisions
 
 
-def panel(data_seed):
-    from loguru import logger
+@dataclass
+class ReferencePanel:
+    data_seed: int
+    train: np.ndarray
+    labels: list
+    tensors: list
+    baseline: list
+    minimum_loss: Fraction
 
-    logger.disable("okapi")
+    def scores(self, predictions):
+        losses = {
+            name: brier(p, y)
+            for name, p, y in zip(DOMAINS, predictions, self.labels, strict=True)
+        }
+        return dict(
+            data_seed=self.data_seed,
+            **losses,
+            prediction_sha256=probability_digest(predictions),
+        )
+
+    def champion_rows(self, snapshots, gp_seed, policy):
+        for metadata, fit, val in snapshots:
+            for name, tree in (("fit", fit), ("validation", val)):
+                probs = [
+                    tree.do_pred_on_another_tensors(current_tensors=t).ravel()
+                    for t in self.tensors
+                ]
+                fit_gap = exact_brier(probs[0], self.labels[0]) - self.minimum_loss
+                assert fit_gap >= 0
+                yield dict(
+                    **self.scores(probs),
+                    gp_seed=gp_seed,
+                    policy=policy,
+                    champion=name,
+                    fit_regret=float(fit_gap),
+                    exact_hit=fit_gap == 0,
+                    nodes=tree.nodes_count,
+                    tree=repr(structural_key(tree.root)),
+                    **metadata,
+                )
+
+
+def reference_panel(data_seed):
     splits = [
         _split(data_seed, 0, 128),
         _split(data_seed, 1, 128),
@@ -217,37 +257,30 @@ def panel(data_seed):
     start = time.perf_counter()
     oracle = fit_lattice_brier(matrices[0], labels[0])
     oracle_seconds = time.perf_counter() - start
-    baseline, gp_runs, events = [], [], []
-
-    def metrics(predictions):
-        losses = {
-            name: brier(p, y)
-            for name, p, y in zip(DOMAINS, predictions, labels, strict=True)
-        }
-        return dict(
-            data_seed=data_seed,
-            **losses,
-            prediction_sha256=probability_digest(predictions),
-        )
-
+    baseline = []
+    panel = ReferencePanel(
+        data_seed, matrices[0], labels, tensors, baseline, oracle.minimum_loss
+    )
     exact_pred = [oracle.predict(x) for x in matrices]
     assert exact_brier(exact_pred[0], labels[0]) == oracle.minimum_loss
     baseline.append(
         dict(
             method="exact_lattice",
-            **metrics(exact_pred),
+            **panel.scores(exact_pred),
             optimum_numerator=oracle.minimum_loss.numerator,
             optimum_denominator=oracle.minimum_loss.denominator,
             terms=len(oracle.terms()),
             fit_seconds=oracle_seconds,
         )
     )
-    baseline.append(dict(method="average", **metrics([x.mean(1) for x in matrices])))
+    baseline.append(
+        dict(method="average", **panel.scores([x.mean(1) for x in matrices]))
+    )
     top = TopN("brier").fit(providers[0], labels[0], task="binary", n_classes=2)
     baseline.append(
         dict(
             method="top_n",
-            **metrics([top.predict(p)[:, 1] for p in providers]),
+            **panel.scores([top.predict(p)[:, 1] for p in providers]),
             selected_n=top.n_selected_,
             ranking=json.dumps(top.ranking_.tolist()),
             prefix_scores=json.dumps(np.asarray(top.prefix_scores_).tolist()),
@@ -256,41 +289,31 @@ def panel(data_seed):
     stack = StackingLogit().fit(providers[0], labels[0], task="binary", n_classes=2)
     baseline.append(
         dict(
-            method="stack_logit", **metrics([stack.predict(p)[:, 1] for p in providers])
+            method="stack_logit",
+            **panel.scores([stack.predict(p)[:, 1] for p in providers]),
         )
     )
-    with training_files(matrices[0], labels[0]) as (paths, gt):
+    return panel
+
+
+def panel(data_seed):
+    from loguru import logger
+
+    logger.disable("okapi")
+    reference = reference_panel(data_seed)
+    gp_runs, events = [], []
+    with training_files(reference.train, reference.labels[0]) as (paths, gt):
         for gp_seed in GP_SEEDS:
             for policy in ("legacy", "fixed"):
                 snapshots, collisions = fit_gp(
-                    paths, gt, gp_seed, policy, tensors, labels
+                    paths, gt, gp_seed, policy, reference.tensors, reference.labels
                 )
                 for evt in collisions:
                     events.append(
                         dict(data_seed=data_seed, gp_seed=gp_seed, policy=policy, **evt)
                     )
-                for metadata, fit, val in snapshots:
-                    for name, tree in (("fit", fit), ("validation", val)):
-                        probs = [
-                            tree.do_pred_on_another_tensors(current_tensors=t).ravel()
-                            for t in tensors
-                        ]
-                        fit_gap = exact_brier(probs[0], labels[0]) - oracle.minimum_loss
-                        assert fit_gap >= 0
-                        gp_runs.append(
-                            dict(
-                                **metrics(probs),
-                                gp_seed=gp_seed,
-                                policy=policy,
-                                champion=name,
-                                fit_regret=float(fit_gap),
-                                exact_hit=fit_gap == 0,
-                                nodes=tree.nodes_count,
-                                tree=repr(structural_key(tree.root)),
-                                **metadata,
-                            )
-                        )
-    return baseline, gp_runs, events
+                gp_runs.extend(reference.champion_rows(snapshots, gp_seed, policy))
+    return reference.baseline, gp_runs, events
 
 
 def run(out, workers):

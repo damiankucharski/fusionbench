@@ -79,7 +79,7 @@ class NativeReplay(Okapi):
         return scores
 
 
-def replay(panel_seed):
+def replay(panel_seed, search_seeds):
     x, labels, _ = TwoPathways(rep=2, accuracy=0.9)._generate(
         128, np.random.default_rng([panel_seed, 0])
     )
@@ -90,7 +90,7 @@ def replay(panel_seed):
             np.save(path, x[:, i, 1:2])
         label_path = root / "labels.npy"
         np.save(label_path, labels)
-        for seed in SEARCH_SEEDS:
+        for seed in search_seeds:
             engine = NativeReplay(
                 paths,
                 label_path,
@@ -115,6 +115,9 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--policy", required=True, choices=COMMITS)
     parser.add_argument("--out", required=True, type=Path)
+    parser.add_argument("--data-start", type=int, default=3500)
+    parser.add_argument("--data-count", type=int, default=12)
+    parser.add_argument("--search-seeds", type=int, nargs="+", default=SEARCH_SEEDS)
     args = parser.parse_args()
     checkout = Path(okapi.__file__).resolve().parent
     commit = subprocess.check_output(
@@ -145,10 +148,10 @@ def main():
             ],
         )
         writer.writeheader()
-        for data_seed in range(3500, 3512):
+        for data_seed in range(args.data_start, args.data_start + args.data_count):
             writer.writerows(
                 {"policy": args.policy, "commit": commit, **row}
-                for row in replay(data_seed)
+                for row in replay(data_seed, args.search_seeds)
             )
             stream.flush()
 
