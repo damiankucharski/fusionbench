@@ -1,0 +1,129 @@
+{
+  "okapi_sha": "3eae0e5480cba0471cc5fda71b0c90f35b6a73f2",
+  "trajectories": 684,
+  "checkpoints": 1368,
+  "complete_scoring_cohorts": 7616,
+  "resolution_by_trajectory_and_budget": {
+    "raw": {
+      "600": {
+        "complete_scoring_cohorts": 1399,
+        "candidate_rows": 123025,
+        "sum_distinct_raw": 88144,
+        "cohorts_collapsing_raw_values_raw": 0,
+        "sum_distinct_3": 41914,
+        "cohorts_collapsing_raw_values_3": 1293,
+        "sum_distinct_6": 87623,
+        "cohorts_collapsing_raw_values_6": 299,
+        "sum_distinct_compressed_3": 1399,
+        "cohorts_collapsing_raw_values_compressed_3": 1399,
+        "additional_tied_pairs_3": 420070,
+        "additional_tied_pairs_6": 1403
+      },
+      "1200": {
+        "complete_scoring_cohorts": 2540,
+        "candidate_rows": 259097,
+        "sum_distinct_raw": 177298,
+        "cohorts_collapsing_raw_values_raw": 0,
+        "sum_distinct_3": 65952,
+        "cohorts_collapsing_raw_values_3": 2328,
+        "sum_distinct_6": 172042,
+        "cohorts_collapsing_raw_values_6": 873,
+        "sum_distinct_compressed_3": 2540,
+        "cohorts_collapsing_raw_values_compressed_3": 2540,
+        "additional_tied_pairs_3": 1977685,
+        "additional_tied_pairs_6": 52679
+      }
+    },
+    "round3": {
+      "600": {
+        "complete_scoring_cohorts": 1392,
+        "candidate_rows": 122515,
+        "sum_distinct_raw": 87687,
+        "cohorts_collapsing_raw_values_raw": 0,
+        "sum_distinct_3": 41959,
+        "cohorts_collapsing_raw_values_3": 1293,
+        "sum_distinct_6": 87244,
+        "cohorts_collapsing_raw_values_6": 280,
+        "sum_distinct_compressed_3": 1392,
+        "cohorts_collapsing_raw_values_compressed_3": 1392,
+        "additional_tied_pairs_3": 395702,
+        "additional_tied_pairs_6": 868
+      },
+      "1200": {
+        "complete_scoring_cohorts": 2533,
+        "candidate_rows": 259518,
+        "sum_distinct_raw": 178658,
+        "cohorts_collapsing_raw_values_raw": 0,
+        "sum_distinct_3": 67081,
+        "cohorts_collapsing_raw_values_3": 2331,
+        "sum_distinct_6": 176093,
+        "cohorts_collapsing_raw_values_6": 823,
+        "sum_distinct_compressed_3": 2533,
+        "cohorts_collapsing_raw_values_compressed_3": 2533,
+        "additional_tied_pairs_3": 1713946,
+        "additional_tied_pairs_6": 6194
+      }
+    },
+    "round6": {
+      "600": {
+        "complete_scoring_cohorts": 1399,
+        "candidate_rows": 123042,
+        "sum_distinct_raw": 88044,
+        "cohorts_collapsing_raw_values_raw": 0,
+        "sum_distinct_3": 41929,
+        "cohorts_collapsing_raw_values_3": 1293,
+        "sum_distinct_6": 87544,
+        "cohorts_collapsing_raw_values_6": 297,
+        "sum_distinct_compressed_3": 1399,
+        "cohorts_collapsing_raw_values_compressed_3": 1399,
+        "additional_tied_pairs_3": 418633,
+        "additional_tied_pairs_6": 1174
+      },
+      "1200": {
+        "complete_scoring_cohorts": 2543,
+        "candidate_rows": 259248,
+        "sum_distinct_raw": 177030,
+        "cohorts_collapsing_raw_values_raw": 0,
+        "sum_distinct_3": 66091,
+        "cohorts_collapsing_raw_values_3": 2328,
+        "sum_distinct_6": 171990,
+        "cohorts_collapsing_raw_values_6": 867,
+        "sum_distinct_compressed_3": 2543,
+        "cohorts_collapsing_raw_values_compressed_3": 2543,
+        "additional_tied_pairs_3": 1961761,
+        "additional_tied_pairs_6": 24585
+      }
+    }
+  },
+  "audited_scenarios": 19,
+  "audited_cohorts": 191,
+  "audited_candidate_rows": 20711,
+  "raw_vs_round6": {
+    "identical_order": 146,
+    "order_only": 27,
+    "different_set": 18
+  },
+  "changes_against_actual_round3": {
+    "raw": {
+      "cohorts": 191,
+      "different_set": 134,
+      "order_only": 33,
+      "identical_order": 24,
+      "swaps": 1074
+    },
+    "round3": {
+      "cohorts": 191,
+      "different_set": 0,
+      "order_only": 0,
+      "identical_order": 191,
+      "swaps": 0
+    },
+    "round6": {
+      "cohorts": 191,
+      "different_set": 134,
+      "order_only": 33,
+      "identical_order": 24,
+      "swaps": 1062
+    }
+  }
+}

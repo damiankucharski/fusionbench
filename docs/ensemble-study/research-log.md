@@ -40,6 +40,10 @@ Across all 19 canonical families, native retype lowered IID full-class Brier by 
 
 The four- and five-class scenario posteriors lacked the proper signal and covariance factors. Recomputing every affected probability distance changed the first study’s Saturated secondary effect from +0.00273 to −0.00754. All 2,460 matched-model predictions and their true-label Brier values were verified. [Exact weights, reconstruction and corrected tables](multiclass-oracle/README.md)
 
+### Precision changed survivor choices while the finite grammar remained underexplored
+
+Removing native three-decimal rounding changed 134/191 one-step survivor sets, while the 19-case IID Brier difference was +0.00127 [−0.00452, +0.00705]. On the four-provider matched law the exact fit winner was the truth on 12/12 banks and neither precision found it in any of 24 starts. The next question is whether intermediate programs needed for two complementary paths ever coexist in native populations. [Complete suite, exact populations and replay](selection-precision/README.md)
+
 ## Current research questions
 
 - **Search.** Within a stated tree family, how close does an optimizer get to the best attainable fit score for its budget? In small families, enumerate every admissible tree. In larger ones, record a feasible reference tree and the budget needed to match it. Measure variation across optimizer seeds on identical examples.

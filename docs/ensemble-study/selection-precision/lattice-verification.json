@@ -1,0 +1,15 @@
+{
+  "source_sha256": "2c0b9f2a5c90c133c37d46fd4761ce852bde6fda3a3d11b9e164299ef289812f",
+  "ordered_family_sha256": "681603218b3e47141bc7193f36f899097d5b5bd0485134a1ec8959b7592d7cb2",
+  "verified_prediction_vectors": 1536,
+  "verified_scalar_metrics": 30720,
+  "max_metric_error": 3.3306690738754696e-16,
+  "verified_paired_intervals": 924,
+  "bare_native_data_seeds": [
+    6200,
+    6201
+  ],
+  "bare_native_trajectories": 56,
+  "bare_native_checkpoints_with_three_matching_digests": 112,
+  "bare_native_archive_winners_verified": 224
+}

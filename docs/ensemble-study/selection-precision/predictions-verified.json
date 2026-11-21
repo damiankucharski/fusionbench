@@ -1,0 +1,6 @@
+{
+  "vectors_bitwise": 10692,
+  "verified_metrics": 53460,
+  "max_absolute_error": 0,
+  "aggregate_brier_intervals": 48
+}
