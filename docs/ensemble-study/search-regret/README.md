@@ -38,3 +38,5 @@ A paired replay before and after OKAPI's tree identity correction measures its e
 A fresh intervention changes the unit of population diversity from tree structure to full MIN/MAX prediction function. It compares equal objective costs and equal generations. [Functional diversity audit](functional-key/README.md)
 
 A native two-provider FAR switch, an affine logistic control and a shift that removes switching separate representation from discovery and transfer. [Native switch challenge](native-switch/README.md)
+
+Refitting one native threshold and reassigning one provider on fresh switch/control panels permits a matched comparison against continuing the same GP by either full-forward or threshold-candidate cost. [Local parameter updates](native-refinement/README.md)
