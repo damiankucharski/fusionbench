@@ -152,7 +152,7 @@ class FitnessArchive:
         return 1 - self.errors[code] / self.fit.size
 
 
-def run_search(problem, paths, label_file, seed, checkpoints, mode):
+def run_search(problem, paths, label_file, seed, checkpoints, mode, *, observe=None):
     from okapi import Okapi
     from okapi.operators import MAX, MIN
 
@@ -180,6 +180,8 @@ def run_search(problem, paths, label_file, seed, checkpoints, mode):
         if step not in checkpoints:
             continue
         wall = time.perf_counter() - start
+        if observe is not None:
+            observe(step, tuple(archive.errors))
         # Archive iteration order is the first visit, including after ties.
         empirical = min(archive.errors, key=archive.errors.get)
         val = min(

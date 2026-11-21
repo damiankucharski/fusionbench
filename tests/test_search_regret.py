@@ -62,3 +62,26 @@ def test_erm_ties_and_signed_risk_decomposition():
     )
     assert ref["delta_family_fit_errors"] == 0
     assert p.tied == np.sum(p.fit.errors(tables) == p.best_errors)
+
+
+def test_matched_sampling_agrees_with_enumerating_all_subsets():
+    from itertools import combinations, product
+    from fusionbench.eval.search_coverage import arities, reference
+
+    e = np.array([3, 1, 0, 5, 4, 1])
+    classes = np.array([1, 1, 1, 2, 2, 2])
+    minima = [
+        e[list(a + b)].min()
+        for a, b in product(combinations(range(3), 2), combinations(range(3, 6), 1))
+    ]
+    hit, gap = reference(e, classes, [0, 2, 1])
+    assert hit == pytest.approx(np.mean(np.asarray(minima) == 0))
+    assert gap == pytest.approx(np.mean(minima))
+    np.testing.assert_array_equal(
+        arities(
+            np.stack(
+                [CUBE[:, 0], CUBE[:, 0] & CUBE[:, 1], conditional("two_pathways") > 0.5]
+            )
+        ),
+        [1, 2, 4],
+    )
