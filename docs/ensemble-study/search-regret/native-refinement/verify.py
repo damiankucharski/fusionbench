@@ -122,14 +122,111 @@ def verify_edits(by_model, evaluate, stats, x, y):
             stats["matched_checkpoints"] += 1
 
 
-def native_winners(paths, labels, splits, gp_seed, champ_rows, stats):
-    _, val = splits[0], splits[1]
-    records = search(paths, labels, tensors(val[0]), val[1], gp_seed, True)
+def replay_matched(paths, gt, seed, targets):
+    """Read every true objective in the unmodified selection loop up to the last target."""
+    from okapi import Okapi
+    from okapi.operators import (
+        CLOSE_THRESHOLD,
+        FAR_THRESHOLD,
+        MAX,
+        MEAN,
+        MIN,
+        WEIGHTED_MEAN,
+    )
+
+    class Done(Exception):
+        pass
+
+    class Observe(Okapi):
+        def _calculate_fitnesses(self, trees=None):
+            nonlocal calls, best_loss, best
+            queue = self.population if trees is None else trees
+            batch = queue[: limit - calls]
+            raw_losses.clear()
+            scores = super()._calculate_fitnesses(batch)
+            for tree, loss in zip(batch, raw_losses, strict=True):
+                calls += 1
+                archive.add(tree.structural_key())
+                if loss < best_loss:
+                    best_loss, best = loss, tree.copy()
+                if calls in targets:
+                    result[calls] = serialize(best.root), len(archive)
+            if calls == limit:
+                raise Done
+            return scores
+
+    def objective(pred, truth):
+        loss = brier(pred.ravel(), truth.ravel())
+        raw_losses.append(loss)
+        return 1 - loss
+
+    limit, calls, best_loss, best = max(targets), 0, np.inf, None
+    raw_losses, result, archive = [], {}, set()
+    runner = Observe(
+        paths,
+        gt,
+        len(paths),
+        2,
+        2,
+        backend="numpy",
+        seed=seed,
+        allowed_ops=(MEAN, MIN, MAX, WEIGHTED_MEAN, FAR_THRESHOLD, CLOSE_THRESHOLD),
+        objective_functions=(objective,),
+        postprocessing_function=np.asarray,
+        reuse_survivor_fitness=False,
+    )
+    try:
+        while True:
+            runner.run_iteration()
+    except Done:
+        pass
+    assert set(result) == set(targets)
+    return result
+
+
+def native_winners(paths, labels, val_x, val_y, gp_seed, champ_rows, stats):
+    records = search(paths, labels, tensors(val_x), val_y, gp_seed, True)
     _, archived, _, fit, _ = records[-1]
     initial = champ_rows["gp_initial", "none", "fit", "fit"]
     assert serialize(fit.root) == json.loads(initial["program"])
     assert archived == integer(initial["n_archive"])
     stats["native_initial_1200"] += 1
+    matched = [
+        r
+        for (method, _, decision, split), r in champ_rows.items()
+        if method.startswith("gp_matched") and decision == "fit" and split == "fit"
+    ]
+    assert len(matched) == 6
+    target = {integer(r["calls"]) for r in matched}
+    replay = replay_matched(paths, labels, gp_seed, target)
+    for r in matched:
+        result, archived = replay[integer(r["calls"])]
+        assert result == json.loads(r["program"])
+        assert archived == integer(r["n_archive"])
+        stats["native_matched_winners"] += 1
+
+
+def make_predict(domains, stack, top, evaluate):
+    @lru_cache(None)
+    def predict(encoded, domain, method):
+        sample, mix = domains[domain]
+        x = sample.preds[:, :, 1]
+        if encoded:
+            prog = json.loads(encoded)
+            if "direction" not in prog:
+                return evaluate(prog, x)
+            a, b = x[:, prog["parent"]], x[:, prog["child"]]
+            da, db = (a - prog["threshold"]) ** 2, (b - prog["threshold"]) ** 2
+            return np.where(
+                da <= db if prog["direction"] == "close" else da >= db, a, b
+            )
+        if method == "known_q":
+            return sample.probability(mix)
+        if method == "average":
+            return x.mean(1)
+        return (stack if method == "stack_logit" else top).predict(sample.preds)[:, 1]
+
+    return predict
 
 
 def verify(directory, native):
@@ -189,27 +286,7 @@ def verify(directory, native):
         assert (gate["loss_numerator"], gate["minimizers_on_grid"]) == (loss, ties)
         stats["exhaustive_gate_optima"] += 1
 
-        @lru_cache(None)
-        def predict(encoded, domain, method, domains=domains, stack=stack, top=top):
-            sample, mix = domains[domain]
-            x = sample.preds[:, :, 1]
-            if encoded:
-                prog = json.loads(encoded)
-                if "direction" not in prog:
-                    return evaluate(prog, x)
-                a, b = x[:, prog["parent"]], x[:, prog["child"]]
-                da, db = (a - prog["threshold"]) ** 2, (b - prog["threshold"]) ** 2
-                return np.where(
-                    da <= db if prog["direction"] == "close" else da >= db, a, b
-                )
-            if method == "known_q":
-                return sample.probability(mix)
-            if method == "average":
-                return x.mean(1)
-            return (stack if method == "stack_logit" else top).predict(sample.preds)[
-                :, 1
-            ]
-
+        predict = make_predict(domains, stack, top, evaluate)
         by_search = defaultdict(dict)
         for r in group:
             p = predict(r["program"], r["split"], r["method"])
@@ -270,7 +347,8 @@ def verify(directory, native):
                     native_winners(
                         paths,
                         gt,
-                        ((fit_x, y), (val.preds[:, :, 1], val.labels(mix))),
+                        val.preds[:, :, 1],
+                        val.labels(mix),
                         seed,
                         rows,
                         stats,

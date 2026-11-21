@@ -14,6 +14,7 @@
   "losses": 10800,
   "matched_checkpoints": 288,
   "native_initial_1200": 48,
+  "native_matched_winners": 288,
   "operand_equal": 41,
   "operand_guard_accept": 3,
   "operand_identical": 41,
