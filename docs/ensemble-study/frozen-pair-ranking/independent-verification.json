@@ -1,0 +1,33 @@
+{
+  "inputs_sha256": {
+    "candidates": "1e9facc12331caaa850f99d0cc71ccecc9fc6800b21bd93ec6c3d68f021451d8",
+    "source": "3c424be3a5d05448f7e69dce5f0406311fbf5f0f2e687cf7fa4ecc2f732c8adb",
+    "risks": "04ab3c0cddd7a9f17c7d328f2cdf0f22fca00248157c8c55e60b6bf3980f6ec2",
+    "selections": "6ef2ef73140dcb06b3cb95ee3dd6bbd209df9d54ff039aea8a0a967966e84636",
+    "audit": "e48bed3d787fd5d136ab3f2b06dc1ef90bfb4ae58c0672672b33ad736daf0e96",
+    "pools": "ceb9885da3178721ca0c4ee68bebcdf5966f7e0d840a0cb358a6cca1a66be0b2"
+  },
+  "packed_sha256": "e9e06880138ff01002d8f4aa1cb8da164d800bee7cc414d26390c8b631c675d8",
+  "verified_native_replays": 4,
+  "verified_frozen_programs": 192,
+  "verified_pool_records": 688,
+  "verified_source_rows": 2160,
+  "verified_risk_rows": 2400,
+  "verified_world_selection_rows": 1280,
+  "verified_audit_aggregate_rows": 12800,
+  "verified_scheduled_intervals": 245760,
+  "verified_estimates": 491520,
+  "pinned_OKAPI_CP_cross_checks": 192,
+  "pinned_OKAPI_sharp_bounds_cross_checks": 128,
+  "pinned_OKAPI_commit": "3f64a166f1882d256d068347308fc446e3ec9d58",
+  "floating_tie_witness": {
+    "bank": 7505,
+    "repeat": 6,
+    "p": 0.5,
+    "protocol_projection": 0.3708325804119985,
+    "scalar_division": 0.37083258041199857,
+    "protocol_seed": 947,
+    "scalar_seed": 942,
+    "max_change_on_audit_pool": 1.1102230246251565e-16
+  }
+}

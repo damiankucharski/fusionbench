@@ -1,0 +1,154 @@
+{
+  "data_seeds": [
+    7500,
+    7501,
+    7502,
+    7503,
+    7504,
+    7505,
+    7506,
+    7507,
+    7508,
+    7509,
+    7510,
+    7511,
+    7512,
+    7513,
+    7514,
+    7515
+  ],
+  "gp_seeds": [
+    941,
+    942,
+    943,
+    944,
+    945,
+    946,
+    947,
+    948,
+    949,
+    950,
+    951,
+    952
+  ],
+  "generations": 10,
+  "repeats": 8,
+  "fit_n": 384,
+  "val_n": 256,
+  "monitor_n": 512,
+  "audit_n": 512,
+  "test_n": 16384,
+  "train_p": 0.1,
+  "target_p": [
+    0.1,
+    0.5
+  ],
+  "lambdas": [
+    0.0,
+    0.25,
+    0.5,
+    0.75,
+    1.0
+  ],
+  "budgets": [
+    8,
+    32,
+    128
+  ],
+  "schedules": 64,
+  "elapsed_seconds": 14.777251207000518,
+  "gp_search_seconds": 19.006606580980588,
+  "fit_objective_calls": 59423,
+  "npz_outer_axes": [
+    "data_seed",
+    "repeat",
+    "target_p"
+  ],
+  "npz_proposals": [
+    "uniform",
+    "gap"
+  ],
+  "npz_inner_axes": {
+    "estimate": [
+      "proposal",
+      "lambda",
+      "schedule",
+      "budget"
+    ],
+    "interval_lower": [
+      "lambda",
+      "schedule",
+      "budget"
+    ],
+    "interval_upper": [
+      "lambda",
+      "schedule",
+      "budget"
+    ],
+    "n_unique": [
+      "proposal",
+      "schedule",
+      "budget"
+    ],
+    "draw_indices": [
+      "proposal",
+      "schedule",
+      "position"
+    ],
+    "world_labels": [
+      "lambda",
+      "audit_row"
+    ],
+    "true_gap": [
+      "lambda"
+    ],
+    "exact_variance": [
+      "proposal",
+      "lambda",
+      "budget"
+    ],
+    "det_lower": [
+      "lambda",
+      "det_budget"
+    ],
+    "det_upper": [
+      "lambda",
+      "det_budget"
+    ],
+    "det_n_unique": [
+      "det_budget"
+    ],
+    "draw_budgets": [
+      "budget"
+    ],
+    "det_budgets": [
+      "det_budget"
+    ],
+    "f": [
+      "audit_row"
+    ],
+    "g": [
+      "audit_row"
+    ],
+    "audit_context": [
+      "audit_row"
+    ],
+    "source_context": [
+      "validation_row"
+    ],
+    "monitor_bit": [
+      "monitor_row"
+    ],
+    "center": [],
+    "mean_gap": []
+  },
+  "draw_indices_missing": -1,
+  "table_rows": {
+    "candidates": 192,
+    "source": 2160,
+    "risks": 2400,
+    "selections": 1280,
+    "audit": 12800,
+    "pools": 688
+  }
+}
