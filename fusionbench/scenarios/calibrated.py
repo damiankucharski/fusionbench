@@ -182,13 +182,16 @@ def multiclass_independent_oracle(
     preds: np.ndarray,
     strengths: np.ndarray | None = None,
     log_prior: np.ndarray | None = None,
+    *,
+    min_probability: float = 1e-12,
 ) -> np.ndarray:
     """Bayes posterior for conditionally-independent logit-normal models.
 
     Optimal combination is ``softmax_c( log_prior_c + sum_m s_m log p_{m,c} )``
     — the (strength-weighted) product of probabilities. ``preds`` is ``[N, K, C]``.
+    The default floor preserves the earlier behavior of the generic combiner.
     """
-    logp = np.log(np.clip(preds, 1e-12, 1.0))  # [N, K, C]
+    logp = np.log(np.clip(preds, min_probability, 1.0))  # [N, K, C]
     if strengths is None:
         agg = logp.sum(axis=1)
     else:
@@ -198,6 +201,28 @@ def multiclass_independent_oracle(
     agg = agg - agg.max(axis=1, keepdims=True)
     e = np.exp(agg)
     return e / e.sum(axis=1, keepdims=True)
+
+
+def multiclass_gaussian_oracle(
+    preds: np.ndarray, accuracy: float, *, shared_weight: float = 0.0
+) -> np.ndarray:
+    """Posterior for equally strong logit-normal providers with shared Gaussian noise.
+
+    Given class c, each provider logit vector has mean s times the c-th
+    unit vector. The observable log ratios discard only a class-independent
+    row offset. Multiplying their sum by s / (1 + (K-1) rho) is Gaussian
+    discriminant analysis with the generator's equicorrelation covariance.
+    At rho=1 all provider outputs coincide and the expression reduces to
+    the single-provider posterior.
+    """
+    preds = np.asarray(preds, dtype=np.float64)
+    _, k, classes = preds.shape
+    rho = float(np.clip(shared_weight, 0.0, 1.0))
+    strength = mc_strength(accuracy, classes) / (1 + (k - 1) * rho)
+    weights = np.full(k, strength)
+    return multiclass_independent_oracle(
+        preds, strengths=weights, min_probability=np.nextafter(0.0, 1.0)
+    )
 
 
 def recover_t(p1: np.ndarray, accuracy: float) -> np.ndarray:

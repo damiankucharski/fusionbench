@@ -106,7 +106,7 @@ class Saturated(Scenario):
 
     task = "multiclass"
     expected_winners = ["best_single", "simple_average", "okapi"]
-    oracle_description = "single competent model (others redundant)"
+    oracle_description = "Gaussian posterior weighted for shared logit noise"
 
     def __init__(self, k: int = 6, n_classes: int = 4, accuracy: float = 0.95,
                  corr: float = 0.95, **kw):
@@ -129,7 +129,4 @@ class Saturated(Scenario):
         return np.stack(cols, axis=1), y, {}
 
     def bayes_oracle(self, preds, latent):
-        # Redundant pool: down-weight to avoid overcounting shared evidence;
-        # the ceiling is ~one competent model.
-        strengths = np.full(self.k, 1.0 / self.k)
-        return cal.multiclass_independent_oracle(preds, strengths=strengths)
+        return cal.multiclass_gaussian_oracle(preds, self.accuracy, shared_weight=self.corr)

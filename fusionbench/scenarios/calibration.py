@@ -54,7 +54,7 @@ class MulticlassCommittee(Scenario):
 
     task = "multiclass"
     expected_winners = ["stacking_lr", "simple_average"]
-    oracle_description = "product of probabilities (independent multiclass experts)"
+    oracle_description = "strength-weighted product from independent Gaussian logits"
 
     def __init__(self, k: int = 8, n_classes: int = 5, accuracy: float = 0.6, **kw):
         super().__init__(k=k, n_classes=n_classes, accuracy=accuracy, **kw)
@@ -74,4 +74,4 @@ class MulticlassCommittee(Scenario):
         return np.stack(cols, axis=1), y, {}
 
     def bayes_oracle(self, preds, latent):
-        return cal.multiclass_independent_oracle(preds)
+        return cal.multiclass_gaussian_oracle(preds, self.accuracy)
