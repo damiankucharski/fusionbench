@@ -1,5 +1,5 @@
 {
   "enabled": true,
-  "objective": "Improve OKAPI generalization and FusionBench as an ensemble benchmark. Discover when a single model can learn the benefits of an ensemble, preferably without distillation. Use controlled experiments, competitive baselines, and independent replications.",
+  "objective": "Develop FusionBench as a controlled benchmark for improving OKAPI tree search and generalization. Measure search error against exact optima in stated finite tree families or known achievable trees, and measure overfitting on independent data. Compare current and proposed methods with arithmetic averaging and regularized logistic stacking on matched expert predictions and labeled rows. Track fit, validation, IID and shifted test losses, variation across data and search seeds, complexity and search cost. Iterate on independent confirmations and counterexamples. Use research/ensemble-mechanisms-stability in FusionBench and research/okapi-algorithm-lab for algorithm development in OKAPI. Publication on PyPI, a paper and integration into dev/main are deferred.",
   "journal": "docs/ensemble-study/research-log.md"
 }

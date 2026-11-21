@@ -1,6 +1,13 @@
 # Open research log
 
-The program has two objectives. Improve the reliability and diagnostic value of OKAPI and FusionBench. Find conditions under which one predictor can learn the useful behavior of an ensemble. Each entry records the question, comparison, evidence and next experiment. Completed experiments are checkpoints for continued work.
+The current program uses FusionBench to improve how OKAPI finds and generalizes fusion trees. Earlier ensemble-compression studies below are prior results. The active objective and pause switch are in [the research settings](research-state.json).
+
+## Current research questions
+
+- **Search.** Within a stated tree family, how close does an optimizer get to the best attainable fit score for its budget? In small families, enumerate every admissible tree. In larger ones, record a feasible reference tree and the budget needed to match it. Measure variation across optimizer seeds on identical examples.
+- **Generalization.** For each selected tree, evaluate the same predictor on fit, validation, fresh IID examples and examples under controlled distribution shifts. Compare with the ordinary OKAPI search, arithmetic averaging and regularized logistic stacking on the same expert outputs. Document how each method uses the labeled rows. Test candidate changes on new data seeds and include settings in which the proposed improvement may hurt.
+
+The first paired study found that on TwoPathways, with 384 labeled fit examples, 48-generation OKAPI had IID Brier 0.16071, the stacker 0.13275 and a manually constructed feasible tree 0.06744. The tree used the known grouping of detectors. The first milestone is to measure the search gap in a small exactly enumerable problem, and to test whether OKAPI can discover useful compositions from anonymized expert outputs in the original setting at a matched budget. [Matched-baseline study](https://github.com/damiankucharski/OKAPI/blob/639c5ff/experiments/fit_gap/README.md)
 
 ## Starting evidence
 
