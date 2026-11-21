@@ -26,3 +26,5 @@ python -m pytest -q tests/test_search_regret.py
 [Protocol](protocol.md) · [Configuration](results/config.json) · [Summary](results/means.csv) · [Raw runs](results/runs.csv.gz)
 
 A follow-up on 12 new datasets measured the number of essential providers for every visited decision function. [Independent coverage analysis](coverage.md)
+
+Changing only the starting trees at equal fitness-call budgets tests whether broader initial coverage changes optimization and population error. [Starting-tree intervention](initialization.md)

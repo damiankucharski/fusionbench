@@ -85,3 +85,18 @@ def test_matched_sampling_agrees_with_enumerating_all_subsets():
         ),
         [1, 2, 4],
     )
+
+
+def test_starter_intervention_reaches_prespecified_arities(tmp_path):
+    from fusionbench.eval.search_coverage import arities
+    from fusionbench.eval.search_initialization import starters
+    from okapi.globals import set_backend
+
+    set_backend("numpy")
+    paths = [tmp_path / f"provider{i}.npy" for i in range(4)]
+    for mode, expected in [("one_per_arity", [1, 2, 3, 4]), ("balanced", [4] * 4)]:
+        trees = starters(mode, paths, seed=19)
+        decisions = np.stack([tree.predict().reshape(-1) > 0.5 for tree in trees])
+        assert sorted(arities(decisions).tolist()) == expected
+        if mode == "balanced":
+            assert [tree.nodes_count for tree in trees] == [7] * 4
