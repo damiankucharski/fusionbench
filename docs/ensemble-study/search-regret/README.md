@@ -46,3 +46,5 @@ An insertion experiment adds a threshold gate to a terminal of the trained tree 
 A slot-matched intervention separates a useful fitted operand from its functionally neutral duplicate, parent reordering and archive-only search. [Fitted versus neutral gates and actual lineage](matched-graft/README.md)
 
 A frozen-winner test bypasses traced gate occurrences or resets only their numerical cutoffs on new examples from each law. [Functional contribution of inherited operations](gate-necessity/README.md)
+
+A multi-generation native experiment changes the family or a single input at an existing operator and compares them on a compositional generator with an analytic one-update lower bound. [Type versus operand point mutations](organic-composition/README.md)

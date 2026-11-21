@@ -1,0 +1,16 @@
+{
+  "okapi_commit": "194e94a6c15994a29cdb509bd66c3e320a955c90",
+  "eligible_opportunities": 25391,
+  "equivalent_key_survivors": 4161,
+  "event_replays": 192,
+  "event_rows": 25532,
+  "native_evaluations": 345600,
+  "object_survivors": 1150,
+  "stock_native_evaluations": 86400,
+  "stock_verified_checkpoints": 144,
+  "stock_verified_winners": 288,
+  "unmodified_native_runs": 48,
+  "verified_checkpoints": 576,
+  "verified_cost_ledgers": 576,
+  "verified_winners": 1152
+}

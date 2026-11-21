@@ -15,6 +15,7 @@ from __future__ import annotations
 from fusionbench.scenarios.base import Scenario
 from fusionbench.scenarios.calibration import Miscalibration, MulticlassCommittee
 from fusionbench.scenarios.committee import Committee, DeadWeight, Needle, Saturated
+from fusionbench.scenarios.compositional_switch import CompositionalSwitch
 from fusionbench.scenarios.correlated import CalibratedSuppressor, CorrelatedRedundancy
 from fusionbench.scenarios.gates import (
     Compound,
@@ -44,6 +45,7 @@ SCENARIOS: dict[str, type[Scenario]] = {
     "compound": Compound,
     "gated_experts": GatedExperts,
     "native_switch": NativeSwitch,
+    "compositional_switch": CompositionalSwitch,
     "native_close_switch": NativeCloseSwitch,
     "miscalibration": Miscalibration,
     "multiclass_committee": MulticlassCommittee,

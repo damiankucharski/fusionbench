@@ -1,0 +1,25 @@
+{
+  "predicted_vectors": 7632,
+  "losses": 15264,
+  "native_program_split_rows": 7056,
+  "three_baselines_split_rows": 432,
+  "witness_vectors_equal_to_composition": 144,
+  "data_banks": 12,
+  "runs": 192,
+  "cost_checkpoints": 576,
+  "generational_events": 25532,
+  "checked_single_update_winners_on_cube": 128,
+  "one_update_corner_excess": "961/8192",
+  "one_update_mixed_lower_bound": "961/16384",
+  "affine_logit_mixed_lower_bound": "961/49152",
+  "contrasts": 744,
+  "method_means": 348,
+  "max_abs_loss_error": 0.0,
+  "source_sha256": {
+    "runs.csv.gz": "96f2e48a3048ea972cdd8efefa11bc5bca0b8300778ff1493a6258376cd7665d",
+    "costs.csv.gz": "035ad6244241f368d62396da21fa307d7e336aa9a823483f473f9397641e7153",
+    "events.csv.gz": "a05bfa23fef57c88c61e5ffcb57863ce246acf4bf3cd6aa4980fcb0ef2cb2e64",
+    "paired.csv": "f05fcccf67da3041306a7b0c2500d609d2c29c1730774e5363df7b9b1b7608db",
+    "means.csv": "5d2c8e08680f2e7d111eb8633cc882bd7d9e0b4446552aa8c1382cd1707135dd"
+  }
+}

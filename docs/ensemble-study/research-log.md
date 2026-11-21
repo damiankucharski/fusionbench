@@ -16,6 +16,10 @@ Using the same admission, slot and other parents, the fitted operand improved fi
 
 Across all 32 FAR fit-selected winners, bypassing their traced operations increased conditional-excess Brier from 0.00267 to 0.02437 on fresh rows; resetting just their numeric cutoffs increased excess by 0.01115. The corresponding CLOSE losses from bypass and cutoff reset were 0.03368 and 0.01581. The next controlled search test compares operator versus operand point mutations on a target with a population lower bound for any single operation. [Functional necessity, matched baselines and shifts](search-regret/gate-necessity/README.md)
 
+### Organic operator versus input mutation on a compositional target
+
+At 1800 native evaluations, changing one operator family gave 0.05957 excess Brier versus 0.06259 for changing one direct provider on the composition law. The paired interval crossed zero. Generating distinct candidates was easier than surviving ordinary selection. The next prospective experiment separates structural information in features from labels and tests exact compilation of a posterior over possible hidden pathways. [Organic search cases](search-regret/organic-composition/README.md) · [Matching study protocol](search-regret/matching-compression-protocol.md)
+
 ## Current research questions
 
 - **Search.** Within a stated tree family, how close does an optimizer get to the best attainable fit score for its budget? In small families, enumerate every admissible tree. In larger ones, record a feasible reference tree and the budget needed to match it. Measure variation across optimizer seeds on identical examples.
