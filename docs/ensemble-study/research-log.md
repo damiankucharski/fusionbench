@@ -20,6 +20,10 @@ Across all 32 FAR fit-selected winners, bypassing their traced operations increa
 
 At 1800 native evaluations, changing one operator family gave 0.05957 excess Brier versus 0.06259 for changing one direct provider on the composition law. The paired interval crossed zero. Generating distinct candidates was easier than surviving ordinary selection. The next prospective experiment separates structural information in features from labels and tests exact compilation of a posterior over possible hidden pathways. [Organic search cases](search-regret/organic-composition/README.md) · [Matching study protocol](search-regret/matching-compression-protocol.md)
 
+## Regression testing across the default suite
+
+Each change motivated by an individual mechanism also faces the remaining default FusionBench families as regression tests. Freeze one configuration before seeing the panel. Publish results and their spread for every scenario, and distinguish mechanism-specific findings from broad improvements. If a table suggests a code change, verify it on fresh data. Use a previously omitted family or an external task before making a transfer claim. [First full-suite protocol](full-suite-point/protocol.md)
+
 ## Current research questions
 
 - **Search.** Within a stated tree family, how close does an optimizer get to the best attainable fit score for its budget? In small families, enumerate every admissible tree. In larger ones, record a feasible reference tree and the budget needed to match it. Measure variation across optimizer seeds on identical examples.
