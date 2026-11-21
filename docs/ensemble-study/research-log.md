@@ -44,6 +44,10 @@ The four- and five-class scenario posteriors lacked the proper signal and covari
 
 Removing native three-decimal rounding changed 134/191 one-step survivor sets, while the 19-case IID Brier difference was +0.00127 [−0.00452, +0.00705]. On the four-provider matched law the exact fit winner was the truth on 12/12 banks and neither precision found it in any of 24 starts. The next question is whether intermediate programs needed for two complementary paths ever coexist in native populations. [Complete suite, exact populations and replay](selection-precision/README.md)
 
+### Availability of complementary subtrees in actual native populations
+
+Exhausting all legal next crossovers on the 32 matched generation-15 populations found no way to produce the true two-pathway rule. All 25,600 scored programs across both laws were equivalent to raw-input chains. A single MIN or MAX joining two possible chains covers all 166 four-input rules, yet only four of 32 matched archives included appropriate whole-root ingredients even by 400 calls. The next intervention tests two branching pairs versus a size-, operand- and type-matched chain at initialization, and how far any gain transfers. [Measured opportunities, grammar certificate and limits](semantic-donors/README.md)
+
 ## Current research questions
 
 - **Search.** Within a stated tree family, how close does an optimizer get to the best attainable fit score for its budget? In small families, enumerate every admissible tree. In larger ones, record a feasible reference tree and the budget needed to match it. Measure variation across optimizer seeds on identical examples.

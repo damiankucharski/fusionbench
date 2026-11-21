@@ -1,0 +1,25 @@
+{
+  "trace_sha256": "2d6c9b8d032070f550f96276714c6a211237d4f1d1a29e641414b318caacee46",
+  "focal_sha256": "f189650644aeaafeba35d8f4bc733a4411442df0ef392fa0bb32d4a8cec9b1cb",
+  "data_seeds": [
+    6600,
+    6601
+  ],
+  "search_seed": 809,
+  "generations": [
+    1,
+    5,
+    10,
+    15
+  ],
+  "snapshots": 16,
+  "physically_swapped_site_pairs": 840,
+  "physically_scored_children": 1680,
+  "population_target_checks": 64,
+  "archived_field_groups_checked": 512,
+  "max_abs_probability_error": 2.220446049250313e-16,
+  "evaluation_rows_per_child": {
+    "Boolean_corners": 16,
+    "graded_atoms": 256
+  }
+}

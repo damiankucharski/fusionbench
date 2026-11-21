@@ -1,0 +1,18 @@
+{
+  "okapi_sha": "3eae0e5480cba0471cc5fda71b0c90f35b6a73f2",
+  "laws": [
+    "additive",
+    "matched"
+  ],
+  "data_seeds": [
+    6600,
+    6615
+  ],
+  "gp_seeds": [
+    809,
+    821
+  ],
+  "matched_path_digests": 8,
+  "exact_fitness_calls": 3200,
+  "first_visited_rule_programs": 97
+}

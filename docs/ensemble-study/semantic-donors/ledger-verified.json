@@ -1,0 +1,9 @@
+{
+  "trajectories": 64,
+  "archived_objective_calls": 25600,
+  "programs_reinterpreted": 2887,
+  "generation_ledgers": 4177,
+  "checked_probability_vectors": 256,
+  "scalar_metrics": 2048,
+  "max_error": 2.220446049250313e-16
+}
