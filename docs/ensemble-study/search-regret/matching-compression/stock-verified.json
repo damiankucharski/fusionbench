@@ -1,0 +1,20 @@
+{
+  "bank_groups": 64,
+  "checks": {
+    "archived_structures": 116699,
+    "banks_by_law_and_label_budget": 256,
+    "champions": 1024,
+    "gp_champion_split_rows": 6144,
+    "independently_generated_law_rows": 1536,
+    "metrics": 15360,
+    "native_trajectories": 512,
+    "objective_calls": 307200,
+    "prediction_sha256": 7680
+  },
+  "maximum_absolute_error": {
+    "conditional_excess": 0.0,
+    "observed_brier": 0.0,
+    "raw_champion_loss": 0.0
+  },
+  "okapi_sha": "76f96bc64b8bd2295aef783c47153f72678501e9"
+}

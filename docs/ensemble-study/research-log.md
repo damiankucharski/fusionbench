@@ -24,6 +24,10 @@ At 1800 native evaluations, changing one operator family gave 0.05957 excess Bri
 
 Each change motivated by an individual mechanism also faces the remaining default FusionBench families as regression tests. Freeze one configuration before seeing the panel. Publish results and their spread for every scenario, and distinguish mechanism-specific findings from broad improvements. If a table suggests a code change, verify it on fresh data. Use a previously omitted family or an external task before making a transfer claim. [First full-suite protocol](full-suite-point/protocol.md)
 
+### A single shallow network for an average over 10,395 latent matching trees
+
+Pair-marginal networks reproduce the fixed model average through three active inputs; adding quadruple units recovers the average through five. On 12 anonymous providers and 16 labels, extra input-frequency information improved balanced matching-law excess Brier by 0.02559; a uniform design removed the gain exactly. The next run checks the deployable operator-type mutation on the full default suite before changing the search further. [Study, proofs, controls and two PyTorch models](search-regret/matching-compression/README.md) · [Full-suite freeze](full-suite-point/protocol.md)
+
 ## Current research questions
 
 - **Search.** Within a stated tree family, how close does an optimizer get to the best attainable fit score for its budget? In small families, enumerate every admissible tree. In larger ones, record a feasible reference tree and the budget needed to match it. Measure variation across optimizer seeds on identical examples.

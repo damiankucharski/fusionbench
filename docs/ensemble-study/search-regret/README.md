@@ -48,3 +48,5 @@ A slot-matched intervention separates a useful fitted operand from its functiona
 A frozen-winner test bypasses traced gate occurrences or resets only their numerical cutoffs on new examples from each law. [Functional contribution of inherited operations](gate-necessity/README.md)
 
 A multi-generation native experiment changes the family or a single input at an existing operator and compares them on a compositional generator with an analytic one-update lower bound. [Type versus operand point mutations](organic-composition/README.md)
+
+When only a few provider scores are high, an entire distribution over hidden pairing trees can be compiled into a single ReLU predictor. [Finite matching inference, deployment and support-shift tests](matching-compression/README.md)

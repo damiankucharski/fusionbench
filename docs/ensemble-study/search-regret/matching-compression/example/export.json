@@ -1,0 +1,68 @@
+{
+  "data_seed": 4400,
+  "k": 6,
+  "fit_labels": 16,
+  "unlabeled_rows": 128,
+  "train_design": "balanced",
+  "fit_law": "matching",
+  "mode": "joint",
+  "input": "float64 [N,12], each provider score equals 1/64 (low) or 63/64 (high)",
+  "output": "float64 [N,1], the linear readout before any clipping",
+  "possible_matching_trees": 10395,
+  "networks": {
+    "1": {
+      "path": "matching_order1.pt",
+      "sha256": "7522a89626ae36bbbe6491aa2a3718e6a2d6524cdf5f01ea49bc6f182601db20",
+      "hidden_units": 66,
+      "nonzero_parameters": 265,
+      "dense_parameters": 925,
+      "checks": {
+        "2": {
+          "states": 66,
+          "max_abs_error_vs_compiled": 0.0,
+          "max_abs_error_vs_explicit": 0.0,
+          "max_abs_error_vs_explicit_after_clipping": 0.0
+        },
+        "3": {
+          "states": 220,
+          "max_abs_error_vs_compiled": 0.0,
+          "max_abs_error_vs_explicit": 0.0,
+          "max_abs_error_vs_explicit_after_clipping": 0.0
+        },
+        "4": {
+          "states": 495,
+          "max_abs_error_vs_compiled": 0.0,
+          "max_abs_error_vs_explicit": 0.96875,
+          "max_abs_error_vs_explicit_after_clipping": 0.015625
+        }
+      }
+    },
+    "2": {
+      "path": "matching_order2.pt",
+      "sha256": "3a97807240f60257b459de4af91aae3fea05bd652e5e04a5b55f1a9d4a951d3f",
+      "hidden_units": 561,
+      "nonzero_parameters": 3235,
+      "dense_parameters": 7855,
+      "checks": {
+        "2": {
+          "states": 66,
+          "max_abs_error_vs_compiled": 0.0,
+          "max_abs_error_vs_explicit": 0.0,
+          "max_abs_error_vs_explicit_after_clipping": 0.0
+        },
+        "3": {
+          "states": 220,
+          "max_abs_error_vs_compiled": 0.0,
+          "max_abs_error_vs_explicit": 0.0,
+          "max_abs_error_vs_explicit_after_clipping": 0.0
+        },
+        "4": {
+          "states": 495,
+          "max_abs_error_vs_compiled": 0.0,
+          "max_abs_error_vs_explicit": 0.0,
+          "max_abs_error_vs_explicit_after_clipping": 0.0
+        }
+      }
+    }
+  }
+}
