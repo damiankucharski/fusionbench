@@ -30,6 +30,8 @@ weighted-linear); HardVeto, HardRescue, Compound (logical gates → nonlinear
 min/max optimal); GatedExperts (input-dependent mixture → tree AutoML);
 Miscalibration (judged by log-loss → logit recalibration).
 
+In `calibrated_suppressor`, two individually calibrated binary predictors have different strengths. Their class-conditional error correlation determines whether the optimal logit pool adds the weaker predictor, ignores it or subtracts its signal. [Scenario, proof and paired results](docs/ensemble-study/calibrated-suppressor/README.md)
+
 ## Methods under test
 
 best_single, simple_average, top_n, top_k, val_weighted, **op_min/op_max/op_far/op_close**
