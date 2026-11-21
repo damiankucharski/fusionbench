@@ -25,6 +25,7 @@ from fusionbench.scenarios.gates import (
     WeakestLink,
 )
 from fusionbench.scenarios.mixture import GatedExperts
+from fusionbench.scenarios.native_switch import NativeSwitch
 from fusionbench.scenarios.polarity import PolarityFault
 
 SCENARIOS: dict[str, type[Scenario]] = {
@@ -42,6 +43,7 @@ SCENARIOS: dict[str, type[Scenario]] = {
     "parity": Parity,
     "compound": Compound,
     "gated_experts": GatedExperts,
+    "native_switch": NativeSwitch,
     "miscalibration": Miscalibration,
     "multiclass_committee": MulticlassCommittee,
 }

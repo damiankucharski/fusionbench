@@ -36,3 +36,5 @@ On continuous outputs, an integer minimum cut computes the fit optimum without e
 A paired replay before and after OKAPI's tree identity correction measures its effect on observed search paths, exact regret and held-out predictions. [Structural key audit](structural-key/README.md)
 
 A fresh intervention changes the unit of population diversity from tree structure to full MIN/MAX prediction function. It compares equal objective costs and equal generations. [Functional diversity audit](functional-key/README.md)
+
+A native two-provider FAR switch, an affine logistic control and a shift that removes switching separate representation from discovery and transfer. [Native switch challenge](native-switch/README.md)
