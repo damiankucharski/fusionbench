@@ -48,6 +48,10 @@ Removing native three-decimal rounding changed 134/191 one-step survivor sets, w
 
 Exhausting all legal next crossovers on the 32 matched generation-15 populations found no way to produce the true two-pathway rule. All 25,600 scored programs across both laws were equivalent to raw-input chains. A single MIN or MAX joining two possible chains covers all 166 four-input rules, yet only four of 32 matched archives included appropriate whole-root ingredients even by 400 calls. The next intervention tests two branching pairs versus a size-, operand- and type-matched chain at initialization, and how far any gain transfers. [Measured opportunities, grammar certificate and limits](semantic-donors/README.md)
 
+### Matched topology at initialization
+
+On eight anonymous inputs where four implement two hidden pathways, branching initialization reached the true rule in 21/24 GP runs against 11/24 for chains. The estimates after validation differed by −0.00944 IID Brier across twelve banks. A post-hoc bound placed even the best possible mixture of empirically optimal lattice programs above the validation-selected branched GP in ten of twelve banks. The 19-family regression suite gave +0.00044 [−0.00286, +0.00374] in full Brier. The next test connects these results to the earlier research branch's deployment-mixture selector on a fixed pool of trees and measures the loss of identification when the label law changes silently. [Matched initialization, exact reference and full suite](seed-geometry/README.md) · [Original selector](https://github.com/damiankucharski/fusionbench/blob/1dfb93e/fusionbench/eval/observer.py) · [Earlier exact lookup](https://github.com/damiankucharski/OKAPI/blob/c614670/okapi/lattice_search.py)
+
 ## Current research questions
 
 - **Search.** Within a stated tree family, how close does an optimizer get to the best attainable fit score for its budget? In small families, enumerate every admissible tree. In larger ones, record a feasible reference tree and the budget needed to match it. Measure variation across optimizer seeds on identical examples.

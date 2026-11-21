@@ -1,0 +1,20 @@
+{
+  "champions": 378,
+  "initial_programs": 2397,
+  "maximum_absolute_error": {
+    "accuracy": 0.0,
+    "archive_selection_brier": 0.0,
+    "brier": 0.0,
+    "conditional_excess": 0.0,
+    "log_loss": 0.0,
+    "macro_f1": 0.0,
+    "native_fit_brier": 0.0
+  },
+  "metrics": 6480,
+  "objective_calls": 75600,
+  "okapi_sha": "3eae0e5480cba0471cc5fda71b0c90f35b6a73f2",
+  "path_digests": 189,
+  "prediction_hashes": 1296,
+  "scenarios": 19,
+  "trajectories": 63
+}

@@ -1,0 +1,12 @@
+{
+  "runs_sha256": "f2b1262643787ec7aa1977c71ded64b1328795070a13f75539bcd14618efecaa",
+  "banks_cells": 72,
+  "historical_enumerations": 36,
+  "native_trajectories": 18,
+  "native_prefixes": 54,
+  "native_archive_winners": 108,
+  "prediction_vectors": 2916,
+  "scalar_metrics": 26244,
+  "max_metric_error": 1.5543122344752192e-15,
+  "paired_intervals": 1692
+}
