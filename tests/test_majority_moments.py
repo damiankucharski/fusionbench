@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 
 from fusionbench.methods.majority_moments import (
+    fit_angular_majority_moments,
     fit_majority_moments,
     majority_axes_from_moments,
 )
@@ -78,3 +79,40 @@ def test_degeneracy_and_invalid_input_are_reported():
         majority_axes_from_moments(
             [1, 0, 0], tensor + tensor.swapaxes(0, 1) + tensor.transpose(1, 2, 0)
         )
+
+
+def test_angular_fit_invariant_to_arbitrary_row_radii_even_at_extreme_scales():
+    rng = np.random.default_rng(19)
+    x = rng.normal(size=(144, 5))
+    labels = np.sum(x[:, :3] > 0, axis=1) >= 2
+    reference = fit_angular_majority_moments(x, labels)
+    # Radius is a deterministic function of direction and ranges from 1e-200 to 1e200.
+    radii = np.where(x[:, 0] > 0, 1e200, 1e-200)
+    actual = fit_angular_majority_moments(radii[:, None] * x, labels)
+    # The three axes are only identified up to a permutation.
+    match = np.argmax(actual.axes @ reference.axes.T, axis=1)
+    np.testing.assert_allclose(actual.axes, reference.axes[match], atol=1e-12)
+    with pytest.raises(ValueError, match="nonzero direction"):
+        fit_angular_majority_moments(np.vstack((x, np.zeros(5))), np.r_[labels, False])
+
+
+def test_angular_identity_weight_against_explicit_row_moments():
+    rng = np.random.default_rng(34)
+    x = rng.normal(size=(128, 6))
+    labels = np.sum(x[:, :3] > 0, axis=1) >= 2
+    fitted = fit_angular_majority_moments(x, labels)
+    dimension = x.shape[1]
+    h = np.sqrt(dimension) * x / np.linalg.norm(x, axis=1, keepdims=True)
+    signed = 2 * labels.astype(float) - 1
+    first = np.average(signed[:, None] * h, axis=0)
+    third = np.zeros((dimension,) * 3)
+    for row, sign in zip(h, signed, strict=True):
+        term = np.einsum("i,j,k->ijk", row, row, row)
+        for pattern in ["i,jk->ijk", "j,ik->ijk", "k,ij->ijk"]:
+            term -= (dimension / (dimension + 1)) * np.einsum(
+                pattern, row, np.eye(dimension)
+            )
+        third += sign * term / len(h)
+    expected = majority_axes_from_moments(first, third)
+    match = np.argmax(fitted.axes @ expected.axes.T, axis=1)
+    np.testing.assert_allclose(fitted.axes, expected.axes[match], atol=1e-12)

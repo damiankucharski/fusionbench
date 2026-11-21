@@ -1,4 +1,4 @@
-"""Recover the axes of a three-sign majority under standard Gaussian inputs."""
+"""Recover the axes of a three-sign majority under Gaussian inputs or uniform directions."""
 
 from dataclasses import dataclass
 
@@ -82,6 +82,28 @@ def majority_axes_from_moments(first, third) -> MajorityMoments:
     return MajorityMoments(direction, basis.T, float(phase))
 
 
+def _labeled_inputs(x, y):
+    x = _finite_array(x, "x")
+    labels = _finite_array(y, "y")
+    if x.ndim != 2 or min(x.shape) < 3:
+        raise ValueError("expected x with shape (n, d), n >= 3 and d >= 3")
+    if labels.shape != (len(x),) or not np.isin(labels, (0, 1)).all():
+        raise ValueError("expected one binary 0/1 task label per row")
+    return x, 2 * labels - 1
+
+
+def _estimate_axes(x, signed, identity_weight):
+    first = (signed @ x) / len(x)
+    third = np.einsum("n,ni,nj,nk->ijk", signed, x, x, x, optimize=True) / len(x)
+    first_identity = first[:, None, None] * np.eye(x.shape[1])
+    third -= identity_weight * (
+        first_identity
+        + first_identity.transpose(1, 0, 2)
+        + first_identity.transpose(1, 2, 0)
+    )
+    return majority_axes_from_moments(first, third)
+
+
 def fit_majority_moments(x, y) -> MajorityMoments:
     """Estimate three majority axes using raw standard-normal inputs and 0/1 task labels.
 
@@ -89,19 +111,26 @@ def fit_majority_moments(x, y) -> MajorityMoments:
     The estimator directly averages y_signed * x and y_signed * H3(x) using
     y_signed = 2*y - 1. It reads neither local concept labels nor expert predictions.
     """
-    x = _finite_array(x, "x")
-    labels = _finite_array(y, "y")
-    if x.ndim != 2 or min(x.shape) < 3:
-        raise ValueError("expected x with shape (n, d), n >= 3 and d >= 3")
-    if labels.shape != (len(x),) or not np.isin(labels, (0, 1)).all():
-        raise ValueError("expected one binary 0/1 task label per row")
-    signed = 2 * labels - 1
-    first = (signed @ x) / len(x)
-    third = np.einsum("n,ni,nj,nk->ijk", signed, x, x, x, optimize=True) / len(x)
-    first_identity = first[:, None, None] * np.eye(x.shape[1])
-    third -= (
-        first_identity
-        + first_identity.transpose(1, 0, 2)
-        + first_identity.transpose(1, 2, 0)
-    )
-    return majority_axes_from_moments(first, third)
+    x, signed = _labeled_inputs(x, y)
+    return _estimate_axes(x, signed, 1.0)
+
+
+def fit_angular_majority_moments(x, y) -> MajorityMoments:
+    """Learn three-sign majority axes from nonzero rows with uniform directions.
+
+    The majority rule must depend only on the direction of each row. Radii can
+    vary arbitrarily, even with direction. Normalize each row to length sqrt(d)
+    before forming its first and third moments. For a Gaussian reference radius
+    R, E[R**3] / E[R] = d + 1, giving the angular identity weight d / (d + 1).
+    The resulting population moments are positive multiples of the Gaussian
+    moments when directions are uniform on the sphere.
+    """
+    x, signed = _labeled_inputs(x, y)
+    largest = np.max(np.abs(x), axis=1, keepdims=True)
+    if np.any(largest == 0):
+        raise ValueError("angular moments require a nonzero direction for every row")
+    # Avoid overflow and underflow in the norm for extreme but finite radii.
+    directions = x / largest
+    dimension = x.shape[1]
+    directions *= np.sqrt(dimension) / np.linalg.norm(directions, axis=1, keepdims=True)
+    return _estimate_axes(directions, signed, dimension / (dimension + 1))

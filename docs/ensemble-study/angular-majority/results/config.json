@@ -1,0 +1,32 @@
+{
+  "seeds": [
+    1100,
+    1101,
+    1102,
+    1103,
+    1104,
+    1105,
+    1106,
+    1107,
+    1108,
+    1109,
+    1110,
+    1111,
+    1112,
+    1113,
+    1114,
+    1115
+  ],
+  "train_sizes": [
+    512,
+    2048,
+    8192
+  ],
+  "dimensions": 9,
+  "radial_probability": 0.02,
+  "radial_multiplier": 40,
+  "tilted_chi_df": 7,
+  "direct_logit_scale": 5,
+  "compute_start_utc": "2026-11-21T00:05:17.184115+00:00",
+  "compute_seconds": 4.133251915999608
+}
