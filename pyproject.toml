@@ -14,6 +14,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+lattice = ["networkx>=3.0"]
 nsga = ["pymoo>=0.6"]
 tpot = ["tpot>=0.12"]
 okapi = ["torch>=2.2", "okapi @ git+https://github.com/damiankucharski/OKAPI@a7c23e8e8c8f0bfe608bc7740b1a74a26eef6e8b"]

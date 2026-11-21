@@ -37,6 +37,8 @@ best_single, simple_average, top_k, val_weighted, **op_min/op_max/op_far/op_clos
 runs on the numpy/CPU backend)*, nsga3 *(extra: nsga)*, tpot *(extra: tpot)*, plus
 the analytic **oracle** ceiling.
 
+For binary datasets with 1–12 providers, the opt-in method `lattice_brier_exact` computes the least empirical-Brier minimizer over unrestricted MIN/MAX trees. Install the `lattice` extra for the exact integer-capacity minimum cut. This comparator measures how far a search finished above the best attainable fit loss. Evaluate its generalization on separate rows as for any other fitted method.
+
 ## Results
 
 A regularized logistic stacker is a very strong baseline on *calibrated,

@@ -564,6 +564,9 @@ dependencies = [
 dev = [
     { name = "pytest" },
 ]
+lattice = [
+    { name = "networkx" },
+]
 nsga = [
     { name = "pymoo" },
 ]
@@ -578,8 +581,9 @@ tpot = [
 [package.metadata]
 requires-dist = [
     { name = "matplotlib", specifier = ">=3.8" },
+    { name = "networkx", marker = "extra == 'lattice'", specifier = ">=3.0" },
     { name = "numpy", specifier = ">=1.26" },
-    { name = "okapi", marker = "extra == 'okapi'", git = "https://github.com/damiankucharski/OKAPI?rev=022330fcaea478b750cf117cb2ba7e34b7deab40" },
+    { name = "okapi", marker = "extra == 'okapi'", git = "https://github.com/damiankucharski/OKAPI?rev=a7c23e8e8c8f0bfe608bc7740b1a74a26eef6e8b" },
     { name = "pandas", specifier = ">=2.2" },
     { name = "pymoo", marker = "extra == 'nsga'", specifier = ">=0.6" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
@@ -589,7 +593,7 @@ requires-dist = [
     { name = "torch", marker = "extra == 'okapi'", specifier = ">=2.2" },
     { name = "tpot", marker = "extra == 'tpot'", specifier = ">=0.12" },
 ]
-provides-extras = ["nsga", "tpot", "okapi", "dev"]
+provides-extras = ["lattice", "nsga", "tpot", "okapi", "dev"]
 
 [[package]]
 name = "graphemeu"
@@ -1457,7 +1461,7 @@ wheels = [
 [[package]]
 name = "okapi"
 version = "0.1.0"
-source = { git = "https://github.com/damiankucharski/OKAPI?rev=022330fcaea478b750cf117cb2ba7e34b7deab40#022330fcaea478b750cf117cb2ba7e34b7deab40" }
+source = { git = "https://github.com/damiankucharski/OKAPI?rev=a7c23e8e8c8f0bfe608bc7740b1a74a26eef6e8b#a7c23e8e8c8f0bfe608bc7740b1a74a26eef6e8b" }
 dependencies = [
     { name = "graphviz" },
     { name = "loguru" },
@@ -1466,6 +1470,8 @@ dependencies = [
     { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "pre-commit" },
     { name = "scikit-learn" },
+    { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "scipy", version = "1.18.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "tqdm" },
 ]
 

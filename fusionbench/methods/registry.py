@@ -12,6 +12,7 @@ from collections.abc import Callable
 from fusionbench.methods.averaging import BestSingle, SimpleAverage, TopK, ValWeighted
 from fusionbench.methods.base import Method
 from fusionbench.methods.clr import StackingCLR
+from fusionbench.methods.lattice_brier import ExactLatticeBrier
 from fusionbench.methods.nsga3 import NSGA3
 from fusionbench.methods.okapi import OKAPIMethod
 from fusionbench.methods.operators import OpClose, OpFar, OpMax, OpMin
@@ -35,6 +36,7 @@ FACTORIES: dict[str, Callable[[], Method]] = {
     "tpot": TPOTMethod,
     "okapi": OKAPIMethod,
     "okapi_shrunk": ShrunkOKAPI,
+    "lattice_brier_exact": ExactLatticeBrier,
 }
 
 # Methods considered "core" (no heavy optional deps) — always run locally.
@@ -45,7 +47,9 @@ CORE = ["best_single", "simple_average", "top_5", "val_weighted",
 
 def default_methods(names: list[str] | None = None, only_available: bool = True
                     ) -> list[Method]:
-    names = names or list(FACTORIES)
+    # The exact lattice oracle is a binary-only, exponential-width comparator.
+    # Keep it opt-in on mixed suites.
+    names = names or [name for name in FACTORIES if name != "lattice_brier_exact"]
     methods = []
     for name in names:
         method = FACTORIES[name]()
