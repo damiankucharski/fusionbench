@@ -4,6 +4,10 @@ The current program uses FusionBench to improve how OKAPI finds and generalizes 
 
 The [literature index for the paper](literature/README.md) connects primary sources to benchmark assumptions, dated proposals and measured results. It includes the [21 November review](literature/2026-11-21.md) and a [BibTeX bibliography](literature/references.bib).
 
+## One round on 23 November 2026: quality against logistic stacking
+
+The cross-fitted native GP and logistic hybrid reached .20219 IID Brier averaged equally over the fixed 19 families, versus .21747 probability LR, .22039 logit LR and .21421 for the same selector restricted to the two logistic models. GP alone scored .26187. The incremental reduction from adding GP was .01202 (95% interval .01012–.01392). On nine shifts probability LR retained a small average lead. Training and evaluation took 156.9 seconds, and protocol, implementation, audit and report took about five minutes. A future comparison could use tuned LR and an external OOF bank. Scheduled work remains paused. [Full results and source](oof-gp-stack/README.md)
+
 ## Follow-up on 23 November 2026: pruning the frozen mixed-start winners
 
 The focal balanced-start trees shrank by 7.63 nodes at +.00097 fresh IID Brier, below the prespecified quality cost in the paired upper confidence limit. Two of 16 trees dropped a provider. The primary criterion requiring reliable base-model savings was unmet. Across the 19 families, pruned balanced-start winners used 4.09 providers versus 4.73 intact, with Brier .26114 versus .25861. A future study could test moves that remove all occurrences of one provider, including the root. Automated work remains paused. [Protocol, times, verification and scores](prune-frozen-mix/README.md)
