@@ -213,3 +213,36 @@ def test_stock_archive_and_initial_diversity_match_native_reference(
     assert diversity["initial_unique_fit_predictions"] == len(set(hashes))
     assert diversity["seed_unique_fit_predictions"] == len(set(hashes[7:]))
     assert tuple(diversity["initial_prediction_hashes"]) == tuple(hashes)
+
+
+@pytest.mark.parametrize("providers", [2, 6, 8, 12])
+def test_six_deep_starters_share_operands_and_inorder_operators(providers):
+    from types import SimpleNamespace
+
+    pytest.importorskip("okapi")
+    from fusionbench.eval.seed_geometry import replace_deep_seeds
+
+    def fresh():
+        return SimpleNamespace(
+            ids=list(range(providers)),
+            models=[np.full((4, 1), k / providers) for k in range(providers)],
+            population=[None] * (providers + 30),
+        )
+
+    def inorder(value):
+        yield value.id
+        for op in value.children:
+            yield type(op).__name__
+            yield from inorder(op.children[0])
+
+    branch, chain = fresh(), fresh()
+    for model, shape in ((branch, "mixed_branch"), (chain, "mixed_chain")):
+        replace_deep_seeds(model, 723, shape, providers)
+        assert all(tree is None for tree in model.population[:-6])
+    for left, right in zip(branch.population[-6:], chain.population[-6:], strict=True):
+        assert left.nodes_count == right.nodes_count == 15
+        tokens = tuple(inorder(left.root))
+        assert tokens == tuple(inorder(right.root))
+        assert len(set(tokens[::2])) == min(providers, 8)
+        assert len(left.root.children) == 3
+        assert len(right.root.children) == 7

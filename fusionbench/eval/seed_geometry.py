@@ -76,3 +76,34 @@ def append_geometry_seeds(engine, plans, shape):
     engine.population += seeds
     engine.population_size = min(40, engine.population_size + len(seeds))
     engine.fitnesses = None
+
+
+def replace_deep_seeds(engine, seed, shape, singletons):
+    """Replace the final six shallow starters, preserving native RNG and population size."""
+    from okapi.node import MaxNode, MinNode, ValueNode
+    from okapi.tree import Tree
+
+    if shape not in ("mixed_branch", "mixed_chain"):
+        raise ValueError("Expected an eight-input branch or chain")
+    if len(engine.population) - singletons != 30:
+        raise ValueError("The matched study expects exactly 30 native seeds")
+    rng = np.random.default_rng(np.random.SeedSequence([seed, 8301]))
+    n = len(engine.ids)
+    for slot in range(len(engine.population) - 6, len(engine.population)):
+        if n >= 8:
+            indices = rng.choice(n, 8, replace=False)
+        else:
+            indices = rng.permutation(np.r_[np.arange(n), rng.choice(n, 8 - n)])
+        leaves = [ValueNode(None, engine.models[i], engine.ids[i]) for i in indices]
+        inner, middle = (MinNode, MaxNode) if rng.integers(2) else (MaxNode, MinNode)
+        if shape == "mixed_branch":
+            level = leaves
+            for operator in (inner, middle, inner):
+                for left, right in zip(level[::2], level[1::2], strict=True):
+                    left.add_child(operator([right]))
+                level = level[::2]
+        else:
+            inorder = (inner, middle, inner, inner, inner, middle, inner)
+            for operator, right in zip(inorder, leaves[1:], strict=True):
+                leaves[0].add_child(operator([right]))
+        engine.population[slot] = Tree.create_tree_from_root(leaves[0])

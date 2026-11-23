@@ -19,7 +19,7 @@ from fusionbench.eval.full_suite_point import data_for, fingerprint
 from fusionbench.eval.metrics import score
 from fusionbench.eval.mutation_opportunity import evaluate_bank as evaluate_baselines
 from fusionbench.eval.native_switch import serialize
-from fusionbench.eval.seed_geometry import append_geometry_seeds, make_seed_plans
+from fusionbench.eval.seed_geometry import append_geometry_seeds, make_seed_plans, replace_deep_seeds
 from fusionbench.eval.suite_point_gp import (
     SuiteCheckpoint,
     _bind,
@@ -74,7 +74,7 @@ def fit_seed_geometry(
         WEIGHTED_MEAN,
     )
 
-    if shape not in SHAPES:
+    if shape not in (*SHAPES, "mixed_branch", "mixed_chain"):
         raise ValueError(f"Unknown shape {shape!r}")
     budgets = tuple(budgets)
     if not budgets or any(
@@ -228,8 +228,10 @@ def fit_seed_geometry(
                 postprocessing_function=None,
             )
             singleton_count = len(gp.population)
-            if shape == "stock":
+            if shape in ("stock", "mixed_branch", "mixed_chain"):
                 adapter._seed_population(gp, np.random.default_rng(seed))
+                if shape != "stock":
+                    replace_deep_seeds(gp, seed, shape, singleton_count)
             else:
                 append_geometry_seeds(
                     gp, make_seed_plans(gp.ids, seed, adapter.n_seeds), shape

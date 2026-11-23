@@ -4,6 +4,10 @@ The current program uses FusionBench to improve how OKAPI finds and generalizes 
 
 The [literature index for the paper](literature/README.md) connects primary sources to benchmark assumptions, dated proposals and measured results. It includes the [21 November review](literature/2026-11-21.md) and a [BibTeX bibliography](literature/references.bib).
 
+## One authorized round on 23 November 2026
+
+Six balanced 15-node starters and 24 ordinary shallow starters reduced IID full-class Brier on CompositionalSwitch by 0.07073 relative to the same six left-fold starters (95% paired interval 0.02906–0.11240). Across all 19 families the selected balanced arm averaged .25811, ordinary OKAPI .27526 and same-total-label logistic stacking .21995. The balanced winners referenced more providers. A possible follow-up measures which providers can be pruned from those frozen trees at an independently verified quality cost. The scheduled program remains paused. [Results, timings and reproduction](mixed-deep-init/README.md)
+
 ## Continuing between rounds
 
 While the research switch is enabled and the user's instructions allow work, the FusionBench and OKAPI leads send the coordinator each published result and start the next falsifiable experiment in the same active run. Record the next question with the result and coordinate directly on code revisions and controls. If a run reaches a limit or a blocker, record the last verified result, the remaining question and the reason work stopped so the next run can resume. A completed round alone does not retire either research lead.
