@@ -4,6 +4,10 @@ The current program uses FusionBench to improve how OKAPI finds and generalizes 
 
 The [literature index for the paper](literature/README.md) connects primary sources to benchmark assumptions, dated proposals and measured results. It includes the [21 November review](literature/2026-11-21.md) and a [BibTeX bibliography](literature/references.bib).
 
+## Follow-up on 23 November 2026: pruning the frozen mixed-start winners
+
+The focal balanced-start trees shrank by 7.63 nodes at +.00097 fresh IID Brier, below the prespecified quality cost in the paired upper confidence limit. Two of 16 trees dropped a provider. The primary criterion requiring reliable base-model savings was unmet. Across the 19 families, pruned balanced-start winners used 4.09 providers versus 4.73 intact, with Brier .26114 versus .25861. A future study could test moves that remove all occurrences of one provider, including the root. Automated work remains paused. [Protocol, times, verification and scores](prune-frozen-mix/README.md)
+
 ## One authorized round on 23 November 2026
 
 Six balanced 15-node starters and 24 ordinary shallow starters reduced IID full-class Brier on CompositionalSwitch by 0.07073 relative to the same six left-fold starters (95% paired interval 0.02906–0.11240). Across all 19 families the selected balanced arm averaged .25811, ordinary OKAPI .27526 and same-total-label logistic stacking .21995. The balanced winners referenced more providers. A possible follow-up measures which providers can be pruned from those frozen trees at an independently verified quality cost. The scheduled program remains paused. [Results, timings and reproduction](mixed-deep-init/README.md)
