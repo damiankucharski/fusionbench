@@ -1,26 +1,32 @@
 # fusionbench
 
-A controlled benchmark for **stacking / prediction-fusion methods**. It isolates
-specific *base-model pathologies* (the issues fusion is meant to solve) and
-evaluates methods in a **guaranteed-reliable validation environment**, so an
-observed difference reflects a method's expressiveness on a pathology — not
-optimizer's-curse / validation-test luck.
+A controlled benchmark for stacking and prediction fusion. FusionBench generates
+per-provider class probabilities and known labels so that a new fusion method
+can be compared on the same examples as averaging, Top-N and logistic stacking.
+
+## Run a transfer benchmark
+
+```sh
+fusionbench transfer-grid --preset smoke --out results/transfer-smoke
+```
+
+This packaged CPU experiment fits four methods and evaluates them on clean and
+corrupted inputs. The standard preset covers 19 scenarios. Both run with the
+base installation. [Configuration, metrics, extension API and reproducibility](docs/transfer-benchmark.md)
 
 ## What makes it different
 
-- **Reliability by construction.** Each dataset is one i.i.d. generative process,
-  split 50k *fit* / 50k *test* from identical parameters. At that size the fit
-  ranking of methods provably transfers to test. A reliability report verifies
-  selection-top-1 agreement and fit→test rank correlation per scenario.
-- **Not circular / not partial.** Data is generated in the natural causal
-  direction (label → calibrated noisy base predictions with a pathology-specific
-  error process). The ceiling is the **analytic Bayes posterior** `P(y | preds)`,
-  derived from the DGP — *never* by applying any method's operators to the
-  predictions. Methods are scored by **regret to that oracle**.
-- **Impartial by design.** Different pathologies are won by different methods:
-  logit-space stacking on conditionally-independent / calibration scenarios,
-  weighted-linear on correlated ones, gating (min/max) on logical-gate scenarios,
-  tree AutoML on input-dependent mixtures.
+- **Matched examples.** The ordinary IID suite draws fit and test examples
+  independently from identical generator parameters. A reliability report
+  measures fit-to-test rank correlation and top-choice agreement. Finite samples
+  and model selection can change the ranking, even with large fit and test sets.
+- **Known mechanisms.** Some scenarios draw labels first and generate noisy
+  observations of those labels; others specify a conditional label probability
+  directly to test a known fusion mechanism. An analytic posterior, when
+  available for the observed inputs, provides a scenario-specific reference.
+- **Controlled transfer.** Separate development annotation noise, corrupted
+  deployment inputs and changes in a scenario's data-generating parameters.
+  Each run records paired results and the seeds used to generate them.
 
 ## Scenarios (base-model pathologies)
 

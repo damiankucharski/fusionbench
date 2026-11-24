@@ -1,11 +1,12 @@
 [project]
 name = "fusionbench"
 version = "0.1.0"
-description = "A controlled benchmark for stacking / prediction-fusion methods: isolates base-model pathologies under a guaranteed-reliable validation environment."
+description = "Controlled benchmarks for prediction fusion, including matched-distribution and graded validation-to-test transfer scenarios."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "numpy>=1.26",
+    "scipy>=1.11",
     "scikit-learn>=1.4",
     "pyyaml>=6.0",
     "matplotlib>=3.8",
@@ -17,7 +18,7 @@ dependencies = [
 lattice = ["networkx>=3.0"]
 nsga = ["pymoo>=0.6"]
 tpot = ["tpot>=0.12"]
-okapi = ["torch>=2.2", "okapi @ git+https://github.com/damiankucharski/OKAPI@a7c23e8e8c8f0bfe608bc7740b1a74a26eef6e8b"]
+okapi = ["torch>=2.2", "okapi @ git+https://github.com/damiankucharski/OKAPI@0e88dbe762f5fbdf6b8c043aa1aa71908fd1dea8"]
 dev = ["pytest>=8.0"]
 
 [project.scripts]

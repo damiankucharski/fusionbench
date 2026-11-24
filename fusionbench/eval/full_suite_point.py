@@ -17,23 +17,12 @@ from fusionbench.eval.metrics import score
 from fusionbench.eval.native_switch import serialize
 from fusionbench.methods.averaging import TopN
 from fusionbench.methods.stacking import StackingLogit
+from fusionbench.scenarios.blocks import SHIFTS, draw_block
 from fusionbench.scenarios.registry import SCENARIOS
-
-SHIFTS = {
-    "two_pathways": {"accuracy": 0.78},
-    "parity": {"accuracy": 0.78},
-    "weakest_link": {"accuracy": 0.76},
-    "correlated": {"corr": 0.1},
-    "calibrated_suppressor": {"corr": 0.0},
-    "polarity_fault": {"correlation": 0.0},
-    "native_switch": {"mixing": 1.0},
-    "native_close_switch": {"mixing": 1.0},
-    "compositional_switch": {"corner_probability": 0.0},
-}
 
 
 def scenario_block(scenario, seed, index, n):
-    preds, labels, latent = scenario._generate(n, np.random.default_rng([seed, index]))
+    preds, labels, latent = draw_block(scenario, seed, index, n)
     q = scenario.bayes_oracle(preds, latent)
     if q is not None:
         q = np.asarray(q)

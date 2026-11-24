@@ -4,8 +4,9 @@ A :class:`Dataset` holds stacked base-model predictions for two splits:
 
 - ``fit``  : the data every fusion method is allowed to select / fit on
              (the "Train for OKAPI" / validation pool).
-- ``test`` : held-out evaluation data, drawn from the *identical* generative
-             process so validation-test reliability holds by construction.
+- ``test`` : held-out evaluation data. IID scenarios use the same generator
+             parameters on both splits. The transfer suite varies the test
+             conditions explicitly. Ranking agreement is measured on held-out rows.
 
 Predictions are stored stacked as ``[N, K, C]`` (samples x base-models x
 classes). For binary tasks ``C == 2``; rows over the class axis sum to 1.

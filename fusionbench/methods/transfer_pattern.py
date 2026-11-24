@@ -49,6 +49,7 @@ class TransferPatternOKAPI(Method):
             select_transfer_candidate,
             shrink_subtree_weights,
         )
+
         from fusionbench.eval.suite_point_gp import _full, predict_tree
 
         base = NativePatternOKAPI(seed=self.seed, fitness=self.fitness)

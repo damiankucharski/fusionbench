@@ -13,6 +13,7 @@ from fusionbench.eval.transfer_grid import (
     noisy_labels,
     provider_swap_plan,
 )
+from fusionbench.scenarios.base import Scenario
 from fusionbench.scenarios.calibration import MulticlassCommittee
 from fusionbench.scenarios.native_switch import NativeSwitch
 from fusionbench.scenarios.registry import SCENARIOS
@@ -190,3 +191,28 @@ def test_brier_is_full_class_sum_and_clean_only_accepts_single_rows():
         _conditions("committee", 17, 1)
     with pytest.raises(ValueError, match="Severities"):
         _conditions("committee", 17, 10, severities=(1.5,))
+
+
+def test_transfer_never_calls_oracle_and_custom_scenario_can_omit_it():
+    class SampleOnly(Scenario):
+        n_classes = 2
+
+        def model_ids(self):
+            return ["provider"]
+
+        def _generate(self, n, rng):
+            p = rng.random((n, 1))
+            return np.stack((1 - p, p), axis=-1), rng.integers(2, size=n), {}
+
+    class UnavailableOracle(SampleOnly):
+        def bayes_oracle(self, preds, latent):
+            raise AssertionError("transfer unexpectedly evaluated the oracle")
+
+    ds = SampleOnly().build(n_per_split=8, seed=22)
+    assert ds.fit_oracle is None and ds.test_oracle is None
+    x, y = development(UnavailableOracle, 22, 8, q=0.15)
+    assert x.shape == (8, 1, 2) and y.shape == (8,)
+    assert len(_conditions(UnavailableOracle, 22, 8, canonical_shift={})) == 10
+    # The old research helper retains its oracle-enabled behavior.
+    with pytest.raises(AssertionError, match="evaluated the oracle"):
+        scenario_block(UnavailableOracle(), 22, 1, 8)

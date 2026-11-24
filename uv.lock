@@ -557,6 +557,8 @@ dependencies = [
     { name = "pandas" },
     { name = "pyyaml" },
     { name = "scikit-learn" },
+    { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
+    { name = "scipy", version = "1.18.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "tabulate" },
 ]
 
@@ -583,12 +585,13 @@ requires-dist = [
     { name = "matplotlib", specifier = ">=3.8" },
     { name = "networkx", marker = "extra == 'lattice'", specifier = ">=3.0" },
     { name = "numpy", specifier = ">=1.26" },
-    { name = "okapi", marker = "extra == 'okapi'", git = "https://github.com/damiankucharski/OKAPI?rev=a7c23e8e8c8f0bfe608bc7740b1a74a26eef6e8b" },
+    { name = "okapi", marker = "extra == 'okapi'", git = "https://github.com/damiankucharski/OKAPI?rev=0e88dbe762f5fbdf6b8c043aa1aa71908fd1dea8" },
     { name = "pandas", specifier = ">=2.2" },
     { name = "pymoo", marker = "extra == 'nsga'", specifier = ">=0.6" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
     { name = "pyyaml", specifier = ">=6.0" },
     { name = "scikit-learn", specifier = ">=1.4" },
+    { name = "scipy", specifier = ">=1.11" },
     { name = "tabulate", specifier = ">=0.9" },
     { name = "torch", marker = "extra == 'okapi'", specifier = ">=2.2" },
     { name = "tpot", marker = "extra == 'tpot'", specifier = ">=0.12" },
@@ -1461,7 +1464,7 @@ wheels = [
 [[package]]
 name = "okapi"
 version = "0.1.0"
-source = { git = "https://github.com/damiankucharski/OKAPI?rev=a7c23e8e8c8f0bfe608bc7740b1a74a26eef6e8b#a7c23e8e8c8f0bfe608bc7740b1a74a26eef6e8b" }
+source = { git = "https://github.com/damiankucharski/OKAPI?rev=0e88dbe762f5fbdf6b8c043aa1aa71908fd1dea8#0e88dbe762f5fbdf6b8c043aa1aa71908fd1dea8" }
 dependencies = [
     { name = "graphviz" },
     { name = "loguru" },
@@ -1470,8 +1473,6 @@ dependencies = [
     { name = "numpy", version = "2.5.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "pre-commit" },
     { name = "scikit-learn" },
-    { name = "scipy", version = "1.17.1", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.12'" },
-    { name = "scipy", version = "1.18.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.12'" },
     { name = "tqdm" },
 ]
 

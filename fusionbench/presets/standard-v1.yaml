@@ -1,0 +1,30 @@
+schema_version: 1
+base_seed: 1700000
+repeats: 8
+fit_rows: 640
+validation_rows: 192
+test_rows: 2048
+dev_noise: [0, 0.15, 0.30]
+modes: [provider_swap, log_jitter, canonical_shift]
+severities: [0.25, 0.50, 1.0]
+methods: [simple_average, top_n, stacking_lr, stacking_logit]
+scenarios:
+  committee: {seed_slot: 0}
+  deadweight: {seed_slot: 1}
+  needle: {seed_slot: 2}
+  saturated: {seed_slot: 3}
+  correlated: {seed_slot: 4}
+  calibrated_suppressor: {seed_slot: 5}
+  polarity_fault: {seed_slot: 6}
+  hardveto: {seed_slot: 7}
+  hardrescue: {seed_slot: 8}
+  weakest_link: {seed_slot: 9}
+  two_pathways: {seed_slot: 10}
+  parity: {seed_slot: 11}
+  compound: {seed_slot: 12}
+  gated_experts: {seed_slot: 13}
+  native_switch: {seed_slot: 14}
+  compositional_switch: {seed_slot: 15}
+  native_close_switch: {seed_slot: 16}
+  miscalibration: {seed_slot: 17}
+  multiclass_committee: {seed_slot: 18}

@@ -6,8 +6,8 @@ from operator import index
 import numpy as np
 from scipy.special import softmax
 
-from fusionbench.eval.full_suite_point import SHIFTS, scenario_block
 from fusionbench.scenarios.base import Scenario
+from fusionbench.scenarios.blocks import SHIFTS, draw_block
 from fusionbench.scenarios.registry import SCENARIOS
 
 SOURCE_NOISE = (0.0, 0.15, 0.30)
@@ -20,10 +20,12 @@ STREAMS = {
     "development": 0,
     "clean_test": 1,
     "canonical_shift": 2,
+    "source_validation": 3,
     "annotation_noise": 10,
     "row_threshold": 11,
     "provider_swap": 12,
     "log_jitter": 13,
+    "validation_annotation_noise": 14,
 }
 
 
@@ -42,12 +44,13 @@ def _indices(labels, n_classes):
     return y
 
 
-def noisy_labels(labels, n_classes, seed, q):
+def noisy_labels(labels, n_classes, seed, q, *, stream=STREAMS["annotation_noise"]):
     """Flip each label independently with probability q, uniformly to another class.
 
     A row's threshold and wrong class are fixed across noise levels. Applying
     this once before discovery and validation splitting gives every method
-    the same noisy development annotations. The input labels are untouched.
+    the same noisy development annotations. The optional stream separates the
+    held-out source-validation flips from training flips. The input labels are untouched.
     """
     n_classes = index(n_classes)
     if n_classes < 2 or not 0.0 <= q <= 1.0:
@@ -55,7 +58,7 @@ def noisy_labels(labels, n_classes, seed, q):
     y = _indices(labels, n_classes)
     if q == 0.0:
         return y.copy()
-    rng = np.random.default_rng([seed, STREAMS["annotation_noise"]])
+    rng = np.random.default_rng([seed, stream])
     mask = rng.random(len(y)) < q
     offsets = rng.integers(1, n_classes, size=len(y))
     wrong = (y.astype(np.int64) + offsets) % n_classes
@@ -71,7 +74,7 @@ def development(name, seed, n, q=0.0, *, scenario_kwargs=None):
     if n < 1:
         raise ValueError("Development requires at least one row")
     scenario = _constructor(name)(**(scenario_kwargs or {}))
-    x, y, _ = scenario_block(scenario, seed, STREAMS["development"], n)
+    x, y, _ = draw_block(scenario, seed, STREAMS["development"], n)
     return x, noisy_labels(y, scenario.n_classes, seed, q)
 
 
@@ -187,7 +190,7 @@ def iter_test_conditions(
     ctor = _constructor(name)
     kwargs = dict(scenario_kwargs or {})
     scenario = ctor(**kwargs)
-    clean, labels, _ = scenario_block(scenario, seed, STREAMS["clean_test"], n)
+    clean, labels, _ = draw_block(scenario, seed, STREAMS["clean_test"], n)
     yield "clean", 0.0, clean, labels
     if not levels:
         return
@@ -215,7 +218,7 @@ def iter_test_conditions(
             or shifted.n_classes != scenario.n_classes
         ):
             raise ValueError("The shift changed the provider mapping or class count")
-        other, other_y, _ = scenario_block(shifted, seed, STREAMS[mode], n)
+        other, other_y, _ = draw_block(shifted, seed, STREAMS[mode], n)
         threshold = np.random.default_rng([seed, STREAMS["row_threshold"]]).random(n)
         for s in levels:
             mask = threshold < s

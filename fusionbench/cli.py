@@ -10,7 +10,7 @@ from fusionbench.scenarios.registry import SCENARIOS, default_suite
 
 def _comparison_names(names):
     """Include the three reference methods in each explicit OKAPI comparison."""
-    if not names or not {"okapi", "okapi_shrunk"}.intersection(names):
+    if not names or not any(name.startswith("okapi") for name in names):
         return names
     names = list(dict.fromkeys(names))
     for name in ("simple_average", "top_n"):
@@ -124,10 +124,76 @@ def cmd_stability(args):
     run_search_stability(**options)
 
 
-def cmd_transfer(args):
+def cmd_mechanism_transfer(args):
     from fusionbench.eval.mechanism_transfer import run_study
 
-    run_study(args.out, args.seeds, rescue_rates=args.rescue_rates, followup=args.followup)
+    run_study(args.out, args.seeds or list(range(8)),
+              rescue_rates=args.rescue_rates or [0., 0.03125, 0.5], followup=args.followup)
+
+
+def add_transfer_options(parser):
+    source = parser.add_mutually_exclusive_group()
+    source.add_argument("--preset", choices=("smoke", "standard"), help="packaged transfer grid")
+    source.add_argument("--config", help="path to a versioned transfer YAML file")
+    parser.add_argument("--scenarios", nargs="+", help="registered scenario IDs to include")
+    parser.add_argument("--methods", nargs="+", help="registered method IDs")
+    parser.add_argument("--dev-noise", nargs="+", type=float, help="development label flip probabilities")
+    parser.add_argument("--modes", nargs="+", help="provider_swap, log_jitter, canonical_shift; clean always included")
+    parser.add_argument("--severities", nargs="+", type=float, help="positive stress strengths up to 1")
+    parser.add_argument("--fit-rows", type=int)
+    parser.add_argument("--validation-rows", type=int, help="independent source rows for method selection (default: 192)")
+    parser.add_argument("--test-rows", type=int)
+    parser.add_argument("--repeats", type=int)
+    parser.add_argument("--base-seed", type=int)
+    parser.add_argument("--out", help="directory for reports and resolved configuration")
+
+
+def cmd_transfer_grid(args):
+    from pathlib import Path
+
+    import yaml
+
+    from fusionbench.transfer import load_preset, run_transfer
+
+    try:
+        if args.config:
+            cfg = yaml.safe_load(Path(args.config).read_text(encoding="utf-8"))
+            if not isinstance(cfg, dict):
+                raise ValueError("Transfer config must be a YAML mapping")
+        else:
+            cfg = load_preset(args.preset or "smoke")
+        if args.scenarios:
+            choices = {**load_preset("standard")["scenarios"], **cfg.get("scenarios", {})}
+            missing = set(args.scenarios)-choices.keys()
+            if missing:
+                raise ValueError(f"Supply a YAML scenario seed_slot for: {', '.join(sorted(missing))}")
+            if len(args.scenarios) != len(set(args.scenarios)):
+                raise ValueError("Scenario IDs must be distinct")
+            cfg["scenarios"] = {name: choices[name] for name in args.scenarios}
+        for field in ("methods", "dev_noise", "modes", "severities", "fit_rows", "validation_rows", "test_rows",
+                      "repeats", "base_seed"):
+            if (value := getattr(args, field)) is not None:
+                cfg[field] = value
+        if "clean" in (args.modes or []):
+            cfg["modes"] = [name for name in args.modes if name != "clean"]
+        out = run_transfer(cfg, args.out or "results/transfer-grid")
+    except (ValueError, OSError, yaml.YAMLError) as exc:
+        raise SystemExit(f"Transfer benchmark: {exc}") from exc
+    print(f"Transfer benchmark written to {out}")
+
+
+def cmd_transfer(args):
+    grid = any(getattr(args, field) is not None for field in
+               ("preset", "config", "methods", "dev_noise", "modes", "severities",
+                "fit_rows", "validation_rows", "test_rows", "repeats", "base_seed", "scenarios"))
+    legacy = args.seeds is not None or args.rescue_rates is not None or args.followup
+    if grid and legacy:
+        raise SystemExit("Use transfer-grid options or the MLP study's --seeds/--rescue-rates/--followup separately")
+    if legacy or (args.out is not None and not grid):
+        if args.out is None:
+            raise SystemExit("The MLP mechanism study requires --out")
+        return cmd_mechanism_transfer(args)
+    return cmd_transfer_grid(args)
 
 
 def main(argv=None):
@@ -177,11 +243,17 @@ def main(argv=None):
     add_stability_arguments(stability)
     stability.set_defaults(func=cmd_stability)
 
-    transfer = sub.add_parser("transfer", help="train one MLP using symmetries of a fitted ensemble")
-    transfer.add_argument("--out", required=True)
-    transfer.add_argument("--seeds", nargs="+", type=int, default=list(range(8)))
-    transfer.add_argument("--rescue-rates", nargs="+", type=float, default=[0., 0.03125, 0.5])
-    transfer.add_argument("--followup", action="store_true", help="compare algebraic training losses")
+    grid = sub.add_parser("transfer-grid", help="run paired development noise and deployment stresses")
+    add_transfer_options(grid)
+    grid.set_defaults(func=cmd_transfer_grid)
+
+    transfer = sub.add_parser("transfer", help="use --preset smoke or --config FILE for the transfer grid",
+                              description="Use --preset smoke/standard or --config FILE for the transfer grid. "
+                                          "The legacy --out DIR alone runs the MLP mechanism study.")
+    add_transfer_options(transfer)
+    transfer.add_argument("--seeds", nargs="+", type=int, help="legacy MLP study seeds")
+    transfer.add_argument("--rescue-rates", nargs="+", type=float, help="legacy MLP rescue rates")
+    transfer.add_argument("--followup", action="store_true", help="legacy MLP algebraic training losses")
     transfer.set_defaults(func=cmd_transfer)
 
     args = p.parse_args(argv)

@@ -1,9 +1,7 @@
 """fusionbench: a controlled benchmark for stacking / prediction-fusion methods.
 
-The benchmark isolates specific *base-model pathologies* (the issues stacking is
-meant to solve) and evaluates fusion methods under a *guaranteed-reliable*
-validation environment, so observed differences reflect a method's expressiveness
-on a pathology rather than optimizer's-curse / validation-test luck.
+The benchmark isolates base-model failure modes and measures fusion quality and
+validation-to-test transfer under fixed or deliberately changed distributions.
 """
 
 from fusionbench.types import Dataset, Task
