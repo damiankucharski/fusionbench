@@ -32,15 +32,29 @@ def summarize(out):
     effects, means = [], []
     for mode, frame in per_mode.items():
         repl = frame.groupby("replicate")[METHODS].mean()
-        means.append({"panel": mode, "families": len(frame.index.unique("scenario")), **repl.mean()})
+        means.append(
+            {
+                "panel": mode,
+                "families": len(frame.index.unique("scenario")),
+                **repl.mean(),
+            }
+        )
         for ref in METHODS:
             if ref == "challenger":
                 continue
             delta, lo, hi = interval(repl.challenger - repl[ref])
             fam_delta = (frame.challenger - frame[ref]).groupby("scenario").mean()
-            effects.append({"panel": mode, "reference": ref, "delta": delta, "low": lo,
-                            "high": hi, "family_wins": int((fam_delta < 0).sum()),
-                            "families": len(fam_delta)})
+            effects.append(
+                {
+                    "panel": mode,
+                    "reference": ref,
+                    "delta": delta,
+                    "low": lo,
+                    "high": hi,
+                    "family_wins": int((fam_delta < 0).sum()),
+                    "families": len(fam_delta),
+                }
+            )
     pd.DataFrame(effects).to_csv(out / "contrasts.csv", index=False)
     pd.DataFrame(means).to_csv(out / "means.csv", index=False)
     per_mode["joint"].groupby("scenario")[METHODS].mean().to_csv(out / "families.csv")
@@ -50,11 +64,20 @@ def summarize(out):
     selected = np.array([COMPONENTS.index(k) for k in d.chosen])
     rows = np.arange(len(d))
     for stage in ("discovery", "refit"):
-        d["chosen_" + stage] = d[[stage + "_" + k for k in COMPONENTS]].to_numpy()[rows, selected]
+        d["chosen_" + stage] = d[[stage + "_" + k for k in COMPONENTS]].to_numpy()[
+            rows, selected
+        ]
     d["refit_change"] = d["chosen_refit"] - d["chosen_discovery"]
-    values = ["chosen_discovery", "chosen_refit", "refit_change", "chosen_discovery_regret",
-              "chosen_refit_regret", "chosen_ties_discovery_oracle", "chosen_ties_refit_oracle",
-              *["refit_" + k for k in COMPONENTS]]
+    values = [
+        "chosen_discovery",
+        "chosen_refit",
+        "refit_change",
+        "chosen_discovery_regret",
+        "chosen_refit_regret",
+        "chosen_ties_discovery_oracle",
+        "chosen_ties_refit_oracle",
+        *["refit_" + k for k in COMPONENTS],
+    ]
     d.groupby(["method", "mode"])[values].mean().to_csv(out / "candidate-summary.csv")
     extra = raw[raw.gp_seed != raw.data_seed]
     if not extra.empty:
