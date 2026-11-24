@@ -1,6 +1,6 @@
 # Scenario catalog
 
-Choose a scenario by the assumption you want to test. Each generator returns class probabilities from multiple providers for the same examples, together with class labels. The default suite contains 17 binary scenarios and two multiclass scenarios. Use the IDs below as registry keys in Python or as scenario names in a transfer configuration.
+Choose a scenario by the assumption you want to test. Each generator returns class probabilities from multiple providers for the same examples, together with class labels. The default v1 suite contains 17 binary scenarios and two multiclass scenarios. The registry also includes the opt-in three-provider panel below. Use these IDs as registry keys in Python or as scenario names in a transfer configuration.
 
 ## Independent evidence and calibration
 
@@ -33,7 +33,40 @@ assert data.fit_preds.shape == (256, 100, 2)
 | `calibrated_suppressor` | Two individually calibrated binary sources with unequal signal strengths. Their conditional correlation controls the weaker source's joint weight. | `corr=0.85`, strictly between −1 and 1 |
 | `polarity_fault` | One of seven fixed-strength sensors occasionally reports its evidence with the wrong sign. The six stable sensors share noise. | `fault_rate=0.10` for the first sensor, `correlation=0.65` among the six stable sensors |
 
-For a sign-change control, build `SCENARIOS["calibrated_suppressor"](corr=0.0)` and `SCENARIOS["calibrated_suppressor"](corr=0.85)`. The weaker source's population coefficient passes through zero at 0.5 for these fixed logit variances. For both multiclass scenarios, `accuracy` controls a heuristic logit boost. Measure realized top-1 accuracy from the generated labels.
+For a sign-change control, build `SCENARIOS["calibrated_suppressor"](corr=0.0)` and `SCENARIOS["calibrated_suppressor"](corr=0.85)`. The weaker source's population coefficient passes through zero at 0.5 for these fixed logit variances. For the two v1 multiclass scenarios, `accuracy` controls a heuristic logit boost. Measure realized top-1 accuracy from the generated labels.
+
+## Three-provider multiclass panel
+
+`multiclass_provider_panel` tests fusion when three providers differ in strength, confidence and reporting precision. It first draws a uniform class label and marks each example hard with probability `hard_fraction` (default 0.15). For each class, the three providers receive unit-variance Gaussian logit noise with pairwise correlation `shared_error` (0.65). Each provider adds `separation × strength` to the correct class's logit. Hard rows multiply that boost by `hard_scale` (0.55). The default strengths in provider order are `(1, 0.9, 0.8)`.
+
+On a hard row with label `y`, provider `j` adds `confusion_bias` to class `(y + 1 + j % (C - 1)) % C`, using zero-based indices. A positive bias creates a systematic preference for a particular wrong class. Each provider divides its logits by its own temperature (defaults `(1.5, 1.0, 0.75)`) before softmax. Provider 0 reports the resulting probabilities. Providers 1 and 2 can draw independent multinomial votes and report observed class frequencies, including exact zeros. Each entry of `votes` sets that provider's count, with zero selecting continuous output.
+
+These controls were specified independently of digits data. The default class count is 10 and any integer of at least 3 is supported. The higher separation is intended to produce strong providers. Realized accuracy and calibration depend on the class count and the other settings. The scenario supplies labels for scoring and omits an analytic posterior conditioned on reported scores.
+
+| Setting | `separation` | `votes` | `confusion_bias` |
+| --- | ---: | --- | ---: |
+| A · Soft continuous | 2.5 | `(0, 0)` | 0 |
+| B · High separation, finite votes (defaults) | 6.0 | `(31, 7)` | 0 |
+| C · High separation, continuous | 6.0 | `(0, 0)` | 0 |
+| D · Soft, finite votes | 2.5 | `(31, 7)` | 0 |
+| E · High separation, finite votes, directed confusion | 6.0 | `(31, 7)` | 3.0 |
+
+Keep the seed, class count and row counts fixed to pair the labels, difficulty flags and Gaussian draws across settings. Separate voting streams preserve the other providers when one count changes.
+
+```python
+from fusionbench import generate_dataset
+
+options = dict(n_per_split=256, seed=42, n_classes=10, separation=6.0)
+voted = generate_dataset("multiclass_provider_panel", **options, votes=(31, 7))
+continuous = generate_dataset("multiclass_provider_panel", **options, votes=(0, 0))
+assert (voted.test_y == continuous.test_y).all()
+assert (voted.test_preds[:, 0] == continuous.test_preds[:, 0]).all()
+```
+
+```sh
+fusionbench generate --scenarios multiclass_provider_panel --param n_classes=3 \
+  --param 'votes=[31,7]' --param confusion_bias=3 --n 256 --seed 42 --out data
+```
 
 ## Hidden conditions and specialists
 
@@ -77,4 +110,4 @@ This comparison holds provider inputs and roles fixed while changing the conditi
 
 ## Reading the oracle
 
-`Dataset.test_oracle`, when available, is a row-by-class reference under the generating law. The independent binary committee uses a sum of log odds under balanced class priors. The correlated Gaussian model accounts for its covariance, and the logical tasks combine evidence using the known latent grouping. For the two multiclass models the reference uses the generator's logit strength and, for Saturated, its shared noise. Keep the oracle and known roles on the evaluation side. Custom scenarios may return `None`. After provider corruption, the appropriate reference would condition on the corrupted observations. [Generator implementations](https://github.com/damiankucharski/fusionbench/tree/05fa4ec364e545671402ec1ff14392b818fc4d6a/fusionbench/scenarios)
+`Dataset.test_oracle`, when available, is a row-by-class reference under the generating law. The independent binary committee uses a sum of log odds under balanced class priors. The correlated Gaussian model accounts for its covariance, and the logical tasks combine evidence using the known latent grouping. For the two v1 multiclass models the reference uses the generator's logit strength and, for Saturated, its shared noise. Keep the oracle and known roles on the evaluation side. The three-provider panel and custom scenarios may return `None`. After provider corruption, the appropriate reference would condition on the corrupted observations. [Version-1 generator implementations](https://github.com/damiankucharski/fusionbench/tree/05fa4ec364e545671402ec1ff14392b818fc4d6a/fusionbench/scenarios)

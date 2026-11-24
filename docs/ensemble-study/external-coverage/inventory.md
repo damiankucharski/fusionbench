@@ -1,6 +1,6 @@
 # What the 19 standard scenarios cover
 
-The version-1 suite contains 17 binary families and two multiclass families. Both multiclass constructors can produce three providers and ten classes. The clearest gap exposed by digits is the distribution of probabilities those providers emit. [Scenario catalog and constructor defaults](../../site/scenarios.md) · [Registry](../../../fusionbench/scenarios/registry.py)
+At revision `5513323`, the version-1 suite contains 17 binary families and two multiclass families. Both multiclass constructors can produce three providers and ten classes. The clearest gap exposed by digits is the distribution of probabilities those providers emit. [Scenario catalog and constructor defaults](../../site/scenarios.md) · [Registry](../../../fusionbench/scenarios/registry.py)
 
 | Families | What the existing settings can vary |
 | --- | --- |
@@ -10,7 +10,7 @@ The version-1 suite contains 17 binary families and two multiclass families. Bot
 | `native_switch`, `native_close_switch`, `compositional_switch` | Binary labels depend on discrete provider scores. Knobs change column roles, the label law or the fraction of corner cases. |
 | `multiclass_committee`, `saturated` | The former defaults to 8 providers and 5 classes, the latter to 6 providers and 4 classes. Both expose provider count, class count and signal strength. Saturated also controls a common Gaussian noise component. |
 
-The package ships one synthetic archive per family, seed 1729, with 128 fit and 128 test rows. On the saved test sets, mean provider top-1 accuracy was 29.0% for `multiclass_committee` and 90.5% for `saturated`. Both had zero exact-zero probability entries. Their `accuracy` settings of 0.60 and 0.95 control a heuristic boost to the true-class logit. The nine standard generator shifts all concern binary families. [Reference manifest](../../../fusionbench/data/reference-v1/manifest.json) · [Signal definition](../../../fusionbench/scenarios/calibrated.py) · [Shift settings](../../../fusionbench/scenarios/blocks.py)
+The package ships one synthetic archive per family, seed 1729, with 128 fit and 128 test rows. On the saved test sets, mean provider top-1 accuracy was 29.0% for `multiclass_committee` and 90.5% for `saturated`. Every stored class probability was positive in both banks. Their `accuracy` settings of 0.60 and 0.95 control a heuristic boost to the true-class logit. The nine standard generator shifts all concern binary families. [Reference manifest](../../../fusionbench/data/reference-v1/manifest.json) · [Signal definition](../../../fusionbench/scenarios/calibrated.py) · [Shift settings](../../../fusionbench/scenarios/blocks.py)
 
 ## Where digits differs
 

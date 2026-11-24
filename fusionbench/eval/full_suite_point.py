@@ -18,7 +18,7 @@ from fusionbench.eval.native_switch import serialize
 from fusionbench.methods.averaging import TopN
 from fusionbench.methods.stacking import StackingLogit
 from fusionbench.scenarios.blocks import SHIFTS, draw_block
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import SCENARIOS, STANDARD_V1_SCENARIOS
 
 
 def scenario_block(scenario, seed, index, n):
@@ -214,7 +214,7 @@ def run(out, workers):
         df = pd.DataFrame(
             [
                 row
-                for batch in pool.map(panel, product(SCENARIOS, range(4600, 4608)))
+                for batch in pool.map(panel, product(STANDARD_V1_SCENARIOS, range(4600, 4608)))
                 for row in batch
             ]
         )

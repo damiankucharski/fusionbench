@@ -10,7 +10,7 @@ from loguru import logger
 
 from fusionbench.eval.full_suite_point import data_for
 from fusionbench.eval.suite_point_gp import fit_suite_point
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 
 
 def collect(path):

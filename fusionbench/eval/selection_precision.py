@@ -397,7 +397,7 @@ def panel(pair):
 def run(out, workers):
     import pandas as pd
 
-    from fusionbench.scenarios.registry import SCENARIOS
+    from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)

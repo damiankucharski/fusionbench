@@ -16,7 +16,7 @@ from fusionbench.eval.mutation_opportunity import evaluate_bank
 from fusionbench.eval.native_switch import serialize
 from fusionbench.eval.seed_geometry_standard import fit_seed_geometry
 from fusionbench.eval.suite_point_gp import predict_tree
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 
 OUT = Path(__file__).resolve().parent
 FOCAL = "compositional_switch"

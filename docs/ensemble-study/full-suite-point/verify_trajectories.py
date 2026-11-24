@@ -34,7 +34,7 @@ from sklearn.metrics import f1_score, log_loss
 
 from fusionbench.eval.full_suite_point import data_for
 from fusionbench.eval.native_switch import serialize
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 
 PIN = "db7b2b15c7064ad34f638e5e93a8cdb01e5271b8"
 BUDGETS = (600, 1200)

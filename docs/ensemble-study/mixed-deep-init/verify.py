@@ -11,7 +11,7 @@ from statistics import fmean, stdev
 import numpy as np
 from scipy.stats import t
 
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 from fusionbench.eval.full_suite_point import SHIFTS
 
 out = Path(__file__).resolve().parent

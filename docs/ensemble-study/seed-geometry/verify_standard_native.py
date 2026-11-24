@@ -26,7 +26,7 @@ from okapi.node import MaxNode, MinNode, ValueNode
 from okapi.tree import Tree
 
 from fusionbench.eval.native_switch import serialize
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 
 PIN = "3eae0e5480cba0471cc5fda71b0c90f35b6a73f2"
 ARMS = ("stock", "branch", "chain")

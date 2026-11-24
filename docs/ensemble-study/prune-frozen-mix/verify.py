@@ -13,7 +13,7 @@ import numpy as np
 from scipy.stats import t
 
 from fusionbench.eval.full_suite_point import SHIFTS
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 
 FOLDER = Path(__file__).resolve().parent
 SOURCE = FOLDER.parent / "mixed-deep-init"

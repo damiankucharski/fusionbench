@@ -18,7 +18,7 @@ from okapi.functions import scale_vector_to_sum_1
 
 from fusionbench.eval.full_suite_point import data_for
 from fusionbench.eval.opportunity_wine import build_wine_fold
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 
 # Use the independently built native seeds, input binding and loss from the previous experiment.
 sys.path.insert(0, str(Path(__file__).resolve().parents[1] / "full-suite-point"))

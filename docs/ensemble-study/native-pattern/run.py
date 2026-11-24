@@ -17,7 +17,7 @@ from fusionbench.eval.native_switch import serialize
 from fusionbench.methods.averaging import TopN
 from fusionbench.methods.native_pattern import NativePatternOKAPI
 from fusionbench.methods.stacking import StackingLogit, StackingLR
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 
 OUT = Path(__file__).resolve().parent
 REFERENCES = ["logit", "prob_lr", "gp", "flat", "augmented", "top_n", "mean"]

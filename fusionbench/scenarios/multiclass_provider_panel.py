@@ -10,7 +10,7 @@ from fusionbench.scenarios.base import Scenario
 
 def _finite(value, name, *, low=0.0, high=np.inf):
     if isinstance(value, (bool, np.bool_)) or not isinstance(value, Real):
-        raise ValueError(f"{name} must be a finite number in [{low}, {high}]")
+        raise TypeError(f"{name} must be a real number")
     value = float(value)
     if not np.isfinite(value) or not low <= value <= high:
         raise ValueError(f"{name} must be a finite number in [{low}, {high}]")

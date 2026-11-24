@@ -6,7 +6,7 @@ import argparse
 import json
 
 from fusionbench.methods.registry import CORE, FACTORIES, default_methods
-from fusionbench.scenarios.registry import BUILTIN_IDS, SCENARIOS
+from fusionbench.scenarios.registry import SCENARIOS, STANDARD_V1_SCENARIOS
 
 
 def _comparison_names(names):
@@ -39,7 +39,7 @@ def _scenarios(names, parameters=()):
     if len(params) != len(parameters):
         raise SystemExit("Specify each scenario parameter once")
     try:
-        return [get_scenario(name, **params) for name in (names or BUILTIN_IDS)]
+        return [get_scenario(name, **params) for name in (names or STANDARD_V1_SCENARIOS)]
     except (ValueError, TypeError, KeyError) as exc:
         raise SystemExit(str(exc)) from exc
 

@@ -18,7 +18,7 @@ from sklearn.preprocessing import StandardScaler
 from threadpoolctl import threadpool_limits
 
 from fusionbench.eval.full_suite_point import SHIFTS
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 
 FOLDER = Path(__file__).resolve().parent
 METHODS = ("hybrid", "logit", "prob_lr", "linear_blend", "gp", "mean", "top_n")

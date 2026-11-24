@@ -10,7 +10,7 @@ import pandas as pd
 from sklearn.metrics import accuracy_score, f1_score, log_loss
 
 from fusionbench.eval.opportunity_wine import build_wine_fold
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 
 # Reuse the earlier immutable replay's NumPy interpreter and independent baseline fitter.
 previous = (

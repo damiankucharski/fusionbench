@@ -417,7 +417,7 @@ def run(out, workers, intervention_only=None):
     """Write one row per search, decision, endpoint and split, plus baselines."""
     import pandas as pd
 
-    from fusionbench.scenarios.registry import SCENARIOS
+    from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 
     out = Path(out)
     out.mkdir(exist_ok=True, parents=True)

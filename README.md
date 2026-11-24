@@ -1,10 +1,10 @@
 # FusionBench
 
-FusionBench is a Python library of controlled classification datasets for studying how to combine model predictions. Each dataset contains aligned class probabilities from several providers, labels, and independent fit and test examples. The 19 built-in scenarios cover correlated errors, weak and redundant models, calibration, noisy logical conditions and input-dependent expertise. Each scenario specifies how its predictions and labels arise. Researchers can vary its parameters, supply a fusion method or contribute a different generator.
+FusionBench is a Python library of controlled classification datasets for studying how to combine model predictions. Each dataset contains aligned class probabilities from several providers, labels, and independent fit and test examples. The 19 version-1 scenarios cover correlated errors, weak and redundant models, calibration, noisy logical conditions and input-dependent expertise. An additional multiclass generator pairs continuous scores with finite-vote reports from the same three providers. Each scenario specifies how its predictions and labels arise. Researchers can vary its parameters, supply a fusion method or contribute a different generator.
 
 ## Load a dataset or generate an experiment
 
-Install the research checkout with `python -m pip install .` (Python 3.11+). The base installation includes small reference datasets for all 19 built-ins. Generating data and running the standard baselines work on CPU.
+Install the research checkout with `python -m pip install .` (Python 3.11+). The base installation includes small reference datasets for all 19 version-1 scenarios. Generating data and running the standard baselines work on CPU.
 
 ```python
 import fusionbench as fb

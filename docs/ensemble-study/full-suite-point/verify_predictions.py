@@ -13,7 +13,7 @@ from sklearn.metrics import accuracy_score, f1_score, log_loss
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
 
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 
 SHIFTS = {
     "correlated": {"corr": 0.1},

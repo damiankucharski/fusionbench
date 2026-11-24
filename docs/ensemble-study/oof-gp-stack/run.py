@@ -16,7 +16,7 @@ from fusionbench.eval.full_suite_point import SHIFTS, fingerprint, scenario_bloc
 from fusionbench.eval.native_switch import serialize
 from fusionbench.methods.averaging import TopN
 from fusionbench.methods.crossfit_okapi import CrossFitOKAPI
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V1_SCENARIOS as SCENARIOS
 
 OUT = Path(__file__).resolve().parent
 REFERENCES = ["logit", "prob_lr", "linear_blend", "gp", "mean", "top_n"]
