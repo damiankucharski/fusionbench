@@ -17,4 +17,4 @@ SHIFTS = {
 
 def draw_block(scenario, seed, index, n):
     """Draw predictions, labels and generator metadata from a fixed RNG stream."""
-    return scenario._generate(n, np.random.default_rng([seed, index]))
+    return scenario.sample(n, np.random.default_rng([seed, index]))

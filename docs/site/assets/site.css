@@ -1,0 +1,12 @@
+.wy-side-nav-search { background: #174941; }
+.wy-side-nav-search input[type="text"] { border-color: #98bcb5; }
+.wy-nav-top { background: #174941; }
+.wy-nav-content { max-width: 58rem; }
+.wy-menu-vertical .caption { color: #92cebc; }
+.rst-content h1, .rst-content h2, .rst-content h3 { color: #1e3734; }
+.rst-content h2 { margin-top: 1.9rem; }
+.rst-content a { color: #00685c; }
+.rst-content a:visited { color: #514075; }
+.rst-content pre { max-width: 100%; overflow-x: auto; }
+.rst-content code { color: #254e4c; }
+.rst-content table.docutils td, .rst-content table.docutils th { white-space: normal; }

@@ -88,18 +88,18 @@ For each scenario the bank seed is `base_seed + 1000 * seed_slot + replicate`, w
 
 ## Add a scenario or provider
 
-Subclass `fusionbench.scenarios.base.Scenario`, define the task and class count, return ordered provider identifiers from `model_ids()`, and generate a probability tensor of shape `(N, providers, classes)` plus integer class labels and any oracle metadata from `_generate(n, rng)`. Use the supplied random generator. An analytic oracle is optional for transfer. Implement `bayes_oracle` when the law supplies one. To add a provider to an existing scenario, update its generation, identifiers and any oracle that depends on those inputs. IDs must keep their meaning across the endpoint. Register your class in process before calling the Python entry point, or add it to the package registry for CLI discovery.
+Subclass `fusionbench.Scenario`, define the task and class count, return ordered provider identifiers from `model_ids()`, and generate a probability tensor of shape `(N, providers, classes)` plus integer class labels and any oracle metadata from `sample(n, rng)`. Use the supplied random generator. An analytic oracle is optional for transfer. Implement `bayes_oracle` when the law supplies one. To add a provider to an existing scenario, update its generation, identifiers and any oracle that depends on those inputs. IDs must keep their meaning across the endpoint. Register your class in process before calling the Python entry point. [Implement a new generator](site/extend.md)
 
 ```python
+from fusionbench import register_scenario
 from fusionbench.scenarios.native_switch import NativeSwitch
-from fusionbench.scenarios.registry import SCENARIOS
 from fusionbench.transfer import load_preset, run_transfer
 
 class PartialSwitch(NativeSwitch):
     def __init__(self, mixing=0.25, **kwargs):
         super().__init__(mixing=mixing, **kwargs)
 
-SCENARIOS["partial_switch"] = PartialSwitch
+register_scenario("partial_switch", PartialSwitch)
 config = load_preset("smoke")
 config["scenarios"] = {"partial_switch": {"seed_slot": 100, "canonical_shift": {"mixing": 0.9}}}
 run_transfer(config, "results/partial-switch")

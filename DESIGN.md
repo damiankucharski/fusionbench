@@ -1,41 +1,18 @@
 # Design rationale
 
-`fusionbench` is a controlled, **method-agnostic** benchmark for stacking /
-prediction-fusion methods. Goal: isolate individual *base-model pathologies* and
-evaluate fusion methods in a **guaranteed-reliable validation environment**, so a
-performance difference reflects a method's expressiveness on a pathology rather
-than validation-test (optimizer's-curse) luck. It is a scientific instrument, not
-an advocacy harness for any one method.
+FusionBench studies prediction fusion through controlled data-generating mechanisms. The library supplies parameterized generators, reproducible datasets, and an interface for additional scenarios. This document also preserves the design and measured results of the initial OKAPI study. [Current scenario catalog](docs/site/scenarios.md) · [Public interface](docs/site/index.md)
 
-## Two non-negotiable methodological choices
+## Experimental controls
 
-1. **Generate in the natural causal direction.** Draw the label `y` from a prior,
-   then emit each base model as a *calibrated noisy observation of `y`* with a
-   pathology-specific error process. The generators describe conditions and error
-   structure only — they never apply any fusion operator (mean/max/min/far) to the
-   predictions. This avoids the circularity that would make the benchmark
-   "partial" toward operator-based methods like OKAPI.
+A scenario declares its observable provider scores, class labels and adjustable parameters. Several generators sample labels first and draw scores conditionally on them. Logical-gate scenarios sample latent conditions before generating both detectors and labels. Some switch tasks specify a label law on observed scores to test a known representable target. The catalog documents this construction so a comparison can be interpreted in its proper scope.
 
-2. **The ceiling is the analytic Bayes posterior** `P(y | predictions)`, derived
-   from the DGP, not from any method. For calibrated, conditionally-independent
-   models this is the **sum of logits** (binary) / **product of probabilities**
-   (multiclass); for correlated evidence it is the Gaussian linear discriminant;
-   for logical-gate DGPs it is a product / noisy-OR. Methods are scored by
-   **regret to this oracle**. Tests assert the oracle is never beaten.
+When known, the clean-domain posterior supplies a performance reference for probability losses. For independent calibrated binary providers with balanced priors, optimal evidence combines by adding log odds. In the binary Gaussian construction, `p = sigmoid(2 s t)` with `t | y ~ N((2y-1)s, 1)` gives accuracy `Phi(s)`. On a finite test sample a competing method may score better than the posterior. A metric such as macro-F1 also depends on the decision rule.
 
-Calibration is exact in the binary construction `p = sigmoid(2 s t)`,
-`t | y ~ N((2y-1)s, 1)`, giving accuracy `Phi(s)` (so `s = Phi^{-1}(acc)`).
+## Sampling and transfer
 
-## Reliability by construction
+The default IID interface uses 50,000 fit and 50,000 test rows sampled at the same parameters. Ranking agreement is an empirical question even under this matched design. The transfer protocol can vary development labels, provider outputs and, where specified, the test generator. These are distinct evaluations of the same scenario framework.
 
-100k rows per dataset, identical generative parameters across a 50k *fit* / 50k
-*test* split. At that N the fit ranking of methods provably transfers to test;
-`eval/reliability.py` verifies selection-top-1 agreement and fit->test rank
-correlation per scenario.
-
-## Scenario taxonomy (impartial by design)
-
-Different pathologies are won by different methods — that spread is the point:
+## Initial scenario taxonomy
 
 - **Conditionally independent** (logit-sum optimal → logistic stacker near-oracle):
   Committee, DeadWeight, Needle, MulticlassCommittee.

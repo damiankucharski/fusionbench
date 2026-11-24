@@ -3,9 +3,10 @@
 from __future__ import annotations
 
 import argparse
+import json
 
 from fusionbench.methods.registry import CORE, FACTORIES, default_methods
-from fusionbench.scenarios.registry import SCENARIOS, default_suite
+from fusionbench.scenarios.registry import BUILTIN_IDS, SCENARIOS
 
 
 def _comparison_names(names):
@@ -21,17 +22,33 @@ def _comparison_names(names):
     return names
 
 
-def _scenarios(names):
-    if not names:
-        return default_suite()
-    return [SCENARIOS[n]() for n in names]
+def _parameter(text):
+    name, separator, value = text.partition("=")
+    if not separator or not name.isidentifier():
+        raise argparse.ArgumentTypeError("Use --param name=JSON, for example --param accuracy=0.8")
+    try:
+        return name, json.loads(value)
+    except ValueError as exc:
+        raise argparse.ArgumentTypeError(f"Invalid JSON value for parameter {name!r}") from exc
+
+
+def _scenarios(names, parameters=()):
+    from fusionbench import get_scenario
+
+    params = dict(parameters)
+    if len(params) != len(parameters):
+        raise SystemExit("Specify each scenario parameter once")
+    try:
+        return [get_scenario(name, **params) for name in (names or BUILTIN_IDS)]
+    except (ValueError, TypeError, KeyError) as exc:
+        raise SystemExit(str(exc)) from exc
 
 
 def cmd_list(args):
     print("Scenarios:")
     for name, cls in SCENARIOS.items():
-        inst = cls()
-        print(f"  {name:22s} task={inst.task:10s} winners={inst.expected_winners}")
+        task = cls.task if isinstance(cls.task, str) else "configurable"
+        print(f"  {name:22s} task={task:10s} winners={cls.expected_winners}")
     print("\nMethods:")
     for name, factory in FACTORIES.items():
         avail = type(factory()).available()
@@ -40,7 +57,7 @@ def cmd_list(args):
 
 def cmd_generate(args):
     from fusionbench.store import save_dataset
-    for sc in _scenarios(args.scenarios):
+    for sc in _scenarios(args.scenarios, args.param):
         ds = sc.build(n_per_split=args.n, seed=args.seed)
         path = save_dataset(ds, args.out)
         print(f"wrote {path}")
@@ -53,7 +70,7 @@ def cmd_run(args):
 
     methods = default_methods(_comparison_names(args.methods) or None)
     print(f"methods: {[m.name for m in methods]}")
-    df = run_suite(_scenarios(args.scenarios), methods=methods,
+    df = run_suite(_scenarios(args.scenarios, args.param), methods=methods,
                    n_per_split=args.n, seed=args.seed)
     out = save_report(df, args.out)
     rel = reliability_summary(df)
@@ -207,6 +224,8 @@ def main(argv=None):
     g.add_argument("--n", type=int, default=50_000)
     g.add_argument("--seed", type=int, default=0)
     g.add_argument("--scenarios", nargs="*")
+    g.add_argument("--param", action="append", type=_parameter, default=[],
+                   metavar="NAME=JSON", help="set a generator parameter on each selected scenario (repeatable)")
     g.set_defaults(func=cmd_generate)
 
     r = sub.add_parser("run")
@@ -214,6 +233,8 @@ def main(argv=None):
     r.add_argument("--n", type=int, default=50_000)
     r.add_argument("--seed", type=int, default=0)
     r.add_argument("--scenarios", nargs="*")
+    r.add_argument("--param", action="append", type=_parameter, default=[],
+                   metavar="NAME=JSON", help="set a generator parameter on each selected scenario (repeatable)")
     r.add_argument("--methods", nargs="*")
     r.set_defaults(func=cmd_run)
 

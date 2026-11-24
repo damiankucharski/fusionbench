@@ -3,7 +3,6 @@
 from __future__ import annotations
 
 import hashlib
-import inspect
 import json
 import platform
 from importlib import metadata, resources
@@ -29,7 +28,7 @@ from fusionbench.eval.transfer_grid import (
 from fusionbench.methods.averaging import TopN
 from fusionbench.methods.registry import FACTORIES
 from fusionbench.scenarios.blocks import draw_block
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.scenarios.registry import SCENARIOS, _validated_defaults
 
 PRESETS = ("smoke", "standard")
 CONFIG_KEYS = {
@@ -95,7 +94,7 @@ def _known(items, universe, field):
         )
 
 
-def _scenario_spec(name, spec, builtin):
+def _scenario_spec(name, spec):
     opts = _mapping(spec, f"scenarios.{name}")
     _known(opts, ("seed_slot", "knobs", "canonical_shift"), "scenario field")
     if "seed_slot" not in opts:
@@ -105,18 +104,7 @@ def _scenario_spec(name, spec, builtin):
     endpoint = opts.get("canonical_shift", SHIFTS.get(name))
     if endpoint is not None:
         endpoint = _mapping(endpoint, f"{name}.canonical_shift")
-    if name in builtin:
-        # Many built-in constructors forward **kw into the base metadata.
-        # Reject misspellings there; external classes may consume dynamic keys.
-        declared = {
-            p
-            for cls in SCENARIOS[name].__mro__
-            for p, v in inspect.signature(cls.__init__).parameters.items()
-            if v.kind in (v.POSITIONAL_OR_KEYWORD, v.KEYWORD_ONLY) and p != "self"
-        }
-        _known(
-            [*knobs, *(endpoint or {})], sorted(declared), f"constructor knob on {name}"
-        )
+    _validated_defaults(name, {**knobs, **(endpoint or {})})
     return {"seed_slot": slot, "knobs": knobs, "canonical_shift": endpoint}
 
 
@@ -160,9 +148,8 @@ def resolve_config(config):
     if not scenarios:
         raise ValueError("Select at least one scenario")
     _known(scenarios, SCENARIOS, "scenario")
-    builtin = load_preset("standard")["scenarios"]
     cfg["scenarios"] = {
-        name: _scenario_spec(name, spec, builtin) for name, spec in scenarios.items()
+        name: _scenario_spec(name, spec) for name, spec in scenarios.items()
     }
     starts = sorted(_first_seed(cfg, s) for s in cfg["scenarios"].values())
     if any(b - a < cfg["repeats"] for a, b in pairwise(starts)):

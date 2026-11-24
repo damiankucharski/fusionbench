@@ -1,0 +1,24 @@
+site_name: FusionBench
+site_description: Reproducible experiments in combining model predictions
+docs_dir: docs/site
+site_dir: site
+strict: true
+theme:
+  name: readthedocs
+  highlightjs: false
+  prev_next_buttons_location: bottom
+  navigation_depth: 3
+nav:
+  - Overview: index.md
+  - Generate and save data: generate.md
+  - Scenario catalog: scenarios.md
+  - Evaluate fusion methods: evaluate.md
+  - Measure transfer: transfer.md
+  - Add a scenario: extend.md
+  - OKAPI case study: okapi.md
+plugins:
+  - search
+markdown_extensions:
+  - tables
+extra_css:
+  - assets/site.css

@@ -13,7 +13,7 @@ from fusionbench.types import Dataset
 
 
 def _regret(primary: str, oracle_val: float, method_val: float) -> float:
-    """Non-negative shortfall of a method vs the oracle on the primary metric."""
+    """Empirical difference on this test split, positive when the oracle scores better."""
     return (oracle_val - method_val) if HIGHER_BETTER[primary] else (method_val - oracle_val)
 
 
@@ -22,12 +22,13 @@ def evaluate_dataset(ds: Dataset, methods=None) -> pd.DataFrame:
     primary = ds.meta.get("primary_metric", "macro_f1")
     rows = []
 
-    # Oracle ceiling (analytic Bayes posterior), if present.
     oracle_test = None
     if ds.test_oracle is not None:
         o_test = score(ds.test_y, ds.test_oracle, ds.n_classes)
-        # fit_oracle is absent on degraded datasets; only the test ceiling matters.
-        o_fit = score(ds.fit_y, ds.fit_oracle, ds.n_classes) if ds.fit_oracle is not None else o_test
+        o_fit = (
+            score(ds.fit_y, ds.fit_oracle, ds.n_classes)
+            if ds.fit_oracle is not None else dict.fromkeys(METRIC_NAMES, np.nan)
+        )
         oracle_test = o_test[primary]
         rows.append(_row(ds, "oracle", primary, o_fit, o_test, 0.0, 0.0, oracle_test))
 

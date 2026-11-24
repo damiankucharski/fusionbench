@@ -1,19 +1,29 @@
-"""The two methodological guarantees of the benchmark.
+"""Empirical checks on oracle scores and ranking stability for fixed benchmark draws."""
 
-1. The analytic Bayes oracle is a genuine ceiling: no fitted method beats it on
-   the scenario's primary metric (beyond sampling noise).
-2. Validation-test reliability holds: selecting a method by its fit score picks
-   (essentially) the test-best method, and the fit->test ranking is preserved.
-"""
+from dataclasses import replace
 
 import pytest
 
+from fusionbench.eval.metrics import METRIC_NAMES
 from fusionbench.eval.reliability import reliability_summary
 from fusionbench.eval.runner import evaluate_dataset
 from fusionbench.methods.registry import CORE, default_methods
+from fusionbench.scenarios.compositional_switch import CompositionalSwitch
 from fusionbench.scenarios.registry import default_suite
 
 N = 8000
+
+
+def test_missing_fit_oracle_keeps_test_scores_and_leaves_fit_metrics_missing():
+    dataset = CompositionalSwitch().build(n_per_split=64, seed=0)
+    full = evaluate_dataset(dataset, methods=[]).iloc[0]
+    test_only = evaluate_dataset(replace(dataset, fit_oracle=None), methods=[]).iloc[0]
+    fit_columns = [f"fit_{metric}" for metric in METRIC_NAMES]
+    test_columns = [f"test_{metric}" for metric in METRIC_NAMES]
+    assert test_only.index.equals(full.index)
+    assert test_only[fit_columns + ["val_test_gap"]].isna().all()
+    assert test_only[test_columns].equals(full[test_columns])
+    assert test_only["method"] == "oracle" and test_only["regret"] == 0.0
 
 
 @pytest.fixture(scope="module")

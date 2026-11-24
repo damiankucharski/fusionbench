@@ -2,6 +2,7 @@
 /data/
 /results/
 /runs/
+/site/
 
 # Python
 __pycache__/

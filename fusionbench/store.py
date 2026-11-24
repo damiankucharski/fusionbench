@@ -15,6 +15,7 @@ adapter converts to whatever tensor format OKAPI expects at run time.
 from __future__ import annotations
 
 import json
+import zipfile
 from pathlib import Path
 
 import numpy as np
@@ -28,6 +29,10 @@ SPLITS = ("fit", "test")
 
 def save_dataset(ds: Dataset, root: str | Path) -> Path:
     """Write ``ds`` under ``root/<name>/`` and return that directory."""
+    for component in (ds.name, *ds.model_ids):
+        if (not isinstance(component, str) or not component or component in (".", "..")
+                or Path(component).name != component or "\\" in component or "\0" in component):
+            raise ValueError("Dataset and provider names must be single file names")
     base = Path(root) / ds.name
     (base / "gt").mkdir(parents=True, exist_ok=True)
     (base / "oracle").mkdir(parents=True, exist_ok=True)
@@ -67,8 +72,12 @@ def save_dataset(ds: Dataset, root: str | Path) -> Path:
 
 def load_dataset(path: str | Path) -> Dataset:
     """Load a dataset previously written by :func:`save_dataset`."""
-    base = Path(path)
-    meta = json.loads((base / "meta.json").read_text())
+    return _read_dataset_dir(Path(path))
+
+
+def _read_dataset_dir(base: Path | zipfile.Path) -> Dataset:
+    """Read the native directory layout from disk or an open reference archive."""
+    meta = json.loads((base / "meta.json").read_text(encoding="utf-8"))
     model_ids = meta["model_ids"]
 
     if not isinstance(model_ids, list) or not model_ids or any(
@@ -84,16 +93,19 @@ def load_dataset(path: str | Path) -> Dataset:
         raise ValueError("unknown primary metric in meta.json")
 
     def probabilities(file, n):
-        p = np.load(file, allow_pickle=False)
+        with file.open("rb") as stream:
+            p = np.load(stream, allow_pickle=False)
         if (p.shape != (n, classes) or p.dtype.kind not in "fiu"
                 or not np.isfinite(p).all() or p.min() < 0 or p.max() > 1
                 or not np.allclose(p.sum(axis=1), 1, atol=1e-5, rtol=0)):
-            raise ValueError(f"{file}: expected finite probabilities [N, {classes}] with rows summing to 1")
+            location = file.at if isinstance(file, zipfile.Path) else file
+            raise ValueError(f"{location}: expected finite probabilities [N, {classes}] with rows summing to 1")
         return p
 
     labels = {}
     for split in SPLITS:
-        y = np.load(base / "gt" / f"{split}.npy", allow_pickle=False)
+        with (base / "gt" / f"{split}.npy").open("rb") as stream:
+            y = np.load(stream, allow_pickle=False)
         if (y.ndim != 1 or not len(y) or y.dtype.kind not in "biu"
                 or y.min() < 0 or y.max() >= classes):
             raise ValueError(f"{split}: expected nonempty integer class labels [N] in [0, {classes})")

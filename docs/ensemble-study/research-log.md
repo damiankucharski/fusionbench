@@ -1,8 +1,12 @@
 # Open research log
 
-The current program uses FusionBench to improve how OKAPI finds and generalizes fusion trees. Earlier ensemble-compression studies below are prior results. The active objective and pause switch are in [the research settings](research-state.json).
+FusionBench is a general benchmark for prediction fusion with controlled generators, reference datasets and a public scenario interface. OKAPI provides a case study in diagnosing representation, search and generalization. Earlier ensemble-compression studies below are prior results. The active objective and pause switch are in [the research settings](research-state.json).
 
 The [literature index for the paper](literature/README.md) connects primary sources to benchmark assumptions, dated proposals and measured results. It includes the [21 November review](literature/2026-11-21.md) and a [BibTeX bibliography](literature/references.bib).
+
+## FusionBench library and reference datasets, 24 November 2026
+
+The publication scope is the controlled dataset collection and the API for reproducing, modifying and adding scenarios. All 19 default generators have a small, versioned reference dataset. A separate wheel installation reproduced their labels, provider predictions and available posterior arrays at their stored precision. The OKAPI case study illustrates how a known target can distinguish an expressivity limit from a failure of search or selection. Transfer under a distribution change is one of several experiments enabled by the same library. [Library guide](../site/index.md) · [Scenario catalog](../site/scenarios.md) · [OKAPI case study](../site/okapi.md)
 
 ## Graded validation-to-test transfer on 24 November 2026
 

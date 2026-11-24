@@ -1,82 +1,41 @@
-# fusionbench
+# FusionBench
 
-A controlled benchmark for stacking and prediction fusion. FusionBench generates
-per-provider class probabilities and known labels so that a new fusion method
-can be compared on the same examples as averaging, Top-N and logistic stacking.
+FusionBench is a Python library of controlled classification datasets for studying how to combine model predictions. Each dataset contains aligned class probabilities from several providers, labels, and independent fit and test examples. The 19 built-in scenarios cover correlated errors, weak and redundant models, calibration, noisy logical conditions and input-dependent expertise. Each scenario specifies how its predictions and labels arise. Researchers can vary its parameters, supply a fusion method or contribute a different generator.
 
-## Run a transfer benchmark
+## Load a dataset or generate an experiment
+
+Install the research checkout with `python -m pip install .` (Python 3.11+). The base installation includes small reference datasets for all 19 built-ins. Generating data and running the standard baselines work on CPU.
+
+```python
+import fusionbench as fb
+
+print(fb.list_scenarios())
+reference = fb.load_reference_dataset("correlated")
+
+# Change how strongly eight providers share their errors, keeping their marginal
+# accuracy, the other two providers, the sample size and the seed fixed.
+for corr in (0.1, 0.85):
+    data = fb.generate_dataset("correlated", corr=corr, n_per_split=2048, seed=17)
+    assert data.fit_preds.shape == (2048, 10, 2)
+    print(corr, data.model_ids, data.fit_y.shape)
+```
+
+The bundled datasets have 128 examples per split. Use larger generated splits and independent seeds for an experiment. The Python API also supports saving and loading local datasets in the same per-model NumPy format. [Getting started](docs/site/generate.md) · [Scenario catalog and parameter defaults](docs/site/scenarios.md) · [Implement a scenario](docs/site/extend.md)
+
+## Compare fusion methods
 
 ```sh
-fusionbench transfer-grid --preset smoke --out results/transfer-smoke
+fusionbench list
+fusionbench generate --scenarios correlated --param corr=0.1 --seed 17 --n 2048 --out data
+fusionbench run --scenarios correlated --param corr=0.1 --seed 17 --n 2048 \
+  --methods simple_average top_n stacking_lr stacking_logit --out results/correlated
 ```
 
-This packaged CPU experiment fits four methods and evaluates them on clean and
-corrupted inputs. The standard preset covers 19 scenarios. Both run with the
-base installation. [Configuration, metrics, extension API and reproducibility](docs/transfer-benchmark.md)
+Available comparisons include simple averaging, ranked-prefix Top-N, probability and logit stacking, tree operators, and optional learned fusion methods. Where the generating law supplies the conditional class probabilities, a clean-domain oracle can help distinguish limits of the data from limits of a method. For binary banks with up to 12 providers, the optional `lattice_brier_exact` comparator computes the lowest attainable empirical Brier for unrestricted MIN/MAX trees. [Evaluate a method](docs/site/evaluate.md)
 
-## What makes it different
+## Use the benchmark to diagnose a method
 
-- **Matched examples.** The ordinary IID suite draws fit and test examples
-  independently from identical generator parameters. A reliability report
-  measures fit-to-test rank correlation and top-choice agreement. Finite samples
-  and model selection can change the ranking, even with large fit and test sets.
-- **Known mechanisms.** Some scenarios draw labels first and generate noisy
-  observations of those labels; others specify a conditional label probability
-  directly to test a known fusion mechanism. An analytic posterior, when
-  available for the observed inputs, provides a scenario-specific reference.
-- **Controlled transfer.** Separate development annotation noise, corrupted
-  deployment inputs and changes in a scenario's data-generating parameters.
-  Each run records paired results and the seeds used to generate them.
-
-## Scenarios (base-model pathologies)
-
-Committee, DeadWeight, Needle, MulticlassCommittee (conditionally independent →
-logit-sum optimal); CorrelatedRedundancy, Saturated (correlated/redundant →
-weighted-linear); HardVeto, HardRescue, Compound (logical gates → nonlinear
-min/max optimal); GatedExperts (input-dependent mixture → tree AutoML);
-Miscalibration (judged by log-loss → logit recalibration).
-
-In `calibrated_suppressor`, two individually calibrated binary predictors have different strengths. Their class-conditional error correlation determines whether the optimal logit pool adds the weaker predictor, ignores it or subtracts its signal. [Scenario, proof and paired results](docs/ensemble-study/calibrated-suppressor/README.md)
-
-## Methods under test
-
-best_single, simple_average, top_n, top_k, val_weighted, **op_min/op_max/op_far/op_close**
-(fixed operator atoms), stacking_lr, **stacking_logit**, **okapi** *(extra: okapi —
-runs on the numpy/CPU backend)*, nsga3 *(extra: nsga)*, tpot *(extra: tpot)*, plus
-the analytic **oracle** ceiling.
-
-For binary datasets with 1–12 providers, the opt-in method `lattice_brier_exact` computes the least empirical-Brier minimizer over unrestricted MIN/MAX trees. Install the `lattice` extra for the exact integer-capacity minimum cut. This comparator measures how far a search finished above the best attainable fit loss. Evaluate its generalization on separate rows as for any other fitted method.
-
-## Results
-
-A regularized logistic stacker is a very strong baseline on *calibrated,
-stationary* probabilities, so OKAPI **ties** it on the monotone structured
-pathologies (committee, correlated, deadweight, needle, hardveto, hardrescue,
-weakest_link, compound — regret within ~0.01) while being far more parsimonious,
-and it **dominates** the naive consensus baselines (avg / top-k / best-single)
-everywhere.
-
-OKAPI's *clear* wins are on **genuinely non-linearly-separable** structures that
-linear methods provably cannot represent: `gated_experts` (mixture routing, OKAPI
-0.786 vs stacking 0.73) and `parity` (XOR, 0.692 vs 0.49) — robust across seeds.
-Its honest losses are `miscalibration` (needs a logistic recalibration link) and
-`two_pathways` (a depth-3 DNF its GP search still under-realises). Making OKAPI
-competitive required adapter-level search fixes (coherent single-channel binary,
-population seeding, multi-restart). See `DESIGN.md` and `docs/sample_run/`.
-
-## Usage
-
-```bash
-uv sync                       # core deps; add --extra nsga/tpot/okapi as needed
-uv run fusionbench list
-uv run fusionbench run --n 20000 --out results
-uv run fusionbench sweep --kind reliability --scenario needle --out results/sweep
-uv run fusionbench generate --n 50000 --out data   # write datasets to disk
-```
-
-OKAPI runs on the numpy/CPU backend (no GPU needed); these datasets are small
-enough to evaluate every method locally. Optional methods (okapi / nsga3 / tpot)
-are skipped when their dependencies are absent.
+A fixed scenario lets you ask whether a method can represent the target, whether its optimizer finds a suitable solution, and whether the chosen solution generalizes. The OKAPI case study uses known target trees, exact comparisons and independent evaluation to distinguish those questions. The transfer suite is another available protocol. Run `fusionbench transfer-grid --preset smoke --out results/transfer-smoke` to compare four baselines on paired disturbances. [OKAPI case study](docs/site/okapi.md) · [Transfer configurations](docs/transfer-benchmark.md) · [Earlier design and experiments](DESIGN.md)
 
 ## Evaluate predictions from your own models
 
