@@ -4,6 +4,10 @@ FusionBench is a general benchmark for prediction fusion with controlled generat
 
 The [literature index for the paper](literature/README.md) connects primary sources to benchmark assumptions, dated proposals and measured results. It includes the [21 November review](literature/2026-11-21.md) and a [BibTeX bibliography](literature/references.bib).
 
+## Coverage review of the 20-scenario suite · 24 November 2026
+
+On ten archived clean draws, regularized OKAPI lost to probability stacking in eight for weakest link. The sign-flipping provider showed a large loss in one small-bank run and a near tie in the larger historical comparison. The [coverage review](scenario-coverage/README.md) separates those observations from four proposed mechanisms and proposes severity axes for every standard scenario.
+
 ## Standard suite for OKAPI regression evaluations · 24 November 2026
 
 Evaluate each OKAPI change across the entire current standard suite and report per-scenario scores against mean, ranked-prefix Top-N and logistic stacking. Include the suite version and seeds. The current standard-v2 suite contains all 19 standard-v1 scenarios plus `similar_classes_38`. The ready-made ten-class problem pairs labels 3 and 8 for all three providers in both splits. Run `fusionbench run --methods okapi_native_pattern_l2` to evaluate the full suite. The [single-seed integration run](class-capacity/standard-v2-smoke.csv) used 256 rows per split and seed 1729. Targeted diagnostics supplement the full evaluation.
