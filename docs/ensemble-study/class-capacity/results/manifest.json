@@ -1,0 +1,55 @@
+{
+  "sources": {
+    "external-coverage/external-results/fit_banks.npz": "163b70904a03c314348de2652f81ac61909d62fa246c13ba760cd20df0fae886",
+    "external-coverage/external-results/test_banks.npz": "835bce8241dd773683174e60d7882c4d7ebd94df04fa3a0757f788df793aac83",
+    "external-coverage/external-results/scores.csv": "f2e080e7ae92b67729fe82a3a6df50febf95689bea4fbbb0e4f98aca08e16cc3",
+    "external-coverage/external-results/fit_manifest.json": "bd273d64e36fabb14c0276cfccdaaef60180353015aa1cb8e3441ecfb2f701c5",
+    "runner-up-transfer/external-fit/fit_banks.npz": "7caa774d7bb2022173838d12f9d45222fcbc9da196e511e6df4e185cb9134d3e",
+    "runner-up-transfer/external-fit/fit_manifest.json": "c1d8343af41822188ccbb11c227a095e013a0278d2381bc4a029a87d332970a6",
+    "runner-up-transfer/external-results/test_banks.npz": "c01b4cb376af61c740997c859afe556905d4e628ec733c6cdde1439c7783f97c",
+    "runner-up-transfer/external-results/scores.csv": "83044da2f4a7b1302fb27a1ecac84c197fb05ffeb8b16bddd2c8ad9392db0d59"
+  },
+  "real_reference_method_ids": [
+    "mean",
+    "top_n",
+    "prob_lr",
+    "logit",
+    "native",
+    "symmetric_lr",
+    "pooled_lr"
+  ],
+  "real_seeds": {
+    "digits_hetero_a": 3140000,
+    "digits_lr_bag": 3140000,
+    "wine": 3150000,
+    "digits_hetero_b": 3300000,
+    "iris": 3310000,
+    "seeds": 3320000
+  },
+  "real_replicates": 8,
+  "synthetic_seed_root": 3500000,
+  "synthetic_replicates": 6,
+  "fit_stream": 0,
+  "test_stream": 1,
+  "synthetic_rows": {
+    "fit": 449,
+    "test": 2048
+  },
+  "synthetic_affected_labels": [
+    3,
+    8
+  ],
+  "brier": "mean row sum of squared class errors; lower is better",
+  "pairing": "All methods on identical stored provider tensors. Synthetic variants use common random numbers and unchanged true-label probability and class-probability multiset per provider per row.",
+  "fit_budget": {
+    "native_class_head_l2_strength": 0.25,
+    "native_class_head_max_evaluations": 4096,
+    "logistic_C": 1.0
+  },
+  "tie_tolerance": 1e-12,
+  "n_scores": 792,
+  "n_scores_by_origin": {
+    "archive": 336,
+    "fit": 456
+  }
+}

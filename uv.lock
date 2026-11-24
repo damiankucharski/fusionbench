@@ -589,7 +589,7 @@ requires-dist = [
     { name = "mkdocs", marker = "extra == 'docs'", specifier = ">=1.6,<2" },
     { name = "networkx", marker = "extra == 'lattice'", specifier = ">=3.0" },
     { name = "numpy", specifier = ">=1.26" },
-    { name = "okapi", marker = "extra == 'okapi'", git = "https://github.com/damiankucharski/OKAPI?rev=5af0db2bfaef981fcef4dd4aff183e69c2e165f7" },
+    { name = "okapi", marker = "extra == 'okapi'", git = "https://github.com/damiankucharski/OKAPI?rev=ce6ae177a4058612b7ffa33194a13e3fda86f5cb" },
     { name = "pandas", specifier = ">=2.2" },
     { name = "pymoo", marker = "extra == 'nsga'", specifier = ">=0.6" },
     { name = "pytest", marker = "extra == 'dev'", specifier = ">=8.0" },
@@ -1536,7 +1536,7 @@ wheels = [
 [[package]]
 name = "okapi"
 version = "0.1.0"
-source = { git = "https://github.com/damiankucharski/OKAPI?rev=5af0db2bfaef981fcef4dd4aff183e69c2e165f7#5af0db2bfaef981fcef4dd4aff183e69c2e165f7" }
+source = { git = "https://github.com/damiankucharski/OKAPI?rev=ce6ae177a4058612b7ffa33194a13e3fda86f5cb#ce6ae177a4058612b7ffa33194a13e3fda86f5cb" }
 dependencies = [
     { name = "graphviz" },
     { name = "loguru" },

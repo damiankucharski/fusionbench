@@ -105,6 +105,9 @@ class MulticlassProviderPanel(Scenario):
         # Consume a fixed number of caller draws for every configuration.
         # Toggling voting preserves latent examples on this and subsequent splits.
         latent_seed, *vote_seeds = rng.integers(2**63, size=3, dtype=np.uint64)
+        return self._sample_with_seeds(n, latent_seed, vote_seeds)
+
+    def _sample_with_seeds(self, n, latent_seed, vote_seeds):
         latent = np.random.default_rng(latent_seed)
         y = latent.integers(self.n_classes, size=n)
         hard = latent.random(n) < self.hard_fraction

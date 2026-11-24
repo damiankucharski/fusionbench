@@ -68,6 +68,33 @@ fusionbench generate --scenarios multiclass_provider_panel --param n_classes=3 \
   --param 'votes=[31,7]' --param confusion_bias=3 --n 256 --seed 42 --out data
 ```
 
+### Direct wrong-class preferences with paired controls
+
+`shared_confusion_panel` takes the same generator settings and applies a class-identity intervention after all three providers report their probabilities. Supply a `shared_matrix` of shape `(C, C)`. Row `y` gives the relative weights of wrong destinations for examples with true class `y`. Weights must be finite and nonnegative, and the diagonal must be zero. A whole row of zeros leaves examples from that class untouched.
+
+On each example and provider independently, `strength` sets the probability of applying the intervention. The generator draws a destination according to the row weights and swaps its probability with the largest probability among the wrong classes. It chooses uniformly among tied maxima. To allow differences between providers, pass `provider_matrices` of shape `(3, C, C)`. On each active draw, `deviation_mix` sets the probability of using that provider's weights. At zero all providers use the shared weights. At one each uses its own weights. Omitted provider weights reuse the shared matrix. The default `strength=0` exactly reproduces the original panel.
+
+The example makes 3 and 8 each other's most favored wrong class. The private alternative sends both true classes toward wrong class 0, 1 or 2 according to the provider. These are illustrative class identities.
+
+```python
+import numpy as np
+from fusionbench import generate_dataset
+
+shared = np.zeros((10, 10))
+shared[3, 8] = shared[8, 3] = 1
+private = np.zeros((3, 10, 10))
+for j in range(3):
+    private[j, [3, 8], j] = 1
+
+options = dict(seed=42, n_per_split=256, shared_matrix=shared,
+               provider_matrices=private, strength=1)
+common = generate_dataset("shared_confusion_panel", **options, deviation_mix=0)
+per_provider = generate_dataset("shared_confusion_panel", **options, deviation_mix=1)
+np.testing.assert_array_equal(common.fit_y, per_provider.fit_y)
+```
+
+For paired draws, keep the seed, split sizes and base panel settings fixed. The true-class probability and every wrong probability value are preserved for each example and provider. Consequently each provider retains its per-example Brier and log loss, its margins and its number of exact zeros. Fusion loss can change as providers put their wrong probability mass on different class identities. Shared preferences control the destination of errors. The inherited `shared_error` controls correlation in the original provider logits. When probabilities have exact top-1 ties, the class selected by lowest-index tie-breaking can change.
+
 ### Measure wrong-class preferences on fit rows
 
 Call `runner_up_profile(bank.fit_preds, bank.fit_y)` on a generated or external bank. Supply a nonempty array shaped `(rows, providers, classes)`, with at least two classes and one integer label per row in `0..C-1`. Each probability must be finite and in `[0, 1]`, and each provider's class probabilities must sum to one within `1e-5`.

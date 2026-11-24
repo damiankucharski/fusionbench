@@ -32,6 +32,8 @@ def serialize(node):
         result["id"] = node.id
     if hasattr(node, "weights"):
         result["weights"] = np.asarray(node.weights).tolist()
+    if type(node).__name__ == "MulticlassAffineNode":
+        result.update(mode=node.mode, coefficients=np.asarray(node.coefficients).tolist(), intercept=np.asarray(node.intercept).tolist())
     if hasattr(node, "threshold"):
         result["threshold"] = float(node.threshold)
         result["close"] = bool(node.close)

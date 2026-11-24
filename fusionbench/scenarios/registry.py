@@ -26,6 +26,7 @@ from fusionbench.scenarios.mixture import GatedExperts
 from fusionbench.scenarios.multiclass_provider_panel import MulticlassProviderPanel
 from fusionbench.scenarios.native_switch import NativeCloseSwitch, NativeSwitch
 from fusionbench.scenarios.polarity import PolarityFault
+from fusionbench.scenarios.shared_confusion_panel import SharedConfusionPanel
 from fusionbench.types import Dataset
 
 STANDARD_V1_SCENARIOS = MappingProxyType(
@@ -55,6 +56,7 @@ STANDARD_V1_SCENARIOS = MappingProxyType(
 SCENARIOS: dict[str, type[Scenario]] = {
     **STANDARD_V1_SCENARIOS,
     "multiclass_provider_panel": MulticlassProviderPanel,
+    "shared_confusion_panel": SharedConfusionPanel,
 }
 
 BUILTIN_IDS = tuple(SCENARIOS)

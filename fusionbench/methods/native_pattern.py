@@ -26,10 +26,18 @@ def _raw_roots(inputs):
     return [ValueNode(None, tensor, name) for name, tensor in inputs.items()]
 
 
-def _head(inputs, labels, bases, objective, multiclass, l2_strength):
-    """Bind independent copies of the frozen feature programs to this fit split."""
-    from okapi.pattern_logit import fit_pattern_tree
+def _validate_class_head(class_head, max_evaluations):
+    if class_head not in (None, "diagonal", "full"):
+        raise ValueError("class_head must be 'diagonal' or 'full'")
+    if max_evaluations is not None:
+        if class_head is None:
+            raise ValueError("class_head_max_evaluations requires an explicit class_head")
+        if isinstance(max_evaluations, (bool, np.bool_)) or not isinstance(max_evaluations, (int, np.integer)) or max_evaluations < 1:
+            raise ValueError("Class head evaluation budget must be a positive integer")
 
+
+def _head(inputs, labels, bases, objective, multiclass, l2_strength, class_head=None, max_evaluations=None):
+    """Bind independent copies of the frozen feature programs to this fit split."""
     roots = _raw_roots(inputs)
     for tree in bases:
         rebound = tree.copy()
@@ -37,6 +45,14 @@ def _head(inputs, labels, bases, objective, multiclass, l2_strength):
             node.value = inputs[node.id]
         roots.append(rebound.root)
     options = {"l2_strength": l2_strength} if l2_strength else {}
+    if class_head is not None:
+        from okapi.multiclass_affine import fit_multiclass_affine_tree
+
+        if max_evaluations is not None:
+            options["max_evaluations"] = int(max_evaluations)
+        return fit_multiclass_affine_tree(roots, labels, objective=objective, mode=class_head, **options)
+    from okapi.pattern_logit import fit_pattern_tree
+
     return fit_pattern_tree(
         roots, labels, objective=objective, multiclass=multiclass, **options
     )
@@ -54,6 +70,9 @@ class NativePatternOKAPI(Method):
     varying seed for the GP search. The partition uses seed by default.
     Positive l2_strength regularizes the native head weights on each fit
     split. Discovery screening and held-out selection use raw fitness.
+    On multiclass tasks, class_head="diagonal" or "full" fits a native
+    probability-affine head on each ordered set of providers and GP bases.
+    class_head_max_evaluations limits objective calls per head fit.
     """
 
     name = "okapi_native_pattern"
@@ -66,6 +85,8 @@ class NativePatternOKAPI(Method):
         pair_basis=False,
         split_seed=None,
         l2_strength=0.0,
+        class_head=None,
+        class_head_max_evaluations=None,
     ):
         if fitness is not None and not callable(fitness):
             raise TypeError("fitness must be callable")
@@ -84,6 +105,9 @@ class NativePatternOKAPI(Method):
         self.pair_basis = bool(pair_basis)
         self.split_seed = split_seed
         self.l2_strength = float(strength)
+        _validate_class_head(class_head, class_head_max_evaluations)
+        self.class_head = class_head
+        self.class_head_max_evaluations = class_head_max_evaluations
 
     @classmethod
     def available(cls):
@@ -104,6 +128,11 @@ class NativePatternOKAPI(Method):
         x = _full(fit_preds)
         n, providers, classes = x.shape
         expected_task = "binary" if classes == 2 else "multiclass"
+        if self.class_head is not None:
+            if task != "multiclass" or classes < 3:
+                raise ValueError("class_head requires a multiclass bank with at least three classes")
+            # Check the optional native operator before starting the GP search.
+            from okapi.multiclass_affine import fit_multiclass_affine_tree  # noqa: F401
         if n < 2 or providers < 2 or classes != n_classes or task != expected_task:
             raise ValueError(
                 "Supply aligned fit rows, at least two providers and a matching classification task"
@@ -135,6 +164,10 @@ class NativePatternOKAPI(Method):
         def native_score(p, y):
             return full_score(_full_probability(p), y)
 
+        def fit_head(inputs, fit_labels, bases):
+            return _head(inputs, fit_labels, bases, native_score, multiclass, self.l2_strength,
+                         self.class_head, self.class_head_max_evaluations)
+
         archive = []
 
         def collect(tree, prediction):
@@ -165,9 +198,7 @@ class NativePatternOKAPI(Method):
             archive.extend(pairs)
             pair_seconds = perf_counter() - start
         start = perf_counter()
-        flat_d, flat_d_info = _head(
-            inputs, dy, (), native_score, multiclass, self.l2_strength
-        )
+        flat_d, flat_d_info = fit_head(inputs, dy, ())
         flat_seconds = perf_counter() - start
         start = perf_counter()
         with _task_postprocessing(task):
@@ -182,9 +213,7 @@ class NativePatternOKAPI(Method):
         )
         screen_seconds = perf_counter() - start
         start = perf_counter()
-        aug_d, aug_d_info = _head(
-            inputs, dy, bases, native_score, multiclass, self.l2_strength
-        )
+        aug_d, aug_d_info = fit_head(inputs, dy, bases)
         aug_seconds = perf_counter() - start
         discovery_trees = {"flat": flat_d, "augmented": aug_d, "gp": gp.val_tree}
         validation_scores = {
@@ -195,14 +224,10 @@ class NativePatternOKAPI(Method):
 
         inputs = _bind(x)
         start = perf_counter()
-        flat, flat_info = _head(
-            inputs, labels, (), native_score, multiclass, self.l2_strength
-        )
+        flat, flat_info = fit_head(inputs, labels, ())
         flat_refit_seconds = perf_counter() - start
         start = perf_counter()
-        augmented, aug_info = _head(
-            inputs, labels, bases, native_score, multiclass, self.l2_strength
-        )
+        augmented, aug_info = fit_head(inputs, labels, bases)
         aug_refit_seconds = perf_counter() - start
         score_calls = {
             "gp_discovery": gp.calls,
@@ -246,7 +271,10 @@ class NativePatternOKAPI(Method):
                 "augmented_refit": aug_refit_seconds,
             },
         }
-        if self.l2_strength:
+        if self.class_head is not None:
+            self.counts_["class_head"] = self.class_head
+            self.counts_["class_head_max_evaluations"] = flat_info["max_evaluations"]
+        if self.l2_strength or self.class_head is not None:
             self.counts_["l2_strength"] = self.l2_strength
             self.counts_["head_fit_scores"] = {
                 stage: {

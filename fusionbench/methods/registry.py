@@ -9,8 +9,16 @@ from __future__ import annotations
 
 from collections.abc import Callable
 
-from fusionbench.methods.averaging import BestSingle, SimpleAverage, TopK, TopN, ValWeighted
+from fusionbench.methods.averaging import (
+    BestSingle,
+    SimpleAverage,
+    TopK,
+    TopN,
+    ValWeighted,
+)
 from fusionbench.methods.base import Method
+from fusionbench.methods.class_head import OKAPIClassDiagonal, OKAPIClassFull
+from fusionbench.methods.class_stacking import DiagonalStackingLR, SharedBiasStackingLR
 from fusionbench.methods.clr import StackingCLR
 from fusionbench.methods.crossfit_okapi import CrossFitOKAPI
 from fusionbench.methods.lattice_brier import ExactLatticeBrier
@@ -39,6 +47,8 @@ FACTORIES: dict[str, Callable[[], Method]] = {
     "stacking_lr": StackingLR,
     "stacking_clr": StackingCLR,
     "stacking_logit": StackingLogit,
+    "stacking_shared_bias": SharedBiasStackingLR,
+    "stacking_diagonal": DiagonalStackingLR,
     "nsga3": NSGA3,
     "tpot": TPOTMethod,
     "okapi": OKAPIMethod,
@@ -46,6 +56,8 @@ FACTORIES: dict[str, Callable[[], Method]] = {
     "okapi_crossfit_stack": CrossFitOKAPI,
     "okapi_native_pattern": NativePatternOKAPI,
     "okapi_native_pattern_l2": RegularizedNativePatternOKAPI,
+    "okapi_class_diagonal": OKAPIClassDiagonal,
+    "okapi_class_full": OKAPIClassFull,
     "okapi_transfer_pattern": TransferPatternOKAPI,
     "lattice_brier_exact": ExactLatticeBrier,
 }
@@ -62,6 +74,8 @@ def default_methods(names: list[str] | None = None, only_available: bool = True
     opt_in = {
         "lattice_brier_exact", "okapi_crossfit_stack", "okapi_native_pattern",
         "okapi_native_pattern_l2", "okapi_transfer_pattern",
+        "okapi_class_diagonal", "okapi_class_full",
+        "stacking_shared_bias", "stacking_diagonal",
     }
     names = names or [name for name in FACTORIES if name not in opt_in]
     methods = []
