@@ -5,6 +5,7 @@ from __future__ import annotations
 import inspect
 import json
 from threading import Lock
+from types import MappingProxyType
 
 import numpy as np
 
@@ -22,30 +23,38 @@ from fusionbench.scenarios.gates import (
     WeakestLink,
 )
 from fusionbench.scenarios.mixture import GatedExperts
+from fusionbench.scenarios.multiclass_provider_panel import MulticlassProviderPanel
 from fusionbench.scenarios.native_switch import NativeCloseSwitch, NativeSwitch
 from fusionbench.scenarios.polarity import PolarityFault
 from fusionbench.types import Dataset
 
+STANDARD_V1_SCENARIOS = MappingProxyType(
+    {
+        "committee": Committee,
+        "deadweight": DeadWeight,
+        "needle": Needle,
+        "saturated": Saturated,
+        "correlated": CorrelatedRedundancy,
+        "calibrated_suppressor": CalibratedSuppressor,
+        "polarity_fault": PolarityFault,
+        "hardveto": HardVeto,
+        "hardrescue": HardRescue,
+        "weakest_link": WeakestLink,
+        "two_pathways": TwoPathways,
+        "parity": Parity,
+        "compound": Compound,
+        "gated_experts": GatedExperts,
+        "native_switch": NativeSwitch,
+        "compositional_switch": CompositionalSwitch,
+        "native_close_switch": NativeCloseSwitch,
+        "miscalibration": Miscalibration,
+        "multiclass_committee": MulticlassCommittee,
+    }
+)
+
 SCENARIOS: dict[str, type[Scenario]] = {
-    "committee": Committee,
-    "deadweight": DeadWeight,
-    "needle": Needle,
-    "saturated": Saturated,
-    "correlated": CorrelatedRedundancy,
-    "calibrated_suppressor": CalibratedSuppressor,
-    "polarity_fault": PolarityFault,
-    "hardveto": HardVeto,
-    "hardrescue": HardRescue,
-    "weakest_link": WeakestLink,
-    "two_pathways": TwoPathways,
-    "parity": Parity,
-    "compound": Compound,
-    "gated_experts": GatedExperts,
-    "native_switch": NativeSwitch,
-    "compositional_switch": CompositionalSwitch,
-    "native_close_switch": NativeCloseSwitch,
-    "miscalibration": Miscalibration,
-    "multiclass_committee": MulticlassCommittee,
+    **STANDARD_V1_SCENARIOS,
+    "multiclass_provider_panel": MulticlassProviderPanel,
 }
 
 BUILTIN_IDS = tuple(SCENARIOS)
@@ -144,5 +153,5 @@ def generate_dataset(
 
 
 def default_suite() -> list[Scenario]:
-    """Instantiate the built-in suite, independently of local registrations."""
-    return [get_scenario(name) for name in BUILTIN_IDS]
+    """Instantiate the fixed 19-scenario v1 suite."""
+    return [get_scenario(name) for name in STANDARD_V1_SCENARIOS]
