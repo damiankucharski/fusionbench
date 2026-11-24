@@ -20,12 +20,17 @@ def _full_probability(p):
     return normalize_proba(p)
 
 
+def _raw_roots(inputs):
+    from okapi.node import ValueNode
+
+    return [ValueNode(None, tensor, name) for name, tensor in inputs.items()]
+
+
 def _head(inputs, labels, bases, objective, multiclass):
     """Bind independent copies of the frozen feature programs to this fit split."""
-    from okapi.node import ValueNode
     from okapi.pattern_logit import fit_pattern_tree
 
-    roots = [ValueNode(None, tensor, name) for name, tensor in inputs.items()]
+    roots = _raw_roots(inputs)
     for tree in bases:
         rebound = tree.copy()
         for node in rebound.value_nodes:
@@ -40,15 +45,23 @@ class NativePatternOKAPI(Method):
     fitness(probabilities, labels) receives canonical full-class probabilities
     and returns a finite higher-is-better scalar. The default, one minus half
     the full-class Brier score, uses OKAPI's historical unit-interval fitness.
+    pair_basis appends native two-provider minima to the GP feature archive
+    before the same discovery-only functional deduplication and screening.
+    Set split_seed to hold the discovery/validation partition fixed while
+    varying seed for the GP search. The partition uses seed by default.
     """
 
     name = "okapi_native_pattern"
 
-    def __init__(self, seed=0, fitness=None):
+    def __init__(self, seed=0, fitness=None, *, pair_basis=False, split_seed=None):
         if fitness is not None and not callable(fitness):
             raise TypeError("fitness must be callable")
+        if not isinstance(pair_basis, (bool, np.bool_)):
+            raise TypeError("pair_basis must be boolean")
         self.seed = seed
         self.fitness = fitness
+        self.pair_basis = bool(pair_basis)
+        self.split_seed = split_seed
 
     @classmethod
     def available(cls):
@@ -80,8 +93,9 @@ class NativePatternOKAPI(Method):
                 "Each provider must supply finite class probabilities summing to one"
             )
         labels, _ = _targets(fit_y, n, classes)
+        split_seed = self.seed if self.split_seed is None else self.split_seed
         order = np.random.default_rng(
-            np.random.SeedSequence([self.seed, 51])
+            np.random.SeedSequence([split_seed, 51])
         ).permutation(n)
         discovery, validation = np.split(order, [7 * n // 10])
         self.validation_indices_ = validation.copy()
@@ -118,6 +132,16 @@ class NativePatternOKAPI(Method):
         )[600]
         gp_seconds = perf_counter() - start
         inputs = _bind(d)
+        gp_archive_size = len(archive)
+        if self.pair_basis:
+            from okapi.pair_basis import build_min_pair_basis
+
+            start = perf_counter()
+            pairs, pair_info = build_min_pair_basis(
+                _raw_roots(inputs), dy, objective=native_score, multiclass=multiclass
+            )
+            archive.extend(pairs)
+            pair_seconds = perf_counter() - start
         start = perf_counter()
         flat_d, flat_d_info = _head(inputs, dy, (), native_score, multiclass)
         flat_seconds = perf_counter() - start
@@ -130,6 +154,7 @@ class NativePatternOKAPI(Method):
             flat_prediction,
             dy,
             objective=native_score,
+            **({"report_indices": True} if self.pair_basis else {}),
         )
         screen_seconds = perf_counter() - start
         start = perf_counter()
@@ -191,6 +216,32 @@ class NativePatternOKAPI(Method):
                 "augmented_refit": aug_refit_seconds,
             },
         }
+        if self.pair_basis:
+            # The common screen gives precedence to raw providers and earlier
+            # GP programs. Only genuinely novel minima can incur trial calls.
+            trials = screen.pop("evaluations_by_archive_index")
+            pair_trials = [calls for i, calls in trials.items() if i >= gp_archive_size]
+            selected = [
+                item["archive_index"]
+                for item in screen["selected"]
+                if item["archive_index"] >= gp_archive_size
+            ]
+            self.counts_["pair_basis"] = {
+                **pair_info,
+                "gp_archive_size": gp_archive_size,
+                "unique_novel_features": len(pair_trials),
+                "screen_calls": sum(pair_trials),
+                "additional_discovery_calls": pair_info["evaluations"]
+                + sum(pair_trials),
+                "selected_pair_count": len(selected),
+                "selected_pairs": [
+                    pair_info["pairs"][i - gp_archive_size] for i in selected
+                ],
+                "selected_archive_indices": selected,
+            }
+            score_calls["pair_ranking"] = pair_info["evaluations"]
+            self.counts_["total_score_calls"] = sum(score_calls.values())
+            self.counts_["seconds"]["pair_basis"] = pair_seconds
         return self
 
     def _query(self, preds):
