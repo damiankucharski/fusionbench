@@ -30,6 +30,8 @@ LOGURU_LEVEL=WARNING fusionbench transfer-grid --preset smoke \
   --methods okapi_native_pattern stacking_logit --out results/native-smoke
 ```
 
+Use `--methods okapi_native_pattern_l2` to fit native logit heads with variance-scaled L2 strength fixed at 0.25.
+
 ## Define a panel in YAML
 
 The schema version, stable slots and row counts below are explicit. A named scenario can override its registered constructor arguments using `knobs`. The canonical endpoint starts with those knobs and replaces the named fields. The runner checks that the endpoint retains provider IDs and class dimensions. Built-in endpoints are applied by default on the nine supported scenarios; set `canonical_shift: null` to omit one. A custom endpoint can supply new parameters for a scenario that has no built-in endpoint. Command-line switches override matching fields. A CLI scenario subset inherits its configuration and seed slots; a new registry entry needs an explicit YAML slot.

@@ -1,0 +1,45 @@
+{
+  "challenger_kwargs": {
+    "l2_strength": 0.25
+  },
+  "coherent_pair": true,
+  "development_rows": 640,
+  "native_kwargs": {},
+  "primary_weights": {
+    "clean": 0.5,
+    "log_jitter": 0.25,
+    "provider_swap": 0.25
+  },
+  "replicates": 10,
+  "round": 3,
+  "scenarios": {
+    "calibrated_suppressor": 5,
+    "committee": 0,
+    "compositional_switch": 15,
+    "compound": 12,
+    "correlated": 4,
+    "deadweight": 1,
+    "gated_experts": 13,
+    "hardrescue": 8,
+    "hardveto": 7,
+    "miscalibration": 17,
+    "multiclass_committee": 18,
+    "native_close_switch": 16,
+    "native_switch": 14,
+    "needle": 2,
+    "parity": 11,
+    "polarity_fault": 6,
+    "saturated": 3,
+    "two_pathways": 10,
+    "weakest_link": 9
+  },
+  "second_gp_seed_offset": 10000000,
+  "second_gp_seed_replicates": [
+    0,
+    1
+  ],
+  "seed_root": 2210000,
+  "source_label_noise": 0.0,
+  "split_seed": "data_seed",
+  "test_rows": 2048
+}

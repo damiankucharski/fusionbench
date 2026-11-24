@@ -194,3 +194,55 @@ def test_positive_l2_regularizes_four_heads_and_keeps_selection_on_raw_fitness(
 def test_invalid_l2_strength_fails_before_discovery(invalid):
     with pytest.raises(ValueError, match="finite nonnegative"):
         NativePatternOKAPI(l2_strength=invalid)
+
+
+def test_named_l2_registry_matches_explicit_fit_and_reported_name():
+    from fusionbench import Dataset
+    from fusionbench.eval.runner import evaluate_dataset
+    from fusionbench.methods.registry import FACTORIES, default_methods
+
+    name = "okapi_native_pattern_l2"
+    assert name not in {m.name for m in default_methods(only_available=False)}
+    if not FACTORIES[name].available():
+        pytest.skip("The installed OKAPI does not support native L2 head fitting")
+    [method] = default_methods([name])
+    assert method.name == name and method.l2_strength == 0.25 and not method.pair_basis
+    rng = np.random.default_rng(574)
+    x = rng.dirichlet([1.0, 1.0], size=(106, 4))
+    y = (x[:, 0, 1] + x[:, 1, 1] > 1).astype(int)
+    ds = Dataset(
+        name="l2_registry_fixture",
+        n_classes=2,
+        task="binary",
+        model_ids=[f"m{i}" for i in range(4)],
+        fit_preds=x[:80],
+        fit_y=y[:80],
+        test_preds=x[80:],
+        test_y=y[80:],
+    )
+    report = evaluate_dataset(ds, methods=[method])
+    assert list(report.method) == [name] and list(report.error) == [""]
+    explicit = _fit(ds.fit_preds, ds.fit_y, seed=0, l2_strength=0.25)
+    assert (
+        method.chosen_ == explicit.chosen_
+        and method.counts_["score_calls"] == explicit.counts_["score_calls"]
+    )
+    np.testing.assert_array_equal(
+        method.predict(ds.test_preds), explicit.predict(ds.test_preds)
+    )
+
+
+def test_named_l2_registry_hides_method_on_older_okapi(monkeypatch):
+    native = pytest.importorskip("okapi.pattern_logit")
+    from fusionbench.methods.registry import FACTORIES, default_methods
+
+    def old_native_fit(roots, labels, *, objective, multiclass=False):
+        raise AssertionError(
+            "Availability should inspect the native signature without fitting"
+        )
+
+    monkeypatch.setattr(native, "fit_pattern_tree", old_native_fit)
+    alias = "okapi_native_pattern_l2"
+    assert not FACTORIES[alias].available()
+    assert default_methods([alias]) == []
+    assert FACTORIES["okapi_native_pattern"].available()

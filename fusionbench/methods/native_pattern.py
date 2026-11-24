@@ -309,3 +309,22 @@ class NativePatternOKAPI(Method):
         from fusionbench.eval.suite_point_gp import predict_tree
 
         return predict_tree(self.trees_[self.chosen_], self._query(preds))
+
+
+class RegularizedNativePatternOKAPI(NativePatternOKAPI):
+    """Native pattern search with the fixed variance-scaled L2 strength of 0.25."""
+
+    name = "okapi_native_pattern_l2"
+
+    def __init__(self, seed=0):
+        super().__init__(seed=seed, l2_strength=0.25)
+
+    @classmethod
+    def available(cls):
+        from inspect import signature
+
+        if not super().available():
+            return False
+        from okapi.pattern_logit import fit_pattern_tree
+
+        return "l2_strength" in signature(fit_pattern_tree).parameters

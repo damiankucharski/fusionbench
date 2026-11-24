@@ -14,7 +14,10 @@ from fusionbench.methods.base import Method
 from fusionbench.methods.clr import StackingCLR
 from fusionbench.methods.crossfit_okapi import CrossFitOKAPI
 from fusionbench.methods.lattice_brier import ExactLatticeBrier
-from fusionbench.methods.native_pattern import NativePatternOKAPI
+from fusionbench.methods.native_pattern import (
+    NativePatternOKAPI,
+    RegularizedNativePatternOKAPI,
+)
 from fusionbench.methods.nsga3 import NSGA3
 from fusionbench.methods.okapi import OKAPIMethod
 from fusionbench.methods.operators import OpClose, OpFar, OpMax, OpMin
@@ -42,6 +45,7 @@ FACTORIES: dict[str, Callable[[], Method]] = {
     "okapi_shrunk": ShrunkOKAPI,
     "okapi_crossfit_stack": CrossFitOKAPI,
     "okapi_native_pattern": NativePatternOKAPI,
+    "okapi_native_pattern_l2": RegularizedNativePatternOKAPI,
     "okapi_transfer_pattern": TransferPatternOKAPI,
     "lattice_brier_exact": ExactLatticeBrier,
 }
@@ -55,7 +59,10 @@ CORE = ["best_single", "simple_average", "top_5", "top_n", "val_weighted",
 def default_methods(names: list[str] | None = None, only_available: bool = True
                     ) -> list[Method]:
     # These research methods are opt-in on mixed suites.
-    opt_in = {"lattice_brier_exact", "okapi_crossfit_stack", "okapi_native_pattern", "okapi_transfer_pattern"}
+    opt_in = {
+        "lattice_brier_exact", "okapi_crossfit_stack", "okapi_native_pattern",
+        "okapi_native_pattern_l2", "okapi_transfer_pattern",
+    }
     names = names or [name for name in FACTORIES if name not in opt_in]
     methods = []
     for name in names:

@@ -1,0 +1,6 @@
+comparator,challenger_brier_gain,wins,ties,losses,n_splits
+mean,0.02737856418423231,8,0,0,8
+previous,8.178576702782929e-07,1,4,3,8
+stack_logit,0.003794533475053537,6,0,2,8
+stack_p,-0.004337133915378438,1,0,7,8
+top_n,0.0015050788811256993,7,0,1,8

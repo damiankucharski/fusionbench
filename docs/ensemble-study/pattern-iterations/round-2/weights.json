@@ -1,0 +1,68 @@
+{
+  "discovery": {
+    "sampled_banks": 19,
+    "choices": {
+      "native": {
+        "flat": 8,
+        "augmented": 8,
+        "gp": 3
+      },
+      "challenger": {
+        "flat": 8,
+        "augmented": 8,
+        "gp": 3
+      }
+    },
+    "shared_flat_provider_slots": 225,
+    "flat_head_on_shared_providers": {
+      "paired_banks": 19,
+      "smaller_challenger_banks": 17,
+      "equal_banks": 2,
+      "median_native_bank_mean_abs": 0.3619791666666667,
+      "median_challenger_bank_mean_abs": 0.31887755102040816,
+      "median_paired_change": -0.033854166666666685
+    },
+    "median_bank_mean_abs_paired_difference": 0.033854166666666664,
+    "selected_flat_or_augmented_heads": {
+      "paired_banks": 16,
+      "smaller_challenger_banks": 16,
+      "equal_banks": 0,
+      "median_native_bank_mean_abs": 0.5924479166666667,
+      "median_challenger_bank_mean_abs": 0.3324652777777778,
+      "median_paired_change": -0.3270399305555556
+    }
+  },
+  "refit": {
+    "sampled_banks": 19,
+    "choices": {
+      "native": {
+        "flat": 8,
+        "augmented": 8,
+        "gp": 3
+      },
+      "challenger": {
+        "flat": 8,
+        "augmented": 8,
+        "gp": 3
+      }
+    },
+    "shared_flat_provider_slots": 225,
+    "flat_head_on_shared_providers": {
+      "paired_banks": 19,
+      "smaller_challenger_banks": 16,
+      "equal_banks": 3,
+      "median_native_bank_mean_abs": 0.3541666666666667,
+      "median_challenger_bank_mean_abs": 0.3359375,
+      "median_paired_change": -0.036458333333333315
+    },
+    "median_bank_mean_abs_paired_difference": 0.03645833333333332,
+    "selected_flat_or_augmented_heads": {
+      "paired_banks": 16,
+      "smaller_challenger_banks": 16,
+      "equal_banks": 0,
+      "median_native_bank_mean_abs": 0.5521873459072978,
+      "median_challenger_bank_mean_abs": 0.36092013888888885,
+      "median_paired_change": -0.24275935374149654
+    }
+  }
+}
