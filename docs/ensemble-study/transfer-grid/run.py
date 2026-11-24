@@ -24,7 +24,7 @@ from fusionbench.eval.transfer_grid import (
 )
 from fusionbench.methods.averaging import TopN
 from fusionbench.methods.stacking import StackingLogit, StackingLR
-from fusionbench.scenarios.registry import SCENARIOS
+from fusionbench.transfer import load_preset
 
 HERE = Path(__file__).resolve().parent
 CANDIDATES = ("flat", "augmented", "gp", "half")
@@ -280,8 +280,11 @@ def run(output, workers):
     if not 1 <= workers <= 8:
         raise ValueError("The benchmark supports one to eight concurrent bank workers")
     output.mkdir(parents=True, exist_ok=True)
+    suite = load_preset("standard")
     jobs = [
-        (i, name, r, 640, 2048) for i, name in enumerate(SCENARIOS) for r in range(8)
+        (spec["seed_slot"], name, r, suite["fit_rows"], suite["test_rows"])
+        for name, spec in suite["scenarios"].items()
+        for r in range(suite["repeats"])
     ]
     files = (
         "results.csv.gz",
@@ -299,7 +302,7 @@ def run(output, workers):
             ProcessPoolExecutor(max_workers=workers) as pool,
         ):
             writers = [
-                csv.DictWriter(f, fieldnames=columns)
+                csv.DictWriter(f, fieldnames=columns, lineterminator="\n")
                 for f, columns in zip(
                     (rf, df, cf), (RESULTS, DIAGNOSTICS, COSTS), strict=True
                 )

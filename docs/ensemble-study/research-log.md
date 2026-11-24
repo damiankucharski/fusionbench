@@ -4,6 +4,10 @@ The current program uses FusionBench to improve how OKAPI finds and generalizes 
 
 The [literature index for the paper](literature/README.md) connects primary sources to benchmark assumptions, dated proposals and measured results. It includes the [21 November review](literature/2026-11-21.md) and a [BibTeX bibliography](literature/references.bib).
 
+## Graded validation-to-test transfer on 24 November 2026
+
+FusionBench now ships configurable smoke and full transfer suites with fixed seed slots, matched control predictions and example extension instructions. A comparison across 19 scenarios, 152 banks and 3,840 paired evaluation conditions found that mild validation stress and selective subtree shrinkage did not improve native OKAPI. The primary difference in Brier was +.00112 (95% CI −.00026 to +.00249). With clean source labels, ranking the same four discovery trees transferred to clean test data in 65.1% of banks and to the strongest logit noise in 27.6%. Training and evaluation took 129.1 seconds on four workers, with about ten minutes from the frozen protocol to the independently verified report. An open question is whether limiting how strongly one provider can change a tree's prediction improves unseen transfer, including a fault mechanism withheld during development. [Results and diagnostics](transfer-grid/README.md) · [Public benchmark guide](../transfer-benchmark.md)
+
 ## One native OKAPI tree on 24 November 2026
 
 With score-only logit weight fitting and optional evolved subtrees, one native tree reached .18388 macro-average IID Brier over all 19 scenarios. Probability LR scored .21698, logit LR .22017, the flat native node .21891 and native GP alone .26004. Across nine shifts the native tree trailed probability LR by .01518 and logit LR by .00503. The independent replay verified 2,688 test scores and prediction hashes. The run took 59.4 seconds across three workers and about nine minutes from frozen protocol to verification and report. The next question is whether shrinking the weights on evolved subtrees can preserve the IID improvement under shift. [Report, tree archives and paired comparisons](native-pattern/README.md)

@@ -1,0 +1,41 @@
+{
+  "study": "transfer-grid-v1",
+  "fusionbench_evaluation_commit": "604ca93",
+  "okapi_evaluation_commit": "0e88dbe762f5fbdf6b8c043aa1aa71908fd1dea8",
+  "protocol_commit": "804b7d4",
+  "python": "3.12.14",
+  "system": "Linux",
+  "architecture": "x86_64",
+  "dependencies": {
+    "numpy": "2.3.5",
+    "scipy": "1.17.0",
+    "pandas": "2.2.3",
+    "scikit-learn": "1.8.0",
+    "threadpoolctl": "3.6.0",
+    "torch": "2.15.0+cpu",
+    "loguru": "0.8.0",
+    "matplotlib": "3.10.8"
+  },
+  "backend": "numpy",
+  "workers": 4,
+  "blas_threads_per_worker": 1,
+  "wall_seconds": 129.113,
+  "scenario_count": 19,
+  "independent_banks": 152,
+  "fits_including_source_noise": 456,
+  "comparative_test_cells": 3840,
+  "sha256": {
+    "results.csv.gz": "defce2f66dd369f234bfca7e781fa2dd0a0e016131e22bd2e3f0f325c11b0031",
+    "diagnostics.csv.gz": "db7b703425dab7f28b0edd316a69bec46c467bb1859bb275a63f8da54bce1842",
+    "sample_trees.jsonl.gz": "a5881381073c826a28aacbd7c8bebf00031de0f364ab83d64524f107ac4b1b1e",
+    "costs.csv": "69958fa2effda68563442f90fc8d3f450cbc2475244de0e20494ebe66173b6fd",
+    "panels.csv": "a5f7bcb08ff1ca439917aef931659c31c179caa7fbcc10029e444b02f51bcd83",
+    "conditions.csv": "49b26d3349a50d137f42239679faf9cf8893b4b24315b040b29deb499e509a1d",
+    "contrasts.csv": "9d3d41cbef1a67d11b8d44c1e4baf843d6a6f6d093464718bf2a3ca9c207d6a0",
+    "families.csv": "34963e6248fdf7812e9f29e645af464f0775bf54c7a1eb51fd280c6b39770e01",
+    "reference-manifest.json.gz": "f476b67a5a2ce6e5ac541f932479d3dec0d0425e4f27584f372e60f961054bbc",
+    "reference-selection.csv.gz": "030a2143fb69a430077f2e6ea8aa527e7ad1f7604b72ac634129414b3215e234",
+    "reference-validation.csv.gz": "a017ebdafa42b03b1a55e3fb226b017a131a9b309c294d680bbf7b3107278739"
+  },
+  "fusionbench_public_protocol_commit": "8b6d8d9"
+}
