@@ -1,0 +1,8 @@
+{
+  "bank_version": "reference-v2",
+  "banks": {
+    "similar_classes_38": "f63d685f046984c1c22cca7b64dae97291785de577fb79a218890befcaaf49ae"
+  },
+  "n_per_split": 128,
+  "seed": 1729
+}

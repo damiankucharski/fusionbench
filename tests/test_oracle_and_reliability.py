@@ -47,7 +47,8 @@ def test_oracle_not_beaten(results):
 def test_oracle_present_for_all(results):
     scen = set(results["scenario"])
     have = set(results[results.method == "oracle"]["scenario"])
-    assert scen == have
+    assert scen - {"similar_classes_38"} == have
+    assert "similar_classes_38" in scen  # Its posterior given reported scores is unknown.
 
 
 def test_reliability_selection(results):

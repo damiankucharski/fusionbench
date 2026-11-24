@@ -6,7 +6,7 @@ import argparse
 import json
 
 from fusionbench.methods.registry import CORE, FACTORIES, default_methods
-from fusionbench.scenarios.registry import SCENARIOS, STANDARD_V1_SCENARIOS
+from fusionbench.scenarios.registry import SCENARIOS, STANDARD_SCENARIOS
 
 
 def _comparison_names(names):
@@ -39,7 +39,7 @@ def _scenarios(names, parameters=()):
     if len(params) != len(parameters):
         raise SystemExit("Specify each scenario parameter once")
     try:
-        return [get_scenario(name, **params) for name in (names or STANDARD_V1_SCENARIOS)]
+        return [get_scenario(name, **params) for name in (names or STANDARD_SCENARIOS)]
     except (ValueError, TypeError, KeyError) as exc:
         raise SystemExit(str(exc)) from exc
 
@@ -150,7 +150,7 @@ def cmd_mechanism_transfer(args):
 
 def add_transfer_options(parser):
     source = parser.add_mutually_exclusive_group()
-    source.add_argument("--preset", choices=("smoke", "standard"), help="packaged transfer grid")
+    source.add_argument("--preset", choices=("smoke", "standard", "standard-v1", "standard-v2"), help="packaged transfer grid")
     source.add_argument("--config", help="path to a versioned transfer YAML file")
     parser.add_argument("--scenarios", nargs="+", help="registered scenario IDs to include")
     parser.add_argument("--methods", nargs="+", help="registered method IDs")

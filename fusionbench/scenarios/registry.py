@@ -26,7 +26,7 @@ from fusionbench.scenarios.mixture import GatedExperts
 from fusionbench.scenarios.multiclass_provider_panel import MulticlassProviderPanel
 from fusionbench.scenarios.native_switch import NativeCloseSwitch, NativeSwitch
 from fusionbench.scenarios.polarity import PolarityFault
-from fusionbench.scenarios.shared_confusion_panel import SharedConfusionPanel
+from fusionbench.scenarios.shared_confusion_panel import SharedConfusionPanel, SimilarClasses38
 from fusionbench.types import Dataset
 
 STANDARD_V1_SCENARIOS = MappingProxyType(
@@ -53,8 +53,10 @@ STANDARD_V1_SCENARIOS = MappingProxyType(
     }
 )
 
+STANDARD_SCENARIOS = MappingProxyType({**STANDARD_V1_SCENARIOS, "similar_classes_38": SimilarClasses38})
+
 SCENARIOS: dict[str, type[Scenario]] = {
-    **STANDARD_V1_SCENARIOS,
+    **STANDARD_SCENARIOS,
     "multiclass_provider_panel": MulticlassProviderPanel,
     "shared_confusion_panel": SharedConfusionPanel,
 }
@@ -155,5 +157,5 @@ def generate_dataset(
 
 
 def default_suite() -> list[Scenario]:
-    """Instantiate the fixed 19-scenario v1 suite."""
-    return [get_scenario(name) for name in STANDARD_V1_SCENARIOS]
+    """Instantiate the current standard regression suite."""
+    return [get_scenario(name) for name in STANDARD_SCENARIOS]

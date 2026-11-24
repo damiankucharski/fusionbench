@@ -1,6 +1,6 @@
 # Scenario catalog
 
-Choose a scenario by the assumption you want to test. Each generator returns class probabilities from multiple providers for the same examples, together with class labels. The default v1 suite contains 17 binary scenarios and two multiclass scenarios. The registry also includes the opt-in three-provider panel below. Use these IDs as registry keys in Python or as scenario names in a transfer configuration.
+Choose a scenario by the assumption you want to test. Each generator returns class probabilities from multiple providers for the same examples, together with class labels. The standard suite contains 20 scenarios, including 17 binary scenarios and three multiclass scenarios. The registry also includes the opt-in three-provider panel below. Use these IDs as registry keys in Python or as scenario names in a transfer configuration.
 
 ## Independent evidence and calibration
 
@@ -28,6 +28,7 @@ assert data.fit_preds.shape == (256, 100, 2)
 
 | ID | Mechanism | Constructor defaults |
 | --- | --- | --- |
+| `similar_classes_38` | On true class 3 or 8, all three providers assign their largest incorrect probability to the other member of the pair (ties are possible). Other labels follow the ordinary provider panel. | 10 classes, shared pair active on fit and test, finite votes (31, 7) |
 | `correlated` | One block shares Gaussian noise. The remaining providers have independent noise and the same marginal accuracy. | `n_block=8`, `n_diverse=2`, `accuracy=0.75`, `corr=0.85` within the block |
 | `saturated` | Strong multiclass providers share most of their noise, leaving little independent evidence. | `k=6`, `n_classes=4`, `accuracy=0.95`, `corr=0.95` shared noise fraction |
 | `calibrated_suppressor` | Two individually calibrated binary sources with unequal signal strengths. Their conditional correlation controls the weaker source's joint weight. | `corr=0.85`, strictly between −1 and 1 |

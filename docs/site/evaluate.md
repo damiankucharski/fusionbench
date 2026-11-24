@@ -49,3 +49,7 @@ print(results[["method", "test_brier"]])
 For the generic transfer grid, register a zero-argument factory under a unique key in `fusionbench.methods.registry.FACTORIES`, for example `FACTORIES["median_pool"] = MedianPool`. Include that ID in the configuration and call `run_transfer` in the same Python process. The runner creates fresh instances per data bank and noise level. A registry addition in Python is local to that process. [Transfer configuration and results](transfer.md)
 
 Built-ins include averaging and fixed operators, Top-N and stackers on raw probabilities or logits. Additional algorithms can require extras; `fusionbench list` shows availability. Learned OKAPI trees are one application of the same evaluation interface. [OKAPI case study](okapi.md)
+
+## Compare an OKAPI change across the full standard suite
+
+`fusionbench run --methods okapi_native_pattern_l2 --seed 1729 --n 2048 --out results/okapi-standard` evaluates all 20 standard scenarios, including `correlated`, `parity` and `similar_classes_38`. The runner includes simple averaging, ranked-prefix Top-N and probability logistic stacking with each explicit OKAPI comparison. Use the same seeds and row counts for both revisions and compare the per-scenario test scores in `results.csv`.

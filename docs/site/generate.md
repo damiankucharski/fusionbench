@@ -4,7 +4,7 @@ A dataset contains the per-provider probability vectors and class labels on sepa
 
 ## Load a ready-made sample
 
-The installed package includes one versioned reference dataset for each of the 19 standard-v1 scenarios. Each uses default parameters and seed 1729, with 128 examples per split. The loader reads the packaged files offline. Use these small fixed banks to check an implementation or demonstrate an API. Repeated analyses of the same reference bank share the same test examples. Additional registered generators, including `multiclass_provider_panel`, are available through `generate_dataset()`.
+The installed package includes one versioned reference dataset for each of the 20 standard scenarios (19 original banks plus `similar_classes_38`). Each uses default parameters and seed 1729, with 128 examples per split. The loader reads the packaged files offline. Use these small fixed banks to check an implementation or demonstrate an API. Repeated analyses of the same reference bank share the same test examples. Additional registered generators, including `multiclass_provider_panel`, are available through `generate_dataset()`.
 
 ```python
 from fusionbench import list_scenarios, load_reference_dataset

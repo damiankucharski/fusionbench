@@ -37,10 +37,11 @@ SEED = 1729
 ROWS = 128
 
 
-def build(out: Path) -> str:
+def build(out: Path, version="reference-v1") -> str:
     out.mkdir(parents=True, exist_ok=True)
     banks = {}
-    for scenario_id in SCENARIO_IDS:
+    ids = SCENARIO_IDS if version == "reference-v1" else ("similar_classes_38",)
+    for scenario_id in ids:
         dataset = generate_dataset(scenario_id, n_per_split=ROWS, seed=SEED)
         target = out / f"{scenario_id}.zip"
         with TemporaryDirectory() as temp:
@@ -54,7 +55,7 @@ def build(out: Path) -> str:
                         archive.writestr(member, file.read_bytes())
         banks[scenario_id] = hashlib.sha256(target.read_bytes()).hexdigest()
     manifest = {
-        "bank_version": "reference-v1",
+        "bank_version": version,
         "seed": SEED,
         "n_per_split": ROWS,
         "banks": banks,
@@ -67,4 +68,6 @@ def build(out: Path) -> str:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, required=True)
-    print(build(parser.parse_args().out))
+    parser.add_argument("--version", choices=("reference-v1", "reference-v2"), default="reference-v1")
+    args = parser.parse_args()
+    print(build(args.out, args.version))

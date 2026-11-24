@@ -67,3 +67,14 @@ def test_archived_native_reader_validates_provider_ids():
         archive.writestr("meta.json", json.dumps({"model_ids": ["../outside"]}))
     with ZipFile(buffer) as archive, pytest.raises(ValueError, match="model_ids"):
         _read_dataset_dir(ZipPath(archive))
+
+
+def test_reference_bank_for_similar_classes_matches_live_draw():
+    from fusionbench import generate_dataset
+
+    frozen = reference.load_reference_dataset("similar_classes_38")
+    live = generate_dataset("similar_classes_38", n_per_split=128, seed=1729)
+    assert frozen.meta["reference_bank"] == "reference-v2"
+    for split in ("fit", "test"):
+        np.testing.assert_array_equal(getattr(frozen, split + "_y"), getattr(live, split + "_y"))
+        np.testing.assert_array_equal(getattr(frozen, split + "_preds"), getattr(live, split + "_preds").astype(np.float32))

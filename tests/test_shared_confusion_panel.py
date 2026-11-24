@@ -186,3 +186,29 @@ def test_public_config_recorded_and_roundtrips(tmp_path):
 def test_invalid_parameters(opts):
     with pytest.raises((TypeError, ValueError)):
         get_scenario(ID, n_classes=3, **opts)
+
+
+def test_similar_classes_is_a_standard_regression_case_on_both_splits():
+    from fusionbench.cli import _scenarios
+    from fusionbench.scenarios.registry import default_suite
+    from fusionbench.transfer import load_preset
+
+    scenario_id = "similar_classes_38"
+    expected = [*STANDARD_V1_SCENARIOS, scenario_id]
+    assert [s._registry_metadata["scenario_id"] for s in default_suite()] == expected
+    assert [s._registry_metadata["scenario_id"] for s in _scenarios(None)] == expected
+    assert list(load_preset("standard")["scenarios"]) == expected
+    assert load_preset("standard") == load_preset("standard-v2")
+    data = get_scenario(scenario_id).build(n_per_split=1024, seed=37)
+    base = get_scenario("multiclass_provider_panel").build(n_per_split=1024, seed=37)
+    for split in ("fit", "test"):
+        p = getattr(data, f"{split}_preds")
+        y = getattr(data, f"{split}_y")
+        np.testing.assert_array_equal(y, getattr(base, f"{split}_y"))
+        other = ~np.isin(y, [3, 8])
+        np.testing.assert_array_equal(p[other], getattr(base, f"{split}_preds")[other])
+        for label, partner in ((3, 8), (8, 3)):
+            rows = p[y == label].copy()
+            assert len(rows) > 0
+            rows[:, :, label] = -1
+            np.testing.assert_array_equal(rows[:, :, partner], rows.max(axis=2))

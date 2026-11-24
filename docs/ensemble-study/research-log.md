@@ -4,6 +4,10 @@ FusionBench is a general benchmark for prediction fusion with controlled generat
 
 The [literature index for the paper](literature/README.md) connects primary sources to benchmark assumptions, dated proposals and measured results. It includes the [21 November review](literature/2026-11-21.md) and a [BibTeX bibliography](literature/references.bib).
 
+## Standard suite for OKAPI regression evaluations · 24 November 2026
+
+Evaluate each OKAPI change across the entire current standard suite and report per-scenario scores against mean, ranked-prefix Top-N and logistic stacking. Include the suite version and seeds. The current standard-v2 suite contains all 19 standard-v1 scenarios plus `similar_classes_38`. The ready-made ten-class problem pairs labels 3 and 8 for all three providers in both splits. Run `fusionbench run --methods okapi_native_pattern_l2` to evaluate the full suite. The [single-seed integration run](class-capacity/standard-v2-smoke.csv) used 256 rows per split and seed 1729. Targeted diagnostics supplement the full evaluation.
+
 ## Shared versus provider-specific class confusions · 24 November 2026
 
 Implemented the missing own-class logistic control, two native gradient-free OKAPI softmax nodes, and a seeded wrong-destination intervention with configurable shared and per-provider matrices. On original digits the full stacker beat the own-class stacker 0.03190 to 0.03402; the ordering reversed on a second provider pool and partition set. On the targeted synthetic classes the full model gained 0.00103 Brier under shared confusions and 0.00439 with provider-specific destinations. The new native full node could replay the production stacker within 8.4 × 10⁻⁸, yet its independent fit on original digits reached 0.03597. Validation selection over evolved subtrees regressed on the shared-pair control. Next question: can a complexity penalty improve held-out tree selection on fresh banks? [Study, code and measured comparisons](class-capacity/README.md)

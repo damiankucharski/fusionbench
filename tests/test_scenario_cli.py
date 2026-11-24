@@ -44,7 +44,7 @@ def test_discovery_can_list_extensions_with_required_parameters(monkeypatch, cap
     try:
         cmd_list(None)
         assert "custom_committee" in capsys.readouterr().out
-        assert len(default_suite()) == len(_scenarios(None)) == 19
+        assert len(default_suite()) == len(_scenarios(None)) == 20
         assert _scenarios(["custom_committee"], [("required_k", 3)])[0].k == 3
     finally:
         del SCENARIOS["custom_committee"]

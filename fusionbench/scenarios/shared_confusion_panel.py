@@ -5,6 +5,7 @@ import json
 
 import numpy as np
 
+from fusionbench.scenarios.base import Scenario
 from fusionbench.scenarios.multiclass_provider_panel import (
     MulticlassProviderPanel,
     _finite,
@@ -117,3 +118,26 @@ class SharedConfusionPanel(MulticlassProviderPanel):
                         x[rows, provider, src],
                     )
         return x, y, latent
+
+
+class SimilarClasses38(Scenario):
+    """Three ten-class providers share a persistent 3 ↔ 8 confusion."""
+
+    task = "multiclass"
+    primary_metric = "brier"
+
+    def __init__(self, *, name=None):
+        shared = np.zeros((10, 10))
+        shared[3, 8] = shared[8, 3] = 1
+        self.panel = SharedConfusionPanel(shared_matrix=shared, strength=1.0)
+        super().__init__(name=name or "similar_classes_38", **self.panel.knobs)
+
+    @property
+    def n_classes(self):
+        return self.panel.n_classes
+
+    def model_ids(self):
+        return self.panel.model_ids()
+
+    def sample(self, n, rng):
+        return self.panel.sample(n, rng)

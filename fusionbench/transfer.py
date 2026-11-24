@@ -30,7 +30,7 @@ from fusionbench.methods.registry import FACTORIES
 from fusionbench.scenarios.blocks import draw_block
 from fusionbench.scenarios.registry import SCENARIOS, _validated_defaults
 
-PRESETS = ("smoke", "standard")
+PRESETS = ("smoke", "standard", "standard-v1", "standard-v2")
 CONFIG_KEYS = {
     "schema_version",
     "base_seed",
@@ -50,7 +50,8 @@ def load_preset(name="smoke"):
     """Read a version-1 configuration shipped inside the installed package."""
     if name not in PRESETS:
         raise ValueError(f"Unknown preset {name!r}; choose from {', '.join(PRESETS)}")
-    path = resources.files("fusionbench").joinpath("presets", f"{name}-v1.yaml")
+    version = {"smoke": "smoke-v1", "standard": "standard-v2"}.get(name, name)
+    path = resources.files("fusionbench").joinpath("presets", f"{version}.yaml")
     return yaml.safe_load(path.read_text(encoding="utf-8"))
 
 

@@ -103,7 +103,7 @@ def test_registry_cli_and_frozen_v1_inventories(tmp_path):
     source = files("fusionbench").joinpath("data", "reference-v1", "manifest.json")
     archived = json.loads(source.read_bytes())["banks"]
     assert len(archived) == 19 and set(archived) == set(STANDARD_V1_SCENARIOS)
-    assert tuple(load_preset("standard")["scenarios"]) == tuple(STANDARD_V1_SCENARIOS)
+    assert tuple(load_preset("standard-v1")["scenarios"]) == tuple(STANDARD_V1_SCENARIOS)
     main(
         [
             "generate",
