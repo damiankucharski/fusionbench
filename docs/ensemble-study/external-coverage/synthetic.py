@@ -8,8 +8,8 @@ from time import perf_counter
 
 import numpy as np
 import pandas as pd
-
 from common import evaluate_methods, profile_fit
+
 from fusionbench import Dataset, get_scenario
 
 STRATA = {"digits": (10, 449, 3_160_000), "wine": (3, 44, 3_170_000)}

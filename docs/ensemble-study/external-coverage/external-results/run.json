@@ -1,0 +1,25 @@
+{
+  "test_overlap": {
+    "digits": {
+      "n_unique": 1620,
+      "mean_pair_overlap": 111.64285714285714,
+      "min_pair_overlap": 91,
+      "max_pair_overlap": 124
+    },
+    "digits_lr_bag": {
+      "n_unique": 1620,
+      "mean_pair_overlap": 111.64285714285714,
+      "min_pair_overlap": 91,
+      "max_pair_overlap": 124
+    },
+    "wine": {
+      "n_unique": 159,
+      "mean_pair_overlap": 11.535714285714286,
+      "min_pair_overlap": 8,
+      "max_pair_overlap": 20
+    }
+  },
+  "base_build_seconds": 10.19777032300044,
+  "fusion_and_scoring_seconds": 29.408844344998215,
+  "fit_counts": 216
+}
