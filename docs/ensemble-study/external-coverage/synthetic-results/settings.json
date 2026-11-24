@@ -1,0 +1,105 @@
+{
+  "strata_classes_fit_rows_seed_root": {
+    "digits": [
+      10,
+      449,
+      3160000
+    ],
+    "wine": [
+      3,
+      44,
+      3170000
+    ]
+  },
+  "scenarios": {
+    "committee_60": [
+      "multiclass_committee",
+      {
+        "k": 3,
+        "accuracy": 0.6
+      }
+    ],
+    "committee_95": [
+      "multiclass_committee",
+      {
+        "k": 3,
+        "accuracy": 0.95
+      }
+    ],
+    "saturated_50": [
+      "saturated",
+      {
+        "k": 3,
+        "accuracy": 0.95,
+        "corr": 0.5
+      }
+    ],
+    "saturated_95": [
+      "saturated",
+      {
+        "k": 3,
+        "accuracy": 0.95,
+        "corr": 0.95
+      }
+    ],
+    "panel_A": [
+      "multiclass_provider_panel",
+      {
+        "separation": 2.5,
+        "votes": [
+          0,
+          0
+        ]
+      }
+    ],
+    "panel_B": [
+      "multiclass_provider_panel",
+      {
+        "separation": 6.0,
+        "votes": [
+          31,
+          7
+        ]
+      }
+    ],
+    "panel_C": [
+      "multiclass_provider_panel",
+      {
+        "separation": 6.0,
+        "votes": [
+          0,
+          0
+        ]
+      }
+    ],
+    "panel_D": [
+      "multiclass_provider_panel",
+      {
+        "separation": 2.5,
+        "votes": [
+          31,
+          7
+        ]
+      }
+    ],
+    "panel_E": [
+      "multiclass_provider_panel",
+      {
+        "separation": 6.0,
+        "votes": [
+          31,
+          7
+        ],
+        "confusion_bias": 3.0
+      }
+    ]
+  },
+  "replicates": 8,
+  "test_rows": 2048,
+  "rng_streams": {
+    "fit": 0,
+    "test": 1
+  },
+  "workers": 4,
+  "elapsed_seconds": 240.08422615900054
+}

@@ -1,0 +1,7 @@
+suite,stratum,library,config,distance,native_minus_prob_lr,direction,rank_native,rank_mean,rank_top_n,rank_prob_lr,rank_logit
+digits,digits,existing,saturated_95,0.5152982452956791,-0.022857573591699126,native_lower,1.0,4.0,5.0,2.0,3.0
+digits,digits,expanded,panel_B,0.10715243389566238,-0.006125495677043992,native_lower,1.0,5.0,4.0,2.0,3.0
+digits_lr_bag,digits,existing,saturated_95,0.3275561296081933,-0.022857573591699126,native_lower,1.0,4.0,5.0,2.0,3.0
+digits_lr_bag,digits,expanded,panel_C,0.05158213790064403,-0.005697264123828514,native_lower,1.0,5.0,4.0,2.0,3.0
+wine,wine,existing,saturated_95,0.30732341320743,-0.011670643986071788,native_lower,1.0,4.0,5.0,2.0,3.0
+wine,wine,expanded,panel_E,0.11250115740480025,0.00738891383484664,prob_lr_lower,2.0,5.0,4.0,1.0,3.0
