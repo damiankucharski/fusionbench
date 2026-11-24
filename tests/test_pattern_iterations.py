@@ -127,3 +127,70 @@ def test_split_seed_changes_only_the_partition_rng():
     assert default.counts_["gp_path_digest"] == explicit.counts_["gp_path_digest"]
     np.testing.assert_array_equal(default.predict(x), explicit.predict(x))
     assert alternate.counts_["gp_path_digest"] != default.counts_["gp_path_digest"]
+
+
+def test_positive_l2_regularizes_four_heads_and_keeps_selection_on_raw_fitness(
+    monkeypatch,
+):
+    import inspect
+
+    native = pytest.importorskip("okapi.pattern_logit")
+    if "l2_strength" not in inspect.signature(native.fit_pattern_tree).parameters:
+        pytest.skip("Native OKAPI lacks optional head regularization")
+    from fusionbench.eval.suite_point_gp import predict_tree
+
+    rng = np.random.default_rng(713)
+    x = rng.dirichlet([1.0, 1.0], size=(160, 5))
+    y = (x[:, 0, 1] + 0.6 * x[:, 1, 1] > 0.8).astype(int)
+    seed = 15
+    old_fit = native.fit_pattern_tree
+
+    def raw(p, y):
+        return 1.0 - np.square(p - np.eye(2)[y]).sum(axis=1).mean() / 2.0
+
+    # Older OKAPI wheels omit the optional keyword from their signature.
+    def legacy(roots, labels, *, objective, multiclass):
+        return old_fit(roots, labels, objective=objective, multiclass=multiclass)
+
+    monkeypatch.setattr(native, "fit_pattern_tree", legacy)
+    baseline = _fit(x, y, seed=seed, l2_strength=0.0)
+    assert (
+        "head_fit_scores" not in baseline.counts_
+        and "l2_strength" not in baseline.counts_
+    )
+    monkeypatch.setattr(native, "fit_pattern_tree", old_fit)
+    strength = 2.0
+    model = _fit(x, y, seed=seed, l2_strength=strength)
+    assert model.counts_["l2_strength"] == strength
+    assert model.counts_["gp_path_digest"] == baseline.counts_["gp_path_digest"]
+    d, v = np.split(np.random.default_rng([seed, 51]).permutation(len(x)), [112])
+    records = model.counts_["head_fit_scores"]
+    assert len(records) == 4
+    for stage, trees, rows in (
+        ("discovery", model.discovery_trees_, d),
+        ("refit", model.trees_, np.arange(len(x))),
+    ):
+        for family in ("flat", "augmented"):
+            record = records[f"{family}_{stage}"]
+            actual = raw(predict_tree(trees[family], x[rows]), y[rows])
+            assert record["raw_score"] == pytest.approx(actual, abs=1e-13)
+            assert record["penalty"] > 0
+            assert record["penalized_score"] == pytest.approx(
+                actual - record["penalty"], abs=1e-13
+            )
+    valid = {
+        family: raw(predict_tree(tree, x[v]), y[v])
+        for family, tree in model.discovery_trees_.items()
+    }
+    assert model.counts_["validation_scores"] == pytest.approx(valid, abs=1e-13)
+    assert model.chosen_ == max(valid, key=valid.get)
+    assert model.counts_["screen"]["initial_score"] == pytest.approx(
+        records["flat_discovery"]["raw_score"], abs=1e-13
+    )
+    json.dumps(model.counts_)
+
+
+@pytest.mark.parametrize("invalid", [-1.0, float("nan"), float("inf"), True, [1.0]])
+def test_invalid_l2_strength_fails_before_discovery(invalid):
+    with pytest.raises(ValueError, match="finite nonnegative"):
+        NativePatternOKAPI(l2_strength=invalid)

@@ -26,7 +26,7 @@ def _raw_roots(inputs):
     return [ValueNode(None, tensor, name) for name, tensor in inputs.items()]
 
 
-def _head(inputs, labels, bases, objective, multiclass):
+def _head(inputs, labels, bases, objective, multiclass, l2_strength):
     """Bind independent copies of the frozen feature programs to this fit split."""
     from okapi.pattern_logit import fit_pattern_tree
 
@@ -36,7 +36,10 @@ def _head(inputs, labels, bases, objective, multiclass):
         for node in rebound.value_nodes:
             node.value = inputs[node.id]
         roots.append(rebound.root)
-    return fit_pattern_tree(roots, labels, objective=objective, multiclass=multiclass)
+    options = {"l2_strength": l2_strength} if l2_strength else {}
+    return fit_pattern_tree(
+        roots, labels, objective=objective, multiclass=multiclass, **options
+    )
 
 
 class NativePatternOKAPI(Method):
@@ -49,19 +52,38 @@ class NativePatternOKAPI(Method):
     before the same discovery-only functional deduplication and screening.
     Set split_seed to hold the discovery/validation partition fixed while
     varying seed for the GP search. The partition uses seed by default.
+    Positive l2_strength regularizes the native head weights on each fit
+    split. Discovery screening and held-out selection use raw fitness.
     """
 
     name = "okapi_native_pattern"
 
-    def __init__(self, seed=0, fitness=None, *, pair_basis=False, split_seed=None):
+    def __init__(
+        self,
+        seed=0,
+        fitness=None,
+        *,
+        pair_basis=False,
+        split_seed=None,
+        l2_strength=0.0,
+    ):
         if fitness is not None and not callable(fitness):
             raise TypeError("fitness must be callable")
         if not isinstance(pair_basis, (bool, np.bool_)):
             raise TypeError("pair_basis must be boolean")
+        strength = np.asarray(l2_strength)
+        if (
+            strength.ndim != 0
+            or strength.dtype.kind not in "iuf"
+            or not np.isfinite(strength)
+            or strength < 0
+        ):
+            raise ValueError("l2_strength must be a finite nonnegative scalar")
         self.seed = seed
         self.fitness = fitness
         self.pair_basis = bool(pair_basis)
         self.split_seed = split_seed
+        self.l2_strength = float(strength)
 
     @classmethod
     def available(cls):
@@ -143,7 +165,9 @@ class NativePatternOKAPI(Method):
             archive.extend(pairs)
             pair_seconds = perf_counter() - start
         start = perf_counter()
-        flat_d, flat_d_info = _head(inputs, dy, (), native_score, multiclass)
+        flat_d, flat_d_info = _head(
+            inputs, dy, (), native_score, multiclass, self.l2_strength
+        )
         flat_seconds = perf_counter() - start
         start = perf_counter()
         with _task_postprocessing(task):
@@ -158,7 +182,9 @@ class NativePatternOKAPI(Method):
         )
         screen_seconds = perf_counter() - start
         start = perf_counter()
-        aug_d, aug_d_info = _head(inputs, dy, bases, native_score, multiclass)
+        aug_d, aug_d_info = _head(
+            inputs, dy, bases, native_score, multiclass, self.l2_strength
+        )
         aug_seconds = perf_counter() - start
         discovery_trees = {"flat": flat_d, "augmented": aug_d, "gp": gp.val_tree}
         validation_scores = {
@@ -169,10 +195,14 @@ class NativePatternOKAPI(Method):
 
         inputs = _bind(x)
         start = perf_counter()
-        flat, flat_info = _head(inputs, labels, (), native_score, multiclass)
+        flat, flat_info = _head(
+            inputs, labels, (), native_score, multiclass, self.l2_strength
+        )
         flat_refit_seconds = perf_counter() - start
         start = perf_counter()
-        augmented, aug_info = _head(inputs, labels, bases, native_score, multiclass)
+        augmented, aug_info = _head(
+            inputs, labels, bases, native_score, multiclass, self.l2_strength
+        )
         aug_refit_seconds = perf_counter() - start
         score_calls = {
             "gp_discovery": gp.calls,
@@ -216,6 +246,21 @@ class NativePatternOKAPI(Method):
                 "augmented_refit": aug_refit_seconds,
             },
         }
+        if self.l2_strength:
+            self.counts_["l2_strength"] = self.l2_strength
+            self.counts_["head_fit_scores"] = {
+                stage: {
+                    "raw_score": info["score"],
+                    "penalty": info["penalty"],
+                    "penalized_score": info["penalized_score"],
+                }
+                for stage, info in (
+                    ("flat_discovery", flat_d_info),
+                    ("augmented_discovery", aug_d_info),
+                    ("flat_refit", flat_info),
+                    ("augmented_refit", aug_info),
+                )
+            }
         if self.pair_basis:
             # The common screen gives precedence to raw providers and earlier
             # GP programs. Only genuinely novel minima can incur trial calls.
