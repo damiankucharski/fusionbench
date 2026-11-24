@@ -21,6 +21,7 @@ from fusionbench.methods.operators import OpClose, OpFar, OpMax, OpMin
 from fusionbench.methods.shrinkage import ShrunkOKAPI
 from fusionbench.methods.stacking import StackingLogit, StackingLR
 from fusionbench.methods.tpot import TPOTMethod
+from fusionbench.methods.transfer_pattern import TransferPatternOKAPI
 
 FACTORIES: dict[str, Callable[[], Method]] = {
     "best_single": BestSingle,
@@ -41,6 +42,7 @@ FACTORIES: dict[str, Callable[[], Method]] = {
     "okapi_shrunk": ShrunkOKAPI,
     "okapi_crossfit_stack": CrossFitOKAPI,
     "okapi_native_pattern": NativePatternOKAPI,
+    "okapi_transfer_pattern": TransferPatternOKAPI,
     "lattice_brier_exact": ExactLatticeBrier,
 }
 
@@ -53,7 +55,7 @@ CORE = ["best_single", "simple_average", "top_5", "top_n", "val_weighted",
 def default_methods(names: list[str] | None = None, only_available: bool = True
                     ) -> list[Method]:
     # These research methods are opt-in on mixed suites.
-    opt_in = {"lattice_brier_exact", "okapi_crossfit_stack", "okapi_native_pattern"}
+    opt_in = {"lattice_brier_exact", "okapi_crossfit_stack", "okapi_native_pattern", "okapi_transfer_pattern"}
     names = names or [name for name in FACTORIES if name not in opt_in]
     methods = []
     for name in names:

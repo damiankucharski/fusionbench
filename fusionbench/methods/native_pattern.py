@@ -84,6 +84,7 @@ class NativePatternOKAPI(Method):
             np.random.SeedSequence([self.seed, 51])
         ).permutation(n)
         discovery, validation = np.split(order, [7 * n // 10])
+        self.validation_indices_ = validation.copy()
         d, v = x[discovery], x[validation]
         dy, vy = labels[discovery], labels[validation]
         multiclass = classes > 2
