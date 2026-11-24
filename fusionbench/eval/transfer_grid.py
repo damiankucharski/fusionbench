@@ -7,7 +7,7 @@ import numpy as np
 from scipy.special import softmax
 
 from fusionbench.scenarios.base import Scenario
-from fusionbench.scenarios.blocks import SHIFTS, draw_block
+from fusionbench.scenarios.blocks import SHIFTS, default_target_shift, draw_block  # noqa: F401 (public historical shift catalog)
 from fusionbench.scenarios.registry import SCENARIOS
 
 SOURCE_NOISE = (0.0, 0.15, 0.30)
@@ -173,7 +173,8 @@ def iter_test_conditions(
 
     name is a registered key or Scenario subclass. Stream 1 supplies clean rows
     and stream 2 the canonical endpoint, matching the native-pattern benchmark.
-    The built-in SHIFTS are looked up by registered name (or class). Supply a
+    Built-in endpoints are looked up by registered name (or class). The
+    environment shortcut's canonical endpoint uses its own test mixture. Supply a
     mapping as canonical_shift to replace the complete default shift definition.
     Source constructor options in scenario_kwargs carry over unless overridden
     by the shift. An unregistered scenario without an explicit shift yields
@@ -207,7 +208,7 @@ def iter_test_conditions(
             if isinstance(name, str)
             else next((k for k, v in SCENARIOS.items() if v is ctor), None)
         )
-        shift = SHIFTS.get(registry_key) if canonical_shift is None else canonical_shift
+        shift = default_target_shift(registry_key) if canonical_shift is None else canonical_shift
         if shift is None:
             continue
         if not isinstance(shift, Mapping):
@@ -218,7 +219,7 @@ def iter_test_conditions(
             or shifted.n_classes != scenario.n_classes
         ):
             raise ValueError("The shift changed the provider mapping or class count")
-        other, other_y, _ = draw_block(shifted, seed, STREAMS[mode], n)
+        other, other_y, _ = draw_block(shifted, seed, STREAMS[mode], n, split="test")
         threshold = np.random.default_rng([seed, STREAMS["row_threshold"]]).random(n)
         for s in levels:
             mask = threshold < s

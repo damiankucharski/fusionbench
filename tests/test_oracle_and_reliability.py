@@ -62,5 +62,7 @@ def test_reliability_selection(results):
 
 def test_max_gap_small(results):
     rel = reliability_summary(results)
-    # No scenario should show a large validation-test gap given the controlled DGP.
-    assert rel["max_abs_gap"].max() < 0.05
+    # The IID check excludes the explicitly shifting environment mixture.
+    shift_name = next(s.name for s in default_suite()
+                      if s._registry_metadata["scenario_id"] == "environment_shortcut")
+    assert rel.loc[rel.scenario != shift_name, "max_abs_gap"].max() < 0.05

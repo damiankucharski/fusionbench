@@ -68,7 +68,10 @@ def cmd_run(args):
     from fusionbench.eval.report import save_report
     from fusionbench.eval.runner import run_suite
 
-    methods = default_methods(_comparison_names(args.methods) or None)
+    names = _comparison_names(args.methods)
+    methods = default_methods(names or None)
+    if names and (missing := set(names) - {m.name for m in methods}):
+        raise SystemExit(f"Install optional dependencies for: {', '.join(sorted(missing))}")
     print(f"methods: {[m.name for m in methods]}")
     df = run_suite(_scenarios(args.scenarios, args.param), methods=methods,
                    n_per_split=args.n, seed=args.seed)
@@ -150,7 +153,7 @@ def cmd_mechanism_transfer(args):
 
 def add_transfer_options(parser):
     source = parser.add_mutually_exclusive_group()
-    source.add_argument("--preset", choices=("smoke", "standard", "standard-v1", "standard-v2"), help="packaged transfer grid")
+    source.add_argument("--preset", choices=("smoke", "standard", "standard-v1", "standard-v2", "standard-v3"), help="packaged transfer grid")
     source.add_argument("--config", help="path to a versioned transfer YAML file")
     parser.add_argument("--scenarios", nargs="+", help="registered scenario IDs to include")
     parser.add_argument("--methods", nargs="+", help="registered method IDs")
@@ -216,6 +219,8 @@ def cmd_transfer(args):
 def main(argv=None):
     p = argparse.ArgumentParser(prog="fusionbench")
     sub = p.add_subparsers(dest="cmd", required=True)
+    from fusionbench.profiles import add_profile_parser
+    add_profile_parser(sub)
 
     sub.add_parser("list").set_defaults(func=cmd_list)
 

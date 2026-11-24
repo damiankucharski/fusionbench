@@ -2,6 +2,7 @@
 
 from __future__ import annotations
 
+from copy import deepcopy
 from dataclasses import dataclass
 
 import numpy as np
@@ -49,7 +50,12 @@ class SwitchDraw:
 
 
 class NativeSwitch(Scenario):
-    """Mix a FAR gate and a logistic control, keeping the input distribution fixed."""
+    """Mix a FAR gate with logistic labels on an anonymous score grid.
+
+    material_fraction sets the mass of operand pairs at least 0.25 apart.
+    Each stratum is uniform over its original ordered pairs. None uses the
+    historical independent grid. The threshold and label law stay fixed.
+    """
 
     close = False
     threshold = 27 / 64
@@ -58,11 +64,17 @@ class NativeSwitch(Scenario):
         "Mixture of an ordered two-provider FAR gate and an affine logit posterior"
     )
 
-    def __init__(self, mixing=0.0, role_seed=0, **kw):
+    def __init__(self, mixing=0.0, role_seed=0, material_fraction=None, **kw):
         if not 0 <= mixing <= 1:
             raise ValueError("mixing must lie in [0, 1]")
+        if material_fraction is not None:
+            if not 0 <= material_fraction <= 1:
+                raise ValueError("material_fraction must lie in [0, 1]")
+            kw["material_fraction"] = material_fraction
+            self.evaluation_group_fields = ("material",)
         super().__init__(mixing=mixing, role_seed=role_seed, **kw)
         self.mixing = mixing
+        self.material_fraction = material_fraction
         self.roles = np.random.default_rng([role_seed, 15]).permutation(6)[:2]
 
     @property
@@ -74,9 +86,25 @@ class NativeSwitch(Scenario):
 
     def draw(self, n, rng):
         scores = rng.integers(1, 64, size=(n, 6)) / 64
+        uniform = rng.random(n)
+        if self.material_fraction is not None:
+            # The extra stream leaves the label draw, distractors and subsequent
+            # caller RNG state paired with the original grid draw.
+            seed = int(deepcopy(rng).integers(2**63))
+            stress = np.random.default_rng([seed, 0x4652])
+            desired = stress.random(n) < self.material_fraction
+            a, b = self.roles
+            actual = np.abs(scores[:, a] - scores[:, b]) >= 0.25
+            ticks = np.arange(1, 64)
+            far = np.abs(ticks[:, None] - ticks[None, :]) >= 16
+            for group in (False, True):
+                pairs = np.argwhere(far == group) + 1
+                choice = stress.integers(len(pairs), size=n)
+                change = (desired == group) & (actual != desired)
+                scores[np.ix_(change, self.roles)] = pairs[choice[change]] / 64
         return SwitchDraw(
             np.stack((1 - scores, scores), axis=-1),
-            rng.random(n),
+            uniform,
             *map(int, self.roles),
             close=self.close,
             threshold=self.threshold,
@@ -84,7 +112,9 @@ class NativeSwitch(Scenario):
 
     def _generate(self, n, rng):
         sample = self.draw(n, rng)
-        return sample.preds, sample.labels(self.mixing), {}
+        a, b = self.roles
+        material = np.abs(sample.preds[:, a, 1] - sample.preds[:, b, 1]) >= 0.25
+        return sample.preds, sample.labels(self.mixing), {"material": material}
 
     def bayes_oracle(self, preds, latent):
         a, b = self.roles

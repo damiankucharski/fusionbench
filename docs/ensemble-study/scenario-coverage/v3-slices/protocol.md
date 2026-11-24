@@ -1,0 +1,13 @@
+# Subgroup comparison
+
+Use six independent banks with data seeds 4821000–4821005. Each bank has 512 fit and 4096 test examples drawn from separate child streams. Pair the example seeds and GP-search seeds (7169000–7169005) across methods and intervention arms. A bank and its search draw form one unit of replication. Changing both across units estimates their combined variation. The test bank never selects the method or its parameters.
+
+Fit native OKAPI with its registered L2 default, probability stacking LR, simple averaging and a Top-N prefix selected by full-class fit Brier. Include the planted reference provider when present, and the posterior conditional on observed provider outputs wherever the generator supplies it. The native procedure uses a 70/30 inner split and its standard refit. Count examples in fit, native validation and held-out test on every reported slice. Every method sees only provider outputs and fit labels.
+
+- **Rare specialist**. Stratify by the generator's rare region. Compare its default with zero specialist gain.
+- **Redundant pool**. Check the canonical anonymous pool, then pair a newly permuted null and one-informative-candidate arm within each bank. Vary the known role assignment between banks for the latter pair. Compare with the true anchor.
+- **Environment shortcut**. Preserve the default change of environment mixture from fit to test. Compare with a stationary deployment mixture. Stratify by aligned, independent and reversed environments; the known stable provider is the fixed control.
+- **Selective fallback**. Stratify independently by fallback status and example difficulty. Compare the default difficulty-dependent mechanism with random fallback at the same frequency.
+- **Similar classes 3 and 8**. Add this earlier ten-class task as a reference with realized-label 3, 8, 3/8 pooled, other labels, hard/easy, and hard 3/8 slices. Its generator supplies no analytic conditional posterior.
+
+Report observed full-class Brier as the mean of the row-wise sum of squared probability errors, in [0, 2]. For a provided observable posterior q(X), also report mean sum of squared differences from q(X) and the paired realized difference between method and q(X) Brier. The squared distance equals expected excess Brier over the **whole** observable-input distribution. Conditioning on a hidden region or the realized label can change that identity. Within such a slice it measures the distance to the same observable predictor. Paired delta summaries use equal weight per bank and preserve the sign in each bank. These data are synthetic mechanism checks.

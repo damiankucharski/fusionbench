@@ -121,16 +121,35 @@ class SharedConfusionPanel(MulticlassProviderPanel):
 
 
 class SimilarClasses38(Scenario):
-    """Three ten-class providers share a persistent 3 ↔ 8 confusion."""
+    """Mix a shared 3 ↔ 8 preference with provider-private destinations.
+
+    At deviation_mix=1 each provider j targets class j for both 3 and 8.
+    At zero these rows follow the published shared-preference scenario.
+    """
 
     task = "multiclass"
     primary_metric = "brier"
 
-    def __init__(self, *, name=None):
+    def __init__(self, *, deviation_mix=0.0, name=None):
         shared = np.zeros((10, 10))
         shared[3, 8] = shared[8, 3] = 1
-        self.panel = SharedConfusionPanel(shared_matrix=shared, strength=1.0)
-        super().__init__(name=name or "similar_classes_38", **self.panel.knobs)
+        private = None
+        if deviation_mix:
+            private = np.zeros((3, 10, 10))
+            for j in range(3):
+                private[j, [3, 8], j] = 1
+        self.panel = SharedConfusionPanel(
+            shared_matrix=shared,
+            provider_matrices=private,
+            deviation_mix=deviation_mix,
+            strength=1.0,
+        )
+        default_name = (
+            f"similar_classes_38_deviation_mix{deviation_mix}"
+            if deviation_mix
+            else "similar_classes_38"
+        )
+        super().__init__(name=name or default_name, **self.panel.knobs)
 
     @property
     def n_classes(self):

@@ -1,0 +1,487 @@
+{
+  "profile_version": "stress-v1",
+  "fusionbench_version": "0.1.0",
+  "fit_rows": 512,
+  "test_rows": 1024,
+  "data_seeds": [
+    23309
+  ],
+  "search_seed": 0,
+  "methods": [
+    "okapi_native_pattern_l2",
+    "simple_average",
+    "top_n",
+    "stacking_lr"
+  ],
+  "rng_streams": {
+    "fit": 0,
+    "test": 1
+  },
+  "native_split_seed": "data_seed",
+  "profiles": [
+    {
+      "scenario": "committee",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "committee",
+      "name": "weaker_providers",
+      "parameters": {
+        "accuracy": 0.55
+      }
+    },
+    {
+      "scenario": "committee",
+      "name": "fewer_providers",
+      "parameters": {
+        "k": 3
+      }
+    },
+    {
+      "scenario": "deadweight",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "deadweight",
+      "name": "no_irrelevant",
+      "parameters": {
+        "n_bad": 0
+      }
+    },
+    {
+      "scenario": "deadweight",
+      "name": "many_irrelevant",
+      "parameters": {
+        "n_bad": 24
+      }
+    },
+    {
+      "scenario": "needle",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "needle",
+      "name": "few_irrelevant",
+      "parameters": {
+        "n_bad": 7
+      }
+    },
+    {
+      "scenario": "needle",
+      "name": "more_irrelevant",
+      "parameters": {
+        "n_bad": 197
+      }
+    },
+    {
+      "scenario": "saturated",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "saturated",
+      "name": "independent_noise",
+      "parameters": {
+        "corr": 0
+      }
+    },
+    {
+      "scenario": "saturated",
+      "name": "identical_providers",
+      "parameters": {
+        "corr": 1
+      }
+    },
+    {
+      "scenario": "correlated",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "correlated",
+      "name": "independent_noise",
+      "parameters": {
+        "corr": 0
+      }
+    },
+    {
+      "scenario": "correlated",
+      "name": "strong_dependence",
+      "parameters": {
+        "corr": 0.98
+      }
+    },
+    {
+      "scenario": "calibrated_suppressor",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "calibrated_suppressor",
+      "name": "positive_weak_weight",
+      "parameters": {
+        "corr": 0.15
+      }
+    },
+    {
+      "scenario": "calibrated_suppressor",
+      "name": "zero_weak_weight",
+      "parameters": {
+        "corr": 0.5
+      }
+    },
+    {
+      "scenario": "polarity_fault",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "polarity_fault",
+      "name": "no_flips",
+      "parameters": {
+        "fault_rate": 0
+      }
+    },
+    {
+      "scenario": "polarity_fault",
+      "name": "frequent_flips",
+      "parameters": {
+        "fault_rate": 0.3
+      }
+    },
+    {
+      "scenario": "hardveto",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "hardveto",
+      "name": "rare_decisive",
+      "parameters": {
+        "decisive_fraction": 0.1
+      }
+    },
+    {
+      "scenario": "hardveto",
+      "name": "frequent_decisive",
+      "parameters": {
+        "decisive_fraction": 0.7
+      }
+    },
+    {
+      "scenario": "hardrescue",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "hardrescue",
+      "name": "rare_decisive",
+      "parameters": {
+        "decisive_fraction": 0.1
+      }
+    },
+    {
+      "scenario": "hardrescue",
+      "name": "frequent_decisive",
+      "parameters": {
+        "decisive_fraction": 0.75
+      }
+    },
+    {
+      "scenario": "weakest_link",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "weakest_link",
+      "name": "deeper_matched_prevalence",
+      "parameters": {
+        "m": 6,
+        "positive_prevalence": 0.0625,
+        "decisive_fraction": 0.26666666666666666
+      }
+    },
+    {
+      "scenario": "weakest_link",
+      "name": "rarer_matched_depth",
+      "parameters": {
+        "m": 4,
+        "positive_prevalence": 0.02,
+        "decisive_fraction": 0.26666666666666666
+      }
+    },
+    {
+      "scenario": "two_pathways",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "two_pathways",
+      "name": "rare_second_path",
+      "parameters": {
+        "decisive_fraction": 0.1
+      }
+    },
+    {
+      "scenario": "two_pathways",
+      "name": "frequent_second_path",
+      "parameters": {
+        "decisive_fraction": 0.75
+      }
+    },
+    {
+      "scenario": "parity",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "parity",
+      "name": "weak_second_bit",
+      "parameters": {
+        "second_accuracy": 0.7
+      }
+    },
+    {
+      "scenario": "parity",
+      "name": "uninformative_second_bit",
+      "parameters": {
+        "second_accuracy": 0.5
+      }
+    },
+    {
+      "scenario": "compound",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "compound",
+      "name": "rare_rescue",
+      "parameters": {
+        "decisive_fraction": 0.1
+      }
+    },
+    {
+      "scenario": "compound",
+      "name": "frequent_rescue",
+      "parameters": {
+        "decisive_fraction": 0.75
+      }
+    },
+    {
+      "scenario": "gated_experts",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "gated_experts",
+      "name": "uninformative_selector",
+      "parameters": {
+        "acc_select": 0.5
+      }
+    },
+    {
+      "scenario": "gated_experts",
+      "name": "weaker_experts",
+      "parameters": {
+        "acc_expert": 0.65
+      }
+    },
+    {
+      "scenario": "native_switch",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "native_switch",
+      "name": "few_material_rows",
+      "parameters": {
+        "material_fraction": 0.1
+      }
+    },
+    {
+      "scenario": "native_switch",
+      "name": "many_material_rows",
+      "parameters": {
+        "material_fraction": 0.85
+      }
+    },
+    {
+      "scenario": "compositional_switch",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "compositional_switch",
+      "name": "interior_grid",
+      "parameters": {
+        "corner_probability": 0
+      }
+    },
+    {
+      "scenario": "compositional_switch",
+      "name": "corners_only",
+      "parameters": {
+        "corner_probability": 1
+      }
+    },
+    {
+      "scenario": "native_close_switch",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "native_close_switch",
+      "name": "few_material_rows",
+      "parameters": {
+        "material_fraction": 0.1
+      }
+    },
+    {
+      "scenario": "native_close_switch",
+      "name": "many_material_rows",
+      "parameters": {
+        "material_fraction": 0.85
+      }
+    },
+    {
+      "scenario": "miscalibration",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "miscalibration",
+      "name": "undistorted",
+      "parameters": {
+        "temperature_range": 0
+      }
+    },
+    {
+      "scenario": "miscalibration",
+      "name": "partial_distortion",
+      "parameters": {
+        "temperature_range": 0.5
+      }
+    },
+    {
+      "scenario": "multiclass_committee",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "multiclass_committee",
+      "name": "weaker_providers",
+      "parameters": {
+        "accuracy": 0.51
+      }
+    },
+    {
+      "scenario": "multiclass_committee",
+      "name": "fewer_providers",
+      "parameters": {
+        "k": 3
+      }
+    },
+    {
+      "scenario": "similar_classes_38",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "similar_classes_38",
+      "name": "mixed_destinations",
+      "parameters": {
+        "deviation_mix": 0.5
+      }
+    },
+    {
+      "scenario": "similar_classes_38",
+      "name": "private_destinations",
+      "parameters": {
+        "deviation_mix": 1
+      }
+    },
+    {
+      "scenario": "rare_specialist",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "rare_specialist",
+      "name": "rarer_region",
+      "parameters": {
+        "region_prevalence": 0.025
+      }
+    },
+    {
+      "scenario": "rare_specialist",
+      "name": "uninformative_cue",
+      "parameters": {
+        "cue_accuracy": 0.5
+      }
+    },
+    {
+      "scenario": "redundant_pool",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "redundant_pool",
+      "name": "larger_null_pool",
+      "parameters": {
+        "n_candidates": 63
+      }
+    },
+    {
+      "scenario": "redundant_pool",
+      "name": "informative_candidate",
+      "parameters": {
+        "positive_control": true
+      }
+    },
+    {
+      "scenario": "environment_shortcut",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "environment_shortcut",
+      "name": "stationary_mix",
+      "parameters": {
+        "test_mix": [
+          0.8,
+          0.1,
+          0.1
+        ]
+      }
+    },
+    {
+      "scenario": "environment_shortcut",
+      "name": "stable_only",
+      "parameters": {
+        "stable_only": true
+      }
+    },
+    {
+      "scenario": "selective_fallback",
+      "name": "reference",
+      "parameters": {}
+    },
+    {
+      "scenario": "selective_fallback",
+      "name": "random_missingness",
+      "parameters": {
+        "mechanism": "random"
+      }
+    },
+    {
+      "scenario": "selective_fallback",
+      "name": "always_available",
+      "parameters": {
+        "fallback_rate": 0
+      }
+    }
+  ]
+}

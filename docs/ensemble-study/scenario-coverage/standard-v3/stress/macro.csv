@@ -1,0 +1,13 @@
+method,mean_brier,scenarios,panel
+okapi_native_pattern_l2,0.22196003081750496,24,all_profiles
+simple_average,0.3704223809009997,24,all_profiles
+top_n,0.32834870605434346,24,all_profiles
+stacking_lr,0.23827644856580862,24,all_profiles
+okapi_native_pattern_l2,0.2124526389426988,24,reference
+simple_average,0.37838205760137394,24,reference
+top_n,0.33835686742421006,24,reference
+stacking_lr,0.24368672105522568,24,reference
+okapi_native_pattern_l2,0.22671372675490806,24,stress
+simple_average,0.3664425425508126,24,stress
+top_n,0.32334462536941017,24,stress
+stacking_lr,0.23557131232110007,24,stress

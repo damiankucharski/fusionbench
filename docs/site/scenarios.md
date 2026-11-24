@@ -1,6 +1,6 @@
 # Scenario catalog
 
-Choose a scenario by the assumption you want to test. Each generator returns class probabilities from multiple providers for the same examples, together with class labels. The standard suite contains 20 scenarios, including 17 binary scenarios and three multiclass scenarios. The registry also includes the opt-in three-provider panel below. Use these IDs as registry keys in Python or as scenario names in a transfer configuration.
+Choose a scenario by the assumption you want to test. Each generator returns class probabilities from multiple providers for the same examples, together with class labels. The standard suite contains 24 scenarios, including 21 binary scenarios and three multiclass scenarios. The registry also includes the opt-in three-provider panel below. Use these IDs as registry keys in Python or as scenario names in a transfer configuration.
 
 ## Independent evidence and calibration
 
@@ -161,3 +161,16 @@ This comparison holds provider inputs and roles fixed while changing the conditi
 ## Reading the oracle
 
 `Dataset.test_oracle`, when available, is a row-by-class reference under the generating law. The independent binary committee uses a sum of log odds under balanced class priors. The correlated Gaussian model accounts for its covariance, and the logical tasks combine evidence using the known latent grouping. For the two v1 multiclass models the reference uses the generator's logit strength and, for Saturated, its shared noise. Keep the oracle and known roles on the evaluation side. The three-provider panel and custom scenarios may return `None`. After provider corruption, the appropriate reference would condition on the corrupted observations. [Version-1 generator implementations](https://github.com/damiankucharski/fusionbench/tree/05fa4ec364e545671402ec1ff14392b818fc4d6a/fusionbench/scenarios)
+
+## Four standard-v3 scenarios
+
+| ID | Controlled mechanism | Evaluation question |
+| --- | --- | --- |
+| `rare_specialist` | A specialist supplies additional information in a rare region. A third input gives a noisy cue about the region. | Does a learned rule exploit the specialist on rare examples without degrading performance elsewhere? |
+| `redundant_pool` | An optimal anchor is accompanied by noisy alternatives. A positive control gives one candidate genuine additional evidence. | How much does searching many candidates cost when the anchor is already sufficient? |
+| `environment_shortcut` | The relation between a shortcut and the label depends on the environment. The population mixture changes between fitting and deployment. | Does validation reward a provider whose apparent reliability changes at deployment? |
+| `selective_fallback` | A provider falls back to a neutral score, with the event associated with example difficulty. | Does fusion use the remaining evidence on cases where a source loses resolution? |
+
+[Generate rare specialists and redundant pools](rare-and-redundant.md) · [Control environments and fallback](environments-and-fallback.md) · [Run mechanism stress profiles](stress-profiles.md) · [Change only the class prior](prior-shift.md)
+
+For a nested size comparison, `fusionbench.interventions.paired_pool_sizes("needle", [10, 97], n_per_split=512, seed=7)` returns two banks with identical rows, informative providers and oracle. For committee scenarios the size counts independent inputs; for needle and deadweight it counts irrelevant inputs. All sizes are prefixes of the same maximum-size bank. For correlated and saturated pools, `duplicate_provider(dataset, provider=0, copies=4)` in the same module creates a paired control with identical information and posterior. Each additional copy receives a distinct provider ID.

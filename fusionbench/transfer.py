@@ -18,7 +18,6 @@ import yaml
 from fusionbench import __version__
 from fusionbench.eval.transfer_grid import (
     MODES,
-    SHIFTS,
     STREAMS,
     brier,
     development,
@@ -27,10 +26,10 @@ from fusionbench.eval.transfer_grid import (
 )
 from fusionbench.methods.averaging import TopN
 from fusionbench.methods.registry import FACTORIES
-from fusionbench.scenarios.blocks import draw_block
+from fusionbench.scenarios.blocks import SHIFTS, default_target_shift, draw_block  # noqa: F401 (public historical shift catalog)
 from fusionbench.scenarios.registry import SCENARIOS, _validated_defaults
 
-PRESETS = ("smoke", "standard", "standard-v1", "standard-v2")
+PRESETS = ("smoke", "standard", "standard-v1", "standard-v2", "standard-v3")
 CONFIG_KEYS = {
     "schema_version",
     "base_seed",
@@ -50,7 +49,7 @@ def load_preset(name="smoke"):
     """Read a version-1 configuration shipped inside the installed package."""
     if name not in PRESETS:
         raise ValueError(f"Unknown preset {name!r}; choose from {', '.join(PRESETS)}")
-    version = {"smoke": "smoke-v1", "standard": "standard-v2"}.get(name, name)
+    version = {"smoke": "smoke-v1", "standard": "standard-v3"}.get(name, name)
     path = resources.files("fusionbench").joinpath("presets", f"{version}.yaml")
     return yaml.safe_load(path.read_text(encoding="utf-8"))
 
@@ -102,7 +101,7 @@ def _scenario_spec(name, spec):
         raise ValueError(f"Missing stable seed_slot for {name}")
     slot = _integer(opts["seed_slot"], 0, f"{name}.seed_slot")
     knobs = _mapping(opts.get("knobs", {}), f"{name}.knobs")
-    endpoint = opts.get("canonical_shift", SHIFTS.get(name))
+    endpoint = opts.get("canonical_shift", default_target_shift(name))
     if endpoint is not None:
         endpoint = _mapping(endpoint, f"{name}.canonical_shift")
     _validated_defaults(name, {**knobs, **(endpoint or {})})

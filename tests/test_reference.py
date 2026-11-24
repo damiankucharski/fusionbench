@@ -43,7 +43,7 @@ def test_frozen_banks_cover_the_v1_suite_and_match_generators():
 
 
 def test_unknown_id_does_not_resolve_a_path():
-    with pytest.raises(ValueError, match="Unknown reference-v1"):
+    with pytest.raises(ValueError, match="Unknown reference scenario"):
         reference.load_reference_dataset("../committee")
 
 
@@ -78,3 +78,18 @@ def test_reference_bank_for_similar_classes_matches_live_draw():
     for split in ("fit", "test"):
         np.testing.assert_array_equal(getattr(frozen, split + "_y"), getattr(live, split + "_y"))
         np.testing.assert_array_equal(getattr(frozen, split + "_preds"), getattr(live, split + "_preds").astype(np.float32))
+
+
+@pytest.mark.parametrize("scenario_id", [
+    "rare_specialist", "redundant_pool", "environment_shortcut", "selective_fallback",
+])
+def test_v3_bank_reproduces_live_data_and_observed_oracle(scenario_id):
+    from fusionbench import generate_dataset
+
+    frozen = reference.load_reference_dataset(scenario_id)
+    live = generate_dataset(scenario_id, n_per_split=128, seed=1729)
+    assert frozen.meta["reference_bank"] == "reference-v3"
+    for split in ("fit", "test"):
+        for suffix in ("preds", "oracle", "y"):
+            array = getattr(frozen, f"{split}_{suffix}")
+            np.testing.assert_array_equal(array, getattr(live, f"{split}_{suffix}").astype(array.dtype))

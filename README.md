@@ -1,10 +1,12 @@
 # FusionBench
 
-FusionBench is a Python library of controlled classification datasets for studying how to combine model predictions. Each dataset contains aligned class probabilities from several providers, labels, and independent fit and test examples. The default benchmark now runs 20 scenarios. The added `similar_classes_38` tests a shared confusion between two classes across three providers. The original 19 version-1 scenarios cover correlated errors, weak and redundant models, calibration, noisy logical conditions and input-dependent expertise. An additional multiclass generator pairs continuous scores with finite-vote reports from the same three providers. Each scenario specifies how its predictions and labels arise. Researchers can vary its parameters, supply a fusion method or contribute a different generator.
+FusionBench is a Python library of controlled classification datasets for studying how to combine model predictions. Each dataset contains aligned class probabilities from several providers, labels, and independent fit and test examples. The default benchmark runs 24 scenarios. The latest four cover rare specialists, redundant candidates, environment-dependent shortcuts and selective fallback. The `similar_classes_38` scenario tests shared confusion between two classes across three providers. The original 19 version-1 scenarios cover correlated errors, weak and redundant models, calibration, noisy logical conditions and input-dependent expertise. An additional multiclass generator pairs continuous scores with finite-vote reports from the same three providers. Each scenario specifies how its predictions and labels arise. Researchers can vary its parameters, supply a fusion method or contribute a different generator.
+
+The [stress profiles](docs/site/stress-profiles.md) give each standard scenario a reference setting and two mechanism-specific interventions. Run `fusionbench profiles --list` to see the full inventory. [Full-suite OKAPI results](docs/ensemble-study/scenario-coverage/standard-v3/README.md)
 
 ## Load a dataset or generate an experiment
 
-Install the research checkout with `python -m pip install .` (Python 3.11+). The base installation includes small reference datasets for all 20 standard scenarios. Generating data and running the standard baselines work on CPU.
+Install the research checkout with `python -m pip install .` (Python 3.11+). The base installation includes small reference datasets for all 24 standard scenarios. Generating data and running the standard baselines work on CPU.
 
 ```python
 import fusionbench as fb

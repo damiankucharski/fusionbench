@@ -12,6 +12,10 @@ nav:
   - Overview: index.md
   - Generate and save data: generate.md
   - Scenario catalog: scenarios.md
+  - Rare specialists and redundant pools: rare-and-redundant.md
+  - Environments and selective fallback: environments-and-fallback.md
+  - Mechanism stress profiles: stress-profiles.md
+  - Class prior shift: prior-shift.md
   - Evaluate fusion methods: evaluate.md
   - Measure transfer: transfer.md
   - Add a scenario: extend.md

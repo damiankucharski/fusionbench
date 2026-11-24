@@ -1,0 +1,10 @@
+panel,reference,seeds,scenarios,okapi_minus_reference,lower_95,upper_95
+all_profiles,simple_average,1,24,-0.14846235008349476,,
+all_profiles,stacking_lr,1,24,-0.01631641774830366,,
+all_profiles,top_n,1,24,-0.10638867523683848,,
+reference,simple_average,1,24,-0.16592941865867517,,
+reference,stacking_lr,1,24,-0.031234082112526877,,
+reference,top_n,1,24,-0.12590422848151123,,
+stress,simple_average,1,24,-0.13972881579590454,,
+stress,stacking_lr,1,24,-0.008857585566192054,,
+stress,top_n,1,24,-0.0966308986145021,,

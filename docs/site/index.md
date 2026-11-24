@@ -10,7 +10,7 @@ From a source checkout, install FusionBench with Python 3.11 or newer. The base 
 python -m pip install .
 ```
 
-Load one of the 20 ready-made datasets and compare an arithmetic mean with a trained logistic stacker. Both predict the same held-out examples. Lower test Brier means the probabilities were closer to the observed labels.
+Load one of the 24 ready-made datasets and compare an arithmetic mean with a trained logistic stacker. Both predict the same held-out examples. Lower test Brier means the probabilities were closer to the observed labels.
 
 ```python
 from fusionbench import load_reference_dataset

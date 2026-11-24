@@ -5,8 +5,9 @@ conditional on them. Logical-gate scenarios sample latent conditions that
 determine labels and inform noisy detectors. Switch scenarios draw provider
 scores first, then sample labels from a conditional law specified on the scores.
 
-The optional clean-domain oracle gives the conditional class probabilities
-when known. Scenario.build draws fit and test banks from the same generator.
+The optional domain oracle gives the conditional class probabilities when
+known. Scenario.build draws fit and test banks from the same generator.
+Scenarios with a domain shift can specialize sample_split for each split.
 Finite-sample results vary across draws, and transfer benchmarks can evaluate
 new distributions by changing the generator or perturbing its outputs.
 """
@@ -29,6 +30,7 @@ class Scenario(ABC):
     oracle_description: str = ""
     # Headline metric for this pathology (e.g. calibration scenarios use log_loss).
     primary_metric: str = "macro_f1"
+    evaluation_group_fields: ClassVar[tuple[str, ...]] = ()
     _registry_metadata: dict | None = None
 
     def __init_subclass__(cls, **kwargs):
@@ -72,6 +74,12 @@ class Scenario(ABC):
 
     _generate = sample
 
+    def sample_split(self, n: int, rng: np.random.Generator, split: str):
+        """Draw a named domain. Ordinary scenarios share a law across splits."""
+        if split not in ("fit", "test"):
+            raise ValueError("split must be 'fit' or 'test'")
+        return self.sample(n, rng)
+
     def bayes_oracle(self, preds: np.ndarray, latent: dict) -> np.ndarray | None:
         """Return the clean-domain posterior ``[N, C]`` when known, or None."""
         return None
@@ -99,8 +107,13 @@ class Scenario(ABC):
                 fusionbench_version=__version__,
             )
         rng = np.random.default_rng(seed)
-        fit_preds, fit_y, fit_latent = self.sample(n_per_split, rng)
-        test_preds, test_y, test_latent = self.sample(n_per_split, rng)
+        fit_preds, fit_y, fit_latent = self.sample_split(n_per_split, rng, "fit")
+        test_preds, test_y, test_latent = self.sample_split(n_per_split, rng, "test")
+        if self.evaluation_group_fields:
+            meta["evaluation_groups"] = {
+                split: {key: np.asarray(latent[key]).tolist() for key in self.evaluation_group_fields}
+                for split, latent in (("fit", fit_latent), ("test", test_latent))
+            }
         return Dataset(
             name=self.name,
             task=self.task,

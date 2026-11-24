@@ -35,7 +35,10 @@ def test_public_datasets_match_historical_generator_and_oracle(scenario_id):
     assert dataset.meta["fusionbench_version"] == __version__
     assert dataset.meta["parameters"] == {}
     for split in ("fit", "test"):
-        x, y, latent = historical._generate(rows, rng)
+        if scenario_id == "environment_shortcut":
+            x, y, latent = historical.sample_split(rows, rng, split=split)
+        else:
+            x, y, latent = historical._generate(rows, rng)
         np.testing.assert_array_equal(x, getattr(dataset, f"{split}_preds"))
         np.testing.assert_array_equal(y, getattr(dataset, f"{split}_y"))
         expected_oracle = historical.bayes_oracle(x, latent)

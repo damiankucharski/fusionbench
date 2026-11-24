@@ -40,10 +40,11 @@ class PolarityFault(Scenario):
             np.sqrt(self.correlation) * common[:, None] + np.sqrt(1 - self.correlation) * noise[:, 1:]
         )
         raw = (2 * y - 1)[:, None] * self.strengths + noise
-        raw[rng.random(n) < self.fault_rate, 0] *= -1
+        flipped = rng.random(n) < self.fault_rate
+        raw[flipped, 0] *= -1
         logits = 2 * self.strengths * raw
         scores = np.stack([expit(-logits), expit(logits)], axis=-1)
-        return scores, y, {"raw": raw}
+        return scores, y, {"raw": raw, "flipped": flipped}
 
     def posterior(self, scores, *, fault_rate, correlation):
         # Both output channels are computed directly for numerical stability.

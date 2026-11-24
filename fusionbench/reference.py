@@ -12,8 +12,11 @@ from zipfile import ZipFile
 from fusionbench.store import _read_dataset_dir
 from fusionbench.types import Dataset
 
-_VERSION = "reference-v1"
-_MANIFEST_DIGEST = "ab310db529e7316fc0507b6e971de4b72d550fa9f6444175f1b386cdac75b180"
+_MANIFEST_DIGESTS = {
+    "reference-v1": "ab310db529e7316fc0507b6e971de4b72d550fa9f6444175f1b386cdac75b180",
+    "reference-v2": "27ec27bb0cd031048c15f029d170061f8a462b0d74ac364217df8f71fc1307ed",
+    "reference-v3": "0fd0fe41c0770d6a27b622e702c6624f0911da0367a0698b40144e5622798df5",
+}
 
 
 def load_reference_dataset(scenario_id: str) -> Dataset:
@@ -24,18 +27,19 @@ def load_reference_dataset(scenario_id: str) -> Dataset:
     arrays are independent on each call. Metadata contains the bank version and
     archive SHA-256 for reproducing comparisons.
     """
-    version, digest = _VERSION, _MANIFEST_DIGEST
-    if scenario_id == "similar_classes_38":
-        version = "reference-v2"
-        digest = "27ec27bb0cd031048c15f029d170061f8a462b0d74ac364217df8f71fc1307ed"
-    directory = files("fusionbench").joinpath("data", version)
-    raw_manifest = directory.joinpath("manifest.json").read_bytes()
-    if hashlib.sha256(raw_manifest).hexdigest() != digest:
-        raise ValueError(f"{version} manifest checksum mismatch")
-    manifest = json.loads(raw_manifest)
-    if scenario_id not in manifest["banks"]:
-        raise ValueError(f"Unknown {_VERSION} scenario {scenario_id!r}; choose from {', '.join(manifest['banks'])}")
-    expected_hash = manifest["banks"][scenario_id]
+    available = []
+    for version, digest in _MANIFEST_DIGESTS.items():
+        directory = files("fusionbench").joinpath("data", version)
+        raw_manifest = directory.joinpath("manifest.json").read_bytes()
+        if hashlib.sha256(raw_manifest).hexdigest() != digest:
+            raise ValueError(f"{version} manifest checksum mismatch")
+        banks = json.loads(raw_manifest)["banks"]
+        if scenario_id in banks:
+            expected_hash = banks[scenario_id]
+            break
+        available.extend(banks)
+    else:
+        raise ValueError(f"Unknown reference scenario {scenario_id!r}; choose from {', '.join(available)}")
     data = directory.joinpath(f"{scenario_id}.zip").read_bytes()
     if hashlib.sha256(data).hexdigest() != expected_hash:
         raise ValueError(f"{scenario_id}: reference archive checksum mismatch")

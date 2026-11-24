@@ -44,7 +44,16 @@ def test_discovery_can_list_extensions_with_required_parameters(monkeypatch, cap
     try:
         cmd_list(None)
         assert "custom_committee" in capsys.readouterr().out
-        assert len(default_suite()) == len(_scenarios(None)) == 20
+        assert len(default_suite()) == len(_scenarios(None)) == 24
         assert _scenarios(["custom_committee"], [("required_k", 3)])[0].k == 3
     finally:
         del SCENARIOS["custom_committee"]
+
+
+def test_explicit_okapi_request_requires_installed_method(monkeypatch, tmp_path):
+    from fusionbench.methods.registry import FACTORIES
+
+    monkeypatch.setattr(FACTORIES["okapi_native_pattern_l2"], "available", classmethod(lambda cls: False))
+    with pytest.raises(SystemExit, match="okapi_native_pattern_l2"):
+        main(["run", "--methods", "okapi_native_pattern_l2", "--out", str(tmp_path)])
+    assert not list(tmp_path.iterdir())

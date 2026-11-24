@@ -14,6 +14,7 @@ from fusionbench.scenarios.calibration import Miscalibration, MulticlassCommitte
 from fusionbench.scenarios.committee import Committee, DeadWeight, Needle, Saturated
 from fusionbench.scenarios.compositional_switch import CompositionalSwitch
 from fusionbench.scenarios.correlated import CalibratedSuppressor, CorrelatedRedundancy
+from fusionbench.scenarios.environment_shortcut import EnvironmentShortcut
 from fusionbench.scenarios.gates import (
     Compound,
     HardRescue,
@@ -26,7 +27,13 @@ from fusionbench.scenarios.mixture import GatedExperts
 from fusionbench.scenarios.multiclass_provider_panel import MulticlassProviderPanel
 from fusionbench.scenarios.native_switch import NativeCloseSwitch, NativeSwitch
 from fusionbench.scenarios.polarity import PolarityFault
-from fusionbench.scenarios.shared_confusion_panel import SharedConfusionPanel, SimilarClasses38
+from fusionbench.scenarios.rare_specialist import RareSpecialist
+from fusionbench.scenarios.redundant_pool import RedundantPool
+from fusionbench.scenarios.selective_fallback import SelectiveFallback
+from fusionbench.scenarios.shared_confusion_panel import (
+    SharedConfusionPanel,
+    SimilarClasses38,
+)
 from fusionbench.types import Dataset
 
 STANDARD_V1_SCENARIOS = MappingProxyType(
@@ -53,7 +60,14 @@ STANDARD_V1_SCENARIOS = MappingProxyType(
     }
 )
 
-STANDARD_SCENARIOS = MappingProxyType({**STANDARD_V1_SCENARIOS, "similar_classes_38": SimilarClasses38})
+STANDARD_V2_SCENARIOS = MappingProxyType({**STANDARD_V1_SCENARIOS, "similar_classes_38": SimilarClasses38})
+STANDARD_SCENARIOS = MappingProxyType({
+    **STANDARD_V2_SCENARIOS,
+    "rare_specialist": RareSpecialist,
+    "redundant_pool": RedundantPool,
+    "environment_shortcut": EnvironmentShortcut,
+    "selective_fallback": SelectiveFallback,
+})
 
 SCENARIOS: dict[str, type[Scenario]] = {
     **STANDARD_SCENARIOS,

@@ -194,11 +194,13 @@ def test_similar_classes_is_a_standard_regression_case_on_both_splits():
     from fusionbench.transfer import load_preset
 
     scenario_id = "similar_classes_38"
-    expected = [*STANDARD_V1_SCENARIOS, scenario_id]
+    expected = [*STANDARD_V1_SCENARIOS, scenario_id, "rare_specialist", "redundant_pool",
+                "environment_shortcut", "selective_fallback"]
     assert [s._registry_metadata["scenario_id"] for s in default_suite()] == expected
     assert [s._registry_metadata["scenario_id"] for s in _scenarios(None)] == expected
     assert list(load_preset("standard")["scenarios"]) == expected
-    assert load_preset("standard") == load_preset("standard-v2")
+    assert list(load_preset("standard-v2")["scenarios"]) == expected[:20]
+    assert load_preset("standard") == load_preset("standard-v3")
     data = get_scenario(scenario_id).build(n_per_split=1024, seed=37)
     base = get_scenario("multiclass_provider_panel").build(n_per_split=1024, seed=37)
     for split in ("fit", "test"):

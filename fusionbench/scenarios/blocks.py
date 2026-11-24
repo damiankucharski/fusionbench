@@ -15,6 +15,12 @@ SHIFTS = {
 }
 
 
-def draw_block(scenario, seed, index, n):
+def default_target_shift(name):
+    """Return overrides for the canonical endpoint; a split-aware law can use its own test settings."""
+    return {} if name == "environment_shortcut" else SHIFTS.get(name)
+
+
+def draw_block(scenario, seed, index, n, *, split=None):
     """Draw predictions, labels and generator metadata from a fixed RNG stream."""
-    return scenario.sample(n, np.random.default_rng([seed, index]))
+    rng = np.random.default_rng([seed, index])
+    return scenario.sample(n, rng) if split is None else scenario.sample_split(n, rng, split)

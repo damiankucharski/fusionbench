@@ -14,6 +14,7 @@ from fusionbench.eval.transfer_grid import (
     provider_swap_plan,
 )
 from fusionbench.scenarios.base import Scenario
+from fusionbench.scenarios.blocks import default_target_shift
 from fusionbench.scenarios.calibration import MulticlassCommittee
 from fusionbench.scenarios.native_switch import NativeSwitch
 from fusionbench.scenarios.registry import SCENARIOS
@@ -38,7 +39,7 @@ def test_entire_registry_has_shared_clean_source_and_normalized_test_conditions(
     grid = _conditions(name, seed, n)
     np.testing.assert_array_equal(grid["clean", 0][0], x)
     np.testing.assert_array_equal(grid["clean", 0][1], y)
-    assert len(grid) == (10 if name in SHIFTS else 7)
+    assert len(grid) == (10 if default_target_shift(name) is not None else 7)
     for (mode, s), (test_x, test_y) in grid.items():
         assert mode in (*MODES, "clean") and s in (*SEVERITIES, 0.0)
         assert test_x.shape == x.shape

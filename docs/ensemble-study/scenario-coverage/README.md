@@ -2,6 +2,8 @@
 
 Design review of standard-v2, 24 November 2026. The 20 current scenarios remain the regression suite. The proposals below are hypotheses. They have no benchmark scores yet.
 
+Implementation follow-up: the four candidates entered [standard-v3](standard-v3/README.md). The regression suite now has 24 scenarios. The historical design and observations below explain their selection. [Subgroup and control results](v3-slices/README.md)
+
 ## Evidence from existing evaluations
 
 The [independent confirmation](../pattern-iterations/round-3/README.md) has ten primary draws on each of the original 19 scenarios. Restrict its results to clean test rows and the primary search seed (`gp_seed == data_seed`). Compare the regularized native procedure (`challenger`) with probability stacking within each draw. [All 19 paired summaries, including simple averaging and Top-N](clean-paired.csv). The [20-scenario integration check](../class-capacity/standard-v2-smoke.csv) uses one draw and a different sample size. It cannot supply ten observations on the twentieth scenario.

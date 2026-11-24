@@ -344,8 +344,8 @@ class RegularizedNativePatternOKAPI(NativePatternOKAPI):
 
     name = "okapi_native_pattern_l2"
 
-    def __init__(self, seed=0):
-        super().__init__(seed=seed, l2_strength=0.25)
+    def __init__(self, seed=0, *, split_seed=None):
+        super().__init__(seed=seed, split_seed=split_seed, l2_strength=0.25)
 
     @classmethod
     def available(cls):

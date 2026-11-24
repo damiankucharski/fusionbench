@@ -1,7 +1,8 @@
-"""Rebuild reference-v1 from the 19 canonical default scenarios.
+"""Rebuild an offline reference bank collection from its frozen scenario IDs.
 
 From the source checkout, run
     PYTHONPATH=. python tools/build_reference.py --out /tmp/reference-v1
+    PYTHONPATH=. python tools/build_reference.py --version reference-v3 --out /tmp/reference-v3
 
 The original build used the project lock on Linux x86-64, Python 3.12.14,
 NumPy 2.5.0 and SciPy 1.18.0. Use that environment and the v1 source revision
@@ -40,7 +41,11 @@ ROWS = 128
 def build(out: Path, version="reference-v1") -> str:
     out.mkdir(parents=True, exist_ok=True)
     banks = {}
-    ids = SCENARIO_IDS if version == "reference-v1" else ("similar_classes_38",)
+    ids = {
+        "reference-v1": SCENARIO_IDS,
+        "reference-v2": ("similar_classes_38",),
+        "reference-v3": ('rare_specialist', 'redundant_pool', 'environment_shortcut', 'selective_fallback'),
+    }[version]
     for scenario_id in ids:
         dataset = generate_dataset(scenario_id, n_per_split=ROWS, seed=SEED)
         target = out / f"{scenario_id}.zip"
@@ -68,6 +73,6 @@ def build(out: Path, version="reference-v1") -> str:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--version", choices=("reference-v1", "reference-v2"), default="reference-v1")
+    parser.add_argument("--version", choices=("reference-v1", "reference-v2", "reference-v3"), default="reference-v1")
     args = parser.parse_args()
     print(build(args.out, args.version))
