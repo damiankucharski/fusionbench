@@ -33,6 +33,17 @@ For heterogeneous digits, divide all 1,797 images into three disjoint stratified
 
 The second digits bank uses three logistic regressions trained on stratified bootstrap samples of the same 898 images, with exactly the same fusion and test rows. The separate three-class Wine bank uses the original three classifier families with a standardizer fitted on 89 base-training rows and 44/45 rows for fusion-fit/test. A dataset-level generalization claim would require more independent tasks and provider pools. Digits partitions overlap across seeds and its two pools reuse the same images; Wine has few held-out examples. [Manifest and split hashes](external-results/fit_manifest.json) · [Reference scenario coverage](inventory.md)
 
+## Use a released bank directly
+
+The fit/test probability tensors, labels and row IDs from all 24 real banks are included in the repository. Export one split to the standard FusionBench dataset format, then compare other fusion methods on those same predictions. This example uses the public methods' default settings. The research driver below sets the study's exact search seeds.
+
+```sh
+python docs/ensemble-study/external-coverage/export_bank.py --suite digits --seed 3140000 --out /tmp/fusion-banks
+fusionbench evaluate --dataset /tmp/fusion-banks/digits_3140000 --methods simple_average top_n stacking_lr okapi_native_pattern_l2 --out /tmp/fusion-results
+```
+
+Use `digits_lr_bag` with seeds 3140000–3140007 or `wine` with seeds 3150000–3150007 for the other banks. The [manifest](external-results/fit_manifest.json) names each output column's provider and records the partition fingerprints.
+
 ## Reproduction
 
 Use the research checkout with its optional pinned OKAPI dependency (e.g. `uv sync --extra okapi` and activate its environment). Run from the FusionBench root. The default numerical backend in the study is NumPy with one BLAS thread per worker. An honest forecast requires running the fit-only and synthetic stages, freezing the forecast, and then evaluating the target test data. All necessary raw image and Wine measurements come with scikit-learn.
