@@ -1,0 +1,22 @@
+{
+  "absolute_tolerance": 1e-12,
+  "synthetic_fit_banks_verified": 144,
+  "synthetic_max_absolute_error_by_field": {
+    "mean_provider_brier": 0.0,
+    "best_provider_brier": 0.0,
+    "mean_pairwise_top1_disagreement": 0.0,
+    "zero_fraction": 0.0,
+    "mean_max_probability": 0.0,
+    "unanimous_wrong_fraction": 0.0
+  },
+  "external_fit_banks_verified": 24,
+  "external_max_absolute_error_by_field": {
+    "mean_provider_brier": 0.0,
+    "best_provider_brier": 0.0,
+    "mean_pairwise_top1_disagreement": 0.0,
+    "zero_fraction": 0.0,
+    "mean_max_probability": 0.0,
+    "unanimous_wrong_fraction": 0.0
+  },
+  "synthetic_score_source": "external-coverage/synthetic-results/scores.csv"
+}

@@ -68,6 +68,28 @@ fusionbench generate --scenarios multiclass_provider_panel --param n_classes=3 \
   --param 'votes=[31,7]' --param confusion_bias=3 --n 256 --seed 42 --out data
 ```
 
+### Measure wrong-class preferences on fit rows
+
+Call `runner_up_profile(bank.fit_preds, bank.fit_y)` on a generated or external bank. Supply a nonempty array shaped `(rows, providers, classes)`, with at least two classes and one integer label per row in `0..C-1`. Each probability must be finite and in `[0, 1]`, and each provider's class probabilities must sum to one within `1e-5`.
+
+- `top_two_margin` averages the gap between the largest and second-largest probabilities across rows and providers. A tie for first contributes zero.
+- `wrong_class_repeatability` measures whether a provider favors the same wrong classes across two groups of fit rows. Each row votes for the highest-probability incorrect class, sharing the vote equally across ties. This picks the runner-up when the true class wins, and a winning wrong class when it loses.
+
+Within each true class, alternate rows in their supplied order between two halves. For each provider and half, add two votes spread uniformly over the wrong classes and subtract the uniform distribution from the resulting frequencies. Take the dot product of those deviations across halves. Average equally over providers and true classes with at least two rows, divide by `1 - 1/(C - 1)`, then clip to `[0, 1]`. Values near one indicate a consistent, concentrated preference. The two added votes dampen results for small classes. Binary banks and banks with no repeated true class return zero for repeatability.
+
+Keep class identities aligned across rows. Applying one permutation to every probability vector and relabeling the targets accordingly preserves both scores. Sorting each row's probabilities independently discards the identity of the preferred wrong class.
+
+```python
+import numpy as np
+from fusionbench.eval.confusion_profile import runner_up_profile
+
+# One provider prefers class 1 among the wrong classes on all four rows.
+p = np.array([[0.65, 0.30, 0.05], [0.30, 0.55, 0.15]] * 2)[:, None, :]
+profile = runner_up_profile(p, np.array([0, 0, 0, 0]))
+np.testing.assert_allclose(profile["top_two_margin"], 0.30)
+np.testing.assert_allclose(profile["wrong_class_repeatability"], 0.25)
+```
+
 ## Hidden conditions and specialists
 
 The six Boolean tasks draw independent, balanced latent bits. A detector estimates its own condition, and the Boolean rule gives the observed label. Here `rep` counts independent noisy detectors **per condition**. Their accuracy refers to the latent condition. Increasing the number of conditions in an AND or OR also changes the frequency of the positive class.
