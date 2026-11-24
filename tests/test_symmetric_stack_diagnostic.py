@@ -131,3 +131,41 @@ def test_pooled_full_head_preserves_missing_class_output_column():
     assert actual.shape == (60, 3)
     np.testing.assert_allclose(actual[:, 2], 1e-12, atol=1e-22, rtol=0)
     np.testing.assert_allclose(actual.sum(1), 1.0)
+
+
+def test_float32_synthetic_wine_fit_near_line_search_resolution():
+    # Reproduce only the frozen training input that exposed a SciPy line-search exit.
+    from fusionbench import get_scenario
+
+    scenario = get_scenario(
+        "multiclass_provider_panel", n_classes=3, separation=6.0, votes=[31, 7]
+    )
+    p, y, _ = scenario.sample(44, np.random.default_rng([3_170_006, 0]))
+    model = SymmetricStackingLR().fit(
+        p.astype(np.float32), y, task="multiclass", n_classes=3
+    )
+    assert model.objective_ == pytest.approx(2.5863571681551463, abs=1e-10)
+    assert model.objective_gap_bound_ < 1e-10
+    if not model.optimizer_success_:
+        assert model.objective_gap_bound_ <= 1e-12
+
+
+def test_failed_optimizer_uses_recomputed_stationarity(monkeypatch):
+    from scipy.optimize import OptimizeResult
+
+    def stalled(_fun, x, **_kwargs):
+        # Simulate a stale zero gradient from an interrupted line search.
+        return OptimizeResult(
+            x=x, fun=0.0, jac=np.zeros_like(x), success=False, message="ABNORMAL", nit=1
+        )
+
+    monkeypatch.setitem(SymmetricStackingLR.fit.__globals__, "minimize", stalled)
+    uniform = np.full((20, 2, 3), 1 / 3)
+    y = np.arange(len(uniform)) % 3
+    solved = SymmetricStackingLR().fit(uniform, y, task="multiclass", n_classes=3)
+    assert not solved.optimizer_success_ and solved.objective_gap_bound_ == 0
+    assert solved.objective_ == pytest.approx(len(y) * np.log(3))
+
+    informative = np.repeat(np.eye(3)[y, None, :], 2, axis=1)
+    with pytest.raises(RuntimeError, match="objective gap bound"):
+        SymmetricStackingLR().fit(informative, y, task="multiclass", n_classes=3)

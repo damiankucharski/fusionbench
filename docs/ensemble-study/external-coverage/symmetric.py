@@ -119,20 +119,36 @@ class SymmetricStackingLR(Method):
                 "maxls": 50,
             },
         )
-        if (
-            not result.success
-            or not np.isfinite(result.fun)
-            or not np.isfinite(result.x).all()
-        ):
-            raise RuntimeError(f"Symmetric logistic fit failed: {result.message}")
+        if not np.isfinite(result.x).all():
+            raise RuntimeError(
+                f"Symmetric logistic fit returned non-finite coefficients: {result.message}"
+            )
+        # A line search can report failure when its next improvement is below
+        # float64 resolution. Certify the returned coefficients independently
+        # of its status and its cached gradient. The summed negative log
+        # likelihood is convex and the L2 term makes F penalty-strongly convex:
+        # F(w) - min F <= ||grad F(w)||² / (2 * penalty).
+        value, grad = _loss_and_gradient(result.x, scaled, y, c, penalty)
+        gap_bound = float(grad @ grad) / (2 * penalty)
+        if not np.isfinite(value) or not np.isfinite(gap_bound):
+            raise RuntimeError(
+                f"Symmetric logistic fit returned a non-finite objective or gradient: {result.message}"
+            )
+        if not result.success and gap_bound > 1e-12:
+            raise RuntimeError(
+                f"Symmetric logistic fit failed: {result.message}; objective gap bound {gap_bound:.6g}"
+            )
         super().fit(fit_preds, fit_y, task=task, n_classes=n_classes)
         self.scaler_ = scaler
         self.weights_ = result.x
         self.scale_ = scaler.scale_
         self.n_providers_ = m
         self.n_iter_ = result.nit
-        self.objective_ = float(result.fun)
-        self.gradient_inf_ = float(np.linalg.norm(result.jac, ord=np.inf))
+        self.objective_ = value
+        self.gradient_inf_ = float(np.linalg.norm(grad, ord=np.inf))
+        self.objective_gap_bound_ = gap_bound
+        self.optimizer_success_ = bool(result.success)
+        self.optimizer_message_ = str(result.message)
         return self
 
     def predict(self, preds):
