@@ -4,6 +4,10 @@ The current program uses FusionBench to improve how OKAPI finds and generalizes 
 
 The [literature index for the paper](literature/README.md) connects primary sources to benchmark assumptions, dated proposals and measured results. It includes the [21 November review](literature/2026-11-21.md) and a [BibTeX bibliography](literature/references.bib).
 
+## One native OKAPI tree on 24 November 2026
+
+With score-only logit weight fitting and optional evolved subtrees, one native tree reached .18388 macro-average IID Brier over all 19 scenarios. Probability LR scored .21698, logit LR .22017, the flat native node .21891 and native GP alone .26004. Across nine shifts the native tree trailed probability LR by .01518 and logit LR by .00503. The independent replay verified 2,688 test scores and prediction hashes. The run took 59.4 seconds across three workers and about nine minutes from frozen protocol to verification and report. The next question is whether shrinking the weights on evolved subtrees can preserve the IID improvement under shift. [Report, tree archives and paired comparisons](native-pattern/README.md)
+
 ## One round on 23 November 2026: quality against logistic stacking
 
 The cross-fitted native GP and logistic hybrid reached .20219 IID Brier averaged equally over the fixed 19 families, versus .21747 probability LR, .22039 logit LR and .21421 for the same selector restricted to the two logistic models. GP alone scored .26187. The incremental reduction from adding GP was .01202 (95% interval .01012–.01392). On nine shifts probability LR retained a small average lead. Training and evaluation took 156.9 seconds, and protocol, implementation, audit and report took about five minutes. A future comparison could use tuned LR and an external OOF bank. Scheduled work remains paused. [Full results and source](oof-gp-stack/README.md)

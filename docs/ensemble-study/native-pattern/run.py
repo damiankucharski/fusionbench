@@ -9,13 +9,13 @@ from time import perf_counter
 
 import numpy as np
 import pandas as pd
-from fusionbench.methods.native_pattern import NativePatternOKAPI
 from loguru import logger
 from scipy.stats import t
 
 from fusionbench.eval.full_suite_point import SHIFTS, fingerprint, scenario_block
 from fusionbench.eval.native_switch import serialize
 from fusionbench.methods.averaging import TopN
+from fusionbench.methods.native_pattern import NativePatternOKAPI
 from fusionbench.methods.stacking import StackingLogit, StackingLR
 from fusionbench.scenarios.registry import SCENARIOS
 
