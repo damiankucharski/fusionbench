@@ -19,7 +19,11 @@ from fusionbench.eval.full_suite_point import data_for, fingerprint
 from fusionbench.eval.metrics import score
 from fusionbench.eval.mutation_opportunity import evaluate_bank as evaluate_baselines
 from fusionbench.eval.native_switch import serialize
-from fusionbench.eval.seed_geometry import append_geometry_seeds, make_seed_plans, replace_deep_seeds
+from fusionbench.eval.seed_geometry import (
+    append_geometry_seeds,
+    make_seed_plans,
+    replace_deep_seeds,
+)
 from fusionbench.eval.suite_point_gp import (
     SuiteCheckpoint,
     _bind,
@@ -56,13 +60,21 @@ def _diversity(rows):
 
 
 def fit_seed_geometry(
-    preds, fit_y, validation_preds, validation_y, *, seed, shape, budgets=(600, 1200)
+    preds, fit_y, validation_preds, validation_y, *, seed, shape, budgets=(600, 1200),
+    fitness=None, on_candidate=None,
 ):
     """Return prefix champions and the complete native pre-evolution initial archive.
 
     Training diversity counts distinct byte-exact native float64 prediction matrices
     among the specified actually scored trees. Every fit forward is reused from the
     native score callback, and each structural program receives one validation pass.
+    on_candidate(tree, fit_prediction) observes each distinct program's first
+    fit evaluation, in traversal order. Copy the tree to retain it. A supplied
+    fitness(native_prediction, labels) controls evolution and both champions.
+    OKAPI requires unit-interval selection scores, so custom scores enter
+    native selection as tied ranks within the fully reevaluated population.
+    Archive comparisons use their original finite values. The reported Brier
+    fields always describe the selected trees' Brier losses.
     """
     from okapi import Okapi
     from okapi.operators import (
@@ -89,7 +101,7 @@ def fit_seed_geometry(
             "Expected matching class/provider counts and at least two providers"
         )
     labels, target = _targets(fit_y, n, c)
-    _, vt = _targets(validation_y, len(v), c)
+    val_labels, vt = _targets(validation_y, len(v), c)
     inputs = _bind(v)
     seen = set()
     fit_vectors = set()
@@ -101,15 +113,24 @@ def fit_seed_geometry(
     initial_rows = []
     batch_losses = []
     batch_hashes = []
+    batch_predictions = []
     collecting_init = True
 
     def objective(p, _):
         val = _loss(p, target)
         batch_losses.append(val)
         batch_hashes.append(fingerprint(p))
-        return 1 - val
+        if on_candidate is not None:
+            batch_predictions.append(p)
+        return 1 - val if fitness is None else custom_score(p, labels)
 
-    def remember(t, loss):
+    def custom_score(p, y):
+        value = np.asarray(fitness(p, y))
+        if value.ndim != 0 or not np.isfinite(value):
+            raise ValueError("fitness must return a finite scalar")
+        return float(value)
+
+    def remember(t, loss, fit_score, batch_index):
         nonlocal visits, best_fit, best_val
         key = t.structural_key()
         visits += 1
@@ -118,16 +139,20 @@ def fit_seed_geometry(
         if key in seen:
             return
         seen.add(key)
-        vl = _loss(t.do_pred_on_another_tensors(current_tensors=inputs), vt)
-        wf = best_fit is None or loss < best_fit[0]
-        wv = best_val is None or (vl, loss) < best_val[:2]
+        if on_candidate is not None:
+            on_candidate(t, batch_predictions[batch_index])
+        vp = t.do_pred_on_another_tensors(current_tensors=inputs)
+        vl = _loss(vp, vt)
+        val_score = -vl if fitness is None else custom_score(vp, val_labels)
+        wf = best_fit is None or fit_score > best_fit[0]
+        wv = best_val is None or (val_score, fit_score) > best_val[:2]
         if wf or wv:
             ref = t.copy()
             ref.mutation_chance = t.mutation_chance
             if wf:
-                best_fit = (loss, ref)
+                best_fit = (fit_score, loss, ref)
             if wv:
-                best_val = (vl, loss, ref)
+                best_val = (val_score, fit_score, vl, ref)
 
     def capture(label):
         checks[label] = GeometryCheckpoint(
@@ -138,8 +163,8 @@ def fit_seed_geometry(
             generation=generation,
             path_digest=digest.hexdigest(),
             elapsed_seconds=perf_counter() - start,
-            fit_brier=best_fit[0],
-            validation_brier=best_val[0],
+            fit_brier=best_fit[-2],
+            validation_brier=best_val[-2],
             diversity={
                 **_diversity(initial_rows),
                 "archive_unique_fit_predictions": len(fit_vectors),
@@ -164,6 +189,7 @@ def fit_seed_geometry(
                 subset = trees[visits - start_calls : end - start_calls]
                 batch_losses.clear()
                 batch_hashes.clear()
+                batch_predictions.clear()
                 batches.append(super()._calculate_fitnesses(subset))
                 for j, (tree, loss) in enumerate(
                     zip(subset, batch_losses, strict=True)
@@ -186,7 +212,8 @@ def fit_seed_geometry(
                                 ),
                             }
                         )
-                    remember(tree, loss)
+                    fit_score = -loss if fitness is None else batches[-1][j, 0]
+                    remember(tree, loss, fit_score, j)
                 if end in cuts:
                     capture(end)
                 if collecting_init and end == init_count:
@@ -194,7 +221,11 @@ def fit_seed_geometry(
                     collecting_init = False
                 if end == last:
                     raise Stop
-            return batches[0] if len(batches) == 1 else np.concatenate(batches)
+            scores = batches[0] if len(batches) == 1 else np.concatenate(batches)
+            if fitness is not None:
+                unique, ranks = np.unique(scores[:, 0], return_inverse=True)
+                scores = ranks[:, None] / max(1, len(unique) - 1)
+            return scores
 
     with _task_postprocessing("binary" if c == 2 else "multiclass"):
         start = perf_counter()
@@ -221,7 +252,7 @@ def fit_seed_geometry(
                     CLOSE_THRESHOLD,
                 ),
                 minimize_node_count=adapter.minimize_node_count,
-                selection_fitness_decimals=3,
+                selection_fitness_decimals=3 if fitness is None else None,
                 reuse_survivor_fitness=False,
                 operator_point_mutation=False,
                 objective_functions=(objective,),
