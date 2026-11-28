@@ -96,6 +96,7 @@ def evaluate_bank(b, r):
     rows = []
     fits = {}
     traces = {}
+    exact_forecasts = {}
     for method in (*CORE, *EXTRAS.get(r, ())):
         w, st, policy, reason = policies.get(method, uniform)
         effective = st if np.ptp(w) > 0 else ()
@@ -162,6 +163,10 @@ def evaluate_bank(b, r):
             "method": method,
         }
         traces[method] = {**meta, **fields}
+        if r == 10 and b.cohort == "focus":
+            if len(predictions) != 1:
+                raise ValueError("Focal worlds must share the same support")
+            exact_forecasts[method] = next(iter(predictions.values())).tolist()
         for world, x, y, mass, q in b.worlds:
             h = digest(x)
             p = predictions[h]
@@ -188,6 +193,7 @@ def evaluate_bank(b, r):
         "ctx_hash": digest(b.ctx),
         "full_weights": report,
         "methods": traces,
+        **({"exact_forecasts": exact_forecasts} if exact_forecasts else {}),
         "native_fits": len(fits) - 3,
         "seconds": perf_counter() - start,
     }
