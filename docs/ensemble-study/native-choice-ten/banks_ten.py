@@ -5,6 +5,7 @@ from runpy import run_path
 from types import SimpleNamespace
 
 import numpy as np
+
 from fusionbench.scenarios.rare_shortcut_noise import RareShortcutNoise
 
 HERE = Path(__file__).resolve().parent

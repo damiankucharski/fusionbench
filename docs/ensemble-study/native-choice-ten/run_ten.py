@@ -10,9 +10,9 @@ from time import perf_counter
 
 import numpy as np
 import pandas as pd
+from banks_ten import banks, score
 from threadpoolctl import threadpool_limits
 
-from banks_ten import banks, score
 from fusionbench.methods.averaging import SimpleAverage, TopN
 from fusionbench.methods.native_pattern import RegularizedNativePatternOKAPI
 from fusionbench.methods.stacking import StackingLR
@@ -48,17 +48,18 @@ def forecast(model, x):
 
 
 def source_fit(x, y, groups, seed, methods):
-    options = dict(
-        task="binary" if x.shape[-1] == 2 else "multiclass", n_classes=x.shape[-1]
-    )
-    models = dict(
-        native=RegularizedNativePatternOKAPI(
+    options = {
+        "task": "binary" if x.shape[-1] == 2 else "multiclass",
+        "n_classes": x.shape[-1],
+    }
+    models = {
+        "native": RegularizedNativePatternOKAPI(
             seed=seed, split_seed=0, gp_validation_top_k=8
         ),
-        mean=SimpleAverage(),
-        top_n=TopN(metric="brier"),
-        lr=StackingLR(c_value=1.0),
-    )
+        "mean": SimpleAverage(),
+        "top_n": TopN(metric="brier"),
+        "lr": StackingLR(c_value=1.0),
+    }
     for model in models.values():
         model.fit(x, y, **options)
     oof = [m for m in methods if m not in ("apparent", "augmented")]
@@ -96,22 +97,22 @@ def measure(job):
         train_seconds = perf_counter() - start
         truth = np.eye(b.x.shape[-1])[b.y]
         rows = {}
-        common = dict(
-            round=r,
-            cohort=b.cohort,
-            family=b.family,
-            seed=b.seed,
-            variant=b.variant,
-            optimizer_seed=b.optimizer_seed,
-            n_fit=len(b.y),
-            n_test=len(b.audit_x),
-            source_x_hash=digest(b.x),
-            source_y_hash=digest(b.y),
-            test_x_hash=digest(b.audit_x),
-            target_hash=digest(b.audit_y)
+        common = {
+            "round": r,
+            "cohort": b.cohort,
+            "family": b.family,
+            "seed": b.seed,
+            "variant": b.variant,
+            "optimizer_seed": b.optimizer_seed,
+            "n_fit": len(b.y),
+            "n_test": len(b.audit_x),
+            "source_x_hash": digest(b.x),
+            "source_y_hash": digest(b.y),
+            "test_x_hash": digest(b.audit_x),
+            "target_hash": digest(b.audit_y)
             if b.audit_y is not None
             else digest(np.column_stack((b.mass, b.q))),
-        )
+        }
         for name, model in models.items():
             p, fit = forecast(model, b.audit_x), forecast(model, b.x)
             tree = getattr(model, "best_tree", None)
@@ -194,14 +195,14 @@ def main():
     ):
         for trace in traces:
             stream.write((json.dumps(trace, allow_nan=False) + "\n").encode())
-    time = dict(
-        round=r,
-        bank_conditions=len(traces),
-        score_rows=len(rows),
-        workers=args.workers,
-        elapsed_seconds=perf_counter() - start,
-        fit_worker_seconds=sum(t["train_seconds"] for t in traces),
-    )
+    time = {
+        "round": r,
+        "bank_conditions": len(traces),
+        "score_rows": len(rows),
+        "workers": args.workers,
+        "elapsed_seconds": perf_counter() - start,
+        "fit_worker_seconds": sum(t["train_seconds"] for t in traces),
+    }
     (OUT / f"{stem}-time.json").write_text(json.dumps(time, indent=2) + "\n")
     print(time, flush=True)
 

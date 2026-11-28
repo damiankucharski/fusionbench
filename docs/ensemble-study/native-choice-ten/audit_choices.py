@@ -100,11 +100,11 @@ def audit(r):
                 .all()
             )
             shortcut_count += 1
-    out = dict(
-        conditions=len(traces),
-        decisions_from_raw_unit_or_apparent_losses=checked,
-        matched_identical_shortcut_triplets=shortcut_count,
-    )
+    out = {
+        "conditions": len(traces),
+        "decisions_from_raw_unit_or_apparent_losses": checked,
+        "matched_identical_shortcut_triplets": shortcut_count,
+    }
     (OUT / f"r{r:02}-choice-audit.json").write_text(json.dumps(out, indent=2) + "\n")
     print(out)
 

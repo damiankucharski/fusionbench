@@ -240,6 +240,33 @@ def switch_diagnostics(primary):
     return pd.DataFrame(records)
 
 
+def scenario_headroom(primary):
+    """Locate each standard family's contribution to hindsight gains."""
+    standard = primary[primary.cohort == "standard"]
+    by_bank = standard.pivot(index=KEYS, columns="method", values="brier")
+    oracle = by_bank[["native", "mean", "top_n"]].min(axis=1)
+    gain = by_bank.native - oracle
+    by_family = pd.DataFrame(
+        {
+            "native_brier": by_bank.native,
+            "oracle_brier": oracle,
+            "headroom": gain,
+            "draws_with_strict_gain": gain > 1e-12,
+        }
+    )
+    out = by_family.groupby(level="family").agg(
+        {
+            "native_brier": "mean",
+            "oracle_brier": "mean",
+            "headroom": "mean",
+            "draws_with_strict_gain": "sum",
+        }
+    )
+    total = out.headroom.sum()
+    out["fraction_of_total_headroom"] = out.headroom / total if total > 0 else np.nan
+    return out.reset_index()
+
+
 def shortcut_intervention(primary, r):
     """Each fitted forecast faces three target laws on the identical feature support."""
     sample = primary[primary.family.isin(SHORTCUTS)]
@@ -316,7 +343,14 @@ def matched_variant(raw, r):
         return wide.sub(wide.native, axis=0)
 
     a, b = delta(left), delta(right)
-    data = interval(weights(a.index, r), a - b)
+    w = weights(a.index, r)
+    data = interval(w, a - b)
+    primary = left.brier.unstack("method")
+    other = right.brier.unstack("method")
+    direct = interval(w, primary - other)
+    data["primary_brier"], data["other_brier"] = primary.mean(), other.mean()
+    data["direct_primary_minus_other"] = direct.delta
+    data["direct_lo"], data["direct_hi"] = direct.lo, direct.hi
     data["primary_delta_native"] = a.mean()
     data["other_delta_native"] = b.mean()
     return data.assign(other_variant=label, units=len(a)).reset_index()
@@ -392,6 +426,7 @@ def main():
             result["shortcut"] = shortcut_intervention(primary, r)
         if r == 10:
             result["switches"] = switch_diagnostics(primary)
+            result["headroom"] = scenario_headroom(primary)
         if r in (7, 8):
             result["intervention"] = matched_variant(raw, r)
     for name, frame in result.items():

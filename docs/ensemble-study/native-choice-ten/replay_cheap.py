@@ -7,10 +7,9 @@ from pathlib import Path
 from runpy import run_path
 
 import numpy as np
-from threadpoolctl import threadpool_limits
-
 from banks_ten import banks
 from summarize import CHEAP, OUT, table, validate_rows
+from threadpoolctl import threadpool_limits
 
 HERE = Path(__file__).resolve().parent
 AUDIT = run_path(str(HERE.parent / "mechanism-four" / "verify_four.py"))
