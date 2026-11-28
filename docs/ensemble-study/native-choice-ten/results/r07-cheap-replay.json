@@ -1,0 +1,59 @@
+{
+  "bank_conditions": 212,
+  "exact_action_rows": 1239,
+  "compiled_arithmetic_action_rows": 33,
+  "regenerated_bank_identities": 212,
+  "independent_reference_fits": 30,
+  "replayed_banks": [
+    [
+      "large",
+      "correlated",
+      727400
+    ],
+    [
+      "primary",
+      "correlated",
+      727400
+    ],
+    [
+      "large",
+      "gated_experts",
+      727400
+    ],
+    [
+      "primary",
+      "gated_experts",
+      727400
+    ],
+    [
+      "large",
+      "multiclass_committee",
+      727400
+    ],
+    [
+      "primary",
+      "multiclass_committee",
+      727400
+    ],
+    [
+      "large",
+      "grouped_rare_event",
+      727400
+    ],
+    [
+      "primary",
+      "grouped_rare_event",
+      727400
+    ],
+    [
+      "primary",
+      "scene16",
+      727100
+    ],
+    [
+      "primary",
+      "weak",
+      727200
+    ]
+  ]
+}
