@@ -1,0 +1,20 @@
+{
+  "round": 4,
+  "source_banks": 72,
+  "target_conditions": 108,
+  "score_rows": 972,
+  "standard_families": 30,
+  "paired_intervals": 96,
+  "oracle_brier": {
+    "s0": 0.23217084639498436,
+    "s50": 0.2059100779404559,
+    "s100": 0.10894618226032772,
+    "specialist80": 0.1325811247047294
+  },
+  "recreated_weight_vectors": 24,
+  "cheap_brier_replays": 15,
+  "native_prediction_hash_pairs": 20,
+  "native_source_refits": 8,
+  "jeffreys_table_risks": 24,
+  "conditional_joint_cells": 128
+}

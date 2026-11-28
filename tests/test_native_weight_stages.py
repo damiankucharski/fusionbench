@@ -132,6 +132,25 @@ def test_gp_shortlist_and_champion_follow_stage_brier_with_unrounded_priorities(
     assert result.validation_brier == pytest.approx(val_losses[best])
 
 
+def test_multiclass_nonuniform_weights_score_all_class_channels():
+    rng = np.random.default_rng(61203)
+    x = rng.dirichlet([2.0, 1.0, 1.0], size=(60, 3))
+    y = rng.integers(3, size=len(x))
+    w = 1.0 + 5 * (y == 2)
+    model = RegularizedNativePatternOKAPI(
+        seed=4, split_seed=0, gp_validation_top_k=3
+    ).fit(x, y, task="multiclass", n_classes=3, sample_weight=w)
+    held = model.validation_indices_
+    for name, val in model.counts_["validation_scores"].items():
+        pred = predict_tree(model.discovery_trees_[name], x[held])
+        assert val == pytest.approx(skill(pred, y[held], w[held]), abs=2e-12)
+    for name in ("flat", "augmented"):
+        score = skill(predict_tree(model.trees_[name], x), y, w)
+        assert model.counts_["head_fit_scores"][name + "_refit"][
+            "raw_score"
+        ] == pytest.approx(score, abs=2e-12)
+
+
 @pytest.mark.parametrize(
     "w", [[1.0], np.zeros(88), np.full(88, np.nan), np.full(88, -1), np.ones((88, 1))]
 )

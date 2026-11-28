@@ -1,0 +1,9 @@
+group,method,reference,banks,path_hash_changed,tree_hash_changed,chosen_changed,fit_hash_changed,test_hash_changed
+standard,discovery_only,native,60,47,37,11,36,36
+standard,discovery_only,full,60,0,43,5,43,43
+case_mix,discovery_only,native,6,6,6,0,6,6
+case_mix,discovery_only,full,6,0,6,1,6,6
+mixed,discovery_only,native,6,6,6,3,6,6
+mixed,discovery_only,full,6,0,5,1,5,5
+reversed,discovery_only,native,6,6,6,1,6,6
+reversed,discovery_only,full,6,0,6,1,6,6

@@ -1,0 +1,13 @@
+group,method,reference,banks,path_hash_changed,tree_hash_changed,chosen_changed,fit_hash_changed,test_hash_changed
+standard,selection_only,native,60,0,8,7,8,8
+standard,selection_only,full,60,47,48,13,48,48
+standard,refit_only,native,60,0,37,0,37,37
+standard,refit_only,full,60,47,42,11,42,42
+case_mix,selection_only,native,6,0,0,0,0,0
+case_mix,selection_only,full,6,6,6,0,6,6
+case_mix,refit_only,native,6,0,6,0,6,6
+case_mix,refit_only,full,6,6,6,0,6,6
+mixed,selection_only,native,6,0,0,0,0,0
+mixed,selection_only,full,6,6,6,0,6,6
+mixed,refit_only,native,6,0,6,0,6,6
+mixed,refit_only,full,6,6,6,0,6,6
