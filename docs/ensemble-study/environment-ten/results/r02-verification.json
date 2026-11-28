@@ -4,5 +4,8 @@
   "target_banks": 156,
   "evidence_replays": 368,
   "independent_reference_fits": 15,
-  "independent_paired_intervals": 119
+  "independent_paired_intervals": 119,
+  "max_brier_interpolation_error": 4.440892098500626e-16,
+  "true_shortcut_omissions": 48,
+  "max_risk_change_after_shortcut_omission": 4.440892098500626e-16
 }

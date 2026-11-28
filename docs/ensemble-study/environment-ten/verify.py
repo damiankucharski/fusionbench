@@ -136,6 +136,49 @@ def check_interval_records(raw, r):
     return checked
 
 
+def check_target_geometry(frame):
+    """Fixed forecasts integrate against affine mixtures of the two shortcut laws."""
+    focus = frame[frame.cohort == "focus"]
+    by_source = focus.groupby(["family", "seed", "method"])
+    if (
+        not by_source[["test_hash", "test_x_hash", "drop"]]
+        .nunique(dropna=False)
+        .eq(1)
+        .all()
+        .all()
+    ):
+        raise ValueError(
+            "Forecast, input support or exclusion depends on the target world"
+        )
+    panel = focus.pivot(
+        index=["family", "seed", "method"], columns="world", values="brier"
+    )
+    error = 0.0
+    for world, t in (("s25", 0.25), ("s50", 0.5), ("s75", 0.75)):
+        if world in panel:
+            error = max(
+                error,
+                float(
+                    np.max(np.abs(panel[world] - (1 - t) * panel.s0 - t * panel.s100))
+                ),
+            )
+    removed = focus[focus["drop"].eq(focus.true_shortcut)].pivot(
+        index=["family", "seed", "method"], columns="world", values="brier"
+    )
+    invariant = (
+        float(np.max(np.abs(removed.s0 - removed.s100))) if len(removed) else 0.0
+    )
+    if max(error, invariant) > 3e-12:
+        raise ValueError(
+            "The exact target risks violate the shortcut mixture or marginal invariance"
+        )
+    return {
+        "max_brier_interpolation_error": error,
+        "true_shortcut_omissions": len(removed),
+        "max_risk_change_after_shortcut_omission": invariant,
+    }
+
+
 def check(r):
     frame = pd.read_csv(OUT / f"r{r:02d}.csv", float_precision="round_trip")
     keyed = frame.groupby(["cohort", "family", "seed"])
@@ -219,6 +262,7 @@ def check(r):
                         rtol=0,
                     )
     assert seen == set(traces) == set(keyed.groups)
+    counts.update(check_target_geometry(frame))
     counts["independent_paired_intervals"] = check_interval_records(frame, r)
     return counts
 
