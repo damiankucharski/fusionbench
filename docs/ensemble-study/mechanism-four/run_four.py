@@ -64,7 +64,11 @@ def measure(r, b, chosen=None):
     start = perf_counter()
     models = fit_models(r, b.x, b.y, b.groups, chosen)
     fit_seconds = perf_counter() - start
-    # Only now is the audit available for scoring.
+    return score_models(r, b, models), fit_seconds
+
+
+def score_models(r, b, models):
+    """Score immutable models after every fit and selection decision has finished."""
     truth = np.eye(b.x.shape[-1])[b.y]
     rows = []
     for name, m in models.items():
@@ -107,7 +111,7 @@ def measure(r, b, chosen=None):
                     else None
                 )
         rows.append(row)
-    return rows, fit_seconds
+    return rows
 
 
 def main():

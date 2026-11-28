@@ -1,0 +1,171 @@
+{
+  "rounds": {
+    "1": {
+      "banks": 156,
+      "score_rows": 1092,
+      "cheap_fits": 468,
+      "temperature_replay": {
+        "focal_fits": 0,
+        "beta_counts": {},
+        "unique_source_row_counts": [],
+        "unique_independent_unit_counts": [],
+        "verified_label_batches": 0,
+        "max_abs_binary_ap_change": null,
+        "changed_sorted_orders": 0
+      },
+      "cheap_forecast_hashes": 936,
+      "max_cheap_metric_error": 3.3306690738754696e-16,
+      "audit_reversal": {
+        "family": "h1c1s1",
+        "seed": 492000,
+        "unchanged_forecasts": 7
+      },
+      "checks": {
+        "brier_intervals": 1176,
+        "family_scores": 1596,
+        "max_error": 2.411265631607762e-16
+      },
+      "factorial_intervals": 350
+    },
+    "2": {
+      "banks": 156,
+      "score_rows": 1560,
+      "cheap_fits": 468,
+      "temperature_replay": {
+        "focal_fits": 0,
+        "beta_counts": {},
+        "unique_source_row_counts": [],
+        "unique_independent_unit_counts": [],
+        "verified_label_batches": 0,
+        "max_abs_binary_ap_change": null,
+        "changed_sorted_orders": 0
+      },
+      "cheap_forecast_hashes": 936,
+      "max_cheap_metric_error": 3.3306690738754696e-16,
+      "audit_reversal": {
+        "family": "h1c1s1",
+        "seed": 493000,
+        "unchanged_forecasts": 10
+      },
+      "checks": {
+        "brier_intervals": 2520,
+        "family_scores": 2280,
+        "max_error": 3.191891195797325e-16
+      },
+      "factorial_intervals": 518
+    },
+    "3": {
+      "banks": 156,
+      "score_rows": 1716,
+      "cheap_fits": 468,
+      "temperature_replay": {
+        "focal_fits": 0,
+        "beta_counts": {},
+        "unique_source_row_counts": [],
+        "unique_independent_unit_counts": [],
+        "verified_label_batches": 0,
+        "max_abs_binary_ap_change": null,
+        "changed_sorted_orders": 0
+      },
+      "cheap_forecast_hashes": 936,
+      "max_cheap_metric_error": 3.3306690738754696e-16,
+      "audit_reversal": {
+        "family": "h1c1s1",
+        "seed": 494000,
+        "unchanged_forecasts": 11
+      },
+      "checks": {
+        "brier_intervals": 3080,
+        "family_scores": 2508,
+        "max_error": 2.5673907444456745e-16
+      },
+      "factorial_intervals": 574
+    },
+    "4": {
+      "banks": 408,
+      "score_rows": 2856,
+      "cheap_fits": 1224,
+      "temperature_replay": {
+        "focal_fits": 192,
+        "beta_counts": {
+          "1.0": 106,
+          "1.189207115002721": 86
+        },
+        "unique_source_row_counts": [
+          128
+        ],
+        "unique_independent_unit_counts": [
+          16
+        ],
+        "verified_label_batches": 1728,
+        "max_abs_binary_ap_change": 1.6653345369377348e-16,
+        "changed_sorted_orders": 0
+      },
+      "cheap_forecast_hashes": 2448,
+      "max_cheap_metric_error": 3.3306690738754696e-16,
+      "audit_reversal": {
+        "family": "h1c1s1",
+        "seed": 495000,
+        "unchanged_forecasts": 7
+      },
+      "checks": {
+        "brier_intervals": 1176,
+        "family_scores": 1596,
+        "max_error": 2.7755575615628914e-16
+      },
+      "factorial_intervals": 350
+    }
+  },
+  "lock": "5325c3fee8e3607342b2f4f3a7a011d9a0571241",
+  "chosen": "cal_pull",
+  "confirmations": {
+    "standard": true,
+    "scene16": true,
+    "strong": true
+  },
+  "primary_pass": true,
+  "broad_pass": true,
+  "native_confirmation_replays": [
+    {
+      "family": "h1c1s1",
+      "seed": 495000,
+      "models": [
+        "full",
+        "cal_pull"
+      ],
+      "all_source_rows_per_native_fitness_batch": 128,
+      "native_batches": 18
+    },
+    {
+      "family": "scene16",
+      "seed": 495100,
+      "models": [
+        "full",
+        "cal_pull"
+      ],
+      "all_source_rows_per_native_fitness_batch": 128,
+      "native_batches": 18
+    },
+    {
+      "family": "committee",
+      "seed": 495400,
+      "models": [
+        "full",
+        "cal_pull"
+      ],
+      "all_source_rows_per_native_fitness_batch": 512,
+      "native_batches": 18
+    },
+    {
+      "family": "multiclass_committee",
+      "seed": 495400,
+      "models": [
+        "full",
+        "cal_pull"
+      ],
+      "all_source_rows_per_native_fitness_batch": 512,
+      "native_batches": 18
+    }
+  ],
+  "seconds": 27.278192963996844
+}

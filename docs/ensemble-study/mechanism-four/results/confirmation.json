@@ -1,0 +1,10 @@
+{
+  "chosen": "cal_pull",
+  "primary_pass": true,
+  "breadth_checks": {
+    "standard": true,
+    "scene16": true,
+    "strong": true
+  },
+  "broad_pass": true
+}

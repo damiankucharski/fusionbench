@@ -1,0 +1,9 @@
+{
+  "round": 5,
+  "banks": 426,
+  "scores": 3408,
+  "workers": 2,
+  "threads_per_worker": 1,
+  "seconds": 106.17592612899898,
+  "sum_fit_seconds": 190.03723803701723
+}
