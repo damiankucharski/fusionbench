@@ -73,6 +73,11 @@ class NativePatternOKAPI(Method):
     On multiclass tasks, class_head="diagonal" or "full" fits a native
     probability-affine head on each ordered set of providers and GP bases.
     class_head_max_evaluations limits objective calls per head fit.
+    gp_validation_top_k limits the GP candidates eligible on validation to
+    the k best programs on discovery, with ties kept in first-visit order.
+    Default discovery ranking minimizes raw Brier. With a supplied fitness
+    or discovery objective, ranking maximizes its unrounded discovery score.
+    The complete GP archive remains available for screening head features.
     """
 
     name = "okapi_native_pattern"
@@ -87,6 +92,7 @@ class NativePatternOKAPI(Method):
         l2_strength=0.0,
         class_head=None,
         class_head_max_evaluations=None,
+        gp_validation_top_k=None,
     ):
         if fitness is not None and not callable(fitness):
             raise TypeError("fitness must be callable")
@@ -108,6 +114,11 @@ class NativePatternOKAPI(Method):
         _validate_class_head(class_head, class_head_max_evaluations)
         self.class_head = class_head
         self.class_head_max_evaluations = class_head_max_evaluations
+        if gp_validation_top_k is not None:
+            from fusionbench.eval.seed_geometry_standard import validate_gp_validation_top_k
+
+            gp_validation_top_k = validate_gp_validation_top_k(gp_validation_top_k)
+        self.gp_validation_top_k = gp_validation_top_k
 
     @classmethod
     def available(cls):
@@ -122,13 +133,21 @@ class NativePatternOKAPI(Method):
         """Optional objective bound to this precise training split."""
         return None
 
-    def fit(self, fit_preds, fit_y, *, task, n_classes):
+    def fit(self, fit_preds, fit_y, *, task, n_classes, on_gp_candidate=None):
+        """Fit the model and optionally observe each distinct GP discovery evaluation.
+
+        on_gp_candidate(tree, prediction) receives the live program and its
+        raw discovery output in first-visit order. Treat both as read-only
+        and copy any state that must outlive the callback.
+        """
         from okapi.pattern_features import select_pattern_features
 
         from fusionbench.eval.full_suite_point import fingerprint
         from fusionbench.eval.seed_geometry_standard import fit_seed_geometry
         from fusionbench.eval.suite_point_gp import _bind, _full, _targets, predict_tree
 
+        if on_gp_candidate is not None and not callable(on_gp_candidate):
+            raise TypeError("on_gp_candidate must be callable")
         x = _full(fit_preds)
         n, providers, classes = x.shape
         expected_task = "binary" if classes == 2 else "multiclass"
@@ -181,6 +200,8 @@ class NativePatternOKAPI(Method):
 
         def collect(tree, prediction):
             archive.append((tree.copy(), prediction))
+            if on_gp_candidate is not None:
+                on_gp_candidate(tree, prediction)
 
         start = perf_counter()
         gp = fit_seed_geometry(
@@ -194,6 +215,7 @@ class NativePatternOKAPI(Method):
             fitness=None if self.fitness is None else native_score,
             on_candidate=collect,
             **({"discovery_fitness": discovery_objective} if discovery_objective is not None else {}),
+            **({"gp_validation_top_k": self.gp_validation_top_k} if self.gp_validation_top_k is not None else {}),
         )[600]
         gp_seconds = perf_counter() - start
         inputs = _bind(d)
@@ -241,7 +263,7 @@ class NativePatternOKAPI(Method):
         aug_refit_seconds = perf_counter() - start
         score_calls = {
             "gp_discovery": gp.calls,
-            "gp_validation": gp.n_trees,
+            "gp_validation": gp.validation_calls,
             "flat_discovery": flat_d_info["evaluations"],
             "feature_screen": screen["evaluations"],
             "augmented_discovery": aug_d_info["evaluations"],
@@ -284,6 +306,9 @@ class NativePatternOKAPI(Method):
         if self.class_head is not None:
             self.counts_["class_head"] = self.class_head
             self.counts_["class_head_max_evaluations"] = flat_info["max_evaluations"]
+        if self.gp_validation_top_k is not None:
+            self.counts_["gp_validation_top_k"] = self.gp_validation_top_k
+            self.counts_["gp_final_eligible"] = min(self.gp_validation_top_k, gp.n_trees)
         if self.l2_strength or self.class_head is not None:
             self.counts_["l2_strength"] = self.l2_strength
             self.counts_["head_fit_scores"] = {
@@ -354,8 +379,9 @@ class RegularizedNativePatternOKAPI(NativePatternOKAPI):
 
     name = "okapi_native_pattern_l2"
 
-    def __init__(self, seed=0, *, split_seed=None):
-        super().__init__(seed=seed, split_seed=split_seed, l2_strength=0.25)
+    def __init__(self, seed=0, *, split_seed=None, gp_validation_top_k=None):
+        super().__init__(seed=seed, split_seed=split_seed, l2_strength=0.25,
+                         gp_validation_top_k=gp_validation_top_k)
 
     @classmethod
     def available(cls):
