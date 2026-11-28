@@ -1,22 +1,23 @@
-"""Scenario base class.
+"""Scenario interface for generating provider predictions and class labels.
 
-A scenario is a parametric generator of one base-model *pathology*. Generation
-runs in the natural causal direction:
+Committee-style generators draw labels first, then sample provider outputs
+conditional on them. Logical-gate scenarios sample latent conditions that
+determine labels and inform noisy detectors. Switch scenarios draw provider
+scores first, then sample labels from a conditional law specified on the scores.
 
-    1. draw the true label ``y`` from a class prior (independent of any model);
-    2. emit each base model's prediction as a calibrated, noisy observation of
-       ``y`` with a pathology-specific error process.
-
-The generator never references any fusion method's representation (no
-mean/max/min/far over the predictions). The performance ceiling is the
-**analytic Bayes posterior** ``P(y | predictions)`` derived from the DGP,
-implemented in :meth:`bayes_oracle`. Both splits come from the identical i.i.d.
-process, so validation-test reliability holds by construction.
+The optional domain oracle gives the conditional class probabilities when
+known. Scenario.build draws fit and test banks from the same generator.
+Scenarios with a domain shift can specialize sample_split for each split.
+Finite-sample results vary across draws, and transfer benchmarks can evaluate
+new distributions by changing the generator or perturbing its outputs.
 """
 
 from __future__ import annotations
 
 from abc import ABC, abstractmethod
+from copy import deepcopy
+from operator import index
+from typing import ClassVar
 
 import numpy as np
 
@@ -25,10 +26,21 @@ from fusionbench.types import Dataset, Task
 
 class Scenario(ABC):
     task: Task = "binary"
-    expected_winners: list[str] = []
+    expected_winners: ClassVar[list[str]] = []
     oracle_description: str = ""
     # Headline metric for this pathology (e.g. calibration scenarios use log_loss).
     primary_metric: str = "macro_f1"
+    evaluation_group_fields: ClassVar[tuple[str, ...]] = ()
+    _registry_metadata: dict | None = None
+
+    def __init_subclass__(cls, **kwargs):
+        super().__init_subclass__(**kwargs)
+        # Give each override both spellings at the class that defines it.
+        # Inherited methods and super() then follow Python's ordinary MRO.
+        if "sample" in cls.__dict__ and "_generate" not in cls.__dict__:
+            cls._generate = cls.sample
+        elif "_generate" in cls.__dict__ and "sample" not in cls.__dict__:
+            cls.sample = cls._generate
 
     def __init__(self, name: str | None = None, **knobs):
         self.knobs = knobs
@@ -49,26 +61,71 @@ class Scenario(ABC):
     def model_ids(self) -> list[str]: ...
 
     @abstractmethod
-    def _generate(self, n: int, rng: np.random.Generator) -> tuple[np.ndarray, np.ndarray, dict]:
+    def sample(
+        self, n: int, rng: np.random.Generator
+    ) -> tuple[np.ndarray, np.ndarray, dict]:
         """Return ``(preds[N, K, C], y[N], latent)`` for one split.
 
-        ``latent`` carries whatever the analytic oracle needs (e.g. per-model
-        signal strengths, deferral masks) so the Bayes posterior is exact.
+        Draw all randomness from rng. The class axis follows integer labels
+        and the provider axis follows model_ids(). The latent dictionary
+        holds optional oracle inputs and may be empty.
         """
+        raise NotImplementedError
 
-    @abstractmethod
-    def bayes_oracle(self, preds: np.ndarray, latent: dict) -> np.ndarray:
-        """Analytic Bayes posterior ``P(y | predictions)`` -> ``[N, C]``.
+    _generate = sample
 
-        Derived from the data-generating process, independent of any fusion
-        method. This is the information-theoretic ceiling for the scenario.
-        """
+    def sample_split(self, n: int, rng: np.random.Generator, split: str):
+        """Draw a named domain. Ordinary scenarios share a law across splits."""
+        if split not in ("fit", "test"):
+            raise ValueError("split must be 'fit' or 'test'")
+        return self.sample(n, rng)
+
+    def bayes_oracle(self, preds: np.ndarray, latent: dict) -> np.ndarray | None:
+        """Return the clean-domain posterior ``[N, C]`` when known, or None."""
+        return None
 
     # --- driver ----------------------------------------------------------- #
     def build(self, n_per_split: int = 50_000, seed: int = 0) -> Dataset:
+        """Draw fit then test from one private NumPy generator initialized by seed."""
+        if isinstance(n_per_split, (bool, np.bool_)) or index(n_per_split) < 1:
+            raise ValueError("n_per_split must be a positive integer")
+        if isinstance(seed, (bool, np.bool_)) or index(seed) < 0:
+            raise ValueError("seed must be a nonnegative integer")
+        n_per_split, seed = index(n_per_split), index(seed)
+        meta = {
+            "scenario": type(self).__name__,
+            "knobs": self.knobs,
+            "primary_metric": self.primary_metric,
+        }
+        if self._registry_metadata is not None:
+            # Publicly configured datasets record replayable constructor and RNG options.
+            from fusionbench import __version__
+
+            meta.update(
+                deepcopy(self._registry_metadata),
+                seed=seed,
+                n_per_split=n_per_split,
+                fusionbench_version=__version__,
+            )
         rng = np.random.default_rng(seed)
-        fit_preds, fit_y, fit_latent = self._generate(n_per_split, rng)
-        test_preds, test_y, test_latent = self._generate(n_per_split, rng)
+        fit_preds, fit_y, fit_latent = self.sample_split(n_per_split, rng, "fit")
+        test_preds, test_y, test_latent = self.sample_split(n_per_split, rng, "test")
+        if np.shape(fit_y) != (n_per_split,) or np.shape(test_y) != (n_per_split,):
+            raise ValueError(
+                f"sample_split must return {n_per_split} class labels per split"
+            )
+        if self.evaluation_group_fields:
+            groups = {}
+            for split, latent in (("fit", fit_latent), ("test", test_latent)):
+                groups[split] = {}
+                for key in self.evaluation_group_fields:
+                    values = np.asarray(latent[key])
+                    if values.shape != (n_per_split,):
+                        raise ValueError(
+                            f"{split}/{key} must have one group ID per row"
+                        )
+                    groups[split][key] = values.tolist()
+            meta["evaluation_groups"] = groups
         return Dataset(
             name=self.name,
             task=self.task,
@@ -82,6 +139,5 @@ class Scenario(ABC):
             test_oracle=self.bayes_oracle(test_preds, test_latent),
             oracle_description=self.oracle_description,
             expected_winners=list(self.expected_winners),
-            meta={"scenario": type(self).__name__, "knobs": self.knobs,
-                  "primary_metric": self.primary_metric},
+            meta=meta,
         )

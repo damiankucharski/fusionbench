@@ -10,6 +10,7 @@ fair competitor that is *not* OKAPI.
 from __future__ import annotations
 
 import numpy as np
+from sklearn.dummy import DummyClassifier
 from sklearn.linear_model import LogisticRegression
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
@@ -35,15 +36,24 @@ class _Stacker(Method):
 
     def fit(self, fit_preds, fit_y, *, task, n_classes):
         super().fit(fit_preds, fit_y, task=task, n_classes=n_classes)
-        self.model = make_pipeline(
-            StandardScaler(),
-            LogisticRegression(C=self.c_value, solver="lbfgs", max_iter=self.max_iter),
+        labels = np.asarray(fit_y).ravel()
+        self.provider_shape_ = fit_preds.shape[1:]
+        # Small source banks can contain just one observed class.
+        estimator = (
+            DummyClassifier(strategy="prior")
+            if len(np.unique(labels)) == 1
+            else LogisticRegression(
+                C=self.c_value, solver="lbfgs", max_iter=self.max_iter
+            )
         )
-        self.model.fit(self._features(fit_preds), fit_y.ravel())
+        self.model = make_pipeline(StandardScaler(), estimator)
+        self.model.fit(self._features(fit_preds), labels)
         self.classes_ = self.model.classes_
         return self
 
     def predict(self, preds):
+        if preds.shape[1:] != self.provider_shape_:
+            raise ValueError("Prediction provider and class axes must match fitting")
         proba = self.model.predict_proba(self._features(preds))
         # Re-order/pad columns to canonical 0..C-1 in case a class is absent.
         out = np.zeros((proba.shape[0], self.n_classes))

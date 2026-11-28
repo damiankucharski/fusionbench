@@ -1,0 +1,10 @@
+{
+  "bank_version": "reference-v6",
+  "banks": {
+    "grouped_rare_event": "3a18bcfc7da5237136023ffe7833b49ea2965ffd8d38bf9ccba6f744146c0c26",
+    "rare_scene_specialist": "c231792efb6e0e4270844a33b0327bab91ab6f3a1df0d664d53c715b19f2ed15",
+    "shared_error_bloc": "c2e44780b51d06667b6b9084cbe614e92ef7b2bfdbbe70ef9b9384710dab662e"
+  },
+  "n_per_split": 128,
+  "seed": 1729
+}

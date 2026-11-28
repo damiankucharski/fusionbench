@@ -1,0 +1,8 @@
+{
+  "bank_version": "reference-v4",
+  "banks": {
+    "cloned_shortcut": "19df8f96239d73706afc53cadd99809228d20774cf17331ca0cbc0cbdce02093"
+  },
+  "n_per_split": 128,
+  "seed": 1729
+}

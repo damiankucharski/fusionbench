@@ -1,69 +1,41 @@
-# fusionbench
+# FusionBench
 
-A controlled benchmark for **stacking / prediction-fusion methods**. It isolates
-specific *base-model pathologies* (the issues fusion is meant to solve) and
-evaluates methods in a **guaranteed-reliable validation environment**, so an
-observed difference reflects a method's expressiveness on a pathology — not
-optimizer's-curse / validation-test luck.
+FusionBench is a synthetic benchmark for **combining classification predictions from several models**. A dataset contains the probability vector from each provider for each example, plus a class label. Its generator lets you change a known mechanism, such as error correlation, the frequency of a specialist's cases, or the reliability of a shortcut. Different fusion methods can therefore be compared on exactly the same inputs.
 
-## What makes it different
+The `standard-v6` suite contains 30 scenarios, each with a small reference dataset included in the package. Use a reference bank to check an implementation, generate larger samples or fresh seeds to evaluate a method, and register your own scenarios through the same Python API.
 
-- **Reliability by construction.** Each dataset is one i.i.d. generative process,
-  split 50k *fit* / 50k *test* from identical parameters. At that size the fit
-  ranking of methods provably transfers to test. A reliability report verifies
-  selection-top-1 agreement and fit→test rank correlation per scenario.
-- **Not circular / not partial.** Data is generated in the natural causal
-  direction (label → calibrated noisy base predictions with a pathology-specific
-  error process). The ceiling is the **analytic Bayes posterior** `P(y | preds)`,
-  derived from the DGP — *never* by applying any method's operators to the
-  predictions. Methods are scored by **regret to that oracle**.
-- **Impartial by design.** Different pathologies are won by different methods:
-  logit-space stacking on conditionally-independent / calibration scenarios,
-  weighted-linear on correlated ones, gating (min/max) on logical-gate scenarios,
-  tree AutoML on input-dependent mixtures.
+## Try it from a checkout
 
-## Scenarios (base-model pathologies)
+This checkout contains the 1.0.0a1 prerelease. With Python 3.11 or newer, install the package from this directory.
 
-Committee, DeadWeight, Needle, MulticlassCommittee (conditionally independent →
-logit-sum optimal); CorrelatedRedundancy, Saturated (correlated/redundant →
-weighted-linear); HardVeto, HardRescue, Compound (logical gates → nonlinear
-min/max optimal); GatedExperts (input-dependent mixture → tree AutoML);
-Miscalibration (judged by log-loss → logit recalibration).
-
-## Methods under test
-
-best_single, simple_average, top_k, val_weighted, **op_min/op_max/op_far/op_close**
-(fixed operator atoms), stacking_lr, **stacking_logit**, **okapi** *(extra: okapi —
-runs on the numpy/CPU backend)*, nsga3 *(extra: nsga)*, tpot *(extra: tpot)*, plus
-the analytic **oracle** ceiling.
-
-## Results
-
-A regularized logistic stacker is a very strong baseline on *calibrated,
-stationary* probabilities, so OKAPI **ties** it on the monotone structured
-pathologies (committee, correlated, deadweight, needle, hardveto, hardrescue,
-weakest_link, compound — regret within ~0.01) while being far more parsimonious,
-and it **dominates** the naive consensus baselines (avg / top-k / best-single)
-everywhere.
-
-OKAPI's *clear* wins are on **genuinely non-linearly-separable** structures that
-linear methods provably cannot represent: `gated_experts` (mixture routing, OKAPI
-0.786 vs stacking 0.73) and `parity` (XOR, 0.692 vs 0.49) — robust across seeds.
-Its honest losses are `miscalibration` (needs a logistic recalibration link) and
-`two_pathways` (a depth-3 DNF its GP search still under-realises). Making OKAPI
-competitive required adapter-level search fixes (coherent single-channel binary,
-population seeding, multi-restart). See `DESIGN.md` and `docs/sample_run/`.
-
-## Usage
-
-```bash
-uv sync                       # core deps; add --extra nsga/tpot/okapi as needed
-uv run fusionbench list
-uv run fusionbench run --n 20000 --out results
-uv run fusionbench sweep --kind reliability --scenario needle --out results/sweep
-uv run fusionbench generate --n 50000 --out data   # write datasets to disk
+```sh
+python -m pip install .
 ```
 
-OKAPI runs on the numpy/CPU backend (no GPU needed); these datasets are small
-enough to evaluate every method locally. Optional methods (okapi / nsga3 / tpot)
-are skipped when their dependencies are absent.
+This comparison fits a simple mean, a Brier-ranked prefix average (Top-N) and probability-space logistic stacking. It evaluates them on the held-out split of a bank with shared provider errors.
+
+```python
+from fusionbench import evaluate_dataset, load_reference_dataset
+from fusionbench.methods.averaging import SimpleAverage, TopN
+from fusionbench.methods.stacking import StackingLR
+
+bank = load_reference_dataset("correlated")
+scores = evaluate_dataset(bank, [SimpleAverage(), TopN(metric="brier"), StackingLR()])
+print(scores.loc[scores.method != "oracle", ["method", "test_brier"]])
+```
+
+Run the same comparison on all 30 fixed banks and summarize it by mechanism or scientific purpose.
+
+```sh
+python examples/compare_groups.py
+```
+
+| What you want to do | Start here |
+| --- | --- |
+| Inspect the 30 standard scenarios and choose one to modify | [Scenario catalog](docs/site/scenarios.md) |
+| Load a reference, generate seeded splits or save your own bank | [Datasets](docs/site/datasets.md) |
+| Compare your method with the three baselines or run a transfer experiment | [Evaluation](docs/site/evaluation.md) |
+| Score the standard suite, a mechanism group or an application profile | [Grouping and scoring](docs/site/scoring.md) |
+| Implement and register a new scenario | [Extending the benchmark](docs/site/extend.md) |
+
+The [design notes](DESIGN.md) describe what a score means and where the benchmark's assumptions enter. To build the documentation locally, run `python -m pip install '.[docs]'` followed by `python -m mkdocs serve`.

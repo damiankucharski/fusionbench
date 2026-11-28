@@ -1,11 +1,8 @@
-"""Fixed symbolic-operator baselines (OKAPI's atoms, parameter-free).
+"""Fixed min, max and threshold rules over all providers.
 
-Each applies one OKAPI operator over *all* base models. They are legitimate,
-cheap, calibration-preserving fusion rules and serve two roles: (1) a baseline
-family showing that the *matching* operator wins its pathology (min for
-AND/veto, max for OR/rescue, far-from-0.5 for confidence routing); (2) a local,
-OKAPI-free check of what OKAPI's operator class can achieve — OKAPI's added value
-is discovering the right operator / composition automatically and parsimoniously.
+For binary tasks each rule combines the positive-class probabilities. For
+multiclass tasks it combines each class separately and normalizes the result.
+These baselines measure how well a single native tree operator fits a scenario.
 """
 
 from __future__ import annotations

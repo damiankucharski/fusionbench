@@ -1,0 +1,20 @@
+site_name: FusionBench
+site_description: Controlled prediction banks for evaluating classification fusion
+docs_dir: docs/site
+strict: true
+theme:
+  name: readthedocs
+  highlightjs: false
+  navigation_depth: 2
+nav:
+  - Start here: index.md
+  - Generate and store datasets: datasets.md
+  - Reference data provenance: reference-provenance.md
+  - Scenario catalog: scenarios.md
+  - Evaluate a fusion method: evaluation.md
+  - Group and score scenarios: scoring.md
+  - Add a scenario: extend.md
+plugins:
+  - search
+markdown_extensions:
+  - tables

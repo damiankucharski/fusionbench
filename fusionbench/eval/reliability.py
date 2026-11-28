@@ -1,12 +1,4 @@
-"""Reliability diagnostics — the benchmark's headline guarantee.
-
-Because both splits come from the identical i.i.d. process at large N, selecting a
-method by its fit-split score should pick (essentially) the test-best method, and
-the fit->test ranking should be preserved. These functions quantify that:
-selection-top-1 agreement, Spearman rank correlation of the primary metric, and
-the worst validation-test gap. A scenario where these hold confirms reliability
-is controlled, so any method's shortfall is expressiveness, not selection luck.
-"""
+"""Compare rankings on fit and test and quantify their observed agreement."""
 
 from __future__ import annotations
 

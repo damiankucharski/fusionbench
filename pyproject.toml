@@ -1,11 +1,12 @@
 [project]
 name = "fusionbench"
-version = "0.1.0"
-description = "A controlled benchmark for stacking / prediction-fusion methods: isolates base-model pathologies under a guaranteed-reliable validation environment."
+dynamic = ["version"]
+description = "Reproducible datasets and scenario generators for benchmarking prediction fusion."
 readme = "README.md"
 requires-python = ">=3.11"
 dependencies = [
     "numpy>=1.26",
+    "scipy>=1.11",
     "scikit-learn>=1.4",
     "pyyaml>=6.0",
     "matplotlib>=3.8",
@@ -13,11 +14,21 @@ dependencies = [
     "tabulate>=0.9",
 ]
 
+[project.urls]
+Repository = "https://github.com/damiankucharski/fusionbench"
+Issues = "https://github.com/damiankucharski/fusionbench/issues"
+
 [project.optional-dependencies]
 nsga = ["pymoo>=0.6"]
-tpot = ["tpot>=0.12"]
-okapi = ["torch>=2.2", "okapi @ git+https://github.com/damiankucharski/OKAPI@dev"]
-dev = ["pytest>=8.0"]
+tpot = ["tpot>=1,<2", "setuptools<81"]
+dev = ["pytest>=8"]
+docs = ["mkdocs>=1.6,<2"]
+
+[dependency-groups]
+okapi = [
+    "okapi @ git+https://github.com/damiankucharski/OKAPI@9871dac460eb295a9935fd1d28acf2ea54bf7f73",
+    "torch>=2.2",
+]
 
 [project.scripts]
 fusionbench = "fusionbench.cli:main"
@@ -26,11 +37,14 @@ fusionbench = "fusionbench.cli:main"
 requires = ["hatchling"]
 build-backend = "hatchling.build"
 
-[tool.hatch.metadata]
-allow-direct-references = true
+[tool.hatch.version]
+path = "fusionbench/_version.py"
 
 [tool.hatch.build.targets.wheel]
 packages = ["fusionbench"]
+
+[tool.hatch.build.targets.sdist]
+include = ["/fusionbench", "/tests", "/examples", "/docs/site", "/mkdocs.yml", "/DESIGN.md", "/README.md", "/pyproject.toml", "/uv.lock"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
