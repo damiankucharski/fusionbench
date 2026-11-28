@@ -1,0 +1,95 @@
+{
+  "status": "passed",
+  "terminal_boundaries": {
+    "strict_zero_gates": 2,
+    "negative_cases": 2,
+    "size_then_survivor_order": true,
+    "veto_and_rerank_diverge": true
+  },
+  "round_1": {
+    "scores": 2688,
+    "trajectory_rows": 6528,
+    "terminal_events": 384,
+    "banks": 48,
+    "primary": {
+      "estimate": -0.0022504894134256622,
+      "ci_low": -0.00458973336299642,
+      "ci_high": -0.00045914876142493524
+    },
+    "native_replay": {
+      "seed": 288100,
+      "path": "fold",
+      "unique_structures": 109,
+      "final_structures": 8,
+      "audit_swapped": true
+    }
+  },
+  "round_2": {
+    "scores": 1152,
+    "banks": 32,
+    "fit_only_witness_decisions": 128,
+    "min_grid_pairs": 3969,
+    "noninferior": true,
+    "upper_bound_below_zero": false,
+    "primary": {
+      "estimate": 0.0,
+      "ci_low": 0.0,
+      "ci_high": 0.0
+    },
+    "native_replay": {
+      "seed": 288200,
+      "path": "fold",
+      "unique_structures": 61,
+      "final_structures": 6,
+      "audit_swapped": false,
+      "min_witness_excluded_from_founders": true
+    }
+  },
+  "round_3_controlled": {
+    "scores": 2592,
+    "banks": 24,
+    "searches_per_bank_law": 3,
+    "paired_law_search_cells": 144,
+    "intervals_recomputed": 66,
+    "independent_native_replays": [
+      {
+        "seed": 288300,
+        "path": "pooled",
+        "unique_structures": 77,
+        "final_structures": 6,
+        "audit_swapped": false
+      },
+      {
+        "seed": 288300,
+        "path": "fold",
+        "unique_structures": 79,
+        "final_structures": 6,
+        "audit_swapped": false
+      },
+      {
+        "seed": 288300,
+        "path": "joint",
+        "unique_structures": 79,
+        "final_structures": 6,
+        "audit_swapped": false
+      }
+    ]
+  },
+  "round_3_panel": {
+    "families": 25,
+    "banks_per_family": 4,
+    "scores": 1800,
+    "trajectory_rows": 5100,
+    "independent_mean_top_n_banks": 100,
+    "intervals_recomputed": 16,
+    "primary": {
+      "estimate": -0.002067458912570004,
+      "ci_low": -0.011861445126537383,
+      "ci_high": 0.01043215556162506,
+      "better": 8,
+      "tied": 4,
+      "worse": 13,
+      "broad_gain": false
+    }
+  }
+}

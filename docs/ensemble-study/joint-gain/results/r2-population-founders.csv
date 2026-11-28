@@ -1,0 +1,11 @@
+law,predictor,in_founders,multiplicity,excess_fraction,population_excess_brier
+singleton,p_A,True,1,0,0.0
+singleton,p_B,True,1,31/96,0.3229166666666667
+singleton,distractor,True,4,31/96,0.3229166666666667
+singleton,mean6,True,1,155/1152,0.1345486111111111
+singleton,min_AB,False,1,31/192,0.16145833333333334
+min,p_A,True,1,31/192,0.16145833333333334
+min,p_B,True,1,31/192,0.16145833333333334
+min,distractor,True,4,31/96,0.3229166666666667
+min,mean6,True,1,155/1152,0.1345486111111111
+min,min_AB,False,1,0,0.0
