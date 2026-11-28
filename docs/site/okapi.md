@@ -68,7 +68,7 @@ Use `regularized=False` to remove the penalty while retaining the same search sc
 
 `ConfiguredOKAPI` takes a prediction bank from a new task and selects one of five configurations. In order of preference in close comparisons, these are the arithmetic mean, Brier-ranked Top-N, a temperature-calibrated arithmetic mean, a derivative-free regularized logit head, and a calibrated mean-seeded GP tree. The arithmetic mean and Top-N can both be the final prediction rule.
 
-Install the optional dependency with `pip install '.[okapi]'` from this FusionBench checkout. It pins the OKAPI revision that supplies pool diagnostics, the prediction-pull objective and the learned-policy reader. [Pinned OKAPI source](https://github.com/damiankucharski/OKAPI/tree/aa8f78229d3fd0f7b1165c50d998eb656d638e44)
+Install the optional dependency with `pip install '.[okapi]'` from this FusionBench checkout. It pins the OKAPI revision that supplies pool diagnostics, the prediction-pull objective and the learned-policy reader. [Pinned OKAPI source](https://github.com/damiankucharski/OKAPI/tree/25947c4a695c64c85922d18ac605b8eb2a61d4d7)
 
 ```python
 from fusionbench import generate_dataset
@@ -130,4 +130,26 @@ For repeated observations, pass `groups=scene_ids`. Outer folds keep each scene 
 
 Disagreement is the average squared class-probability distance between a provider and the arithmetic mean, averaged within each scene. Equal disagreement values stay together. If all units have the same value, the stress rule checks the pooled gain. The reported standard errors are selection heuristics computed from paired unit losses on shared folds. The returned evidence contains these losses, the fold and stratum of each unit and the selected simple pool's gain in each. With fewer than three units or fewer than two providers, the helper returns the arithmetic mean and records the fallback reason.
 
-To fit a ranked prefix as a standalone OKAPI tree, use `okapi.ranked_prefix.fit_brier_ranked_prefix(providers, labels)`. It returns the native tree and the provider IDs in its selected prefix. Only these providers are required at inference. [Native API and example](https://github.com/damiankucharski/OKAPI/blob/aa8f78229d3fd0f7b1165c50d998eb656d638e44/docs/api/core.md)
+To fit a ranked prefix as a standalone OKAPI tree, use `okapi.ranked_prefix.fit_brier_ranked_prefix(providers, labels)`. It returns the native tree and the provider IDs in its selected prefix. Only these providers are required at inference. [Native API and example](https://github.com/damiankucharski/OKAPI/blob/25947c4a695c64c85922d18ac605b8eb2a61d4d7/docs/api/core.md)
+
+## Screen providers across observed source environments
+
+`EnvironmentScreenedOKAPI` looks for a provider whose Brier loss changes across source environments, such as sites or acquisition conditions. The adjusted mode compares sites at a common mix of observed contexts. For example, if difficult cases occur more often at one site, pass their recorded category as the context. The estimated discrepancy can also reflect genuine changes in expertise, so removing a provider can hurt in a target environment where it remains useful.
+
+```python
+from fusionbench.methods.environment_screen import EnvironmentScreenedOKAPI
+
+model = EnvironmentScreenedOKAPI(mode="adjusted")
+model.fit(
+    source_predictions, source_labels, task="binary", n_classes=2,
+    environments=source_sites, contexts=source_case_types,
+)
+probabilities = model.predict(test_predictions)
+print(model.drop_, model.screen_info_["reason"])
+```
+
+Supply one site ID and, in adjusted mode, one context ID per source row. When rows repeat within scenes, `screen_indices` can supply a **prespecified, independent** representative per scene as integer row indices or as a Boolean mask. The screen uses only these diagnostic rows, then the native method fits on the full source bank and preserves its usual discovery and validation split. Environment IDs and contexts are needed only at fit time.
+
+With the defaults, the screen requires eight observations in every site/context cell. For each provider it takes the largest absolute difference in adjusted site losses after subtracting 1.96 times its estimated standard error. It drops a provider only when its score is uniquely highest and exceeds 0.10 full-class Brier. Missing metadata, inadequate cell coverage, and ties leave the pool intact. Raw mode compares observed site losses directly and requires two observations per site. The standard errors assume independent diagnostic rows and the thresholds are selection heuristics.
+
+`predict` accepts the original provider ordering. For compact inference, compute only the providers listed in `model.kept_indices_` in that order and pass their predictions to `model.predict_retained`. If only one provider remains, its normalized probabilities give the fused result. The site screen is opt-in.

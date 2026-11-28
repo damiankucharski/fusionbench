@@ -18,7 +18,7 @@ dependencies = [
 lattice = ["networkx>=3.0"]
 nsga = ["pymoo>=0.6"]
 tpot = ["tpot>=0.12"]
-okapi = ["torch>=2.2", "okapi @ git+https://github.com/damiankucharski/OKAPI@aa8f78229d3fd0f7b1165c50d998eb656d638e44"]
+okapi = ["torch>=2.2", "okapi @ git+https://github.com/damiankucharski/OKAPI@25947c4a695c64c85922d18ac605b8eb2a61d4d7"]
 dev = ["pytest>=8.0"]
 docs = ["mkdocs>=1.6,<2"]
 

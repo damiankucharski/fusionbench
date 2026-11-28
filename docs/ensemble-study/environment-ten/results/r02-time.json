@@ -1,0 +1,10 @@
+{
+  "round": 2,
+  "source_banks": 92,
+  "target_conditions": 156,
+  "score_rows": 1248,
+  "native_fits": 176,
+  "seconds": 22.41252157100098,
+  "workers": 4,
+  "fit_worker_seconds": 86.08840194301592
+}

@@ -243,6 +243,35 @@ reference = load_reference_dataset("rare_shortcut_noise")
 
 The standard data generator uses the fit law for fitting and the test law for held-out evaluation. In the optional transfer grid, the clean condition instead draws fresh rows from the fit law. Canonical-shift severity 1 uses the full test law. Intermediate severity selects complete rows from a mixture of these two domains. The benchmark varies the region prevalence, shortcut and noise independently to measure which changes transfer. [Factorial experiment](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/transfer-factorial) · [Transfer-grid settings](transfer.md)
 
+### Multiple labelled source environments
+
+The same rare-shortcut scenario can generate several training environments for a single fusion model. A source environment is an observed batch, such as an acquisition site. Changing both case mix and shortcut activity can make a useful specialist appear unreliable across sites. The following named source profiles vary these factors independently.
+
+| Profile | Specialist-region prevalence at sites 0 / 1 | Fraction of active shortcut cases at sites 0 / 1 |
+|---|---:|---:|
+| `homogeneous` | .50 / .50 | .50 / .50 |
+| `varied` | .50 / .50 | .00 / 1.00 |
+| `case_mix` | .15 / .85 | .50 / .50 |
+| `mixed` | .15 / .85 | .00 / 1.00 |
+
+```python
+import numpy as np
+from fusionbench.scenarios.source_environments import source_environment_preset
+
+bank = source_environment_preset("mixed", n_rows=512, seed=7)
+assert np.bincount(bank.env).tolist() == [256, 256]
+assert bank.x.shape == (512, 4, 2)
+test = bank.target(region=.5, shortcut=0)
+
+# Exact population Brier for the arithmetic mean across the four providers.
+p = test.x[:, :, 1].mean(axis=1)
+loss = 2 * (test.mass @ ((p - test.q) ** 2 + test.q * (1 - test.q)))
+```
+
+Fitting may use reports `x`, class labels `y`, the source identifiers `env`, and the observed per-row cue `context`. The simulator exposes provider role indices and the exact target probabilities for scoring. Keep these outside fitting and configuration. Reusing a seed and row counts pairs the labels, random draws, and provider ordering across profiles. The two-site `mixed` profile and its equal four-site subdivision share all observations when each original site is split into two equal blocks at a quarter of the total row count.
+
+For a custom design, import `source_environment_bank` from the same module and pass parallel sequences `region` and `shortcut`. Pass a total `n_rows` for balanced site counts, or a sequence for explicit counts. The default normalizes every provider's confidence to .8 while preserving its vote. Set `original_scale=True` to restore the original report magnitudes. Set `context_noise` to the desired probability of flipping the supplied source context bit. This affects only that side channel. The cue provider's reports and the exact test population stay fixed.
+
 ## Same-population stratified pool in standard-v5
 
 `stratified_pool` emits eight binary forecasts with independent, equally likely signs before stratification. On each row all eight positive-class probabilities are either 0.5 ± 0.15 or 0.5 ± 0.35. The probability of a positive label is a weighted average of the arithmetic mean and the first provider. The parameter `specialization` controls the first provider's weight in this mixture (default 0.25, range 0–1). At zero the mean is the exact posterior. At one, the first provider is the exact posterior.
