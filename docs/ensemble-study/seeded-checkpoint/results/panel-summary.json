@@ -1,0 +1,38 @@
+{
+  "scenarios": 24,
+  "banks": 48,
+  "scores": 432,
+  "trajectories": 3264,
+  "search_fits": 192,
+  "workers": 2,
+  "numeric_threads_per_worker": 1,
+  "elapsed_seconds": 26.124542110999755,
+  "family_equal_mean_test_brier": {
+    "carry": 0.3132790484680877,
+    "mean": 0.37790402893666,
+    "prob_lr": 0.24888620258017216,
+    "protected": 0.3080739758366819,
+    "regularized": 0.2224357773103095,
+    "seeded": 0.3080739758366819,
+    "sham": 0.34208375533037444,
+    "stock": 0.3537889756932276,
+    "top_n": 0.3399198923363393
+  },
+  "methods": [
+    "stock",
+    "sham",
+    "seeded",
+    "carry",
+    "protected",
+    "mean",
+    "top_n",
+    "prob_lr",
+    "regularized"
+  ],
+  "bootstrap_seed": 97822,
+  "bootstrap_repetitions": 10000,
+  "max_nodes_exception": [
+    "needle"
+  ],
+  "accounting": "Protected and seeded share one search and report its same realized fit cost. Objective calls include rescored survivors. Test oracle summaries were computed after deployment choices."
+}

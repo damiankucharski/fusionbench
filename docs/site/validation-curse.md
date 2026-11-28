@@ -64,3 +64,9 @@ fresh_test = frozen_inputs(bank["I"])
 ```
 
 Fit one copy of a fusion method on each source block and evaluate both on the same fresh scenes. Then exchange A and B and repeat the comparison. Keep all eight observations from a scene together when creating independent blocks. Setting `k=1` removes checkpoint selection while preserving the predictions of the first slot. This staged protocol complements the 24 standard-v3 fixed-provider scenarios. [Paired study, baselines and replay](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/checkpoint-reuse)
+
+### Give one provider the true conditional probability
+
+Use the paired law `generate_checkpoint_bank(seed, law="signal")` to test whether fusion can leave averaging when one provider is more informative. It preserves the labels, scenes and checkpoint outputs of the other seven providers generated with the same seed under `law="equal"`. The designated provider returns the true conditional probability for every checkpoint. Freeze one column per provider before passing inputs to a learner.
+
+Every block exposes `posterior` for evaluation. For binary full-class Brier, the conditional excess loss of a frozen positive-class prediction `p` on the audit inputs is `2 * np.mean((p - bank["I"].posterior) ** 2)`. This averages over possible labels while retaining the finite audit scene sample. On the equal law the posterior uses a latent signal. On the signal law an observable provider attains it. Withhold the posterior and provider identity from model fitting. [Mean founder and positive-control experiment](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/seeded-checkpoint)

@@ -40,7 +40,7 @@ def _f1(positive, labels):
     return 2 * np.count_nonzero(predicted & (labels == 1)) / denominator if denominator else 0.
 
 
-def _fit(fit_x, fit_y, seed, objective):
+def _fit(fit_x, fit_y, seed, objective, *, extra_founder=None, after_survival=None):
     """Search using only the fit bank and freeze each generation's winner."""
     from okapi import Okapi
 
@@ -86,10 +86,16 @@ def _fit(fit_x, fit_y, seed, objective):
             )
             # The default initializer supplies all eight singleton providers.
             # Scoring here gives generation zero its own snapshot without an RNG draw.
+            if extra_founder is not None:
+                gp.population.append(extra_founder(gp.train_tensors))
             gp.fitnesses = gp._selection_fitnesses(gp.population)
+            if after_survival is not None:
+                after_survival(gp, 0)
             tape.snapshot(gp.population)
-            for _ in range(GENERATIONS):
+            for generation in range(1, GENERATIONS + 1):
                 gp.run_iteration()
+                if after_survival is not None:
+                    after_survival(gp, generation)
                 tape.snapshot(gp.population)
         finally:
             adapter._tmp.cleanup()
