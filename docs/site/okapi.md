@@ -68,7 +68,7 @@ Use `regularized=False` to remove the penalty while retaining the same search sc
 
 `ConfiguredOKAPI` takes a prediction bank from a new task and selects one of five configurations. In order of preference in close comparisons, these are the arithmetic mean, Brier-ranked Top-N, a temperature-calibrated arithmetic mean, a derivative-free regularized logit head, and a calibrated mean-seeded GP tree. The arithmetic mean and Top-N can both be the final prediction rule.
 
-Install the optional dependency with `pip install '.[okapi]'` from this FusionBench checkout. It pins the OKAPI revision that supplies pool diagnostics, the prediction-pull objective and the learned-policy reader. [Pinned OKAPI source](https://github.com/damiankucharski/OKAPI/tree/5707500fd5cf8b199ce3d1f201e63af8b1dec0f7)
+Install the optional dependency with `pip install '.[okapi]'` from this FusionBench checkout. It pins the OKAPI revision that supplies pool diagnostics, the prediction-pull objective and the learned-policy reader. [Pinned OKAPI source](https://github.com/damiankucharski/OKAPI/tree/aa8f78229d3fd0f7b1165c50d998eb656d638e44)
 
 ```python
 from fusionbench import generate_dataset
@@ -129,3 +129,5 @@ For repeated observations, pass `groups=scene_ids`. Outer folds keep each scene 
 | `one_se` | Select the first of mean, Top-N and native within one paired standard error of the best action. |
 
 Disagreement is the average squared class-probability distance between a provider and the arithmetic mean, averaged within each scene. Equal disagreement values stay together. If all units have the same value, the stress rule checks the pooled gain. The reported standard errors are selection heuristics computed from paired unit losses on shared folds. The returned evidence contains these losses, the fold and stratum of each unit and the selected simple pool's gain in each. With fewer than three units or fewer than two providers, the helper returns the arithmetic mean and records the fallback reason.
+
+To fit a ranked prefix as a standalone OKAPI tree, use `okapi.ranked_prefix.fit_brier_ranked_prefix(providers, labels)`. It returns the native tree and the provider IDs in its selected prefix. Only these providers are required at inference. [Native API and example](https://github.com/damiankucharski/OKAPI/blob/aa8f78229d3fd0f7b1165c50d998eb656d638e44/docs/api/core.md)

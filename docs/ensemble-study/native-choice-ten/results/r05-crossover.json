@@ -1,0 +1,9 @@
+{
+  "source_draws": 8,
+  "fraction_active_at_equal_brier": 0.5173884809542968,
+  "paired_interval": [
+    0.4808922157151656,
+    0.5478034792013718
+  ],
+  "max_gap_midpoint_error": 1.1102230246251565e-16
+}
