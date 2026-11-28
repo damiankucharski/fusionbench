@@ -1,0 +1,19 @@
+{
+  "independent_native_and_cheap_bank_replays": 2,
+  "primary_policy_hash_pairs": 25,
+  "cheap_full_brier_replays": 15,
+  "independent_focal_joint_rows": 64,
+  "guarded_source_only_hash_pairs": 9,
+  "round": 1,
+  "score_rows": 972,
+  "audited_conditions": 108,
+  "audited_sources": 72,
+  "standard_families": 30,
+  "independent_paired_intervals": 128,
+  "exact_oracle_brier": {
+    "s0": 0.23217084639498436,
+    "s50": 0.2059100779404559,
+    "s100": 0.10894618226032772,
+    "specialist80": 0.1325811247047294
+  }
+}
