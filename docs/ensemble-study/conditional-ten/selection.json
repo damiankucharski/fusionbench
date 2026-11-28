@@ -1,0 +1,29 @@
+{
+  "chosen": "replicated",
+  "eligible": [
+    "half",
+    "replicated",
+    "single"
+  ],
+  "mixed_max_regret": {
+    "half": 0.0754475672481747,
+    "replicated": 0.06416555314576564,
+    "single": 0.06416555314576564
+  },
+  "standard_delta_native": {
+    "half": -0.0005310670001894326,
+    "replicated": -0.00022428604960557572,
+    "single": -0.00011796118404626075
+  },
+  "case_mix_specialist80_delta_native": {
+    "half": 0.0,
+    "replicated": 0.0,
+    "single": 0.0
+  },
+  "mixed_s0_delta_native": {
+    "half": -0.009272294265816503,
+    "replicated": -0.010414679510245486,
+    "single": -0.010414679510245486
+  },
+  "r09_sha256": "33a338145388c7d4a537f8b090c5db6ece5e64144a50653d19310a5453003ae0"
+}

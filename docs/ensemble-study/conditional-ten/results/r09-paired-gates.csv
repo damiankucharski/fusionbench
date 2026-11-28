@@ -1,0 +1,10 @@
+method,event,mixed,case_mix,delta,lo,hi,paired_sources
+half,activation,1.0,0.0,1.0,1.0,1.0,12
+half,application,1.0,0.0,1.0,1.0,1.0,12
+half,correct_shortcut,1.0,0.0,1.0,1.0,1.0,12
+replicated,activation,1.0,0.0,1.0,1.0,1.0,12
+replicated,application,1.0,0.0,1.0,1.0,1.0,12
+replicated,correct_shortcut,1.0,0.0,1.0,1.0,1.0,12
+single,activation,1.0,0.0,1.0,1.0,1.0,12
+single,application,1.0,0.0,1.0,1.0,1.0,12
+single,correct_shortcut,1.0,0.0,1.0,1.0,1.0,12
