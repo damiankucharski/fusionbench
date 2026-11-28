@@ -84,3 +84,48 @@ predictions = model.predict(bank.test_preds)
 With `source_cv`, each row gets one prediction from a model fit on the other two folds. If rows come from repeated measurements of the same scene or subject, pass `groups=scene_ids` to `fit`. The folds keep groups intact and give each group's average Brier loss equal weight. The selector takes the first configuration whose excess loss over the empirical winner is within one standard error of their paired differences. This rule expects at least two providers and three independent units. It uses the arithmetic mean when either is missing. It refits the chosen configuration on every available source row for prediction. Independently changing target behavior can still reverse the choice.
 
 To apply an existing shallow policy, pass its JSON-decoded mapping as `ConfiguredOKAPI(policy=mapping)`. The model computes the pool measurements and fits only the resulting action. Inspect `selection_["path"]` for the diagnostic values and thresholds that led to it. The action names, fitted rule and training-family coverage belong with any published evaluation. [Study protocol](https://github.com/damiankucharski/fusionbench/blob/research/ensemble-mechanisms-stability/docs/ensemble-study/autoconfig-three/protocol.md)
+
+## Include two arithmetic pools in native pattern selection
+
+`PoolCandidateNativePatternOKAPI` lets the regularized native pattern search compare two more trees on its existing held-out rows. One averages every provider. The other ranks the providers by discovery-set Brier score, evaluates the average of each prefix in that ranking and retains the best prefix. Each gets one held-out score alongside the flat logit head, the head with evolved inputs and the GP finalist. An exact tie keeps the original winner, followed in priority by the mean and Top-N.
+
+```python
+from fusionbench import generate_dataset
+from fusionbench.methods.native_pool_candidates import PoolCandidateNativePatternOKAPI
+
+bank = generate_dataset("correlated", n_per_split=256, seed=11)
+model = PoolCandidateNativePatternOKAPI(seed=0, split_seed=0, gp_validation_top_k=8)
+model.fit(bank.fit_preds, bank.fit_y, task="binary", n_classes=2)
+probabilities = model.predict(bank.test_preds)
+print(model.action_, model.chosen_, model.best_tree)
+```
+
+The selected method deploys one native tree. If Top-N wins, the method ranks providers and chooses the prefix again on **all** source rows. To compare against the original winner from exactly the same GP evaluations, call `model.predict_incumbent(bank.test_preds)`. Inspect `model.counts_["pool_candidates"]` to see which providers Top-N selected on discovery and after a winning refit. For M providers the extra work amounts to 2M discovery Brier evaluations, two held-out scores and, when Top-N wins, another 2M evaluations at refit. The historical 70/30 split samples rows. Multiple observations of the same scene can therefore occur on both sides.
+
+## Choose between regularized OKAPI, mean and Top-N using source folds
+
+When the question is whether a simpler pool performs well enough on a particular source bank, compare predictions for the same held-out source rows. `fit_source_choice` shares three outer folds across three actions. The actions are the arithmetic mean, Brier-ranked Top-N, and the regularized native pattern method with eight discovery-ranked GP finalists. The native search uses the supplied seed and fixes its internal discovery split seed at zero.
+
+```python
+from fusionbench import generate_dataset
+from fusionbench.methods.native_choice import fit_source_choice
+
+bank = generate_dataset("correlated", n_per_split=256, seed=11)
+model, action, evidence = fit_source_choice(
+    bank.fit_preds, bank.fit_y, rule="paired", seed=0
+)
+probabilities = model.predict(bank.test_preds)
+print(action, evidence["oof_brier"])
+```
+
+For repeated observations, pass `groups=scene_ids`. Outer folds keep each scene intact. Each scene's mean full-class Brier loss receives equal weight in the comparison. Without groups each row counts as one unit. On each outer training sample the native candidate keeps its usual internal 70/30 row split. The helper applies the requested rule once and fits that action on the entire source bank.
+
+| Rule | When it selects an action |
+| --- | --- |
+| `cv` | Select the lowest average out-of-fold Brier loss. |
+| `paired` | Switch from native to the better arithmetic pool when its average gain reaches one paired standard error. |
+| `sign` | Require the paired threshold and a strictly positive gain in every outer fold. |
+| `stress` | Require the paired threshold and a nonnegative gain both below or at and above median provider disagreement. |
+| `one_se` | Select the first of mean, Top-N and native within one paired standard error of the best action. |
+
+Disagreement is the average squared class-probability distance between a provider and the arithmetic mean, averaged within each scene. Equal disagreement values stay together. If all units have the same value, the stress rule checks the pooled gain. The reported standard errors are selection heuristics computed from paired unit losses on shared folds. The returned evidence contains these losses, the fold and stratum of each unit and the selected simple pool's gain in each. With fewer than three units or fewer than two providers, the helper returns the arithmetic mean and records the fallback reason.

@@ -172,6 +172,7 @@ class NativePatternOKAPI(Method):
             np.random.SeedSequence([split_seed, 51])
         ).permutation(n)
         discovery, validation = np.split(order, [7 * n // 10])
+        self.discovery_indices_ = discovery.copy()
         self.validation_indices_ = validation.copy()
         d, v = x[discovery], x[validation]
         dy, vy = labels[discovery], labels[validation]

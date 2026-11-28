@@ -1,0 +1,12 @@
+method,action,banks,different_native_forecast,fraction,group
+apparent,native,89,0,0.9888888888888889,standard
+apparent,top_n,1,1,0.011111111111111112,standard
+apparent,native,71,0,0.9861111111111112,seen24
+apparent,top_n,1,1,0.013888888888888888,seen24
+apparent,native,18,0,1.0,held6
+apparent,native,8,0,1.0,scene128
+apparent,native,8,0,1.0,scene16
+apparent,native,7,0,0.875,strong
+apparent,top_n,1,1,0.125,strong
+apparent,native,4,0,0.5,weak
+apparent,top_n,4,4,0.5,weak

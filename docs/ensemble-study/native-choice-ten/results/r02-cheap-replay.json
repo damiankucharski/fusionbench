@@ -1,0 +1,38 @@
+{
+  "bank_conditions": 122,
+  "exact_action_rows": 122,
+  "compiled_arithmetic_action_rows": 0,
+  "independent_reference_fits": 18,
+  "replayed_banks": [
+    [
+      "primary",
+      "correlated",
+      722400
+    ],
+    [
+      "primary",
+      "gated_experts",
+      722400
+    ],
+    [
+      "primary",
+      "multiclass_committee",
+      722400
+    ],
+    [
+      "primary",
+      "grouped_rare_event",
+      722400
+    ],
+    [
+      "primary",
+      "scene16",
+      722100
+    ],
+    [
+      "primary",
+      "weak",
+      722200
+    ]
+  ]
+}
