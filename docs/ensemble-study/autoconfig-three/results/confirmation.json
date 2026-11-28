@@ -1,0 +1,51 @@
+{
+  "chosen": "tree_rule",
+  "standard_pass": false,
+  "heldout_pass": false,
+  "scene16_within_limit": true,
+  "generalization_pass": false,
+  "test_oracle_diagnostic": {
+    "standard": {
+      "available_vs_constant": 0.009344077497507708,
+      "gain_vs_constant": 0.0,
+      "fraction_captured": 0.0
+    },
+    "heldout6": {
+      "available_vs_constant": 0.0015439736582240904,
+      "gain_vs_constant": 0.0,
+      "fraction_captured": 0.0
+    },
+    "scene16": {
+      "available_vs_constant": 0.008957788376813158,
+      "gain_vs_constant": 0.0,
+      "fraction_captured": 0.0
+    },
+    "factorial": {
+      "available_vs_constant": 0.006895984724282489,
+      "gain_vs_constant": 0.0,
+      "fraction_captured": 0.0
+    }
+  },
+  "changes_vs_constant": {
+    "standard": {
+      "delta": 0.0,
+      "lo": 0.0,
+      "hi": 0.0
+    },
+    "trained24": {
+      "delta": 0.0,
+      "lo": 0.0,
+      "hi": 0.0
+    },
+    "heldout6": {
+      "delta": 0.0,
+      "lo": 0.0,
+      "hi": 0.0
+    },
+    "scene16": {
+      "delta": 0.0,
+      "lo": 0.0,
+      "hi": 0.0
+    }
+  }
+}

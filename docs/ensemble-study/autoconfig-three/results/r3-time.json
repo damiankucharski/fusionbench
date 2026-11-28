@@ -1,0 +1,10 @@
+{
+  "round": 3,
+  "banks": 404,
+  "score_rows": 4848,
+  "seconds": 91.44457593699917,
+  "workers": 3,
+  "threads_per_worker": 1,
+  "locked_rule": "tree_rule",
+  "r1_policy_sha256": "cc7dd3762b41a9b0a2597b4b585c7f6911ed0bcccbbb6a061946f74cee3efdb8"
+}

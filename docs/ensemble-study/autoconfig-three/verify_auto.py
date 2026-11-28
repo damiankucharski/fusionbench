@@ -12,11 +12,11 @@ from time import perf_counter
 
 import numpy as np
 import pandas as pd
+from banks_auto import banks
+from okapi.pool_diagnostics import pool_fingerprint
 from threadpoolctl import threadpool_limits
 
-from banks_auto import banks
 from fusionbench.transfer import load_preset
-from okapi.pool_diagnostics import pool_fingerprint
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "results"
@@ -395,6 +395,7 @@ def verify_trace(b, rows, trace):
 
 def check_fold_scores(b, trace):
     from sklearn.model_selection import KFold, StratifiedKFold
+
     from fusionbench.methods.auto_configuration import fit_actions
 
     x, y, groups = b.x, b.y, b.groups
@@ -437,6 +438,7 @@ def outcome_probe(r, b, rows, frozen):
     """Exercise the normal runner with protected audit fields and reversed outcomes."""
     from types import SimpleNamespace
     from unittest.mock import patch
+
     import run_auto
     from portfolio import fit_actions
 
@@ -489,6 +491,34 @@ def panels(s):
     yield "legacy27", std[~std.family.isin(GROUPED)]
     yield "factorial", s[s.cohort == "factorial"]
     yield from s[s.cohort != "standard"].groupby("family")
+
+
+def check_mix_intervals(name, costs, chosen, indices, actual_draws, rec):
+    families = costs.index.get_level_values("family").unique()
+    reps = len(costs) // len(families)
+    prob_draws = np.zeros((len(indices), len(ACTIONS)))
+    cost_draws = np.zeros_like(prob_draws)
+    within = np.zeros(len(indices))
+    for i, f in enumerate(families):
+        # A common seed draw links factorial cells. Each standard family has its own draw.
+        ids = (
+            indices
+            if name == "factorial"
+            else indices[:, i * reps : (i + 1) * reps] - i * reps
+        )
+        score, action = costs.xs(f), chosen.xs(f).to_numpy()
+        for j, a in enumerate(ACTIONS):
+            freq = (action == a)[ids].mean(1)
+            values = score[a].to_numpy()[ids].mean(1)
+            prob_draws[:, j] += freq / len(families)
+            cost_draws[:, j] += values / len(families)
+            within += freq * values / len(families)
+    shuffled = np.sum(prob_draws * cost_draws, axis=1)
+    equal([rec.lo, rec.hi], np.quantile(actual_draws - shuffled, [0.025, 0.975]))
+    equal(
+        [rec.within_family_lo, rec.within_family_hi],
+        np.quantile(actual_draws - within, [0.025, 0.975]),
+    )
 
 
 def check_summaries(r):
@@ -559,6 +589,7 @@ def check_summaries(r):
                 ]
             )
             rec = mix.loc[name, method]
+            check_mix_intervals(name, costs, chosen, indices, simulated[method], rec)
             equal(
                 [
                     rec.actual,
@@ -622,6 +653,7 @@ def verify_lock(r, checks):
                     f"{commit}:{next_score.relative_to(git_root)}",
                 ],
                 cwd=git_root,
+                check=False,
                 capture_output=True,
             ).returncode
             != 0

@@ -1,0 +1,20 @@
+{
+  "counts": {
+    "banks": 186,
+    "cv_choice_traces": 186,
+    "independent_cv_replays": 4,
+    "source_only_guarded_rule_replays": 11,
+    "routed_hash_pairs": 744,
+    "independently_refitted_cheap_controls": 558
+  },
+  "round": 2,
+  "independent_paired_brier_intervals": 1496,
+  "verified_policy_training_banks": 96,
+  "verified_policy_training_families": 24,
+  "verified_leave_family_out_fits": 24,
+  "chosen_on_r2_trained24": "tree_rule",
+  "frozen_input_commits": {
+    "r1-policy.json": "046b6e284e4d4a7fd41f1c0bfc445506e4a701d7"
+  },
+  "verification_seconds": 8.23821117499756
+}

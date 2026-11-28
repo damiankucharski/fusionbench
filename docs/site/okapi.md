@@ -68,7 +68,7 @@ Use `regularized=False` to remove the penalty while retaining the same search sc
 
 `ConfiguredOKAPI` takes a prediction bank from a new task and selects one of five configurations. In order of preference in close comparisons, these are the arithmetic mean, Brier-ranked Top-N, a temperature-calibrated arithmetic mean, a derivative-free regularized logit head, and a calibrated mean-seeded GP tree. The arithmetic mean and Top-N can both be the final prediction rule.
 
-Use the matching OKAPI research branch for the pool diagnostics, prediction-pull objective and learned-policy reader. [OKAPI algorithm branch](https://github.com/damiankucharski/OKAPI/tree/research/okapi-algorithm-lab)
+Install the optional dependency with `pip install '.[okapi]'` from this FusionBench checkout. It pins the OKAPI revision that supplies pool diagnostics, the prediction-pull objective and the learned-policy reader. [Pinned OKAPI source](https://github.com/damiankucharski/OKAPI/tree/5707500fd5cf8b199ce3d1f201e63af8b1dec0f7)
 
 ```python
 from fusionbench import generate_dataset

@@ -94,13 +94,22 @@ def action_stats(s, group, weights):
         lo, hi = np.quantile(bootstrap_delta, [0.025, 0.975])
         # Also hold the action proportions within each named scenario fixed. A
         # difference accrued purely between scenarios then disappears.
-        within = np.mean(
-            [
-                actions.xs(family).mean().to_numpy()
-                @ costs.xs(family).mean().to_numpy()
-                for family in costs.index.get_level_values("family").unique()
-            ]
-        )
+        n_families = costs.index.get_level_values("family").nunique()
+        n_seeds = len(costs) // n_families
+        cost_cube = costs.to_numpy().reshape(n_families, n_seeds, -1)
+        action_cube = actions.to_numpy().reshape(n_families, n_seeds, -1)
+        within = (cost_cube.mean(1) * action_cube.mean(1)).sum(axis=1).mean()
+        if group == "factorial":
+            # One sampled seed is shared by every switch setting.
+            by_family = np.broadcast_to(
+                weights[:, None, :], (len(weights), n_families, n_seeds)
+            )
+        else:
+            by_family = weights.reshape(-1, n_families, n_seeds) * n_families
+        cost_means = np.einsum("bfs,fsa->bfa", by_family, cost_cube)
+        action_means = np.einsum("bfs,fsa->bfa", by_family, action_cube)
+        within_draw = (cost_means * action_means).sum(axis=2).mean(axis=1)
+        within_lo, within_hi = np.quantile(weights @ y - within_draw, [0.025, 0.975])
         summary.append(
             {
                 "group": group,
@@ -112,6 +121,8 @@ def action_stats(s, group, weights):
                 "hi": hi,
                 "expected_within_family_random": within,
                 "delta_actual_minus_within_family_random": y.mean() - within,
+                "within_family_lo": within_lo,
+                "within_family_hi": within_hi,
             }
         )
         for i, action in enumerate(cols):
