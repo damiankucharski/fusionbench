@@ -1,0 +1,36 @@
+{
+  "round": 2,
+  "scores_sha256": "67602a4f28d51e22a39e78c2d42214df35f9c1c170764213ced7d8fe4c37a4f6",
+  "replays": [
+    {
+      "family": "mixed",
+      "seed": 842100,
+      "mode": "adjusted",
+      "diagnostic_rows": 512,
+      "all_training_rows": 512,
+      "drop": 2,
+      "reason": "unique_above_threshold",
+      "matching_test_hashes": 3
+    },
+    {
+      "family": "case_mix",
+      "seed": 842101,
+      "mode": "raw",
+      "diagnostic_rows": 512,
+      "all_training_rows": 512,
+      "drop": 0,
+      "reason": "unique_above_threshold",
+      "matching_test_hashes": 3
+    },
+    {
+      "family": "grouped_rare_event",
+      "seed": 842400,
+      "mode": "adjusted",
+      "diagnostic_rows": 64,
+      "all_training_rows": 512,
+      "drop": null,
+      "reason": "insufficient_cell_count",
+      "matching_test_hashes": 1
+    }
+  ]
+}

@@ -5,7 +5,6 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-
 from banks_env import focus_banks
 
 OUT = Path(__file__).resolve().parent / "results"
@@ -28,6 +27,11 @@ def risk(probability, target):
     )
 
 
+def omission_cost(target, ids, omitted):
+    forecast = conditional_mean(target.x, target.mass, target.q, ids[ids != omitted])
+    return risk(forecast, target) - risk(target.q, target)
+
+
 def main(r):
     records = []
     for family, seed, bank, worlds in focus_banks(r):
@@ -43,10 +47,6 @@ def main(r):
             if name.startswith("s") and name != "specialist80":
                 np.testing.assert_allclose(safe, risk(robust, low), atol=1e-12, rtol=0)
 
-            def omitted(idx):
-                p = conditional_mean(t.x, t.mass, t.q, ids[ids != idx])
-                return risk(p, t) - available
-
             records.append(
                 {
                     "family": family,
@@ -54,8 +54,12 @@ def main(r):
                     "world": name,
                     "full_bayes_brier": available,
                     "minimax_s0_s100_rule_brier": safe,
-                    "information_cost_shortcut": omitted(bank.shortcut_index),
-                    "information_cost_specialist": omitted(bank.specialist_index),
+                    "information_cost_shortcut": omission_cost(
+                        t, ids, bank.shortcut_index
+                    ),
+                    "information_cost_specialist": omission_cost(
+                        t, ids, bank.specialist_index
+                    ),
                 }
             )
     frame = pd.DataFrame(records)
