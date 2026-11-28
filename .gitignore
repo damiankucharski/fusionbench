@@ -15,3 +15,9 @@ __pycache__/
 
 # Vendored OKAPI source (cloned for local testing)
 /vendor/
+
+# Local build and documentation outputs
+/dist/
+/build/
+/site/
+.ruff_cache/

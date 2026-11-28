@@ -1,0 +1,11 @@
+{
+  "bank_version": "reference-v3",
+  "banks": {
+    "environment_shortcut": "08fce9b4fb60b3efeb3bf5d49b27c95e11b76e1b47bced9d2831883beb4fb937",
+    "rare_specialist": "3c99ec5bd064a60287d9a0f3698ba73d8d853078ebd879f40b24ab426fc7c7e0",
+    "redundant_pool": "919015546a58db3bb944b3e67f6ec6eb98fdc1572b860cef3d1613ca3cb8d192",
+    "selective_fallback": "f751246d6b5d9e7e364a4c35dcf24c035387be8587baaf6ec4395f01c6878a67"
+  },
+  "n_per_split": 128,
+  "seed": 1729
+}

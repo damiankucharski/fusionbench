@@ -9,6 +9,8 @@ keep the benchmark honest: they are *not* won by nonlinear gating methods.
 
 from __future__ import annotations
 
+from typing import ClassVar
+
 import numpy as np
 
 from fusionbench.scenarios import calibrated as cal
@@ -19,7 +21,7 @@ class Committee(Scenario):
     """K equal-quality calibrated models with independent errors (control)."""
 
     task = "binary"
-    expected_winners = ["stacking_logit", "simple_average"]
+    expected_winners: ClassVar[list[str]] = ["stacking_logit", "simple_average"]
     oracle_description = "logit-sum of K independent calibrated experts"
 
     def __init__(self, k: int = 10, accuracy: float = 0.75, **kw):
@@ -35,8 +37,10 @@ class Committee(Scenario):
 
     def _generate(self, n, rng):
         y = rng.integers(0, 2, n)
-        cols = [cal.to_binary_proba(cal.binary_calibrated(y, self.accuracy, rng))
-                for _ in range(self.k)]
+        cols = [
+            cal.to_binary_proba(cal.binary_calibrated(y, self.accuracy, rng))
+            for _ in range(self.k)
+        ]
         return np.stack(cols, axis=1), y, {}
 
     def bayes_oracle(self, preds, latent):
@@ -52,7 +56,12 @@ class DeadWeight(Scenario):
     """
 
     task = "binary"
-    expected_winners = ["stacking_logit", "top_5", "nsga3", "okapi"]
+    expected_winners: ClassVar[list[str]] = [
+        "stacking_logit",
+        "top_5",
+        "nsga3",
+        "okapi",
+    ]
     oracle_description = "logit-sum; garbage members carry ~0 evidence"
 
     def __init__(self, n_good: int = 4, n_bad: int = 6, accuracy: float = 0.82, **kw):
@@ -64,13 +73,19 @@ class DeadWeight(Scenario):
         return 2
 
     def model_ids(self):
-        return [f"good{i}" for i in range(self.n_good)] + [f"bad{i}" for i in range(self.n_bad)]
+        return [f"good{i}" for i in range(self.n_good)] + [
+            f"bad{i}" for i in range(self.n_bad)
+        ]
 
     def _generate(self, n, rng):
         y = rng.integers(0, 2, n)
-        cols = [cal.to_binary_proba(cal.binary_calibrated(y, self.accuracy, rng))
-                for _ in range(self.n_good)]
-        cols += [cal.to_binary_proba(cal.random_binary(y, rng)) for _ in range(self.n_bad)]
+        cols = [
+            cal.to_binary_proba(cal.binary_calibrated(y, self.accuracy, rng))
+            for _ in range(self.n_good)
+        ]
+        cols += [
+            cal.to_binary_proba(cal.random_binary(y, rng)) for _ in range(self.n_bad)
+        ]
         return np.stack(cols, axis=1), y, {}
 
     def bayes_oracle(self, preds, latent):
@@ -88,7 +103,7 @@ class Needle(DeadWeight):
     parsimonious selection (compact, auditable, cheap-at-inference rules).
     """
 
-    expected_winners = ["okapi", "stacking_logit", "top_5"]
+    expected_winners: ClassVar[list[str]] = ["okapi", "stacking_logit", "top_5"]
     oracle_description = "logit-sum over the few informative models"
 
     def __init__(self, n_good: int = 3, n_bad: int = 97, accuracy: float = 0.80, **kw):
@@ -105,11 +120,17 @@ class Saturated(Scenario):
     """
 
     task = "multiclass"
-    expected_winners = ["best_single", "simple_average", "okapi"]
-    oracle_description = "single competent model (others redundant)"
+    expected_winners: ClassVar[list[str]] = ["best_single", "simple_average", "okapi"]
+    oracle_description = "Gaussian posterior weighted for shared logit noise"
 
-    def __init__(self, k: int = 6, n_classes: int = 4, accuracy: float = 0.95,
-                 corr: float = 0.95, **kw):
+    def __init__(
+        self,
+        k: int = 6,
+        n_classes: int = 4,
+        accuracy: float = 0.95,
+        corr: float = 0.95,
+        **kw,
+    ):
         super().__init__(k=k, n_classes=n_classes, accuracy=accuracy, corr=corr, **kw)
         self.k, self._nc, self.accuracy, self.corr = k, n_classes, accuracy, corr
 
@@ -123,13 +144,20 @@ class Saturated(Scenario):
     def _generate(self, n, rng):
         y = rng.integers(0, self._nc, n)
         shared = rng.standard_normal((n, self._nc))
-        cols = [cal.multiclass_calibrated(y, self.accuracy, self._nc, rng,
-                                          shared_noise=shared, shared_weight=self.corr)
-                for _ in range(self.k)]
+        cols = [
+            cal.multiclass_calibrated(
+                y,
+                self.accuracy,
+                self._nc,
+                rng,
+                shared_noise=shared,
+                shared_weight=self.corr,
+            )
+            for _ in range(self.k)
+        ]
         return np.stack(cols, axis=1), y, {}
 
     def bayes_oracle(self, preds, latent):
-        # Redundant pool: down-weight to avoid overcounting shared evidence;
-        # the ceiling is ~one competent model.
-        strengths = np.full(self.k, 1.0 / self.k)
-        return cal.multiclass_independent_oracle(preds, strengths=strengths)
+        return cal.multiclass_gaussian_oracle(
+            preds, self.accuracy, shared_weight=self.corr
+        )

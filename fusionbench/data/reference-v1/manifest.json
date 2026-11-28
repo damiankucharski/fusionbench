@@ -1,0 +1,26 @@
+{
+  "bank_version": "reference-v1",
+  "banks": {
+    "calibrated_suppressor": "197434bf2177dc82ad15429046c2bd400ab272818b977db1cc3c4bd90445d02f",
+    "committee": "63e618cac60f62dc1b1c1c305ae7fbf872689503017502fa7d905c9f088c7fc8",
+    "compositional_switch": "4585e779d54c6a00e39acc7fd4074d6d4bc8a71f8fb9cd998fe4c3fb0b5d6fa8",
+    "compound": "8d4c50482b2800451940a43332ab091f80ec923f17144c56064099c9807f38d7",
+    "correlated": "01423ea005d3d92ac9979a8e9fdd31bb20ea472a65968c6e79819c3473f7db0b",
+    "deadweight": "1b9f6423f3a551e1db49c5e761f2f0bb0c1501f348bae513bd85f19d09df3e53",
+    "gated_experts": "9ec19a8acd231484e5a27d3804e14695b377f43cfa540aef22fc4ae2f3b1106c",
+    "hardrescue": "f019d92ab923075fcacca339b998dbd14cc2f25ba8cdfca8fb4cfc0847e41231",
+    "hardveto": "4e0235a7c4360ca671e1832a63a8933b8a1aa00e9129dbeb2f0f679fb4233ffd",
+    "miscalibration": "d5db50a801f328b8c6b260de93f3026a56583f2f3a314df30f57269314c2bb05",
+    "multiclass_committee": "6f6b9d09874d75b7bf1b4dd066ed261e545bbddad4b50901527616d4a98ff386",
+    "native_close_switch": "93f0391bc78fa63a2b4ce8f3123e4db63ea9e4798d4d7e9f4e07486f080997cb",
+    "native_switch": "bc6482ac6d0c97aee81876b4f2268c56db3f6606c4679ffe150f9e57b0e3f34b",
+    "needle": "8f6e428715acd2ec46ccaa8ea172ac99cd38c0881fe66bfd7b0ae5b441669967",
+    "parity": "df7e86e1363e0252845be5e209a51d3dad3c6da78b79103d8b87ccc7c18eea98",
+    "polarity_fault": "c1b8c03c7120acc02f38c8a6eae24306953d6ebcbbf53f374b07b7d72b512a10",
+    "saturated": "a8500ade0ff91d9eca358fb8cd920558ffbd64b01d1e4bb79a6461b74eedfeac",
+    "two_pathways": "2536f5e1313f1fc8dfccf830c560502b7dbfd9b604f60eab2d68833d9a282996",
+    "weakest_link": "1312b4854d3e4350579505aad98ebeeb5bb2530fcc81c4daf3f7c5fc6f9e8b64"
+  },
+  "n_per_split": 128,
+  "seed": 1729
+}
