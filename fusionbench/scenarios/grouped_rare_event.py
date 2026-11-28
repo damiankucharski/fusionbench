@@ -36,6 +36,9 @@ class GroupedRareEvent(Scenario):
         scene_error_share=0.85,
         bloc_size=8,
         name=None,
+        *,
+        provider_order_seed=None,
+        provider_signal_slope=1.3,
     ):
         if (
             isinstance(scene_size, (bool, np.bool_))
@@ -55,6 +58,29 @@ class GroupedRareEvent(Scenario):
             or not 0 <= bloc_size <= self.n_providers
         ):
             raise ValueError("bloc_size must be an integer from zero through eight")
+        if (
+            isinstance(provider_signal_slope, (bool, np.bool_))
+            or not isinstance(provider_signal_slope, Real)
+            or not np.isfinite(provider_signal_slope)
+            or provider_signal_slope <= 0
+        ):
+            raise ValueError("provider_signal_slope must be positive and finite")
+        self.provider_signal_slope = float(provider_signal_slope)
+        if provider_order_seed is None:
+            self._provider_order = tuple(range(self.n_providers))
+        else:
+            if (
+                isinstance(provider_order_seed, (bool, np.bool_))
+                or not isinstance(provider_order_seed, Integral)
+                or provider_order_seed < 0
+            ):
+                raise ValueError(
+                    "provider_order_seed must be None or a nonnegative integer"
+                )
+            order_rng = np.random.default_rng(int(provider_order_seed))
+            self._provider_order = tuple(
+                int(role) for role in order_rng.permutation(self.n_providers)
+            )
         shares = {
             "heterogeneity": heterogeneity,
             "common_error_share": common_error_share,
@@ -76,6 +102,24 @@ class GroupedRareEvent(Scenario):
             event_offset=float(event_offset),
             **{k: float(v) for k, v in shares.items()},
         )
+
+        if self.provider_signal_slope != 1.3:
+            self.knobs["provider_signal_slope"] = self.provider_signal_slope
+        if provider_order_seed is not None:
+            self.knobs["provider_order_seed"] = int(provider_order_seed)
+
+    @property
+    def provider_order(self) -> tuple[int, ...]:
+        """Latent provider index at each anonymous output column, shared across splits."""
+        return self._provider_order
+
+    def build(self, n_per_split=50_000, seed=0):
+        dataset = super().build(n_per_split=n_per_split, seed=seed)
+        # Original reference-v6 banks omit subsequently added optional controls.
+        for field in ("provider_order_seed", "provider_signal_slope"):
+            if field not in dataset.meta.get("parameters", {}):
+                dataset.meta.get("effective_parameters", {}).pop(field, None)
+        return dataset
 
     def model_ids(self):
         return [f"provider_{i}" for i in range(self.n_providers)]
@@ -118,15 +162,25 @@ class GroupedRareEvent(Scenario):
         relative_sd /= np.sqrt(np.mean(relative_sd**2))
         # Match the marginal residual variance of the earlier scene-pool control.
         sigma = np.sqrt(0.5**2 + 0.5**2 + 0.85**2 + 0.5**2)
-        logits = 1.3 * signal[:, None] + sigma * relative_sd * noise
+        with np.errstate(over="ignore"):
+            logits = (
+                self.provider_signal_slope * signal[:, None]
+                + sigma * relative_sd * noise
+            )
         specialist = self.specialist_index
         strength = k["specialist_strength"]
-        logits[region, specialist] = (1 - strength) * logits[
-            region, specialist
-        ] + strength * true_logit[region]
+        if strength == 1:
+            logits[region, specialist] = true_logit[region]
+        elif strength > 0:
+            logits[region, specialist] = (1 - strength) * logits[
+                region, specialist
+            ] + strength * true_logit[region]
         p = expit(logits)
+        reports = np.stack((1 - p, p), axis=-1)
+        if "provider_order_seed" in k:
+            reports = reports[:, self.provider_order, :]
         return (
-            np.stack((1 - p, p), axis=-1),
+            reports,
             labels,
             {
                 "scene_id": scene_id,

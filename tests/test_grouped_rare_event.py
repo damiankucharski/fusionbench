@@ -4,7 +4,13 @@ import numpy as np
 import pytest
 from scipy.special import expit, logit
 
-from fusionbench import generate_dataset, get_scenario, load_reference_dataset
+from fusionbench import (
+    generate_dataset,
+    get_scenario,
+    load_dataset,
+    load_reference_dataset,
+    save_dataset,
+)
 from fusionbench.profiles import _draw, list_profiles
 from fusionbench.scenarios.grouped_rare_event import GroupedRareEvent
 from fusionbench.transfer import load_preset
@@ -160,3 +166,92 @@ def test_specialist_base_has_equal_providers_outside_region_and_exact_expert_ins
     assert (
         specialist.knobs["heterogeneity"] == specialist.knobs["common_error_share"] == 0
     )
+
+
+@pytest.mark.parametrize(
+    "scenario_id", [ID, "shared_error_bloc", "rare_scene_specialist"]
+)
+def test_structural_permutation_is_constant_across_splits_and_independent_of_samples(
+    scenario_id, tmp_path
+):
+    original = get_scenario(scenario_id)
+    ordered = get_scenario(scenario_id, provider_order_seed=np.int64(17))
+    order = ordered.provider_order
+    assert isinstance(order, tuple) and sorted(order) == list(range(8))
+    assert order != original.provider_order == tuple(range(8))
+    assert original.model_ids() == ordered.model_ids()
+    inverse = np.argsort(order)
+    left = np.random.default_rng(122)
+    right = np.random.default_rng(122)
+    for name, n in (("fit", 35), ("test", 89)):
+        x, y, latent = original.sample_split(n, left, name)
+        permuted, labels, diagnostic = ordered.sample_split(n, right, name)
+        np.testing.assert_array_equal(permuted[:, inverse], x)
+        np.testing.assert_array_equal(y, labels)
+        for key in latent:
+            np.testing.assert_array_equal(diagnostic[key], latent[key])
+    bank = ordered.build(n_per_split=19, seed=947)
+    loaded = load_dataset(save_dataset(bank, tmp_path))
+    assert loaded.meta["parameters"] == {"provider_order_seed": 17}
+    assert loaded.meta["knobs"]["provider_order_seed"] == 17
+    replay = get_scenario(scenario_id, **loaded.meta["knobs"])
+    assert replay.provider_order == order
+    rebuilt = replay.build(n_per_split=19, seed=947)
+    np.testing.assert_array_equal(bank.test_preds, rebuilt.test_preds)
+    assert get_scenario(scenario_id, provider_order_seed=18).provider_order != order
+
+
+@pytest.mark.parametrize("seed", [False, True, -1, 2.5, "7"])
+def test_invalid_provider_order_seed(seed):
+    with pytest.raises(ValueError, match="provider_order_seed"):
+        get_scenario(ID, provider_order_seed=seed)
+
+
+@pytest.mark.parametrize(
+    "scenario_id", [ID, "shared_error_bloc", "rare_scene_specialist"]
+)
+@pytest.mark.parametrize("slope", [1.8, 2.3])
+def test_signal_slope_changes_only_provider_evidence_without_changing_noise_or_events(
+    scenario_id, slope
+):
+    settings = {"provider_order_seed": 7}
+    original = get_scenario(scenario_id, **settings)
+    variant = get_scenario(scenario_id, provider_signal_slope=slope, **settings)
+    assert variant.knobs["provider_signal_slope"] == slope
+    specialist = variant.provider_order.index(variant.specialist_index)
+    for stream in [0, 1]:
+        x, y, diagnostic = original.sample(256, np.random.default_rng([723, stream]))
+        xs, ys, latents = variant.sample(256, np.random.default_rng([723, stream]))
+        np.testing.assert_array_equal(ys, y)
+        for key in diagnostic:
+            np.testing.assert_array_equal(latents[key], diagnostic[key])
+        change = (slope - 1.3) * latents["signal"]
+        expected_delta = np.broadcast_to(change[:, None], (len(y), 8)).copy()
+        expected_delta[latents["specialist_region"], specialist] *= (
+            1 - variant.knobs["specialist_strength"]
+        )
+        np.testing.assert_allclose(
+            logit(xs[:, :, 1]) - logit(x[:, :, 1]), expected_delta, atol=1e-12
+        )
+    # Stored settings reproduce both the output order and the changed signal slope.
+    replay = get_scenario(scenario_id, **variant.knobs)
+    np.testing.assert_array_equal(
+        variant.build(43, 70).fit_preds, replay.build(43, 70).fit_preds
+    )
+
+
+@pytest.mark.parametrize("slope", [False, True, 0, -1, np.nan, np.inf, "1.8"])
+def test_invalid_signal_slope(slope):
+    with pytest.raises(ValueError, match="provider_signal_slope"):
+        GroupedRareEvent(provider_signal_slope=slope)
+
+
+def test_finite_extreme_slope_keeps_exact_specialist_probability_in_active_scenes():
+    sc = get_scenario(
+        "rare_scene_specialist",
+        provider_signal_slope=np.finfo(float).max,
+        specialist_rate=1,
+    )
+    x, _, latent = sc.sample(128, np.random.default_rng(7))
+    assert np.isfinite(x).all()
+    np.testing.assert_array_equal(x[:, 3, 1], latent["posterior"])

@@ -273,6 +273,8 @@ Use `grouped_rare_event` to ask what a fusion method can learn when the training
 
 | Parameter | Default | Effect |
 | --- | ---: | --- |
+| `provider_signal_slope` | 1.3 | Positive finite coefficient of the latent signal in ordinary provider logits. The true event logit uses slope 1.8. |
+| `provider_order_seed` | None | A nonnegative integer permutes the anonymous provider columns. The order depends only on this seed and is fixed across train and test. The default retains the original order. |
 | `scene_size` | 8 | Positive integer count of rows per scene. The last scene may contain fewer rows. |
 | `event_offset` | 2 | Subtracted from the latent signal; larger values make events rarer. |
 | `heterogeneity` | 0.5 | Changes the ratio of the largest to smallest provider residual standard deviation from 1 at zero to exp(2) at one. Average pre-specialist residual variance is fixed. |
@@ -282,10 +284,10 @@ Use `grouped_rare_event` to ask what a fusion method can learn when the training
 | `specialist_rate` | 0.2 | Probability that a scene activates the specialist, independently of its signal. |
 | `specialist_strength` | 0.75 | Interpolates provider 3's logit toward the true event logit in active scenes. At one this provider reports the exact probability in those scenes. |
 
-Each row has latent signal `z = 0.9 * scene_signal + 0.8 * row_signal - event_offset`, using independent standard normal signals. The event probability is `expit(1.8*z)`. Ordinary provider logits use `1.3*z` plus Gaussian error. Noise controls range from zero to one. At a fixed seed, row count and scene size, changing provider properties preserves the same labels, signals and underlying noise draws. These switches let you compare the loss due to a common provider error with the benefit of a local specialist on the very same events.
+Each row has latent signal `z = 0.9 * scene_signal + 0.8 * row_signal - event_offset`, using independent standard normal signals. The event probability is `expit(1.8*z)`. Ordinary provider logits use `provider_signal_slope*z` plus Gaussian error. Noise controls range from zero to one. At a fixed seed, row count and scene size, changing provider properties preserves the same labels, signals and underlying noise draws. These switches let you compare the loss due to a common provider error with the benefit of a local specialist on the very same events.
 
 ```python
-from fusionbench import generate_dataset, load_reference_dataset
+from fusionbench import generate_dataset, get_scenario, load_reference_dataset
 
 bank = generate_dataset(
     "grouped_rare_event", seed=34, n_per_split=128,
@@ -295,5 +297,21 @@ scenes = bank.meta["evaluation_groups"]["fit"]["scene_id"]
 specialist_active = bank.meta["evaluation_groups"]["test"]["specialist_region"]
 reference = load_reference_dataset("grouped_rare_event")
 ```
+
+To compare how providers scale their evidence, vary the provider slope and keep the data seed fixed:
+
+```python
+slope_banks = {
+    slope: generate_dataset(
+        "rare_scene_specialist", provider_signal_slope=slope,
+        seed=34, n_per_split=128,
+    )
+    for slope in (1.3, 1.8, 2.3)
+}
+```
+
+A slope of 1.8 gives ordinary provider logits the same signal coefficient as the true logit. The providers still carry residual errors. At 2.3 their logits respond more strongly to the latent signal. All three settings share labels, residual draws and active scenes. With specialist strength one, the specialist reports the same true probability inside its active scenes at every slope.
+
+To check sensitivity to column order, keep the data seed and all other knobs fixed and vary `provider_order_seed`. The permutation applies to both splits. With `sc = get_scenario("shared_error_bloc", provider_order_seed=7)`, `sc.provider_order[j]` gives the latent role behind output column `j`. The returned tuple is immutable. Model IDs remain `provider_0` through `provider_7` in output order. A method that receives only the reports cannot read the latent role from these IDs.
 
 The prediction tensor has shape (rows, 8, 2). Scene labels, context and latent probability are available for evaluation. The generator's `sample()` method returns `latent["posterior"]`, the probability conditional on the underlying signal. The posterior conditional on the reports is generally different, so the dataset leaves `fit_oracle` and `test_oracle` empty. This control models within-scene dependence without reproducing image geometry or a particular sensor. [Evaluating grouped data](validation-curse.md)
