@@ -1,0 +1,17 @@
+law,n_providers,method,banks,gp_exact_ever,gp_exact_final,gp_selected_exact,planted_max_offered,exact_probe_offered,exact_menu,deployed_exact,deployed_exact_when_offered_by_probe,deployed_exact_probe_when_offered,exact_menu_bypassed,deployed_any_probe,probe_fit_calls,gp_objective_evaluations
+max,6,balanced8,24,6,6,4,8,8,10,8,6,4,2,5,192,4768
+max,6,gp,24,6,6,4,0,0,4,4,0,0,0,0,0,4768
+max,6,max8,24,6,6,4,14,14,15,13,12,9,2,11,192,4768
+max,6,min8,24,6,6,4,0,0,4,4,0,0,0,0,192,4768
+max,12,balanced8,24,6,4,3,5,5,8,8,5,5,0,6,192,6988
+max,12,gp,24,6,4,3,0,0,3,3,0,0,0,0,0,6988
+max,12,max8,24,6,4,3,5,5,8,8,5,5,0,8,192,6988
+max,12,min8,24,6,4,3,0,0,3,3,0,0,0,0,192,6988
+singleton,6,balanced8,24,24,24,18,8,0,18,18,0,0,0,0,192,3857
+singleton,6,gp,24,24,24,18,0,0,18,18,0,0,0,0,0,3857
+singleton,6,max8,24,24,24,18,14,0,18,18,0,0,0,0,192,3857
+singleton,6,min8,24,24,24,18,0,0,18,18,0,0,0,0,192,3857
+singleton,12,balanced8,24,24,23,15,5,0,15,15,0,0,0,0,192,6122
+singleton,12,gp,24,24,23,15,0,0,15,15,0,0,0,0,0,6122
+singleton,12,max8,24,24,23,15,5,0,15,15,0,0,0,0,192,6122
+singleton,12,min8,24,24,23,15,0,0,15,15,0,0,0,0,192,6122

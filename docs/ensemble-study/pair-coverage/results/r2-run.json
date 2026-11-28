@@ -1,0 +1,16 @@
+{
+  "started_utc": "2026-11-28T16:36:32.346727+00:00",
+  "elapsed_seconds": 57.2586181580009,
+  "workers": 1,
+  "numerical_threads_per_worker": 1,
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "banks": 24,
+  "actual_gp_fits": 96,
+  "source_sha256": {
+    "protocol": "4bfbeb5e14b9c39be598b674b2fcba0b5589ffd4d0d4139036d9431e1905c6f8",
+    "runner": "9c268f93a2200a8f11135f11d37af262579dfb8e2d5f3ffa8d5a15d6a3744a9f",
+    "gp_engine": "58be011b89d9d328a2c1fae249c24176b80f25ef6baacdef5725d21bc7cd2019",
+    "pair_coverage": "7519e1396c4ce22adeb938a542437c3278c34d017002216a79d3f57164b6774a"
+  }
+}

@@ -1,0 +1,67 @@
+{
+  "r2_bank_export": {
+    "paired_differences": 72,
+    "whole_bank_units": 24
+  },
+  "schedule": {
+    "schedule_cases": 36,
+    "multiclass_disjoint_support": true
+  },
+  "selection": {
+    "repeated_pairs_charged": true,
+    "fit_forward_counts": {
+      "r1_menu": 8,
+      "r2_three_menus": 24,
+      "r3_incumbent_and_two_menus": 17
+    },
+    "incumbent_ties": true,
+    "first_probe_ties": true,
+    "audit_preferred_later_probe": true
+  },
+  "round_1": {
+    "independent_banks": 32,
+    "regrown_gp_cells": 64,
+    "reference_refits": 256,
+    "probe_calls": 1024,
+    "tied_winning_menus": 4,
+    "primary": {
+      "estimate": 0.0006530750203729563,
+      "ci_low": -0.01690712261554945,
+      "ci_high": 0.017772486464734793
+    }
+  },
+  "round_2": {
+    "independent_banks": 24,
+    "sizes": [
+      6,
+      12
+    ],
+    "regrown_gp_cells": 96,
+    "reference_refits": 384,
+    "probe_calls": 2304,
+    "tied_winning_menus": 6,
+    "primary": {
+      "estimate": -0.016200784667466713,
+      "ci_low": -0.028556716687748857,
+      "ci_high": -0.005296354527569066
+    }
+  },
+  "round_3": {
+    "fixed_families": 25,
+    "banks_per_family": 4,
+    "regrown_gp_cells": 100,
+    "reference_refits": 400,
+    "probe_calls": 1600,
+    "tied_winning_menus": 2,
+    "paired_intervals": 7,
+    "primary": {
+      "estimate": -0.000619867919876945,
+      "ci_low": -0.001533320162425274,
+      "ci_high": 0.000184767711293627,
+      "better": 3,
+      "tied": 19,
+      "worse": 3
+    }
+  },
+  "status": "passed"
+}

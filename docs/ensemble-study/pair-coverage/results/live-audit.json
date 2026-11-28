@@ -1,0 +1,50 @@
+{
+  "replayed_fits": 328,
+  "replayed_calls_including_founders": 44264,
+  "verified_survivor_generations": 5248,
+  "insertions_matching_terminal_menu": 1312,
+  "test_minus_fit_by_arm": {
+    "ordinary": 0.03302221389604441,
+    "probes": 0.034499711349052005
+  },
+  "live_family_mean_delta": {
+    "calibrated_suppressor": 0.0,
+    "cloned_shortcut": 0.023631486892700115,
+    "committee": 0.0020724869563658807,
+    "compositional_switch": -0.020193324970745927,
+    "compound": -0.006710406268849875,
+    "correlated": -0.002932594458891963,
+    "deadweight": 0.009220240331770525,
+    "environment_shortcut": 0.0,
+    "gated_experts": -0.0014270201246236042,
+    "hardrescue": -0.027647675258704926,
+    "hardveto": -0.005722809056325981,
+    "miscalibration": -0.0029218413755648445,
+    "multiclass_committee": -0.00047578635105019473,
+    "native_close_switch": 0.004500764357248957,
+    "native_switch": 0.0041115996591837844,
+    "needle": -0.0014041881639309042,
+    "parity": -0.0891652158128872,
+    "polarity_fault": -0.0011736427400930588,
+    "rare_specialist": 0.00037977430555555247,
+    "redundant_pool": 0.00042623172158597067,
+    "saturated": -0.0006201681464751418,
+    "selective_fallback": 0.0,
+    "similar_classes_38": -0.016443151294083302,
+    "two_pathways": -0.011115698383071262,
+    "weakest_link": -0.25451953925628595
+  },
+  "two_most_improved_families": {
+    "weakest_link": -0.25451953925628595,
+    "parity": -0.0891652158128872
+  },
+  "fraction_of_net_panel_gain_from_those_two": 0.8632465348584324,
+  "remaining_23_macro_delta": -0.002367205320347835,
+  "fixed_families_lower_brier_for_regularized_than_lr": 19,
+  "regularized_family_selection": {
+    "augmented": 48,
+    "flat": 34,
+    "gp": 18
+  },
+  "wall_seconds": 16.216050161998282
+}
