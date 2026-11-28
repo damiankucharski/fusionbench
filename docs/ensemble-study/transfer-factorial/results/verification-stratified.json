@@ -1,0 +1,15 @@
+{
+  "verified_risk_rows": 1728,
+  "verified_prediction_values": 884736,
+  "full_bank_replays": [
+    255100,
+    255131
+  ],
+  "primary_reg_minus_mean": 0.05226389400811576,
+  "primary_interval": [
+    0.03929020570648782,
+    0.06625718815308242
+  ],
+  "regularized_better_on_fit": 12,
+  "regularized_worse_on_test": 32
+}

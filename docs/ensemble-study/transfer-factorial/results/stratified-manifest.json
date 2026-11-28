@@ -1,0 +1,9 @@
+{
+  "seconds": 140.29143226000087,
+  "banks": 32,
+  "strata": 4,
+  "workers": 2,
+  "search_seed": 0,
+  "native_fits_including_outer_holdout": 576,
+  "bootstrap_seed": 97944
+}

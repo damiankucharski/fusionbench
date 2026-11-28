@@ -1,0 +1,17 @@
+{
+  "data_seeds": [
+    253100,
+    253115
+  ],
+  "native_seed": 0,
+  "split_seed": 0,
+  "bootstrap_seed": 97943,
+  "bootstrap_draws": 10000,
+  "n_fit": 512,
+  "fits": 192,
+  "source_population_rows": 576,
+  "target_population_rows": 5184,
+  "max_brier_identity_error": 2.220446049250313e-16,
+  "max_posterior_identity_error": 2.220446049250313e-16,
+  "seconds": 25.010545239998464
+}

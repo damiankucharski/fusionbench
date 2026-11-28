@@ -1,0 +1,108 @@
+{
+  "seconds": 34.10901301500053,
+  "workers": 1,
+  "numerical_threads_per_worker": 1,
+  "banks": 16,
+  "native_fits": 96,
+  "reference_fits": 48,
+  "optimizer_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "split_seed": 0,
+  "bootstrap_seed": 97946,
+  "bootstrap_draws": 10000,
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "training_banks": [
+    {
+      "seed": 257100,
+      "fit_x_sha256": "b24d67acb03b8494e400bc1c982fa6f77e7d208a36149761b5772f5f5a16c46f",
+      "fit_y_sha256": "466cce67651573f143f4419b6a3aee5876ab4ad1f1a6376f22adb15c59ad8505"
+    },
+    {
+      "seed": 257101,
+      "fit_x_sha256": "763e2dad300ed46c67394f5987514b53a71a3cbdb9de8438af5a301c2d109210",
+      "fit_y_sha256": "c02b4292bb1f13f6b96b5bab8b74480e3201dcbbd45f26ea6072b840c87056c7"
+    },
+    {
+      "seed": 257102,
+      "fit_x_sha256": "80d4f6325c4351335a58f0b5dfc829d4a9661dd40f89b0154fd781a4d1322e0a",
+      "fit_y_sha256": "0f2aeb1c3df87b72e73262c721c073b9e927aba5217f2221beb945abd7573d94"
+    },
+    {
+      "seed": 257103,
+      "fit_x_sha256": "bd6d4f06e4eb97aece728cd6f064d8c10c48d7eb53859230582a2ad46ae71014",
+      "fit_y_sha256": "b5073a10e029a6f4f380d04f8b4da06e7cc639ff0f9ed32eb21426ee654b8460"
+    },
+    {
+      "seed": 257104,
+      "fit_x_sha256": "a551f2f2b6e197bfea41ad52e819e97f62233d6ef5f1dafc94c310a9881f05d8",
+      "fit_y_sha256": "f09e391e16c86b5b379aff510caa984d9b3ab4e7d2a85a9345c406c2d4a477ed"
+    },
+    {
+      "seed": 257105,
+      "fit_x_sha256": "4e98fa7af993a1eba9fdd9a7a54b21bec767b3328176477dd369eec3e5dcddfb",
+      "fit_y_sha256": "aefdff59e53696e926dbea326dc7763bd72f2975e2c992315c2d9c15e7886177"
+    },
+    {
+      "seed": 257106,
+      "fit_x_sha256": "257e593ab14ebb8beadece51b93e09649fce3254f8a5c7b602e14f95f81b0249",
+      "fit_y_sha256": "164e18332815d8aa8ca23ecf7a76d431ace63e13325f175bffee0fd69d1f7b9f"
+    },
+    {
+      "seed": 257107,
+      "fit_x_sha256": "d6f17bcbcf8fa99c974933ca2abca837e08bd3d4d50374fca76ece8760f43eae",
+      "fit_y_sha256": "7e9904d700d458b5f252b6b859c016a8b864344d1846173a4551a661a0eb3734"
+    },
+    {
+      "seed": 257108,
+      "fit_x_sha256": "0332362815eb97850108b32de734415ebd9c4baa6d8762fd87763e664d1c4756",
+      "fit_y_sha256": "dcf46512e4c7525c9f6d49833b5a90f4e2ccc56e2ade32c5e8e39b4cc4e44014"
+    },
+    {
+      "seed": 257109,
+      "fit_x_sha256": "af70e9065b77df47e4ad2d9c8ee070916fc9be2b72f1eb28f950987c5f121cca",
+      "fit_y_sha256": "9c3d22afb13ba6303bd47e14ad3f7a6cb6715ecb83ed7e7da09007337000f4e8"
+    },
+    {
+      "seed": 257110,
+      "fit_x_sha256": "e3d34560ac916204439e50380c8c23208b8aad820d2a88663b43bbb3e4653746",
+      "fit_y_sha256": "dc45dd44f4b580211edf0105439285e93a6ffab610be067743c905a67c4e7de9"
+    },
+    {
+      "seed": 257111,
+      "fit_x_sha256": "2c5c09b82f322678c5c647683e2f3d4cb780266e3ada2db86cd3148755b267ed",
+      "fit_y_sha256": "8e2d7caea7b294d633eec02d9bf739c063e06dcdc0a109a8ac33f61e8e12745a"
+    },
+    {
+      "seed": 257112,
+      "fit_x_sha256": "f5ae134a4525cc459e1ee104987c48647584f6f77e53b8e6f3050b375138e719",
+      "fit_y_sha256": "f9fa7a39da1dbf0a0078ac5095c71a53c038dbae6ae424751976348ff14322bb"
+    },
+    {
+      "seed": 257113,
+      "fit_x_sha256": "4aaa6b6cb2c69d3a251fc4c7a063200905b6b60ec4eae3f895ae758016049685",
+      "fit_y_sha256": "6438b202b42b3b95fc3cc9942fb49aee7295bc72d8f1b4a1b424bc6229c6c84f"
+    },
+    {
+      "seed": 257114,
+      "fit_x_sha256": "ac13d75e650c9b3998f5fbfde33f73a6b667d7544b048bac361b018b0718de53",
+      "fit_y_sha256": "edac61bdfeb53e073e0babcdcc506e1b474c003e541c9c2beeccf5da1e53d209"
+    },
+    {
+      "seed": 257115,
+      "fit_x_sha256": "a37c35286c4618cee0ed07f73b4f7ec8c85119825d42da78dfe1da33bfc47097",
+      "fit_y_sha256": "77f1afde836ba72e09ada349987889071c026831074992d0caf8fbde86aad28a"
+    }
+  ],
+  "source_sha256": {
+    "protocol": "ecc934adf2ff220bcae0f2126a8e979952baf0462d78e7279e7986226d4a3b78",
+    "runner": "dba63b354d0d4c2835a638e261d77cbe745a2a6df529cc1bd6a54a4109aaa3cc",
+    "native_pattern_logit": "627a5a6d5d3ec76c2bf6134eb5a50893cf10f5a4d0c8815ef6794459de569736"
+  }
+}

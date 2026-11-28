@@ -1,0 +1,24 @@
+{
+  "started_utc": "2026-11-28T16:49:20.422364+00:00",
+  "fit_and_score_seconds": 66.24512282300202,
+  "total_seconds": 67.88738381500298,
+  "workers": 1,
+  "numerical_threads_per_worker": 1,
+  "banks": 24,
+  "fits": 768,
+  "fit_rows_per_bank": 512,
+  "search_seed": 0,
+  "split_seed": 0,
+  "bootstrap_seed": 97941,
+  "bootstrap_draws": 10000,
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "sklearn": "1.8.0",
+  "sources_sha256": {
+    "runner": "7e4ac99c1619e96def5007a3e8105a54e0599b41aab976a20be8f88688042222",
+    "protocol": "eb37211b18d4dfefa4f2ac69277c170371aafff977c5582cb8e1f57ed51f25d6",
+    "scenario": "879aca0f43c3eaa2e87c4388e7ce2806bb2b427137c088f81804510c1d1160ff",
+    "okapi": "0ed9848e78dd448f951fb18e5f44c7b45221730035e14eec13033f8b6c996616",
+    "pattern_logit": "627a5a6d5d3ec76c2bf6134eb5a50893cf10f5a4d0c8815ef6794459de569736"
+  }
+}

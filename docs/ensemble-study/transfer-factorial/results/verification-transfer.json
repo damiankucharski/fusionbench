@@ -1,0 +1,301 @@
+{
+  "training_banks": 192,
+  "predictions": 12288,
+  "risk_rows": 1536,
+  "risk_fields": 30720,
+  "max_absolute_risk_discrepancy": 3.3306690738754696e-16,
+  "reference_refits": 64,
+  "replay_seeds": [
+    251100,
+    251123
+  ],
+  "max_absolute_prediction_discrepancy": 0.0,
+  "bootstrap_contrasts_verified": 70,
+  "target_brier_contrasts_regularized": {
+    "A_rare_source": {
+      "estimate": 0.10493260977248618,
+      "ci_low": 0.08377083931633397,
+      "ci_high": 0.12716941462676445
+    },
+    "B_source_shortcut": {
+      "estimate": 0.21376747571625201,
+      "ci_low": 0.18145548748247,
+      "ci_high": 0.2550879497335063
+    },
+    "C_train_noise_only": {
+      "estimate": 0.044090560294864044,
+      "ci_low": 0.023591114785974518,
+      "ci_high": 0.06307551300303164
+    },
+    "D_target_noise_only": {
+      "estimate": 0.025430683402776693,
+      "ci_low": 0.015907870103810926,
+      "ci_high": 0.03438770592858346
+    },
+    "E_joint_mismatch": {
+      "estimate": 0.28882948247062507,
+      "ci_low": 0.26459021917880454,
+      "ci_high": 0.312496228293464
+    }
+  },
+  "rank_method": "rank of mean population Brier among four methods per cell",
+  "mean_rank_across_16_cells": {
+    "mean": 2.4375,
+    "prob_lr": 2.6875,
+    "regularized": 1.625,
+    "top_n": 3.25
+  },
+  "regularized_lower_than": {
+    "vs_mean": 8,
+    "vs_top_n": 14,
+    "vs_prob_lr": 16
+  },
+  "cell_order": [
+    "region_fit",
+    "shortcut_fit",
+    "noise_fit",
+    "noise_target"
+  ],
+  "cells": [
+    {
+      "cell": [
+        0.05,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "regularized_rank": 1.0,
+      "mean_target_brier": {
+        "mean": 0.428203125,
+        "top_n": 0.375,
+        "prob_lr": 0.37022091316390005,
+        "regularized": 0.3568638035760448
+      }
+    },
+    {
+      "cell": [
+        0.05,
+        0.0,
+        0.0,
+        0.2
+      ],
+      "regularized_rank": 1.0,
+      "mean_target_brier": {
+        "mean": 0.4734531250000001,
+        "top_n": 0.4750000000000001,
+        "prob_lr": 0.47236407753903337,
+        "regularized": 0.4582801382895412
+      }
+    },
+    {
+      "cell": [
+        0.05,
+        0.0,
+        0.2,
+        0.0
+      ],
+      "regularized_rank": 2.0,
+      "mean_target_brier": {
+        "mean": 0.428203125,
+        "top_n": 0.3744357638888889,
+        "prob_lr": 0.39907826565809823,
+        "regularized": 0.39030343558254216
+      }
+    },
+    {
+      "cell": [
+        0.05,
+        0.0,
+        0.2,
+        0.2
+      ],
+      "regularized_rank": 1.0,
+      "mean_target_brier": {
+        "mean": 0.4734531250000001,
+        "top_n": 0.46299131944444455,
+        "prob_lr": 0.46076271577041955,
+        "regularized": 0.4603008812169127
+      }
+    },
+    {
+      "cell": [
+        0.05,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "regularized_rank": 2.0,
+      "mean_target_brier": {
+        "mean": 0.428203125,
+        "top_n": 0.80609375,
+        "prob_lr": 0.660199580329605,
+        "regularized": 0.6471582320599332
+      }
+    },
+    {
+      "cell": [
+        0.05,
+        1.0,
+        0.0,
+        0.2
+      ],
+      "regularized_rank": 2.0,
+      "mean_target_brier": {
+        "mean": 0.4734531250000001,
+        "top_n": 0.8081770833333336,
+        "prob_lr": 0.7083604978533344,
+        "regularized": 0.6986281813139793
+      }
+    },
+    {
+      "cell": [
+        0.05,
+        1.0,
+        0.2,
+        0.0
+      ],
+      "regularized_rank": 2.0,
+      "mean_target_brier": {
+        "mean": 0.428203125,
+        "top_n": 0.82,
+        "prob_lr": 0.7371891044966571,
+        "regularized": 0.7327400571133551
+      }
+    },
+    {
+      "cell": [
+        0.05,
+        1.0,
+        0.2,
+        0.2
+      ],
+      "regularized_rank": 2.0,
+      "mean_target_brier": {
+        "mean": 0.4734531250000001,
+        "top_n": 0.8200000000000002,
+        "prob_lr": 0.7631574350884258,
+        "regularized": 0.7540383141018441
+      }
+    },
+    {
+      "cell": [
+        0.5,
+        0.0,
+        0.0,
+        0.0
+      ],
+      "regularized_rank": 1.0,
+      "mean_target_brier": {
+        "mean": 0.428203125,
+        "top_n": 0.3390625,
+        "prob_lr": 0.31895802374876375,
+        "regularized": 0.2519311938035586
+      }
+    },
+    {
+      "cell": [
+        0.5,
+        0.0,
+        0.0,
+        0.2
+      ],
+      "regularized_rank": 2.0,
+      "mean_target_brier": {
+        "mean": 0.4734531250000001,
+        "top_n": 0.4250625000000001,
+        "prob_lr": 0.44566907461205546,
+        "regularized": 0.435229382246131
+      }
+    },
+    {
+      "cell": [
+        0.5,
+        0.0,
+        0.2,
+        0.0
+      ],
+      "regularized_rank": 1.0,
+      "mean_target_brier": {
+        "mean": 0.428203125,
+        "top_n": 0.3390625,
+        "prob_lr": 0.3380224698902818,
+        "regularized": 0.2960217540984227
+      }
+    },
+    {
+      "cell": [
+        0.5,
+        0.0,
+        0.2,
+        0.2
+      ],
+      "regularized_rank": 1.0,
+      "mean_target_brier": {
+        "mean": 0.4734531250000001,
+        "top_n": 0.4250625000000001,
+        "prob_lr": 0.42817188346193213,
+        "regularized": 0.40979869884335435
+      }
+    },
+    {
+      "cell": [
+        0.5,
+        1.0,
+        0.0,
+        0.0
+      ],
+      "regularized_rank": 2.0,
+      "mean_target_brier": {
+        "mean": 0.428203125,
+        "top_n": 0.7927083333333335,
+        "prob_lr": 0.5557330591393732,
+        "regularized": 0.46569866951981065
+      }
+    },
+    {
+      "cell": [
+        0.5,
+        1.0,
+        0.0,
+        0.2
+      ],
+      "regularized_rank": 2.0,
+      "mean_target_brier": {
+        "mean": 0.4734531250000001,
+        "top_n": 0.7966666666666669,
+        "prob_lr": 0.646646337902547,
+        "regularized": 0.5899276466113722
+      }
+    },
+    {
+      "cell": [
+        0.5,
+        1.0,
+        0.2,
+        0.0
+      ],
+      "regularized_rank": 2.0,
+      "mean_target_brier": {
+        "mean": 0.428203125,
+        "top_n": 0.82,
+        "prob_lr": 0.6848661618445547,
+        "regularized": 0.6645584377340349
+      }
+    },
+    {
+      "cell": [
+        0.5,
+        1.0,
+        0.2,
+        0.2
+      ],
+      "regularized_rank": 2.0,
+      "mean_target_brier": {
+        "mean": 0.4734531250000001,
+        "top_n": 0.8200000000000002,
+        "prob_lr": 0.7309240610637707,
+        "regularized": 0.7157225657948739
+      }
+    }
+  ]
+}

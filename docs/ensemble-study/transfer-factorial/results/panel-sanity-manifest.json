@@ -1,0 +1,87 @@
+{
+  "protocol_commit": "8d4dae2",
+  "fusionbench_base_commit": "e51f5293ed7a34ef8f777e1c12b4211662f22482",
+  "okapi_commit": "92f0e96d7ba29f047134ffb3640f444fff5adc7a",
+  "scenarios": [
+    "committee",
+    "deadweight",
+    "needle",
+    "saturated",
+    "correlated",
+    "calibrated_suppressor",
+    "polarity_fault",
+    "hardveto",
+    "hardrescue",
+    "weakest_link",
+    "two_pathways",
+    "parity",
+    "compound",
+    "gated_experts",
+    "native_switch",
+    "compositional_switch",
+    "native_close_switch",
+    "miscalibration",
+    "multiclass_committee",
+    "similar_classes_38",
+    "rare_specialist",
+    "redundant_pool",
+    "environment_shortcut",
+    "selective_fallback",
+    "cloned_shortcut",
+    "rare_shortcut_noise",
+    "stratified_pool"
+  ],
+  "planned_scenarios": 26,
+  "appended_scenario": "stratified_pool",
+  "seeds": [
+    254100,
+    254101
+  ],
+  "rows_per_split": 512,
+  "methods": [
+    "mean",
+    "top_n",
+    "prob_lr",
+    "regularized",
+    "plain",
+    "guard"
+  ],
+  "generation_api": "generate_dataset(scenario, seed=seed, n_per_split=512)",
+  "gate": "gate_choices(fit_x, fit_y) once per bank; compare gain > 0 or gain > SE; share all full-data predictions",
+  "fit_seconds_column": "time for deployed full-data method; identical reused values on decision rows",
+  "ordinary_fit_seconds": 36.02165696203883,
+  "additional_gate_seconds": 33.9654999730119,
+  "wall_seconds": 70.63532352100083,
+  "numerical_threads": 1,
+  "software": {
+    "python": "3.12.14",
+    "numpy": "2.3.5",
+    "sklearn": "1.8.0"
+  },
+  "sha256": "2f281aa46e72d69be03ceff71fcf012d47b9299515df226da9f822b0ca0c64ef",
+  "planned_26_mean_test_brier": {
+    "guard": 0.2593835904806265,
+    "mean": 0.3960749619153359,
+    "plain": 0.25816860837427813,
+    "prob_lr": 0.28446656734463005,
+    "regularized": 0.25904458553639087,
+    "top_n": 0.3755731445993304
+  },
+  "appended_27th_mean_test_brier": {
+    "guard": 0.48037384033203123,
+    "mean": 0.48037384033203123,
+    "plain": 0.4843942260742187,
+    "prob_lr": 0.4866969697931487,
+    "regularized": 0.4947761742862654,
+    "top_n": 0.4849578815901361
+  },
+  "all_27_mean_test_brier": {
+    "guard": 0.267568414549197,
+    "mean": 0.39919714259743566,
+    "plain": 0.26654733495575744,
+    "prob_lr": 0.2919565822501307,
+    "regularized": 0.2677753851197196,
+    "top_n": 0.3796244311545454
+  },
+  "suite_extension_protocol_commit": "02d81b6"
+}
