@@ -1,0 +1,12 @@
+{
+  "chosen": "pull_mean",
+  "criteria": {
+    "weak": true,
+    "scene16": false,
+    "standard": true,
+    "strong": true,
+    "digits_449": true
+  },
+  "both_targets": false,
+  "all_criteria": false
+}

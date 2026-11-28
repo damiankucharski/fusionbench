@@ -1,0 +1,294 @@
+{
+  "round1": {
+    "banks": 118,
+    "score_rows": 826,
+    "paired_contrasts_checked": 1386,
+    "reference_fits_reconstructed": 354,
+    "fit_and_audit_hashes_matched": 708,
+    "max_reference_metric_error": 4.440892098500626e-16,
+    "max_paired_summary_error": 1.249000902703301e-16,
+    "native_replays": [
+      {
+        "method": "full",
+        "family": "weak",
+        "seed": 381000,
+        "rows_every_evaluation": 128,
+        "fitness_batches": 9,
+        "test_prediction_hash": "e5d06db2e8342a4b13ae2a3225281241cf25e00a08d19a9223cbe5de61d46de7"
+      },
+      {
+        "method": "full",
+        "family": "scene16",
+        "seed": 381300,
+        "rows_every_evaluation": 128,
+        "fitness_batches": 9,
+        "test_prediction_hash": "a16e08e38d16b9e7305f52aafdfa547e5319a199a85da9e26495737e5ed1acf3"
+      },
+      {
+        "method": "full",
+        "family": "multiclass_committee",
+        "seed": 381100,
+        "rows_every_evaluation": 512,
+        "fitness_batches": 9,
+        "test_prediction_hash": "071ebf66fb0e058ca822fe60b0749db2be9eb9ec3f2b96f786f40654a072feec"
+      },
+      {
+        "method": "full",
+        "family": "digits_449",
+        "seed": 381200,
+        "rows_every_evaluation": 449,
+        "fitness_batches": 9,
+        "test_prediction_hash": "239b63ae7feabe44ed50a7eb6929f84e93186f3b85df1cc43e237ef88770ca3d"
+      }
+    ],
+    "audit_outcome_probes": [
+      {
+        "family": "scene16",
+        "seed": 381300,
+        "forecasts_unchanged_after_reversing_audit_labels": 7,
+        "premature_audit_reads": 0
+      }
+    ]
+  },
+  "round2": {
+    "banks": 118,
+    "score_rows": 826,
+    "paired_contrasts_checked": 1386,
+    "reference_fits_reconstructed": 354,
+    "fit_and_audit_hashes_matched": 708,
+    "max_reference_metric_error": 6.661338147750939e-16,
+    "max_paired_summary_error": 8.326672684688674e-17,
+    "native_replays": [
+      {
+        "method": "full",
+        "family": "weak",
+        "seed": 382000,
+        "rows_every_evaluation": 128,
+        "fitness_batches": 9,
+        "test_prediction_hash": "f5b1d9ab78576db59b8e7b3553e281f167d34094dc00ee32d4995d337ee8622d"
+      },
+      {
+        "method": "full",
+        "family": "scene16",
+        "seed": 382300,
+        "rows_every_evaluation": 128,
+        "fitness_batches": 9,
+        "test_prediction_hash": "53c31cfd6eccca803733116e65a17068ff82b92e4137af905ff3ffc36eb48ddf"
+      },
+      {
+        "method": "full",
+        "family": "multiclass_committee",
+        "seed": 382100,
+        "rows_every_evaluation": 512,
+        "fitness_batches": 9,
+        "test_prediction_hash": "a7ac33e06ef7849d26affa931448312807b0c39f6db1edd4ccfa22c85787bc04"
+      },
+      {
+        "method": "full",
+        "family": "digits_449",
+        "seed": 382200,
+        "rows_every_evaluation": 449,
+        "fitness_batches": 9,
+        "test_prediction_hash": "6a5250741c9527ffcc8979bcddabc16456e98a7d484bff0b51e4310b487fd58b"
+      }
+    ],
+    "audit_outcome_probes": [
+      {
+        "family": "scene16",
+        "seed": 382300,
+        "forecasts_unchanged_after_reversing_audit_labels": 7,
+        "premature_audit_reads": 0
+      }
+    ]
+  },
+  "round3": {
+    "banks": 118,
+    "score_rows": 944,
+    "paired_contrasts_checked": 1848,
+    "reference_fits_reconstructed": 354,
+    "fit_and_audit_hashes_matched": 708,
+    "max_reference_metric_error": 5.551115123125783e-16,
+    "max_paired_summary_error": 1.8041124150158794e-16,
+    "native_replays": [
+      {
+        "method": "full",
+        "family": "weak",
+        "seed": 383000,
+        "rows_every_evaluation": 128,
+        "fitness_batches": 9,
+        "test_prediction_hash": "a865bfe0d6f5be0335a25402364c1eecf7622f7ffe0baf32c7d1d5ad3d382e7a"
+      },
+      {
+        "method": "full",
+        "family": "scene16",
+        "seed": 383300,
+        "rows_every_evaluation": 128,
+        "fitness_batches": 9,
+        "test_prediction_hash": "faed504959aeb0274a9be3da1d266cae1854ef357360e78fa394115c152dda77"
+      },
+      {
+        "method": "full",
+        "family": "multiclass_committee",
+        "seed": 383100,
+        "rows_every_evaluation": 512,
+        "fitness_batches": 9,
+        "test_prediction_hash": "bca1ed4184090a8af63964af8cfaa7d22c762df27f6be643c5aee056260f05be"
+      },
+      {
+        "method": "full",
+        "family": "digits_449",
+        "seed": 383200,
+        "rows_every_evaluation": 449,
+        "fitness_batches": 9,
+        "test_prediction_hash": "0d00c486653eb221c6c434e570143b4a20a02672cc5071ffafd0c29290346f56"
+      }
+    ],
+    "audit_outcome_probes": [
+      {
+        "family": "scene16",
+        "seed": 383300,
+        "forecasts_unchanged_after_reversing_audit_labels": 8,
+        "premature_audit_reads": 0
+      }
+    ]
+  },
+  "round4": {
+    "banks": 118,
+    "score_rows": 944,
+    "paired_contrasts_checked": 1848,
+    "reference_fits_reconstructed": 354,
+    "fit_and_audit_hashes_matched": 708,
+    "max_reference_metric_error": 3.3306690738754696e-16,
+    "max_paired_summary_error": 8.326672684688674e-17,
+    "native_replays": [
+      {
+        "method": "full",
+        "family": "weak",
+        "seed": 384000,
+        "rows_every_evaluation": 128,
+        "fitness_batches": 9,
+        "test_prediction_hash": "508239bd3879f65e76ff0235d48353bfc44c2973abde1a658d4ad8951e901a5d"
+      },
+      {
+        "method": "full",
+        "family": "scene16",
+        "seed": 384300,
+        "rows_every_evaluation": 128,
+        "fitness_batches": 9,
+        "test_prediction_hash": "ca522ddc227799465f7454729dcf539c490a25156e06e76d57799df594f0d29e"
+      },
+      {
+        "method": "full",
+        "family": "multiclass_committee",
+        "seed": 384100,
+        "rows_every_evaluation": 512,
+        "fitness_batches": 9,
+        "test_prediction_hash": "e4faa2166cbc15eb26e1efb34092e0abd877449adf2e294879fc0ccc35d31359"
+      },
+      {
+        "method": "full",
+        "family": "digits_449",
+        "seed": 384200,
+        "rows_every_evaluation": 449,
+        "fitness_batches": 9,
+        "test_prediction_hash": "9e666b2e79d067fff635fa2257182dc00d50f7310538ecba2c246a5a6a8e044d"
+      }
+    ],
+    "audit_outcome_probes": [
+      {
+        "family": "scene16",
+        "seed": 384300,
+        "forecasts_unchanged_after_reversing_audit_labels": 8,
+        "premature_audit_reads": 0
+      }
+    ]
+  },
+  "round5": {
+    "banks": 284,
+    "score_rows": 1704,
+    "paired_contrasts_checked": 1110,
+    "reference_fits_reconstructed": 852,
+    "fit_and_audit_hashes_matched": 1704,
+    "max_reference_metric_error": 6.661338147750939e-16,
+    "max_paired_summary_error": 5.551115123125783e-17,
+    "native_replays": [
+      {
+        "method": "full",
+        "family": "weak",
+        "seed": 385000,
+        "rows_every_evaluation": 128,
+        "fitness_batches": 9,
+        "test_prediction_hash": "7482ed278c3ba9a8102e53a7ba6d75c765ca8dad2f6b2ffc543ba56ac93efa63"
+      },
+      {
+        "method": "pull_mean",
+        "family": "weak",
+        "seed": 385000,
+        "rows_every_evaluation": 128,
+        "fitness_batches": 9,
+        "test_prediction_hash": "1ff8ad0539a433f8ec9362c43eed88224f5d13cddc7ec3ce1e5623573dd910e6"
+      },
+      {
+        "method": "full",
+        "family": "scene16",
+        "seed": 385300,
+        "rows_every_evaluation": 128,
+        "fitness_batches": 9,
+        "test_prediction_hash": "f582dcbbb889c3a6976eef421b32f6f09ec3d85ba4ad6498feacc7b29a99c053"
+      },
+      {
+        "method": "pull_mean",
+        "family": "scene16",
+        "seed": 385300,
+        "rows_every_evaluation": 128,
+        "fitness_batches": 9,
+        "test_prediction_hash": "e2345da679f6800884e57810b6a8f4c3954e9b72274b01e848b13bb6d67b8eb8"
+      },
+      {
+        "method": "full",
+        "family": "multiclass_committee",
+        "seed": 385100,
+        "rows_every_evaluation": 512,
+        "fitness_batches": 9,
+        "test_prediction_hash": "99aefddeac1f6d0d7c53f4b4af9b6b798bda0924b92897d3548ebf0e5e84ac04"
+      },
+      {
+        "method": "pull_mean",
+        "family": "multiclass_committee",
+        "seed": 385100,
+        "rows_every_evaluation": 512,
+        "fitness_batches": 9,
+        "test_prediction_hash": "127118bcb5e85abd727e1d6cc75905aca26cebfa2180915b796b4e6d2586675e"
+      },
+      {
+        "method": "full",
+        "family": "digits_449",
+        "seed": 385200,
+        "rows_every_evaluation": 449,
+        "fitness_batches": 9,
+        "test_prediction_hash": "d89cd499e40e4b5c53e83022b3d5a85d8ed8e66f2a42080a88dcb1c551c85be5"
+      },
+      {
+        "method": "pull_mean",
+        "family": "digits_449",
+        "seed": 385200,
+        "rows_every_evaluation": 449,
+        "fitness_batches": 9,
+        "test_prediction_hash": "b40b46c86926ff03c1b9e5507ebc2739cf566f6b0f6b1fdbfb5bf8b66fc94d79"
+      }
+    ],
+    "audit_outcome_probes": [
+      {
+        "family": "scene16",
+        "seed": 385300,
+        "forecasts_unchanged_after_reversing_audit_labels": 6,
+        "premature_audit_reads": 0
+      }
+    ]
+  },
+  "selection_commit": "229131d972f5f2e0bdf69f3ab45ffb95059ddbba",
+  "selected": "pull_mean",
+  "joint_target_pass": false,
+  "broad_pass": false,
+  "audit_seconds": 23.20724158899975
+}

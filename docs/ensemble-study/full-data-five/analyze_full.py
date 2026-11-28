@@ -178,7 +178,7 @@ def main():
     tables = summarize(scores, r)
     if r == 5:
         scene_count_contrasts(scores, r).to_csv(
-            OUT / "round5-scene-count.csv", index=False
+            OUT / "round5-scene-interaction.csv", index=False
         )
     for name, table in zip(("levels", "families", "contrasts"), tables, strict=True):
         table.to_csv(OUT / f"round{r}-{name}.csv", index=False)
