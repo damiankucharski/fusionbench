@@ -1,0 +1,59 @@
+{
+  "chosen": "protect",
+  "r09_sha256": "1b770bbc9f2c23d414a894ad0550eb3f7b76682677af083125f487c3aa9d4ed1",
+  "primary_pass": false,
+  "all_guardrails_pass": true,
+  "all_pass": false,
+  "checks": {
+    "mixed/max_regret": {
+      "delta": 0.0009406227749886401,
+      "lo": 0.0,
+      "hi": 0.0028218683249659204,
+      "upper_limit": 0.0,
+      "passed": false
+    },
+    "standard": {
+      "delta": 0.00010775260003777378,
+      "lo": -1.7121912039772475e-05,
+      "hi": 0.0002314762731863614,
+      "upper_limit": 0.005,
+      "passed": true
+    },
+    "mixed/s100": {
+      "delta": 0.0009406227749886401,
+      "lo": 0.0,
+      "hi": 0.0028218683249659204,
+      "upper_limit": 0.005,
+      "passed": true
+    },
+    "standard/gated_experts": {
+      "delta": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "upper_limit": 0.01,
+      "passed": true
+    }
+  },
+  "chosen_minus_hard": {
+    "standard": {
+      "delta": -0.0060644520258317635,
+      "lo": -0.008035871422580235,
+      "hi": -0.004135965090720367
+    },
+    "mixed/s100": {
+      "delta": -0.04582155706216807,
+      "lo": -0.05170448796252919,
+      "hi": -0.0398788144845554
+    },
+    "mixed/max_regret": {
+      "delta": -0.04582155706216807,
+      "lo": -0.05170448796252919,
+      "hi": -0.0398788144845554
+    },
+    "standard/gated_experts": {
+      "delta": -0.10765175982657926,
+      "lo": -0.11797356437029395,
+      "hi": -0.09546040194812982
+    }
+  }
+}

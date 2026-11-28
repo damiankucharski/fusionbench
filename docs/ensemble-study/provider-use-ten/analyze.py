@@ -9,9 +9,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from threadpoolctl import threadpool_limits
-
 from gate_pairs import gate_pairs
+from threadpoolctl import threadpool_limits
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "results"
