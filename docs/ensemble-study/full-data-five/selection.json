@@ -1,0 +1,60 @@
+{
+  "chosen": "pull_mean",
+  "candidates": [
+    {
+      "round": 2,
+      "method": "seeded_mean",
+      "deltas": {
+        "digits_449": -0.0016481310135010828,
+        "equal": -0.03030386509265408,
+        "scene128": 0.0008015622390452037,
+        "scene16": 0.00890581312922069,
+        "standard": -0.04223046005793553,
+        "strong": -0.006306701999733447,
+        "weak": -0.027677475451598686
+      },
+      "violation": 0,
+      "target_average": -0.009385831161188997
+    },
+    {
+      "round": 3,
+      "method": "pull_mean",
+      "deltas": {
+        "digits_449": -0.0025319656266512506,
+        "equal": -0.03429483161019977,
+        "scene128": 0.0014818999066548433,
+        "scene16": -0.00181443762532299,
+        "standard": -0.03336566913924772,
+        "strong": 0.003354467067917144,
+        "weak": -0.04572456462978525
+      },
+      "violation": 0,
+      "target_average": -0.02376950112755412
+    },
+    {
+      "round": 4,
+      "method": "paired_se",
+      "deltas": {
+        "digits_449": 0.0001087201449565178,
+        "equal": -0.05686815442680001,
+        "scene128": -0.002611260768187563,
+        "scene16": -0.002409875746089402,
+        "standard": -0.030701929834175284,
+        "strong": 0.007784164619706306,
+        "weak": -0.04455731054440009
+      },
+      "violation": 0,
+      "target_average": -0.023483593145244747
+    }
+  ],
+  "sha256": {
+    "round1-scores.csv": "67f373c1f5cb7c05f9401a5460910b931015e71c729271092088fc2e0bc29944",
+    "round1-contrasts.csv": "fc82fa42cd1b7efa0cd3da8e290e3e70890fcd497955200521d051a8e00c3b8a",
+    "round2-scores.csv": "fb7bb73d60a033b05d311ab52aec05fab36b67e76ccc8a811c60059d15ed9875",
+    "round2-contrasts.csv": "6549c06da87888e00c465bf954be0b7bc64bccd5d78c88171edf44160121b6bb",
+    "round3-scores.csv": "7847e76d7633303de9a1cbbc2803b1f86532ce1e2de9c609aa1db1e97c8aec0e",
+    "round3-contrasts.csv": "cbb6469fbc37524d392624b00a6961a208fbd068cc7b86bc909465acfc8281a5",
+    "round4-scores.csv": "a5a96ca36a0dc377bec577d10e5c4d9eb1ec7cbbe5698716287ee45f2b72e801",
+    "round4-contrasts.csv": "58050cc63393382245f8b481550af9d2509102ee547d1c45fad3926539e4b3b5"
+  }
+}
