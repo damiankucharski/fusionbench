@@ -178,17 +178,17 @@ Substitution breaks the flagged provider's correlations with the rest of the poo
 Pass a positive finite weight for each source row to `NativePatternOKAPI.fit` or `RegularizedNativePatternOKAPI.fit`. For example, a study sampling equal numbers of observations from two environments can ask how the search changes if one environment receives twice the weight. Specify the affected stages explicitly to distinguish a change in the search from a change in the final choice.
 
 ```python
-import numpy as np
+from okapi.case_mix import case_mix_weights
 from fusionbench.methods.native_pattern import RegularizedNativePatternOKAPI
+from fusionbench.scenarios.source_environments import source_environment_preset
 
+source = source_environment_preset("mixed", seed=42, n_rows=512)
+weights, support = case_mix_weights(source.env, source.context, cap=2)
 model = RegularizedNativePatternOKAPI(seed=0, split_seed=0, gp_validation_top_k=8)
-weights = np.where(source_environment == "site_A", 2.0, 1.0)
-model.fit(
-    source_predictions, source_labels, task="binary", n_classes=2,
-    sample_weight=weights, weight_stages=("discovery", "validation"),
-)
-forecasts = model.predict(target_predictions)
-print(model.counts_["weight_stages"])
+model.fit(source.x, source.y, task="binary", n_classes=2, sample_weight=weights)
+target = source.target(region=0.5, shortcut=0.0)
+forecasts = model.predict(target.x)
+print(support["effective_n"], support["reason"], model.counts_["weight_stages"])
 ```
 
 | Stage | Where the row weights enter |

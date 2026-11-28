@@ -1,0 +1,9 @@
+{
+  "round": 6,
+  "sources": 78,
+  "target_conditions": 132,
+  "rows": 924,
+  "native_fits": 202,
+  "seconds": 29.319659619999584,
+  "workers": 4
+}

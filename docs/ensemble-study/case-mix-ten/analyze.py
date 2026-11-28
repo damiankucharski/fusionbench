@@ -8,9 +8,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from threadpoolctl import threadpool_limits
-
 from matched_profiles import profile_effects, stage_comparisons
+from threadpoolctl import threadpool_limits
 from weight_audit import audit as audit_weights
 
 HERE = Path(__file__).resolve().parent
