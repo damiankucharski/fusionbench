@@ -1,0 +1,31 @@
+name: Test benchmark
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        python: ["3.11", "3.12"]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: ${{ matrix.python }}
+      - uses: astral-sh/setup-uv@v6
+      - name: Install locked core, tests and documentation tools
+        run: uv sync --locked --extra dev --extra docs
+      - name: Run tests
+        run: uv run --no-sync pytest -q
+      - name: Build documentation
+        run: uv run --no-sync mkdocs build --strict
+      - name: Build and smoke-test the installed wheel
+        shell: bash
+        run: |
+          uv build
+          uv venv "$RUNNER_TEMP/fusionbench-wheel"
+          uv pip install --python "$RUNNER_TEMP/fusionbench-wheel/bin/python" dist/*.whl
+          cd "$RUNNER_TEMP"
+          fusionbench-wheel/bin/fusionbench list
+          fusionbench-wheel/bin/python -c 'from fusionbench import load_reference_dataset; assert load_reference_dataset("rare_scene_specialist").fit_y.shape[0] == 128'
