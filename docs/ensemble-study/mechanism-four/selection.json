@@ -1,0 +1,46 @@
+{
+  "chosen": "cal_pull",
+  "candidates": [
+    {
+      "method": "sparse_gp",
+      "round": 2,
+      "breadth": {
+        "standard": 0.0070629772801785754,
+        "scene16": 0.006296713366889221,
+        "strong": 0.008967224874614182
+      },
+      "factorial_expected_delta": 0.0005604341320669219,
+      "max_violation": 0.412595456035715
+    },
+    {
+      "method": "cal_pull",
+      "round": 3,
+      "breadth": {
+        "standard": -0.015397879171341904,
+        "scene16": -0.002114368652762294,
+        "strong": -0.0011053718404823026
+      },
+      "factorial_expected_delta": -0.0011196375219874842,
+      "max_violation": 0
+    },
+    {
+      "method": "cal_sparse",
+      "round": 3,
+      "breadth": {
+        "standard": 0.0005304697013552163,
+        "scene16": 0.006003161257389207,
+        "strong": 0.005222533196473221
+      },
+      "factorial_expected_delta": 0.0002173737915176152,
+      "max_violation": 0.20063225147784136
+    }
+  ],
+  "sha256": {
+    "r1-scores.csv": "84bae8e9bcb52b06556788ecb0f3038faebc30bdad7f2cd88d9939df1e66589e",
+    "r1-contrasts.csv": "31e8f8633cd86a4eae40731d7f57f4a42b20ba15b55b3ea11350cf851828d129",
+    "r2-scores.csv": "ba2216325bf3b0a1df363f83fbe6da14441be4d5e9da2187f77d6bbc47ae5bd0",
+    "r2-contrasts.csv": "e58ba5f9fdd9d17c1847fe926cfb2fe0caba19ec8533d54376f6926c27362b2c",
+    "r3-scores.csv": "c095776d118063f42bfd94d8117273b01827c5bb5025cbf2b34bf6060483cc2b",
+    "r3-contrasts.csv": "c6024c8fc09ea360051a388f867cbe6b1e39de1210733526fddd5a5db1665be1"
+  }
+}
