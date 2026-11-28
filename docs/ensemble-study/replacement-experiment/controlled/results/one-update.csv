@@ -1,0 +1,5 @@
+policy,ever_below_one_update_bound,deploy_below_one_update_bound
+open_kl,10,1
+open_raw,10,8
+ordinary,10,10
+strict_kl,1,0

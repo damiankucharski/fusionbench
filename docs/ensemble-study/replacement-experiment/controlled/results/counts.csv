@@ -1,0 +1,9 @@
+law,policy,initial_oracle,offer_oracle,ever_oracle,ever_oracle_incumbent,promoted_oracle,final_oracle,offered_better_than_mean,final_better_than_mean,ever_harmful_move,ever_nonoptimal_after,final_has_partial_ancestor,offered_exact_via_partial,final_unconfirmed_ancestor
+null,open_kl,48,48,48,48,0,48,0,0,0,0,0,2,0
+null,open_raw,48,48,48,48,28,26,0,0,41,41,1,2,37
+null,ordinary,48,48,48,48,0,24,0,0,24,24,1,2,0
+null,strict_kl,48,48,48,48,0,48,0,0,0,0,0,0,0
+signal,open_kl,0,0,0,0,0,0,47,1,0,48,1,0,1
+signal,open_raw,0,0,0,0,0,0,47,41,31,48,10,0,35
+signal,ordinary,0,0,0,0,0,0,47,43,4,48,7,0,0
+signal,strict_kl,0,0,0,0,0,0,48,0,0,48,0,0,0

@@ -1,0 +1,63 @@
+{
+  "population": "uniform on eight cells; Bernoulli outcomes conditional on the cell",
+  "score": "full binary Brier (sum over two classes)",
+  "low": "1/8",
+  "high": "7/8",
+  "null": {
+    "law": "mean(A,B,C)",
+    "bayes_brier": "13/32",
+    "mean_excess": "0"
+  },
+  "positive": {
+    "law": "min(C,max(A,B))",
+    "bit_truth_table_lexicographic_ABC": [
+      0,
+      0,
+      0,
+      1,
+      0,
+      1,
+      0,
+      1
+    ],
+    "bayes_brier": "7/32",
+    "two_update_excess": "0",
+    "equal_mean_brier": "23/64",
+    "equal_mean_excess": "9/64",
+    "best_one_update_brier": "5/16",
+    "best_one_update_excess": "3/32",
+    "convex_minimizer_weights_ABC": [
+      "1/6",
+      "1/6",
+      "2/3"
+    ],
+    "best_min_or_max_or_threshold_excess": "9/64",
+    "one_update_reduction_excess_by_support": {
+      "min": {
+        "A": "27/64",
+        "B": "27/64",
+        "C": "9/64",
+        "AB": "27/64",
+        "AC": "9/64",
+        "BC": "9/64",
+        "ABC": "9/32"
+      },
+      "max": {
+        "A": "27/64",
+        "B": "27/64",
+        "C": "9/64",
+        "AB": "27/64",
+        "AC": "27/64",
+        "BC": "27/64",
+        "ABC": "9/16"
+      }
+    }
+  },
+  "native_replay": {
+    "role_permutations": 6,
+    "two_update_witnesses": 6,
+    "attaining_weighted_means": 6,
+    "null_mean_trees": 6,
+    "native_threshold_min_max_checks": 720
+  }
+}

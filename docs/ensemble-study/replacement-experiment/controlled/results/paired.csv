@@ -1,0 +1,19 @@
+law,endpoint,comparison,n,mean,lower,upper,lower_risk,tied,higher_risk
+null,exact_excess,strict_kl minus open_kl,48,0.0,0.0,0.0,0,48,0
+null,exact_excess,open_kl minus open_raw,48,-0.006582295876170807,-0.01000118698931698,-0.003163404763024635,22,26,0
+null,exact_excess,open_raw minus ordinary,48,-0.0005254712495997996,-0.004744226695832804,0.003693284196633205,16,19,13
+null,test_brier,strict_kl minus open_kl,48,0.0,0.0,0.0,0,48,0
+null,test_brier,open_kl minus open_raw,48,-0.007071909410123626,-0.010702034862705483,-0.00344178395754177,21,26,1
+null,test_brier,open_raw minus ordinary,48,-0.00039450751460908565,-0.004759542827260096,0.003970527798041924,16,19,13
+null,best_offered_excess,strict_kl minus open_kl,48,0.0,0.0,0.0,0,48,0
+null,best_offered_excess,open_kl minus open_raw,48,0.0,0.0,0.0,0,48,0
+null,best_offered_excess,open_raw minus ordinary,48,0.0,0.0,0.0,0,48,0
+signal,exact_excess,strict_kl minus open_kl,48,0.0013020833333333333,-0.001317370460585632,0.003921537127252298,0,47,1
+signal,exact_excess,open_kl minus open_raw,48,0.034497237835442056,0.026669524560531854,0.042324951110352255,1,6,41
+signal,exact_excess,open_raw minus ordinary,48,0.0016026292067978342,-0.0026017884929627616,0.0058070469065584305,9,26,13
+signal,test_brier,strict_kl minus open_kl,48,0.00140380859375,-0.001420290027818885,0.0042279072153188855,0,47,1
+signal,test_brier,open_kl minus open_raw,48,0.03492978609235615,0.027133307672140804,0.04272626451257149,3,0,45
+signal,test_brier,open_raw minus ordinary,48,0.0022524253726946817,-0.0018172516607148814,0.006322102406104245,8,23,17
+signal,best_offered_excess,strict_kl minus open_kl,48,0.009831772297547416,0.004016206780646235,0.015647337814448596,8,11,29
+signal,best_offered_excess,open_kl minus open_raw,48,0.0,0.0,0.0,0,48,0
+signal,best_offered_excess,open_raw minus ordinary,48,0.0,0.0,0.0,0,48,0

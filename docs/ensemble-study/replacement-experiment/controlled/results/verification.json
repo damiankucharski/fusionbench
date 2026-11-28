@@ -1,0 +1,77 @@
+{
+  "references": {
+    "retrained_or_rebuilt_baselines": 576,
+    "direct_witness_gate_replays": 384,
+    "direct_witness_acceptance": {
+      "null_raw_1": 0,
+      "null_kl_1": 0,
+      "null_raw_12": 0,
+      "null_kl_12": 0,
+      "signal_raw_1": 48,
+      "signal_kl_1": 0,
+      "signal_raw_12": 48,
+      "signal_kl_12": 0
+    }
+  },
+  "search": {
+    "births": 29184,
+    "generations": 2304,
+    "replayed_pairwise_confirmation_bounds": 20736,
+    "promotion_within_4e-12_of_zero": 3,
+    "paired_intervals": 18,
+    "searches": 384,
+    "near_zero_raw_promotions": [
+      {
+        "bank": 28,
+        "generation": 4,
+        "law": "null",
+        "reported_gain": 4.336808689942018e-18,
+        "exact_rational_gate_gain": "0",
+        "population_excess_change": 0.027777777777777773
+      },
+      {
+        "bank": 29,
+        "generation": 6,
+        "law": "signal",
+        "reported_gain": 1.0408340855860843e-17,
+        "exact_rational_gate_gain": "0",
+        "population_excess_change": 0.0069444444444444475
+      },
+      {
+        "bank": 36,
+        "generation": 6,
+        "law": "signal",
+        "reported_gain": 8.326672684688674e-17,
+        "exact_rational_gate_gain": "0",
+        "population_excess_change": -0.024305555555555566
+      }
+    ],
+    "immutable_input_digests": {
+      "births.jsonl.gz": "d9e28694003d6d1adb6b572354d93c3c6531f6a63ddc6e42483abfd19b2064c2",
+      "generations.jsonl.gz": "df796c1b497015cdc19fd8fbc3ac1bffb7f0f0ed5bc63e75a36608a354bf4ade",
+      "search.csv": "c4aa4333b9c5c8ef68be6926ae1357357d39f4a35d1134b33f7b3f2846cd27ff"
+    }
+  },
+  "post_hoc_exact_conditional_witness_power_on_stream_51": {
+    "1": {
+      "banks": 48,
+      "blocks_unable_to_accept_for_any_labels": 9,
+      "conditional_probability_min": 0.0,
+      "conditional_probability_mean": 0.0006915691942216796,
+      "conditional_probability_max": 0.01535885417593051,
+      "expected_number_accepting": 0.03319532132264062,
+      "probability_all_48_reject_conditional_on_inputs": 0.9672179103178826,
+      "max_possible_bound_over_banks": 0.048576855471606506
+    },
+    "12": {
+      "banks": 48,
+      "blocks_unable_to_accept_for_any_labels": 48,
+      "conditional_probability_min": 0.0,
+      "conditional_probability_mean": 0.0,
+      "conditional_probability_max": 0.0,
+      "expected_number_accepting": 0.0,
+      "probability_all_48_reject_conditional_on_inputs": 1.0,
+      "max_possible_bound_over_banks": -0.005958170736030333
+    }
+  }
+}

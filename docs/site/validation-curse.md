@@ -23,3 +23,21 @@ Record the active population as well as the cumulative archive. For each checkpo
 ## Evaluate a conservative training objective
 
 `fusionbench run --methods okapi_search_guard --seed 1729 --n 640 --out results/search-guard` runs the opt-in native training objective over all standard scenarios with averaging, ranked-prefix Top-N and probability stacking. The objective penalizes uncertainty of paired improvement over averaging during GP and parameter fitting. The existing discovery/validation partition and final validation rule are retained. In Python, `SearchGuardedNativeOKAPI(z=0)` gives the incumbent control and `z=1` runs the experiment. This FusionBench adapter treats rows as independent. The native OKAPI primitive also supports group identifiers for clustered losses. [OKAPI usage](https://github.com/damiankucharski/OKAPI/blob/64ee67e/docs/api/core.md)
+
+## Separate breeding from deployment
+
+The replacement experiment runs six native generations of twelve offspring. The discovery set determines breeding fitness. A fresh, independent block of labels in each generation determines which tree can replace the incumbent. In the open variant, offspring can also breed before they have earned a positive lower bound on their Brier gain. The strict variant requires that bound for admission to breeding. Both deploy a single native tree.
+
+```python
+from fusionbench.eval.replacement_search import run_replacement_search
+from fusionbench.eval.suite_point_gp import predict_tree
+
+# Each (X, y) block contains distinct independent examples from development data.
+result = run_replacement_search(
+    X_discovery, y_discovery, six_confirmation_blocks,
+    seed=17, policy="open_kl", incumbent="best_single",
+)
+probabilities = predict_tree(result.tree, X_test)
+```
+
+A comparison with `open_raw` measures the effect of using a confidence bound for promotion on the same proposal trajectory. Comparing `open_kl` with `strict_kl` measures how admitting unconfirmed offspring changes exploration and eventual deployment. Record the label budget and the final tree's provider dependencies. The confidence calculation assumes a fresh independent block at each step. [Protocol, controls and measured outcomes](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/replacement-experiment)
