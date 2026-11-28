@@ -1,0 +1,92 @@
+{
+  "banks": 48,
+  "checks": {
+    "baseline_prediction_sha_matches": 192,
+    "historical_vs_z0_identical_prediction_digests": 192,
+    "incumbent_oracle_matches_selected_loss": 27,
+    "incumbent_score_calls": 204713,
+    "primary_identical_loss_vectors": 10,
+    "primary_sha_matches": 10,
+    "search_z0_oracle_matches_selected_loss": 27,
+    "search_z0_score_calls": 204713,
+    "search_z1_oracle_matches_selected_loss": 26,
+    "search_z1_score_calls": 217330,
+    "secondary_identical_loss_vectors": 24,
+    "secondary_sha_matches": 24,
+    "test_row_losses": 273976,
+    "z0_z1_different_call_count": 48
+  },
+  "contrasts": {
+    "primary": {
+      "four_datasets_equal": 4.154425619780538e-05,
+      "pooled_within_each_provider_pool": {
+        "digits_hetero_a": -0.000268943519650436,
+        "digits_hetero_b": 0.006003448744279525,
+        "digits_lr_bag": 0.00037076585377597446,
+        "iris": 0.0024849783904577535,
+        "seeds": -0.0038857635514283483,
+        "wine": -0.0004681281737065383
+      },
+      "six_pools_equal": 0.0007060596239546551,
+      "wins_ties_losses": {
+        "better": 20,
+        "tied": 13,
+        "worse": 15
+      }
+    },
+    "secondary": {
+      "four_datasets_equal": -0.0017843942184409174,
+      "pooled_within_each_provider_pool": {
+        "digits_hetero_a": 0.0024517347176600326,
+        "digits_hetero_b": 0.008539697341420585,
+        "digits_lr_bag": 0.003737246886857919,
+        "iris": -0.007865335125573802,
+        "seeds": -0.004755921257688428,
+        "wine": 0.000574119860852381
+      },
+      "six_pools_equal": 0.0004469237372547813,
+      "wins_ties_losses": {
+        "better": 10,
+        "tied": 24,
+        "worse": 14
+      }
+    }
+  },
+  "final_family_oracle_rows": 144,
+  "gate_rows": 144,
+  "independent_inner_refit_and_multiplier_replays": {
+    "digits_hetero_a": {
+      "guarded": "gp",
+      "max_gain": 0.0428342505754866,
+      "n_outer": 20,
+      "raw": "gp",
+      "threshold": 0.030816657830024227
+    },
+    "iris": {
+      "guarded": "mean",
+      "max_gain": 0.006520077163492589,
+      "n_outer": 14,
+      "raw": "gp",
+      "threshold": 0.050421081313642
+    }
+  },
+  "score_rows": 1104,
+  "selections": {
+    "guarded": {
+      "augmented": 2,
+      "flat": 1,
+      "gp": 15,
+      "mean": 30
+    },
+    "inner_incumbent": {
+      "augmented": 1,
+      "gp": 47
+    },
+    "raw_plus_mean": {
+      "augmented": 8,
+      "flat": 4,
+      "gp": 30,
+      "mean": 6
+    }
+  }
+}

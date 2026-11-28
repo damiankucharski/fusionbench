@@ -1,0 +1,143 @@
+{
+  "verified_files_sha256": {
+    "external-coverage/external-results/fit_banks.npz": "163b70904a03c314348de2652f81ac61909d62fa246c13ba760cd20df0fae886",
+    "external-coverage/external-results/test_banks.npz": "835bce8241dd773683174e60d7882c4d7ebd94df04fa3a0757f788df793aac83",
+    "external-coverage/external-results/fit_manifest.json": "bd273d64e36fabb14c0276cfccdaaef60180353015aa1cb8e3441ecfb2f701c5",
+    "runner-up-transfer/external-fit/fit_banks.npz": "7caa774d7bb2022173838d12f9d45222fcbc9da196e511e6df4e185cb9134d3e",
+    "runner-up-transfer/external-results/test_banks.npz": "c01b4cb376af61c740997c859afe556905d4e628ec733c6cdde1439c7783f97c",
+    "runner-up-transfer/external-fit/fit_manifest.json": "c1d8343af41822188ccbb11c227a095e013a0278d2381bc4a029a87d332970a6"
+  },
+  "verified_banks": 48,
+  "six_pool_counts": {
+    "digits_A": {
+      "partitions": 8,
+      "n_base_fit_small_test": [
+        898,
+        449,
+        64,
+        450
+      ],
+      "test_positions": 3600,
+      "distinct_test_ids": 1620,
+      "ids_tested_more_than_once": 1126,
+      "max_tests_per_id": 6,
+      "test_intersections_across_partitions": {
+        "pairs": 28,
+        "nonempty_intersections": 28,
+        "min": 91,
+        "mean": 111.64285714285714,
+        "max": 124
+      }
+    },
+    "digits_lr_bag": {
+      "partitions": 8,
+      "n_base_fit_small_test": [
+        898,
+        449,
+        64,
+        450
+      ],
+      "test_positions": 3600,
+      "distinct_test_ids": 1620,
+      "ids_tested_more_than_once": 1126,
+      "max_tests_per_id": 6,
+      "test_intersections_across_partitions": {
+        "pairs": 28,
+        "nonempty_intersections": 28,
+        "min": 91,
+        "mean": 111.64285714285714,
+        "max": 124
+      }
+    },
+    "wine": {
+      "partitions": 8,
+      "n_base_fit_small_test": [
+        89,
+        44,
+        44,
+        45
+      ],
+      "test_positions": 360,
+      "distinct_test_ids": 159,
+      "ids_tested_more_than_once": 109,
+      "max_tests_per_id": 5,
+      "test_intersections_across_partitions": {
+        "pairs": 28,
+        "nonempty_intersections": 28,
+        "min": 8,
+        "mean": 11.535714285714286,
+        "max": 20
+      }
+    },
+    "digits_B": {
+      "partitions": 8,
+      "n_base_fit_small_test": [
+        898,
+        449,
+        64,
+        450
+      ],
+      "test_positions": 3600,
+      "distinct_test_ids": 1601,
+      "ids_tested_more_than_once": 1137,
+      "max_tests_per_id": 6,
+      "test_intersections_across_partitions": {
+        "pairs": 28,
+        "nonempty_intersections": 28,
+        "min": 106,
+        "mean": 115.14285714285714,
+        "max": 139
+      }
+    },
+    "iris": {
+      "partitions": 8,
+      "n_base_fit_small_test": [
+        74,
+        44,
+        44,
+        32
+      ],
+      "test_positions": 256,
+      "distinct_test_ids": 129,
+      "ids_tested_more_than_once": 82,
+      "max_tests_per_id": 5,
+      "test_intersections_across_partitions": {
+        "pairs": 28,
+        "nonempty_intersections": 28,
+        "min": 3,
+        "mean": 6.464285714285714,
+        "max": 10
+      }
+    },
+    "seeds": {
+      "partitions": 8,
+      "n_base_fit_small_test": [
+        104,
+        44,
+        44,
+        62
+      ],
+      "test_positions": 496,
+      "distinct_test_ids": 198,
+      "ids_tested_more_than_once": 153,
+      "max_tests_per_id": 7,
+      "test_intersections_across_partitions": {
+        "pairs": 28,
+        "nonempty_intersections": 28,
+        "min": 12,
+        "mean": 18.714285714285715,
+        "max": 25
+      }
+    }
+  },
+  "digits_A_bag_equal_ordered_base_fit_small_test": 8,
+  "digits_A_or_bag_vs_B_test_intersections": {
+    "pairs": 64,
+    "nonempty_intersections": 64,
+    "min": 94,
+    "mean": 113.21875,
+    "max": 135
+  },
+  "digits_A_or_bag_and_B_union_intersection": 1445,
+  "all_digits_distinct_test_ids": 1776
+}

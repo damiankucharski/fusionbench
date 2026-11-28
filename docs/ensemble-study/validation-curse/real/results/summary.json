@@ -1,0 +1,29 @@
+{
+  "partitions": 48,
+  "incumbent_z0_prediction_hash_matches": 48,
+  "incumbent_z0_risk_exact": 48,
+  "z0_z1_prediction_hash_matches": 10,
+  "raw_guarded_prediction_hash_matches": 24,
+  "secondary_terminals_select_mean": {
+    "raw_plus_mean": 6,
+    "guarded": 30
+  },
+  "primary_wins_ties_losses": {
+    "n": 48,
+    "better": 20,
+    "tied": 13,
+    "worse": 15,
+    "min_difference": -0.021431808599172097,
+    "mean_difference": 0.000706059623954648,
+    "max_difference": 0.05989332496681769
+  },
+  "secondary_wins_ties_losses": {
+    "n": 48,
+    "better": 10,
+    "tied": 24,
+    "worse": 14,
+    "min_difference": -0.03869599210327619,
+    "mean_difference": 0.0004469237372547793,
+    "max_difference": 0.030882684869386404
+  }
+}

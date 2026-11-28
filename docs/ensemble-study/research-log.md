@@ -4,6 +4,10 @@ FusionBench is a general benchmark for prediction fusion with controlled generat
 
 The [literature index for the paper](literature/README.md) connects primary sources to benchmark assumptions, dated proposals and measured results. It includes the [21 November review](literature/2026-11-21.md) and a [BibTeX bibliography](literature/references.bib).
 
+## Validation optimism and loss of useful candidates · 28 November 2026
+
+Two iterations measured finite-menu selection and tracked complete native populations, then tested paired uncertainty penalties throughout training. With a known optimal mean injected at initialization, standard native GP lost it in 12/12 clustered banks; scoring true conditional risk on the same training features retained it in 12/12. The new penalty helped the clustered null but worsened the 24-scenario suite test by 0.00198 Brier on 144 fresh banks, with no resolved reduction in relative validation optimism. The second round kept the default algorithm. Candidate retention and final deployable selection remain separate targets. [Report, research protocols, code and scores](validation-curse/README.md)
+
 ## Standard-v3 and mechanism stress profiles · 24 November 2026
 
 The regression suite now contains 24 scenarios. The four additions cover rare conditional expertise, spurious improvements over a sufficient anchor, environment-dependent shortcuts and difficulty-dependent fallback. On 96 held-out banks, regularized OKAPI scored 0.21656 macro Brier and probability LR scored 0.24662. On six separately seeded banks, shifting the environment mixture moved OKAPI from 0.2852 to 0.7157 and left the stable provider at 0.3772. Next question: can source-only diagnostics identify unreliable provider reliance without knowing which provider will change? [Full-suite scores and protocol](scenario-coverage/standard-v3/README.md) · [Stratified results and paired controls](scenario-coverage/v3-slices/README.md)

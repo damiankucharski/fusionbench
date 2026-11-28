@@ -118,6 +118,10 @@ class NativePatternOKAPI(Method):
             return False
         return True
 
+    def _training_fitness(self, probabilities, labels):
+        """Optional objective bound to this precise training split."""
+        return None
+
     def fit(self, fit_preds, fit_y, *, task, n_classes):
         from okapi.pattern_features import select_pattern_features
 
@@ -164,8 +168,13 @@ class NativePatternOKAPI(Method):
         def native_score(p, y):
             return full_score(_full_probability(p), y)
 
-        def fit_head(inputs, fit_labels, bases):
-            return _head(inputs, fit_labels, bases, native_score, multiclass, self.l2_strength,
+        discovery_objective = self._training_fitness(d, dy)
+        refit_objective = self._training_fitness(x, labels)
+        discovery_score = native_score if discovery_objective is None else discovery_objective
+        refit_score = native_score if refit_objective is None else refit_objective
+
+        def fit_head(inputs, fit_labels, bases, objective):
+            return _head(inputs, fit_labels, bases, objective, multiclass, self.l2_strength,
                          self.class_head, self.class_head_max_evaluations)
 
         archive = []
@@ -184,6 +193,7 @@ class NativePatternOKAPI(Method):
             budgets=(600,),
             fitness=None if self.fitness is None else native_score,
             on_candidate=collect,
+            **({"discovery_fitness": discovery_objective} if discovery_objective is not None else {}),
         )[600]
         gp_seconds = perf_counter() - start
         inputs = _bind(d)
@@ -193,12 +203,12 @@ class NativePatternOKAPI(Method):
 
             start = perf_counter()
             pairs, pair_info = build_min_pair_basis(
-                _raw_roots(inputs), dy, objective=native_score, multiclass=multiclass
+                _raw_roots(inputs), dy, objective=discovery_score, multiclass=multiclass
             )
             archive.extend(pairs)
             pair_seconds = perf_counter() - start
         start = perf_counter()
-        flat_d, flat_d_info = fit_head(inputs, dy, ())
+        flat_d, flat_d_info = fit_head(inputs, dy, (), discovery_score)
         flat_seconds = perf_counter() - start
         start = perf_counter()
         with _task_postprocessing(task):
@@ -208,12 +218,12 @@ class NativePatternOKAPI(Method):
             inputs.values(),
             flat_prediction,
             dy,
-            objective=native_score,
+            objective=discovery_score,
             **({"report_indices": True} if self.pair_basis else {}),
         )
         screen_seconds = perf_counter() - start
         start = perf_counter()
-        aug_d, aug_d_info = fit_head(inputs, dy, bases)
+        aug_d, aug_d_info = fit_head(inputs, dy, bases, discovery_score)
         aug_seconds = perf_counter() - start
         discovery_trees = {"flat": flat_d, "augmented": aug_d, "gp": gp.val_tree}
         validation_scores = {
@@ -224,10 +234,10 @@ class NativePatternOKAPI(Method):
 
         inputs = _bind(x)
         start = perf_counter()
-        flat, flat_info = fit_head(inputs, labels, ())
+        flat, flat_info = fit_head(inputs, labels, (), refit_score)
         flat_refit_seconds = perf_counter() - start
         start = perf_counter()
-        augmented, aug_info = fit_head(inputs, labels, bases)
+        augmented, aug_info = fit_head(inputs, labels, bases, refit_score)
         aug_refit_seconds = perf_counter() - start
         score_calls = {
             "gp_discovery": gp.calls,

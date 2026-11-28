@@ -9,3 +9,7 @@ If the primary round-two intervention implements an uncertainty penalty during e
 ### Round-two starting-rule control
 
 To isolate loss of a good rule from failure to construct it, additionally initialize a paired search with the native arithmetic-mean tree in place of the last singleton (provider 7). This is a fixed label-free insertion and keeps the eight initial individuals, every generation budget and the true informative provider 0. Compare raw and group-penalized search on the same 12 round-two banks as above; leave all downstream selection unchanged. Record the fraction of final populations retaining a mean-equivalent program (test excess below 1e-12 in the mean-optimal arm). The mean has exactly zero excess in that arm at initialization. This secondary diagnostic was added after round one and before reading grouped round-two outcomes.
+
+### Post-result attribution check
+
+The raw terminal population lost the seeded optimal mean in all 12 null banks. Replay the same grouped round-two null banks and seeded mean, replacing the empirical label loss at every GP evaluation with its conditional expectation from the generating posterior. The eight provider tensors, initialization, evolution settings, Pareto/size pressure and three-decimal fitness rounding remain fixed. This simulation-only control probes whether loss of the witness can also occur when training label noise is removed. It was added after observing the witness result, is unavailable on real data, and is not a proposed algorithm.

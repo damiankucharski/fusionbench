@@ -1,0 +1,24 @@
+{
+  "base_seed": 4100000,
+  "banks": 32,
+  "native_banks_per_arm": 8,
+  "rows": {
+    "fit": 640,
+    "validation": 512,
+    "audit": 2048,
+    "iid": 4096,
+    "shift": 4096
+  },
+  "menus": [
+    1,
+    4,
+    16,
+    64
+  ],
+  "validation_sizes": [
+    32,
+    128,
+    512
+  ],
+  "seconds": 10.023048524999922
+}

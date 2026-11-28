@@ -20,6 +20,7 @@ nav:
   - Measure transfer: transfer.md
   - Add a scenario: extend.md
   - OKAPI case study: okapi.md
+  - Diagnose validation overfitting: validation-curse.md
 plugins:
   - search
 markdown_extensions:

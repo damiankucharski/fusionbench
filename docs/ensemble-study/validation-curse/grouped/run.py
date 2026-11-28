@@ -36,10 +36,10 @@ def loss(p, y):
 
 
 def run(job):
-    iteration, bank, signal, policy = job
+    iteration, bank, signal, policy, seed_mean = job
     seed = 4720000 + 10000 * (iteration - 1) + bank
     search = seed + 3000000
-    x, y, _ = draw(seed, 0, 24, 8, signal)
+    x, y, train_posterior = draw(seed, 0, 24, 8, signal)
     t, ty, posterior = draw(seed, 1, 2048, 1, signal)
     mean = x.mean(axis=1)
     test_mean = t.mean(axis=1)
@@ -48,7 +48,15 @@ def run(job):
         model.fit(x, y, task="multiclass", n_classes=5)
         controls[key] = model.predict(t)
     base_loss = loss(mean, y).mean()
-    if policy == "raw":
+    if policy == "population":
+
+        def objective(prediction, gt):
+            conditional = 1 + (
+                prediction * prediction - 2 * prediction * train_posterior
+            ).sum(axis=1)
+            return 1.0 - conditional.mean() / 2
+    elif policy == "raw":
+
         def objective(prediction, gt):
             return 1.0 - loss(prediction, gt.ravel()).mean() / 2
     else:
@@ -67,8 +75,20 @@ def run(job):
             directory = adapter._write_split(x, "fit")
             labels = Path(adapter._tmp.name) / "labels.npy"
             np.save(labels, y)
-            gp = Okapi(directory, labels, 8, 2, 3, objective_functions=(objective,),
-                       backend="numpy", seed=search)
+            gp = Okapi(
+                directory,
+                labels,
+                8,
+                2,
+                3,
+                objective_functions=(objective,),
+                backend="numpy",
+                seed=search,
+            )
+            if seed_mean:
+                from okapi.paired_fitness import arithmetic_mean_tree
+
+                gp.population[-1] = arithmetic_mean_tree(gp.train_tensors)
             for generation in range(17):
                 if generation:
                     gp.run_iteration()
@@ -77,12 +97,30 @@ def run(job):
                 for i, tree in enumerate(gp.population):
                     pred = predict_tree(tree, t)
                     fit = np.asarray(tree.predict())
-                    rows.append(dict(round=iteration, bank=bank, law="signal" if signal else "mean",
-                                     policy=policy, generation=generation, candidate=i, fit_brier=loss(fit, y).mean(),
-                                     fitness=objective(fit, y), test_brier=loss(pred, ty).mean(),
-                                     excess=np.square(pred-posterior).sum(axis=1).mean(),
-                                     **{k+"_excess": np.square(v-posterior).sum(axis=1).mean() for k,v in controls.items()},
-                                     **{k+"_brier": loss(v, ty).mean() for k,v in controls.items()}))
+                    rows.append(
+                        dict(
+                            round=iteration,
+                            bank=bank,
+                            law="signal" if signal else "mean",
+                            policy=policy,
+                            generation=generation,
+                            candidate=i,
+                            fit_brier=loss(fit, y).mean(),
+                            fitness=objective(fit, y),
+                            test_brier=loss(pred, ty).mean(),
+                            excess=np.square(pred - posterior).sum(axis=1).mean(),
+                            **{
+                                k + "_excess": np.square(v - posterior)
+                                .sum(axis=1)
+                                .mean()
+                                for k, v in controls.items()
+                            },
+                            **{
+                                k + "_brier": loss(v, ty).mean()
+                                for k, v in controls.items()
+                            },
+                        )
+                    )
     finally:
         adapter._tmp.cleanup()
     return rows
@@ -91,21 +129,58 @@ def run(job):
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("iteration", type=int, choices=(1, 2))
-    r = parser.parse_args().iteration
+    parser.add_argument("--seed-mean", action="store_true")
+    parser.add_argument("--population-control", action="store_true")
+    args = parser.parse_args()
+    r = args.iteration
+    if args.seed_mean and r != 2:
+        parser.error("The starting-rule control belongs to round two")
     policies = ("raw",) if r == 1 else ("raw", "rows", "groups")
-    jobs = [(r, i, s, p) for i in range(12) for s in (False, True) for p in policies]
+    if args.seed_mean:
+        policies = ("raw", "groups")
+    prefix = f"r{r}" + ("-seed-mean" if args.seed_mean else "")
+    jobs = [
+        (r, i, s, p, args.seed_mean)
+        for i in range(12)
+        for s in (False, True)
+        for p in policies
+    ]
+    if args.population_control:
+        if r != 2 or not args.seed_mean:
+            parser.error("The population control requires 2 --seed-mean")
+        jobs = [(2, i, False, "population", True) for i in range(12)]
+        prefix += "-population"
     with ProcessPoolExecutor(3) as workers:
         data = pd.DataFrame(row for block in workers.map(run, jobs) for row in block)
-    data.to_csv(HERE / f"r{r}-survivors.csv.gz", index=False, compression={"method":"gzip", "mtime":0})
+    data.to_csv(
+        HERE / f"{prefix}-survivors.csv.gz",
+        index=False,
+        compression={"method": "gzip", "mtime": 0},
+    )
     rows = []
-    for (bank, law, policy, g), d in data.groupby(["bank","law","policy","generation"]):
+    for (bank, law, policy, g), d in data.groupby(
+        ["bank", "law", "policy", "generation"]
+    ):
         raw = d.loc[d.fit_brier.idxmin()]
         chosen = d.loc[d.fitness.idxmax()]
-        rows.append(dict(bank=bank, law=law, policy=policy, generation=g, median=d.excess.median(),
-                         best=d.excess.min(), worst=d.excess.max(), raw_selected=raw.excess,
-                         selected=chosen.excess, selected_test=chosen.test_brier, mean=raw.mean_excess,
-                         top_n=raw.top_n_excess, lr=raw.lr_excess))
-    pd.DataFrame(rows).to_csv(HERE / f"r{r}-banks.csv", index=False)
+        rows.append(
+            {
+                "bank": bank,
+                "law": law,
+                "policy": policy,
+                "generation": g,
+                "median": d.excess.median(),
+                "best": d.excess.min(),
+                "worst": d.excess.max(),
+                "raw_selected": raw.excess,
+                "selected": chosen.excess,
+                "selected_test": chosen.test_brier,
+                "mean": raw.mean_excess,
+                "top_n": raw.top_n_excess,
+                "lr": raw.lr_excess,
+            }
+        )
+    pd.DataFrame(rows).to_csv(HERE / f"{prefix}-banks.csv", index=False)
 
 
 if __name__ == "__main__":

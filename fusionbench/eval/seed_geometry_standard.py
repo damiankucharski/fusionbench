@@ -61,7 +61,7 @@ def _diversity(rows):
 
 def fit_seed_geometry(
     preds, fit_y, validation_preds, validation_y, *, seed, shape, budgets=(600, 1200),
-    fitness=None, on_candidate=None,
+    fitness=None, on_candidate=None, discovery_fitness=None,
 ):
     """Return prefix champions and the complete native pre-evolution initial archive.
 
@@ -74,7 +74,10 @@ def fit_seed_geometry(
     OKAPI requires unit-interval selection scores, so custom scores enter
     native selection as tied ranks within the fully reevaluated population.
     Archive comparisons use their original finite values. The reported Brier
-    fields always describe the selected trees' Brier losses.
+    fields always describe the selected trees' Brier losses. An optional
+    discovery_fitness replaces only the stock GP training score on its usual
+    unit scale with three-decimal tournament selection. Validation champions
+    still maximize raw held-out Brier skill with raw fit Brier as a tiebreaker.
     """
     from okapi import Okapi
     from okapi.operators import (
@@ -86,6 +89,8 @@ def fit_seed_geometry(
         WEIGHTED_MEAN,
     )
 
+    if fitness is not None and discovery_fitness is not None:
+        raise ValueError("Specify either a common fitness or a discovery-only fitness")
     if shape not in (*SHAPES, "mixed_branch", "mixed_chain"):
         raise ValueError(f"Unknown shape {shape!r}")
     budgets = tuple(budgets)
@@ -122,6 +127,8 @@ def fit_seed_geometry(
         batch_hashes.append(fingerprint(p))
         if on_candidate is not None:
             batch_predictions.append(p)
+        if discovery_fitness is not None:
+            return discovery_fitness(p, labels)
         return 1 - val if fitness is None else custom_score(p, labels)
 
     def custom_score(p, y):
@@ -145,14 +152,15 @@ def fit_seed_geometry(
         vl = _loss(vp, vt)
         val_score = -vl if fitness is None else custom_score(vp, val_labels)
         wf = best_fit is None or fit_score > best_fit[0]
-        wv = best_val is None or (val_score, fit_score) > best_val[:2]
+        validation_tiebreak = -loss if discovery_fitness is not None else fit_score
+        wv = best_val is None or (val_score, validation_tiebreak) > best_val[:2]
         if wf or wv:
             ref = t.copy()
             ref.mutation_chance = t.mutation_chance
             if wf:
                 best_fit = (fit_score, loss, ref)
             if wv:
-                best_val = (val_score, fit_score, vl, ref)
+                best_val = (val_score, validation_tiebreak, vl, ref)
 
     def capture(label):
         checks[label] = GeometryCheckpoint(
@@ -212,7 +220,7 @@ def fit_seed_geometry(
                                 ),
                             }
                         )
-                    fit_score = -loss if fitness is None else batches[-1][j, 0]
+                    fit_score = -loss if fitness is None and discovery_fitness is None else batches[-1][j, 0]
                     remember(tree, loss, fit_score, j)
                 if end in cuts:
                     capture(end)
