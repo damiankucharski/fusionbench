@@ -1,0 +1,11 @@
+method,pairs,decisions_changed,native_to_simple,simple_to_native,different_predictions,mean_absolute_brier_change
+augmented,90,4,1,3,57,0.005756113381966293
+cv,90,2,0,2,54,0.00589788023578792
+lr,90,0,0,0,0,0.0
+mean,90,0,0,0,0,0.0
+native,90,0,0,0,59,0.005855692549916654
+one_se,90,3,2,1,50,0.0059792000295753565
+paired,90,3,1,2,55,0.005850684195068996
+sign,90,2,1,1,58,0.005945388939331164
+stress,90,1,0,1,55,0.0056442439981941005
+top_n,90,0,0,0,0,0.0

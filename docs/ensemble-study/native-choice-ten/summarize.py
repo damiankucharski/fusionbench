@@ -210,25 +210,30 @@ def summarize(primary, r):
 
 
 def switch_diagnostics(primary):
-    """Bank-level effects for actual forecast changes; hindsight is diagnostic only."""
+    """Count procedural switches, forecast changes and their contribution to held-out loss."""
     records = []
     for group, rows in panels(primary):
         raw = rows.pivot(index=KEYS, columns="method", values="brier")
         ident = rows.pivot(index=KEYS, columns="method", values="test_hash")
+        actions = rows.pivot(index=KEYS, columns="method", values="action")
         oracle = raw[["mean", "top_n", "native"]].min(axis=1)
         for rule in CANDIDATES:
             changed = ident[rule] != ident.native
-            d = (raw[rule] - raw.native)[changed]
+            switched = actions[rule] != "native"
+            differences = raw[rule] - raw.native
+            d = differences[switched]
             records.append(
                 {
                     "group": group,
                     "method": rule,
                     "banks": len(raw),
+                    "action_switches": int(switched.sum()),
                     "forecast_changes": int(changed.sum()),
                     "improvements": int((d < -1e-12).sum()),
                     "regressions": int((d > 1e-12).sum()),
                     "ties": int((d.abs() <= 1e-12).sum()),
-                    "net_delta_per_changed_bank": d.mean(),
+                    "net_delta_per_switch": d.mean(),
+                    "net_delta_per_changed_forecast": differences[changed].mean(),
                     "mean_gain_per_improved_bank": -d[d < -1e-12].mean(),
                     "mean_cost_per_regressed_bank": d[d > 1e-12].mean(),
                     "native_brier": raw.native.mean(),
