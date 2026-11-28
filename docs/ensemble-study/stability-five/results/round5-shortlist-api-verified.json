@@ -1,0 +1,10 @@
+{
+  "round": 5,
+  "banks": 220,
+  "forecast_hash_matches": 220,
+  "gp_champion_matches": 220,
+  "validation_calls_with_full_archive": 80180,
+  "validation_calls_with_shortlist": 3500,
+  "min_validation_calls": 14,
+  "max_validation_calls": 16
+}

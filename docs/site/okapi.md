@@ -22,6 +22,20 @@ With branched starts, three runs never visited the rule and seven visited it but
 
 ## Does the validation choice transfer?
 
+To limit the GP programs compared on a small validation split, construct
+`RegularizedNativePatternOKAPI(seed=0, split_seed=0, gp_validation_top_k=8)`.
+`NativePatternOKAPI` accepts the same keyword. At each checkpoint, the
+method admits the eight structurally distinct programs with the best
+discovery scores and uses their validation scores to choose the GP
+representative. Equal discovery scores retain first-visit order. The
+default discovery score favors lower unrounded Brier. A custom fitness
+uses its higher-is-better discovery score. Both native head families
+continue to compete with that representative. The full archive remains
+available for feature screening. Omitting the option gives unrestricted
+GP validation. With the option enabled, inspect `counts_["gp_final_eligible"]` for the final
+shortlist and `counts_["score_calls"]["gp_validation"]` for actual GP
+validation calls, including the initial checkpoint.
+
 Keep the candidates fixed and change the test inputs. Across 19 scenarios and eight data sets per scenario, four native trees competed on 192 clean validation labels in each run. The validation winner tied for the lowest test Brier among the four in **65.1%** of clean test sets and **27.6%** under the strongest tested log-probability noise. Its average excess over the best of those four rose from **0.00338** to **0.06271** in full-class Brier. These comparisons use the same trees before refitting. Test labels identify the best available candidate retrospectively. [Transfer results and definitions](https://github.com/damiankucharski/fusionbench/blob/05fa4ec364e545671402ec1ff14392b818fc4d6a/docs/ensemble-study/transfer-grid/README.md)
 
 You can apply that last diagnostic to other registered fusion methods. Choose on source validation labels, freeze the candidates and compare their rankings under paired test disturbances. [Run the transfer benchmark](transfer.md)
@@ -31,3 +45,21 @@ You can apply that last diagnostic to other registered fusion methods. Choose on
 The method IDs `okapi_class_diagonal` and `okapi_class_full` fit one native softmax node directly to provider probabilities. The diagonal mode scores each class using that class's probability from every input. The full mode also uses probabilities assigned to other classes. Both fit by derivative-free search. Choose the logistic controls `stacking_diagonal` or `stacking_shared_bias` to compare the effect of own-class slopes and class-specific intercepts.
 
 To let validation also consider evolved subtree inputs, use `NativePatternOKAPI(class_head="full", class_head_max_evaluations=4096)` from `fusionbench.methods.native_pattern`. Each head fit has its own evaluation budget. The deployed result is one tree. [Paired study and baselines](https://github.com/damiankucharski/fusionbench/blob/research/ensemble-mechanisms-stability/docs/ensemble-study/class-capacity/README.md)
+
+## Fit a native convex pool as a low-variance comparison
+
+With the [simplex fitter in OKAPI](https://github.com/damiankucharski/OKAPI/blob/d1afe2b2164e67df5c9e157b84d8729a3850f65e/docs/api/simplex.md) on the Python path, the FusionBench adapter returns one native probability tree. The fit uses no derivatives. The weights are shared by classes, constrained to be nonnegative and sum to one. The default penalty favors similar weights and its strength decreases as more training observations become available.
+
+```python
+from fusionbench import generate_dataset
+from fusionbench.methods.simplex_tree import SimplexTree
+
+bank = generate_dataset("stratified_pool", seed=9, n_per_split=128)
+model = SimplexTree(regularized=True).fit(
+    bank.fit_preds, bank.fit_y, task="binary", n_classes=2
+)
+probabilities = model.predict(bank.test_preds)
+weights = model.weights_
+```
+
+Use `regularized=False` to remove the penalty while retaining the same search schedule. A weighted average can lose substantial accuracy when the target calls for a minimum, maximum or nonlinear interaction. Compare it to the full native-pattern pipeline in those cases. [Five benchmark-wide experiments](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/stability-five)

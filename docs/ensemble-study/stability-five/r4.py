@@ -36,7 +36,7 @@ def _fit(family, x, labels):
 def _folds(labels):
     if len(labels) < N_FOLDS:
         raise ValueError("Four-fold selection requires at least four training rows")
-    kwargs = dict(n_splits=N_FOLDS, shuffle=True, random_state=FOLD_SEED)
+    kwargs = {"n_splits": N_FOLDS, "shuffle": True, "random_state": FOLD_SEED}
     _, class_counts = np.unique(labels, return_counts=True)
     # sklearn cannot stratify when even the largest class has fewer than four rows.
     if class_counts.max() < N_FOLDS:

@@ -27,7 +27,7 @@ class SimplexTree(Method):
 
     def __init__(self, regularized=True, fitness=None):
         if not isinstance(regularized, (bool, np.bool_)):
-            raise ValueError("regularized must be boolean")
+            raise TypeError("regularized must be boolean")
         if fitness is not None and not callable(fitness):
             raise TypeError("fitness must be callable")
         self.regularized, self.fitness = regularized, fitness

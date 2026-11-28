@@ -1,0 +1,24 @@
+{
+  "candidate": "gp_top8",
+  "primary_confirmed": true,
+  "broad_criteria": true,
+  "checks": {
+    "weak_upper_below_zero": true,
+    "standard_upper_within_005": true,
+    "strong_upper_within_010": true,
+    "digits449_mean_within_004": true
+  },
+  "improved_families": 6,
+  "tied_families": 21,
+  "worsened_families": 0,
+  "largest_gains": {
+    "native_close_switch": -0.0076889488249039,
+    "environment_shortcut": -0.0071489588419596,
+    "redundant_pool": -0.0054206476903083
+  },
+  "largest_regressions": {
+    "calibrated_suppressor": 0.0,
+    "cloned_shortcut": 0.0,
+    "committee": 0.0
+  }
+}
