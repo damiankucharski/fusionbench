@@ -1,0 +1,23 @@
+{
+  "chosen": "guarded",
+  "mixed_max_regret": {
+    "guarded": 0.06944176755268053,
+    "cap2": 0.06944176755268053,
+    "full": 0.07432944539455674
+  },
+  "standard_delta_native": {
+    "guarded": 0.0020079957850656087,
+    "cap2": 0.0012057176236291954,
+    "full": 0.006528891980143698
+  },
+  "case_mix_specialist80_delta_native": {
+    "guarded": -1.824991424123068e-05,
+    "cap2": -1.824991424123068e-05,
+    "full": 0.007611095433121851
+  },
+  "eligible": [
+    "guarded",
+    "cap2"
+  ],
+  "r09_sha256": "ffdada2ba930bc9112353288413efab48ff2a46e0a204ac11460059d030362e0"
+}
