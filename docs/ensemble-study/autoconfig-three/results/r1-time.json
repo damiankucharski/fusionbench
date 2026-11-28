@@ -1,0 +1,9 @@
+{
+  "round": 1,
+  "banks": 216,
+  "score_rows": 1728,
+  "seconds": 46.12144557200372,
+  "workers": 3,
+  "threads_per_worker": 1,
+  "locked_rule": null
+}

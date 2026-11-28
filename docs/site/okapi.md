@@ -63,3 +63,24 @@ weights = model.weights_
 ```
 
 Use `regularized=False` to remove the penalty while retaining the same search schedule. A weighted average can lose substantial accuracy when the target calls for a minimum, maximum or nonlinear interaction. Compare it to the full native-pattern pipeline in those cases. [Five benchmark-wide experiments](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/stability-five)
+
+## Choose a fusion configuration from source predictions
+
+`ConfiguredOKAPI` takes a prediction bank from a new task and selects one of five configurations. In order of preference in close comparisons, these are the arithmetic mean, Brier-ranked Top-N, a temperature-calibrated arithmetic mean, a derivative-free regularized logit head, and a calibrated mean-seeded GP tree. The arithmetic mean and Top-N can both be the final prediction rule.
+
+Use the matching OKAPI research branch for the pool diagnostics, prediction-pull objective and learned-policy reader. [OKAPI algorithm branch](https://github.com/damiankucharski/OKAPI/tree/research/okapi-algorithm-lab)
+
+```python
+from fusionbench import generate_dataset
+from fusionbench.methods.auto_configuration import ConfiguredOKAPI
+
+bank = generate_dataset("correlated", n_per_split=256, seed=11)
+model = ConfiguredOKAPI(policy="source_cv")
+model.fit(bank.fit_preds, bank.fit_y, task="binary", n_classes=2)
+print(model.action_, model.selection_["oof_brier"])
+predictions = model.predict(bank.test_preds)
+```
+
+With `source_cv`, each row gets one prediction from a model fit on the other two folds. If rows come from repeated measurements of the same scene or subject, pass `groups=scene_ids` to `fit`. The folds keep groups intact and give each group's average Brier loss equal weight. The selector takes the first configuration whose excess loss over the empirical winner is within one standard error of their paired differences. This rule expects at least two providers and three independent units. It uses the arithmetic mean when either is missing. It refits the chosen configuration on every available source row for prediction. Independently changing target behavior can still reverse the choice.
+
+To apply an existing shallow policy, pass its JSON-decoded mapping as `ConfiguredOKAPI(policy=mapping)`. The model computes the pool measurements and fits only the resulting action. Inspect `selection_["path"]` for the diagnostic values and thresholds that led to it. The action names, fitted rule and training-family coverage belong with any published evaluation. [Study protocol](https://github.com/damiankucharski/fusionbench/blob/research/ensemble-mechanisms-stability/docs/ensemble-study/autoconfig-three/protocol.md)

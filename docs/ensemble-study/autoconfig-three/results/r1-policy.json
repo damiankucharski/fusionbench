@@ -1,0 +1,76 @@
+{
+  "training_round": 1,
+  "training_families": [
+    "calibrated_suppressor",
+    "committee",
+    "compositional_switch",
+    "compound",
+    "correlated",
+    "deadweight",
+    "environment_shortcut",
+    "gated_experts",
+    "hardrescue",
+    "hardveto",
+    "miscalibration",
+    "multiclass_committee",
+    "native_close_switch",
+    "native_switch",
+    "needle",
+    "polarity_fault",
+    "rare_shortcut_noise",
+    "rare_specialist",
+    "redundant_pool",
+    "saturated",
+    "selective_fallback",
+    "stratified_pool",
+    "two_pathways",
+    "weakest_link"
+  ],
+  "excluded_families": [
+    "cloned_shortcut",
+    "grouped_rare_event",
+    "parity",
+    "rare_scene_specialist",
+    "shared_error_bloc",
+    "similar_classes_38"
+  ],
+  "row_count": 96,
+  "training_sha256": "6b8236e689ed202d7696cb27db774a6f358ef93dbfd0d9eb4fb1c5d648120803",
+  "input_sha256": {
+    "r1-scores.csv": "4d83d02b374f1c79dd3a34f29f69a9f30d7394f4b1b8b936acf4212e5941a588",
+    "r1-fingerprints.csv": "6386b740482a4357666c17c2ae88cdd0bbc0f63cce7f00312c32b6014e922fd2"
+  },
+  "constant": "flat",
+  "policy": {
+    "schema_version": 1,
+    "features": [
+      "disagreement",
+      "quality_spread",
+      "gain_best",
+      "residual_alignment",
+      "effective_rank",
+      "local_complementarity",
+      "calibration_slope",
+      "mean_brier"
+    ],
+    "actions": [
+      "mean",
+      "top_n",
+      "cal_mean",
+      "flat",
+      "cal_pull"
+    ],
+    "tree": {
+      "action": "flat",
+      "mean_losses": {
+        "mean": 0.3884179271357324,
+        "top_n": 0.36173681328029517,
+        "cal_mean": 0.3642364975939006,
+        "flat": 0.2716946026370169,
+        "cal_pull": 0.3286292354471323
+      },
+      "banks": 96,
+      "families": 24
+    }
+  }
+}
