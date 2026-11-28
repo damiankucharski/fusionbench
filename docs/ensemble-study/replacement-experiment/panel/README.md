@@ -1,5 +1,20 @@
 # Does a certified replacement policy help on the standard scenarios?
 
+## Is the earlier regularized OKAPI still ahead of probability stacking?
+
+We replayed the earlier frozen regularized native method on the exact 144 banks in this panel, using the same 640 development and 1,024 test rows for both methods. All source/test input and label digests matched. Retraining probability logistic stacking with C=1 reproduced its archived predictions byte for byte on every bank. The earlier method retained its 600 GP discovery scoring visits, native regularized weight fitting, validation choice between three trees and full-development head refit. The replacement experiment instead used 72 offspring proposals to isolate birth and promotion. Scoring visits and offspring proposals measure different kinds of work.
+
+| Method on the same banks | Mean test Brier |
+|---|---:|
+| Regularized native OKAPI with validation choice | 0.21456 |
+| Logistic stacking on probabilities | 0.24431 |
+| GP-only candidate from the longer regularized procedure | 0.28419 |
+| Ordinary short native GP, all 640 rows used for discovery | 0.35892 |
+| Short GP with open breeding and KL replacement | 0.44686 |
+
+Regularized native minus probability LR was −0.02976. The paired 95% interval was −0.03165 to −0.02785, using the panel's within-scenario bootstrap. The regularized procedure had lower mean Brier on 18 of the 24 scenarios. Validation chose a weighted native tree combining provider and GP features on 77/144 banks, a weighted provider-only tree on 40 and the GP candidate on 27. Each deployment is one native tree. The GP-only row above fixes that candidate on all 144 banks and measures its test risk. These comparisons do not separately identify the effects of search budget and initialization. In the earlier panel of six different seeds per scenario, regularized native and probability stacking scored 0.21408 and 0.24545, respectively. [Earlier panel](../../validation-curse/panel/round2/README.md) · [Replay script](compare_variants.py) · [All paired results](results/matched-variants.csv)
+
+
 On 144 fresh banks, an open breeding population with certified incumbent replacement scored **0.44686 Brier**, compared with **0.36252** for empirical replacement on the same native proposals. The paired difference was **+0.08434** (95% interval +0.06123 to +0.10481), with higher loss for certification on 96 banks, lower loss on 14 and a tie on 34. Nineteen of the 24 scenario means favored empirical replacement, three favored certification and two tied. The two open arms had identical proposal and survivor trajectories in every bank. [Frozen design](protocol.md) · [Paired contrasts and intervals](results/contrasts.csv) · [Per-scenario results](results/scenario-means.csv)
 
 Allowing uncertified children to breed under the same certified deployment rule scored 0.00355 lower Brier than strict breeding (interval −0.00985 to +0.00177). It won three banks, lost three and tied on 138. The panel leaves the average advantage of open breeding unresolved. The deployed tree changed from the initial best singleton on only four of 144 banks in either certified arm. The low replacement rate restricts what this comparison can reveal about differences between their populations.
