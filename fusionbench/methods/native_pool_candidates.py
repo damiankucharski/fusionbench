@@ -2,7 +2,6 @@
 
 from time import perf_counter
 
-from fusionbench.eval.suite_point_gp import _bind, _targets, predict_tree
 from fusionbench.methods.averaging import TopN
 from fusionbench.methods.native_pattern import (
     RegularizedNativePatternOKAPI,
@@ -37,6 +36,11 @@ class PoolCandidateNativePatternOKAPI(RegularizedNativePatternOKAPI):
 
     name = "okapi_native_pattern_l2_pools"
 
+    def __init__(self, seed=0, *, split_seed=0, gp_validation_top_k=8):
+        super().__init__(
+            seed=seed, split_seed=split_seed, gp_validation_top_k=gp_validation_top_k
+        )
+
     @classmethod
     def available(cls):
         try:
@@ -46,6 +50,8 @@ class PoolCandidateNativePatternOKAPI(RegularizedNativePatternOKAPI):
         return super().available()
 
     def fit(self, fit_preds, fit_y, *, task, n_classes, on_gp_candidate=None):
+        from fusionbench.eval.suite_point_gp import _bind, _targets, predict_tree
+
         super().fit(
             fit_preds,
             fit_y,
@@ -110,4 +116,6 @@ class PoolCandidateNativePatternOKAPI(RegularizedNativePatternOKAPI):
 
     def predict_incumbent(self, preds):
         """Replay the original winner without rerunning the matched evolution."""
+        from fusionbench.eval.suite_point_gp import predict_tree
+
         return predict_tree(self.trees_[self.old_chosen_], self._query(preds))

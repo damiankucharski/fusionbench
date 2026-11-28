@@ -136,3 +136,13 @@ def test_top_n_discovery_ignores_held_labels_and_refits_only_if_winning(monkeypa
         == fit.discovery_trees_["top_n"].structural_key()
     )
     assert other.counts_["score_calls"]["top_n_refit"] == 0
+
+
+def test_pools_registered_with_the_evaluated_shortlist_as_opt_in():
+    from fusionbench.methods.registry import default_methods
+
+    name = "okapi_native_pattern_l2_pools"
+    assert name not in {m.name for m in default_methods(only_available=False)}
+    (model,) = default_methods([name], only_available=False)
+    assert model.name == name
+    assert (model.seed, model.split_seed, model.gp_validation_top_k) == (0, 0, 8)

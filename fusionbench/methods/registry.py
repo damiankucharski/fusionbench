@@ -26,6 +26,7 @@ from fusionbench.methods.native_pattern import (
     NativePatternOKAPI,
     RegularizedNativePatternOKAPI,
 )
+from fusionbench.methods.native_pool_candidates import PoolCandidateNativePatternOKAPI
 from fusionbench.methods.nsga3 import NSGA3
 from fusionbench.methods.okapi import OKAPIMethod
 from fusionbench.methods.operators import OpClose, OpFar, OpMax, OpMin
@@ -58,6 +59,7 @@ FACTORIES: dict[str, Callable[[], Method]] = {
     "okapi_crossfit_stack": CrossFitOKAPI,
     "okapi_native_pattern": NativePatternOKAPI,
     "okapi_native_pattern_l2": RegularizedNativePatternOKAPI,
+    "okapi_native_pattern_l2_pools": PoolCandidateNativePatternOKAPI,
     "okapi_search_guard": SearchGuardedNativeOKAPI,
     "okapi_terminal_guard": GuardedNativeOKAPI,
     "okapi_class_diagonal": OKAPIClassDiagonal,
@@ -77,7 +79,7 @@ def default_methods(names: list[str] | None = None, only_available: bool = True
     # These research methods are opt-in on mixed suites.
     opt_in = {
         "lattice_brier_exact", "okapi_crossfit_stack", "okapi_native_pattern",
-        "okapi_native_pattern_l2", "okapi_transfer_pattern", "okapi_search_guard", "okapi_terminal_guard",
+        "okapi_native_pattern_l2", "okapi_native_pattern_l2_pools", "okapi_transfer_pattern", "okapi_search_guard", "okapi_terminal_guard",
         "okapi_class_diagonal", "okapi_class_full",
         "stacking_shared_bias", "stacking_diagonal",
     }

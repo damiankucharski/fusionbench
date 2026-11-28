@@ -87,7 +87,7 @@ To apply an existing shallow policy, pass its JSON-decoded mapping as `Configure
 
 ## Include two arithmetic pools in native pattern selection
 
-`PoolCandidateNativePatternOKAPI` lets the regularized native pattern search compare two more trees on its existing held-out rows. One averages every provider. The other ranks the providers by discovery-set Brier score, evaluates the average of each prefix in that ranking and retains the best prefix. Each gets one held-out score alongside the flat logit head, the head with evolved inputs and the GP finalist. An exact tie keeps the original winner, followed in priority by the mean and Top-N.
+`PoolCandidateNativePatternOKAPI` lets the regularized native pattern search compare two more trees on its existing held-out rows. The benchmark method ID is `okapi_native_pattern_l2_pools`. One tree averages every provider. The other ranks the providers by discovery-set Brier score, evaluates the average of each prefix in that ranking and retains the best prefix. Each gets one held-out score alongside the flat logit head, the head with evolved inputs and the GP finalist. An exact tie keeps the original winner, followed in priority by the mean and Top-N.
 
 ```python
 from fusionbench import generate_dataset
