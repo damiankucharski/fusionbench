@@ -31,22 +31,17 @@ def main():
                 atol=2e-12,
             )
         lo, hi = endpoints.mean(0)
-        if lo < 0 < hi:
-            frac = -lo / (hi - lo)
-            rng = np.random.default_rng(94010)
-            draws = rng.integers(len(endpoints), size=(10000, len(endpoints)))
-            dl, dh = endpoints[draws].mean(1).T
-            valid = (dl < 0) & (dh > 0)
-            limits = (
-                np.quantile(-dl[valid] / (dh[valid] - dl[valid]), [0.025, 0.975])
-                if valid.any()
-                else [None, None]
-            )
-            good = int(valid.sum())
-        else:
-            frac = None
-            limits = [None, None]
-            good = 0
+        rng = np.random.default_rng(94010)
+        draws = rng.integers(len(endpoints), size=(10000, len(endpoints)))
+        dl, dh = endpoints[draws].mean(1).T
+        valid = (dl < 0) & (dh > 0)
+        good = int(valid.sum())
+        frac = -lo / (hi - lo) if lo < 0 < hi else None
+        limits = (
+            np.quantile(-dl[valid] / (dh[valid] - dl[valid]), [0.025, 0.975])
+            if frac is not None and valid.any()
+            else [None, None]
+        )
         rows.append(
             {
                 "family": family,
