@@ -85,9 +85,10 @@ def used(model, default):
 def forecast_bank(r, b, queries):
     """Fit from b.x, y and source metadata only. queries contains unlabelled features."""
     x, y, idx = b.x, b.y, b.idx
-    options = dict(
-        task="binary" if x.shape[2] == 2 else "multiclass", n_classes=x.shape[2]
-    )
+    options = {
+        "task": "binary" if x.shape[2] == 2 else "multiclass",
+        "n_classes": x.shape[2],
+    }
     models = {
         "native": native(),
         "mean": SimpleAverage(),
@@ -98,22 +99,24 @@ def forecast_bank(r, b, queries):
     for method, model in models.items():
         model.fit(x, y, **options)
         forecasts[method] = np.asarray(model.predict(queries), dtype=float)
-        metadata[method] = dict(
-            drop=None,
-            strength=0.0,
-            direct_gain=None,
-            routing_gain=None,
-            providers=used(model, x.shape[1]),
-        )
+        metadata[method] = {
+            "drop": None,
+            "strength": 0.0,
+            "direct_gain": None,
+            "routing_gain": None,
+            "providers": used(model, x.shape[1]),
+        }
     fit_native = models["native"]
     half_ids = folds(b.groups[idx], b.seed)
-    real_env = environment_screen(x[idx], y[idx], b.env, contexts=b.ctx)
+    real_env = environment_screen(
+        x[idx], y[idx], b.env, contexts=b.ctx, mode="adjusted"
+    )
     flags = {"original": real_env["drop"]}
     if r == 2:
         fake = np.random.default_rng([b.seed, 819]).permutation(b.env)
-        flags["permuted"] = environment_screen(x[idx], y[idx], fake, contexts=b.ctx)[
-            "drop"
-        ]
+        flags["permuted"] = environment_screen(
+            x[idx], y[idx], fake, contexts=b.ctx, mode="adjusted"
+        )["drop"]
     evidence = {}
     marginal = {}
     shuffled_y = np.random.default_rng([b.seed, 818]).permutation(y[idx])
@@ -190,18 +193,18 @@ def measure(b, r):
     joined = np.concatenate(list(blocks.values()), axis=0)
     with threadpool_limits(limits=1):
         forecasts, meta, info = forecast_bank(r, b, joined)
-    shared = dict(
-        round=r,
-        cohort=b.cohort,
-        family=b.family,
-        seed=b.seed,
-        n_fit=len(b.x),
-        n_screen=len(b.idx),
-        true_shortcut=b.shortcut,
-        true_specialist=b.specialist,
-        source_x_hash=digest(b.x),
-        source_y_hash=digest(b.y),
-    )
+    shared = {
+        "round": r,
+        "cohort": b.cohort,
+        "family": b.family,
+        "seed": b.seed,
+        "n_fit": len(b.x),
+        "n_screen": len(b.idx),
+        "true_shortcut": b.shortcut,
+        "true_specialist": b.specialist,
+        "source_x_hash": digest(b.x),
+        "source_y_hash": digest(b.y),
+    }
     rows = []
     for method, forecast in forecasts.items():
         if (
@@ -255,15 +258,15 @@ def main(r, workers):
     ):
         for trace in traces:
             file.write((json.dumps(trace, allow_nan=False) + "\n").encode())
-    times = dict(
-        round=r,
-        sources=len(traces),
-        target_conditions=len(values) // (len(COMMON) + len(EXTRAS.get(r, ()))),
-        rows=len(values),
-        native_fits=sum(t["native_fits"] for t in traces),
-        workers=workers,
-        seconds=perf_counter() - start,
-    )
+    times = {
+        "round": r,
+        "sources": len(traces),
+        "target_conditions": len(values) // (len(COMMON) + len(EXTRAS.get(r, ()))),
+        "rows": len(values),
+        "native_fits": sum(t["native_fits"] for t in traces),
+        "workers": workers,
+        "seconds": perf_counter() - start,
+    }
     (OUT / f"{stem}-time.json").write_text(json.dumps(times, indent=2) + "\n")
     print(times, flush=True)
 
