@@ -2,6 +2,8 @@
 
 Choose a scenario by the assumption you want to test. Each generator returns class probabilities from multiple providers for the same examples, together with class labels. The standard suite contains 30 scenarios, including 27 binary scenarios and three multiclass scenarios. The registry also includes the opt-in three-provider panel below. Use these IDs as registry keys in Python or as scenario names in a transfer configuration.
 
+To select a disjoint group of standard scenarios or give different mechanisms different shares of an aggregate score, see [Choose and weight mechanism groups](mechanism-groups.md).
+
 ## Independent evidence and calibration
 
 Start with `committee` to check whether fusion combines independent evidence. Use `deadweight` or `needle` to introduce irrelevant inputs, and `miscalibration` to preserve each provider's binary decision while changing its confidence.

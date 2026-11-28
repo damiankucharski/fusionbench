@@ -129,11 +129,19 @@ def _relative(weights, catalog, label):
         for k in names
     ):
         raise ValueError(f"{label} weights must be nonnegative finite numbers")
-    maximum = max(weights.values())
-    if maximum == 0:
+    positive = {k: float(weights[k]) for k in names if weights[k] > 0}
+    if not positive:
         raise ValueError(f"At least one {label} must have positive weight")
-    # Scale before adding to support large finite relative weights.
-    return {k: float(weights[k] / maximum) for k in names if weights[k] > 0}
+    return positive
+
+
+def _normalized(positive):
+    # Scale after restricting to the requested subset. An omitted very large weight
+    # should not cause the remaining finite weights to underflow before normalization.
+    scale = max(positive.values())
+    scaled = {k: v / scale for k, v in positive.items()}
+    total = fsum(scaled.values())
+    return {k: v / total for k, v in scaled.items() if v > 0}
 
 
 def scenario_weights(*, groups=None, purposes=None, scenarios=None, group_weights=None):
@@ -165,15 +173,41 @@ def scenario_weights(*, groups=None, purposes=None, scenarios=None, group_weight
             weights = {s: value for s, value in weights.items() if s in allowed}
     if group_weights is not None:
         shares = _relative(group_weights, MECHANISM_GROUPS, "groups")
-        allocated = {}
-        for key, share in shares.items():
+        represented = {}
+        for key in shares:
             group = {s: weights[s] for s in MECHANISM_GROUPS[key] if s in weights}
-            total = fsum(group.values())
-            allocated.update({s: share * (value / total) for s, value in group.items()})
-        weights = {s: allocated[s] for s in weights if s in allocated}
+            if group:
+                represented[key] = _normalized(group)
+        if not represented:
+            raise ValueError(
+                "The requested filters select no scenarios with positive weight"
+            )
+        scale = max(shares[k] for k in represented)
+        allocated = {
+            s: (shares[k] / scale) * w
+            for k, members in represented.items()
+            for s, w in members.items()
+        }
+        total = fsum(allocated.values())
+        return {s: allocated[s] / total for s in weights if allocated.get(s, 0) > 0}
     if not weights:
         raise ValueError(
             "The requested filters select no scenarios with positive weight"
         )
-    total = fsum(weights.values())
-    return {s: value / total for s, value in weights.items()}
+    return _normalized(weights)
+
+
+def weighted_score(per_scenario, weights):
+    """Combine one finite score per selected scenario, such as its mean Brier across seeds.
+
+    Extra scores outside the profile are ignored. An absent or nonfinite score for any
+    positively weighted scenario raises an error instead of changing the profile.
+    """
+    shares = _normalized(_relative(weights, SCENARIOS, "scenarios"))
+    missing = set(shares).difference(per_scenario)
+    if missing:
+        raise ValueError(f"Missing scores for selected scenarios: {missing}")
+    scores = [per_scenario[name] for name in shares]
+    if not all(isinstance(v, Real) and isfinite(v) for v in scores):
+        raise ValueError("Selected scenarios must have finite numeric scores")
+    return fsum(v * w for v, w in zip(scores, shares.values(), strict=True))

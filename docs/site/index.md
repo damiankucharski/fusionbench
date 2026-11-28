@@ -39,6 +39,7 @@ fusionbench run --scenarios committee --param k=5 --param accuracy=0.8 \
 |---|---|
 | Can I get a small dataset immediately, or generate larger fit and test sets with the same mechanism? | [Generate and save data](generate.md) |
 | What exactly changes in the data, and what information is available to an ideal predictor? | [Scenario catalog](scenarios.md) |
+| Which mechanisms matter to my use case, and how can I assign them different weights? | [Choose and weight mechanism groups](mechanism-groups.md) |
 | Does my method improve on averaging or a regularized stacker on the same test examples? | [Evaluate fusion methods](evaluate.md) |
 | When does a validation winner lose its advantage under noisy labels or a deployment shift? | [Measure validation-to-test transfer](transfer.md) |
 | How can I contribute a new probability generator? | [Add a scenario](extend.md) |
