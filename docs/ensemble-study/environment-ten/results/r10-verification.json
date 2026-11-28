@@ -1,0 +1,11 @@
+{
+  "score_rows": 9984,
+  "source_banks": 408,
+  "target_banks": 1248,
+  "evidence_replays": 1632,
+  "independent_reference_fits": 21,
+  "max_brier_interpolation_error": 4.996003610813204e-16,
+  "true_shortcut_omissions": 274,
+  "max_risk_change_after_shortcut_omission": 4.440892098500626e-16,
+  "independent_paired_intervals": 350
+}

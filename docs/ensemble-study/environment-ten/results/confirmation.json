@@ -1,0 +1,42 @@
+{
+  "chosen": "adjusted",
+  "r09_sha256": "a4df460ccd76ab52720df96a45fa50f14a2634e0b0be5eb0a13c2cc9edb59259",
+  "checks": {
+    "mixed/worst_endpoint": {
+      "delta": -0.029278846109215734,
+      "lo": -0.038834157564185734,
+      "hi": -0.020631505882840517,
+      "upper_limit": 0.0,
+      "passed": true
+    },
+    "case_mix/specialist80": {
+      "delta": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "upper_limit": 0.005,
+      "passed": true
+    },
+    "standard": {
+      "delta": 0.014780394009562702,
+      "lo": 0.006158898659113816,
+      "hi": 0.02436027965102747,
+      "upper_limit": 0.005,
+      "passed": false
+    },
+    "mixed/s100": {
+      "delta": 0.044833739980661015,
+      "lo": 0.03788292480905784,
+      "hi": 0.051361697011656916,
+      "upper_limit": 0.005,
+      "passed": false
+    }
+  },
+  "primary_pass": true,
+  "all_guardrails_pass": false,
+  "all_pass": false,
+  "unseen_reversed_worst_endpoint": {
+    "delta": -0.09597980082505059,
+    "lo": -0.10958122433585782,
+    "hi": -0.08403283995457411
+  }
+}

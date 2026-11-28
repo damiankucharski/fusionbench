@@ -2,7 +2,6 @@
 
 import numpy as np
 import pandas as pd
-
 from paired_stats import intervals, robust_panel, weights
 
 

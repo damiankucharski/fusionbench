@@ -8,10 +8,9 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
-from threadpoolctl import threadpool_limits
-
 from paired_designs import design_pairs
 from paired_stats import intervals, robust_panel, weights
+from threadpoolctl import threadpool_limits
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "results"
@@ -103,10 +102,10 @@ def validate(raw, r):
             "The reference methods must not be assigned diagnostic exclusions"
         )
     source = raw.groupby(["cohort", "family", "seed", "method"], dropna=False)
-    for field in ("drop", "fit_hash", "n_fit"):
+    for field in ("drop", "fit_hash", "n_fit", "test_x_hash", "test_hash"):
         if source[field].nunique(dropna=False).gt(1).any():
             raise ValueError(
-                f"A training decision changed across target worlds: {field}"
+                f"A source decision or forecast changed across target worlds: {field}"
             )
     # The filtering rule delegates to the native baseline on the original bank when it abstains.
     joined = raw[~raw.method.isin(REFS) & raw["drop"].isna()].merge(

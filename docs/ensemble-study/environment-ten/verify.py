@@ -11,9 +11,8 @@ from types import SimpleNamespace
 
 import numpy as np
 import pandas as pd
-from threadpoolctl import threadpool_limits
-
 from run_env import sources
+from threadpoolctl import threadpool_limits
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "results"
