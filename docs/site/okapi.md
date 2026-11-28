@@ -153,3 +153,22 @@ Supply one site ID and, in adjusted mode, one context ID per source row. When ro
 With the defaults, the screen requires eight observations in every site/context cell. For each provider it takes the largest absolute difference in adjusted site losses after subtracting 1.96 times its estimated standard error. It drops a provider only when its score is uniquely highest and exceeds 0.10 full-class Brier. Missing metadata, inadequate cell coverage, and ties leave the pool intact. Raw mode compares observed site losses directly and requires two observations per site. The standard errors assume independent diagnostic rows and the thresholds are selection heuristics.
 
 `predict` accepts the original provider ordering. For compact inference, compute only the providers listed in `model.kept_indices_` in that order and pass their predictions to `model.predict_retained`. If only one provider remains, its normalized probabilities give the fused result. The site screen is opt-in.
+
+## Limit reliance on one provider at prediction time
+
+A fitted fusion model can use one provider as a gate for others. To measure that dependence, substitute a fixed set of **whole source reports** for this provider on every query row, run the fitted model once per substitution, and average its outputs. The other providers keep their observed values on that row. The procedure uses one fitted model.
+
+```python
+from fusionbench.methods.provider_reliance import (
+    limit_reliance, marginal_prediction, source_donors,
+)
+
+donors = source_donors(source_predictions, provider=2, count=8)
+original = model.predict(query_predictions)
+marginal = marginal_prediction(model.predict, query_predictions, provider=2, donors=donors)
+probabilities = limit_reliance(original, marginal, strength=0.5)
+```
+
+At strength zero the result equals the ordinary fusion forecast. At strength one it equals the average after substitution. Eight donor reports require eight fusion evaluations for each batch, plus the original evaluation when blending. Donors are selected at the middle rank of each of eight equal probability intervals after sorting source reports lexicographically by their class columns. Duplicate source reports retain their frequency. With one donor per source row the average uses the complete empirical marginal distribution.
+
+Substitution breaks the flagged provider's correlations with the rest of the pool. This can produce report combinations absent from training and can remove information a genuine specialist or gate supplies. The chosen source sample, class ordering and donor count matter when using a finite set of donor reports. Evaluation on separate target data measures the consequences.
