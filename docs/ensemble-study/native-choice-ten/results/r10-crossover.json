@@ -1,0 +1,10 @@
+{
+  "source_draws": 16,
+  "fraction_active_at_equal_brier": 0.5478200091867881,
+  "paired_interval": [
+    0.525625934489871,
+    0.5665084510130353
+  ],
+  "max_gap_midpoint_error": 1.249000902703301e-16,
+  "difference_from_round5": 0.03043152823249129
+}
