@@ -101,6 +101,8 @@ The first two designs each contain 192 training rows. Comparing them estimates t
 
 Use `generate_scene_pool(42, law="signal", scene_error_share=0.5)` to place half of each provider's residual variance at scene level. Values from zero to one preserve the distribution of the provider's checkpoint predictions for a single row. They change how much error persists across the other rows in the same scene. The scene's influence on the event probability remains present at zero. `None` uses the original coefficients, which allocate different shares to static errors and checkpoint-specific errors.
 
+Set `event_offset=2.0` to generate an imbalanced population with approximately 9.90% positive observations. The offset shifts the same latent signal for providers and labels in each block. This gives separate fit and audit scenes drawn from the same population. To skip checkpoint selection, use a fixed checkpoint index for every provider, for example `pool["F"].P[:, :, 0]` and `pool["I"].P[:, :, 0]`.
+
 For a paired experiment, use the same seed and freeze the selected checkpoint columns before changing the share. Compare training on one observation per scene with training on several observations from each scene. The variance of the difference in losses for a specific pair of rules can respond differently from the test loss of an adaptive fusion procedure. [Paired study and data](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/scene-dependence)
 
 ### Check whether a candidate improves both the pooled loss and several folds

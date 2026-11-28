@@ -94,3 +94,31 @@ def test_invalid_pool_size(key, value):
 def test_invalid_scene_indices(scenes, rows):
     with pytest.raises(ValueError):
         scene_sample_indices(scenes, rows)
+
+
+def test_event_offset_changes_both_risks_and_scores_on_the_same_scenes():
+    from scipy.special import logit
+
+    params = {"law": "equal", "n_fit_scenes": 4, "n_audit_scenes": 7}
+    legacy = generate_scene_pool(23, **params)
+    same = generate_scene_pool(23, **params, event_offset=1.1)
+    rare = generate_scene_pool(23, **params, event_offset=2.0)
+    for block in rare:
+        for attr in ("P", "y", "scene", "posterior"):
+            np.testing.assert_array_equal(
+                getattr(legacy[block], attr), getattr(same[block], attr)
+            )
+        np.testing.assert_array_equal(rare[block].scene, legacy[block].scene)
+        assert np.all(rare[block].y <= legacy[block].y)
+        np.testing.assert_allclose(
+            logit(rare[block].posterior) - logit(legacy[block].posterior), -1.8 * 0.9
+        )
+        np.testing.assert_allclose(
+            logit(rare[block].P) - logit(legacy[block].P), -1.3 * 0.9
+        )
+
+
+@pytest.mark.parametrize("bad", [True, float("inf"), float("nan"), "2"])
+def test_invalid_event_offset(bad):
+    with pytest.raises(ValueError, match="event_offset"):
+        generate_scene_pool(4, n_fit_scenes=1, n_audit_scenes=1, event_offset=bad)

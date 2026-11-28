@@ -90,11 +90,13 @@ def _sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
-def _block(seed, block_id, n_scenes, offset, stride, order, signal_index, scales):
+def _block(
+    seed, block_id, n_scenes, offset, stride, order, signal_index, scales, event_offset
+):
     rows = ROWS_PER_SCENE
     s = _rng(seed, block_id, 0).standard_normal((n_scenes, 1))
     e = _rng(seed, block_id, 1).standard_normal((n_scenes, rows))
-    z = 0.9 * s + 0.8 * e - 1.1
+    z = 0.9 * s + 0.8 * e - event_offset
     posterior = _sigmoid(1.8 * z)
     y = _rng(seed, block_id, 2).random(z.shape) < posterior
     u = _rng(seed, block_id, 3).standard_normal((n_scenes, 1, PROVIDERS, 1))
@@ -152,7 +154,7 @@ def _residual_scales(scene_error_share):
     )
 
 
-def _generate_blocks(seed, law, specs, scene_error_share=None):
+def _generate_blocks(seed, law, specs, scene_error_share=None, event_offset=1.1):
     seed = _checked_seed(seed)
     if law not in ("equal", "signal"):
         raise ValueError("law must be 'equal' or 'signal'")
@@ -162,7 +164,15 @@ def _generate_blocks(seed, law, specs, scene_error_share=None):
     order = np.stack([rng.permutation(CHECKPOINTS) for _ in range(PROVIDERS)])
     return {
         name: _block(
-            seed, block_id, n_scenes, offset, stride, order, signal_index, scales
+            seed,
+            block_id,
+            n_scenes,
+            offset,
+            stride,
+            order,
+            signal_index,
+            scales,
+            event_offset,
         )
         for name, block_id, n_scenes, offset, stride in specs
     }
@@ -201,6 +211,7 @@ def generate_scene_pool(
     n_fit_scenes: int = 1536,
     n_audit_scenes: int = 512,
     scene_error_share: float | None = None,
+    event_offset: float = 1.1,
 ) -> dict[str, Block]:
     """Generate checkpoint-selection (A), fit (F) and audit (I) blocks.
 
@@ -222,7 +233,17 @@ def generate_scene_pool(
     shares and the historical setting have the same single-row joint law.
     Changing s reuses the same primitive draws. The scene signal in z, true
     posterior, label draws, and planted signal provider retain their values.
+
+    The event_offset shifts the latent signal shared by labels and providers
+    in every block. The original law subtracts 1.1 from the signal. An offset
+    of 2.0 gives a marginal positive prevalence of approximately 9.90%.
     """
+    if (
+        isinstance(event_offset, (bool, np.bool_))
+        or not isinstance(event_offset, Real)
+        or not np.isfinite(event_offset)
+    ):
+        raise ValueError("event_offset must be a finite real number")
     n_fit = _scene_count(n_fit_scenes, "n_fit_scenes")
     n_audit = _scene_count(n_audit_scenes, "n_audit_scenes")
     return _generate_blocks(
@@ -230,6 +251,7 @@ def generate_scene_pool(
         law,
         (("A", 1, 24, 0, 1), ("F", 4, n_fit, 24, 2), ("I", 3, n_audit, 25, 2)),
         scene_error_share=scene_error_share,
+        event_offset=float(event_offset),
     )
 
 
