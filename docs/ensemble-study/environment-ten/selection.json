@@ -1,0 +1,9 @@
+{
+  "chosen": "adjusted",
+  "mixed_mean_worst_endpoint_brier": {
+    "adjusted": 0.23982329609962857,
+    "strict": 0.23982329609962857,
+    "raw": 0.25951395485218093
+  },
+  "r09_sha256": "a4df460ccd76ab52720df96a45fa50f14a2634e0b0be5eb0a13c2cc9edb59259"
+}
