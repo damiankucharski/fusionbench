@@ -1,6 +1,6 @@
 # Scenario catalog
 
-Choose a scenario by the assumption you want to test. Each generator returns class probabilities from multiple providers for the same examples, together with class labels. The standard suite contains 27 scenarios, including 24 binary scenarios and three multiclass scenarios. The registry also includes the opt-in three-provider panel below. Use these IDs as registry keys in Python or as scenario names in a transfer configuration.
+Choose a scenario by the assumption you want to test. Each generator returns class probabilities from multiple providers for the same examples, together with class labels. The standard suite contains 30 scenarios, including 27 binary scenarios and three multiclass scenarios. The registry also includes the opt-in three-provider panel below. Use these IDs as registry keys in Python or as scenario names in a transfer configuration.
 
 ## Independent evidence and calibration
 
@@ -258,3 +258,42 @@ assert reports.shape == (512, 8, 2)
 ```
 
 The [matched-population study and directional transfer experiment](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/transfer-factorial) use these two standard-v5 scenarios.
+
+## Rare events in correlated scenes (standard-v6)
+
+Three ready-made IDs appear in the standard suite and use the same configurable generator.
+
+| Scenario | Mechanism at its default settings |
+| --- | --- |
+| `grouped_rare_event` | Provider accuracy differs and all eight providers share some error. A specialist is active in 20% of scenes. |
+| `shared_error_bloc` | Six of eight equally accurate providers share 85% of their error variance. The other two have independent errors. Specialization is off. |
+| `rare_scene_specialist` | All eight providers are equally noisy outside the specialist region. One reports the exact probability in the active 20% of scenes. There is no shared residual across providers. |
+
+Use `grouped_rare_event` to ask what a fusion method can learn when the training set covers few independent scenes. Eight anonymous providers estimate a binary event probability. Observations from one scene share a signal and a component of each provider's error. Fit and test contain independently drawn scenes from the same population. Scene identifiers are local to each split. The default configuration yields about 10% positives in expectation; a small training set can have a markedly different event rate.
+
+| Parameter | Default | Effect |
+| --- | ---: | --- |
+| `scene_size` | 8 | Positive integer count of rows per scene. The last scene may contain fewer rows. |
+| `event_offset` | 2 | Subtracted from the latent signal; larger values make events rarer. |
+| `heterogeneity` | 0.5 | Changes the ratio of the largest to smallest provider residual standard deviation from 1 at zero to exp(2) at one. Average pre-specialist residual variance is fixed. |
+| `common_error_share` | 0.35 | Fraction of a provider's standardized residual variance shared across providers. |
+| `bloc_size` | 8 | Number of providers participating in the shared residual, starting with provider zero. The other providers draw independent residuals. Accepts integers from zero through eight. |
+| `scene_error_share` | 0.85 | Fraction of this residual variance persistent across observations of a scene. |
+| `specialist_rate` | 0.2 | Probability that a scene activates the specialist, independently of its signal. |
+| `specialist_strength` | 0.75 | Interpolates provider 3's logit toward the true event logit in active scenes. At one this provider reports the exact probability in those scenes. |
+
+Each row has latent signal `z = 0.9 * scene_signal + 0.8 * row_signal - event_offset`, using independent standard normal signals. The event probability is `expit(1.8*z)`. Ordinary provider logits use `1.3*z` plus Gaussian error. Noise controls range from zero to one. At a fixed seed, row count and scene size, changing provider properties preserves the same labels, signals and underlying noise draws. These switches let you compare the loss due to a common provider error with the benefit of a local specialist on the very same events.
+
+```python
+from fusionbench import generate_dataset, load_reference_dataset
+
+bank = generate_dataset(
+    "grouped_rare_event", seed=34, n_per_split=128,
+    scene_size=8, common_error_share=0.7, specialist_strength=1.0,
+)
+scenes = bank.meta["evaluation_groups"]["fit"]["scene_id"]
+specialist_active = bank.meta["evaluation_groups"]["test"]["specialist_region"]
+reference = load_reference_dataset("grouped_rare_event")
+```
+
+The prediction tensor has shape (rows, 8, 2). Scene labels, context and latent probability are available for evaluation. The generator's `sample()` method returns `latent["posterior"]`, the probability conditional on the underlying signal. The posterior conditional on the reports is generally different, so the dataset leaves `fit_oracle` and `test_oracle` empty. This control models within-scene dependence without reproducing image geometry or a particular sensor. [Evaluating grouped data](validation-curse.md)

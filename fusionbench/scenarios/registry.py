@@ -24,6 +24,11 @@ from fusionbench.scenarios.gates import (
     TwoPathways,
     WeakestLink,
 )
+from fusionbench.scenarios.grouped_rare_event import (
+    GroupedRareEvent,
+    RareSceneSpecialist,
+    SharedErrorBloc,
+)
 from fusionbench.scenarios.mixture import GatedExperts
 from fusionbench.scenarios.multiclass_provider_panel import MulticlassProviderPanel
 from fusionbench.scenarios.native_switch import NativeCloseSwitch, NativeSwitch
@@ -78,7 +83,11 @@ STANDARD_V5_SCENARIOS = MappingProxyType({
     "rare_shortcut_noise": RareShortcutNoise,
     "stratified_pool": StratifiedPool,
 })
-STANDARD_SCENARIOS = STANDARD_V5_SCENARIOS
+STANDARD_V6_SCENARIOS = MappingProxyType({
+    **STANDARD_V5_SCENARIOS, "grouped_rare_event": GroupedRareEvent,
+    "shared_error_bloc": SharedErrorBloc, "rare_scene_specialist": RareSceneSpecialist,
+})
+STANDARD_SCENARIOS = STANDARD_V6_SCENARIOS
 
 SCENARIOS: dict[str, type[Scenario]] = {
     **STANDARD_SCENARIOS,

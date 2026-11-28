@@ -1,6 +1,6 @@
 # Run mechanism stress profiles
 
-Every standard scenario has a `reference` profile using its constructor defaults and two named alternatives. A full run evaluates 81 settings across 27 scenarios. Each method learns from the same rows within a setting and receives the same held-out provider probabilities. Full-class Brier is the average sum of squared probability errors per row. Lower values are better. [Scenario definitions](scenarios.md)
+Every standard scenario has a `reference` profile using its constructor defaults and two named alternatives. A full run evaluates 90 settings across 30 scenarios. Each method learns from the same rows within a setting and receives the same held-out provider probabilities. Full-class Brier is the average sum of squared probability errors per row. Lower values are better. [Scenario definitions](scenarios.md)
 
 ```sh
 fusionbench profiles --list --scenario weakest_link similar_classes_38
@@ -32,6 +32,9 @@ Omit `--scenario` to evaluate all standard families. Choose a subset of settings
 | `selective_fallback` | Compare difficulty-dependent losses of availability with the same quota allocated randomly, or keep the provider available for all rows. |
 | `stratified_pool` | Choose an exact arithmetic-mean oracle or a strong specialization of provider zero on both splits. |
 | `rare_shortcut_noise` | Use the source settings at test, or remove test-time provider noise while keeping the changed region and shortcut. |
+| `shared_error_bloc` | Remove shared error or reduce the correlated group from six providers to four. |
+| `rare_scene_specialist` | Remove the specialist or reduce its active-scene frequency to 5%. |
+| `grouped_rare_event` | Remove provider-quality differences, shared provider error and specialization together, or increase common error and give the specialist exact probabilities in its region. |
 | `cloned_shortcut` | Restore independent shortcut votes at fixed test reversal, or keep cloned votes and restore source alignment at test. |
 
 ## Reading the outputs

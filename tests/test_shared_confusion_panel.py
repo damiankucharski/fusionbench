@@ -195,14 +195,16 @@ def test_similar_classes_is_a_standard_regression_case_on_both_splits():
 
     scenario_id = "similar_classes_38"
     expected = [*STANDARD_V1_SCENARIOS, scenario_id, "rare_specialist", "redundant_pool",
-                "environment_shortcut", "selective_fallback", "cloned_shortcut", "rare_shortcut_noise", "stratified_pool"]
+                "environment_shortcut", "selective_fallback", "cloned_shortcut", "rare_shortcut_noise", "stratified_pool", "grouped_rare_event",
+                "shared_error_bloc", "rare_scene_specialist"]
     assert [s._registry_metadata["scenario_id"] for s in default_suite()] == expected
     assert [s._registry_metadata["scenario_id"] for s in _scenarios(None)] == expected
     assert list(load_preset("standard")["scenarios"]) == expected
     assert list(load_preset("standard-v2")["scenarios"]) == expected[:20]
     assert list(load_preset("standard-v3")["scenarios"]) == expected[:24]
     assert list(load_preset("standard-v4")["scenarios"]) == expected[:25]
-    assert load_preset("standard") == load_preset("standard-v5")
+    assert list(load_preset("standard-v5")["scenarios"]) == expected[:27]
+    assert load_preset("standard") == load_preset("standard-v6")
     data = get_scenario(scenario_id).build(n_per_split=1024, seed=37)
     base = get_scenario("multiclass_provider_panel").build(n_per_split=1024, seed=37)
     for split in ("fit", "test"):

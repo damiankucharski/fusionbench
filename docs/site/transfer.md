@@ -8,7 +8,7 @@ A method can win on source validation and lose on future cases. FusionBench sepa
 fusionbench transfer-grid --preset smoke --out results/transfer-smoke
 ```
 
-The smoke preset includes two scenarios and four lightweight methods. The standard preset (standard-v5) covers 27 scenarios. Use `--preset standard-v1`, `standard-v2`, `standard-v3` or `standard-v4` to reproduce the earlier 19, 20, 24 or 25 scenarios. All standard versions use eight replicates per scenario and retain the earlier seed slots. Both use 640 development rows, 192 independent source-validation rows and 2,048 test rows per bank. Larger runs add stability across seeds and mechanisms and consume more compute. For a targeted experiment, retain the scenario's fixed seed slot and choose the methods and perturbation levels explicitly.
+The smoke preset includes two scenarios and four lightweight methods. The standard preset (standard-v6) covers 30 scenarios. Presets `standard-v1` through `standard-v5` reproduce the earlier 19, 20, 24, 25 and 27 scenarios, respectively. All standard versions use eight replicates per scenario and retain the earlier seed slots. Both use 640 development rows, 192 independent source-validation rows and 2,048 test rows per bank. Larger runs add stability across seeds and mechanisms and consume more compute. For a targeted experiment, retain the scenario's fixed seed slot and choose the methods and perturbation levels explicitly.
 
 ```sh
 fusionbench transfer-grid --preset standard --scenarios native_switch multiclass_committee \

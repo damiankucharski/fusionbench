@@ -29,7 +29,6 @@ def test_standard_v5_appends_two_seed_slots_to_immutable_v4():
             "stratified_pool": {"seed_slot": 26},
         },
     }
-    assert new == load_preset("standard")
 
 
 @pytest.mark.parametrize(
