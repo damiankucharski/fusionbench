@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import argparse
 import hashlib
+import heapq
 import json
 import struct
 from concurrent.futures import ProcessPoolExecutor
@@ -43,6 +44,15 @@ GP_SEEDS = (907, 919)
 class GeometryCheckpoint(SuiteCheckpoint):
     diversity: dict
     initial_rows: tuple[dict, ...]
+    validation_calls: int
+
+
+def validate_gp_validation_top_k(value):
+    if value is not None and (
+        isinstance(value, (bool, np.bool_)) or not isinstance(value, Integral) or value < 1
+    ):
+        raise ValueError("gp_validation_top_k must be None or a positive integer")
+    return None if value is None else int(value)
 
 
 def _diversity(rows):
@@ -61,13 +71,18 @@ def _diversity(rows):
 
 def fit_seed_geometry(
     preds, fit_y, validation_preds, validation_y, *, seed, shape, budgets=(600, 1200),
-    fitness=None, on_candidate=None, discovery_fitness=None,
+    fitness=None, on_candidate=None, discovery_fitness=None, gp_validation_top_k=None,
 ):
     """Return prefix champions and the complete native pre-evolution initial archive.
 
     Training diversity counts distinct byte-exact native float64 prediction matrices
     among the specified actually scored trees. Every fit forward is reused from the
-    native score callback, and each structural program receives one validation pass.
+    native score callback. By default each structural program receives one
+    validation pass. gp_validation_top_k restricts validation at each checkpoint
+    to its k best unrounded discovery scores, keeping first visits on ties.
+    The default ranks by lowest raw discovery Brier. A custom fitness or
+    discovery_fitness ranks by its supplied higher-is-better discovery score.
+    Shared candidates across checkpoints reuse their cached validation score.
     on_candidate(tree, fit_prediction) observes each distinct program's first
     fit evaluation, in traversal order. Copy the tree to retain it. A supplied
     fitness(native_prediction, labels) controls evolution and both champions.
@@ -89,6 +104,7 @@ def fit_seed_geometry(
         WEIGHTED_MEAN,
     )
 
+    top_k = validate_gp_validation_top_k(gp_validation_top_k)
     if fitness is not None and discovery_fitness is not None:
         raise ValueError("Specify either a common fitness or a discovery-only fitness")
     if shape not in (*SHAPES, "mixed_branch", "mixed_chain"):
@@ -114,6 +130,8 @@ def fit_seed_geometry(
     visits = 0
     generation = 0
     best_fit = best_val = None
+    shortlist = []
+    validation_cache = {}
     checks = {}
     initial_rows = []
     batch_losses = []
@@ -137,6 +155,11 @@ def fit_seed_geometry(
             raise ValueError("fitness must return a finite scalar")
         return float(value)
 
+    def validation(t):
+        vp = t.do_pred_on_another_tensors(current_tensors=inputs)
+        vl = _loss(vp, vt)
+        return (-vl if fitness is None else custom_score(vp, val_labels)), vl
+
     def remember(t, loss, fit_score, batch_index):
         nonlocal visits, best_fit, best_val
         key = t.structural_key()
@@ -148,11 +171,25 @@ def fit_seed_geometry(
         seen.add(key)
         if on_candidate is not None:
             on_candidate(t, batch_predictions[batch_index])
-        vp = t.do_pred_on_another_tensors(current_tensors=inputs)
-        vl = _loss(vp, vt)
-        val_score = -vl if fitness is None else custom_score(vp, val_labels)
         wf = best_fit is None or fit_score > best_fit[0]
         validation_tiebreak = -loss if discovery_fitness is not None else fit_score
+        if top_k is not None:
+            # The heap root is the least eligible pair (lowest score, latest visit).
+            priority = (fit_score, -visits)
+            eligible = len(shortlist) < top_k or priority > shortlist[0][:2]
+            if wf or eligible:
+                ref = t.copy()
+                ref.mutation_chance = t.mutation_chance
+                if wf:
+                    best_fit = (fit_score, loss, ref)
+                if eligible:
+                    entry = (*priority, validation_tiebreak, ref)
+                    if len(shortlist) < top_k:
+                        heapq.heappush(shortlist, entry)
+                    else:
+                        heapq.heapreplace(shortlist, entry)
+            return
+        val_score, vl = validation(t)
         wv = best_val is None or (val_score, validation_tiebreak) > best_val[:2]
         if wf or wv:
             ref = t.copy()
@@ -163,6 +200,17 @@ def fit_seed_geometry(
                 best_val = (val_score, validation_tiebreak, vl, ref)
 
     def capture(label):
+        nonlocal best_val
+        if top_k is not None:
+            best_order = None
+            for _, neg_visit, tie, ref in shortlist:
+                if neg_visit not in validation_cache:
+                    validation_cache[neg_visit] = validation(ref)
+                val_score, vl = validation_cache[neg_visit]
+                order = (val_score, tie, neg_visit)
+                if best_order is None or order > best_order:
+                    best_order = order
+                    best_val = (val_score, tie, vl, ref)
         checks[label] = GeometryCheckpoint(
             fit_tree=best_fit[-1],
             val_tree=best_val[-1],
@@ -178,6 +226,7 @@ def fit_seed_geometry(
                 "archive_unique_fit_predictions": len(fit_vectors),
             },
             initial_rows=tuple(initial_rows),
+            validation_calls=len(seen) if top_k is None else len(validation_cache),
         )
 
     class Stop(Exception):
