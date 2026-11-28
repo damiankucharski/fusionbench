@@ -55,6 +55,35 @@ def validate_gp_validation_top_k(value):
     return None if value is None else int(value)
 
 
+def _row_weights(values, rows):
+    if values is None:
+        return None
+    w = np.asarray(values)
+    if w.shape != (rows,) or w.dtype.kind not in "iuf":
+        raise ValueError("Supply one positive numeric sample weight per source row")
+    w = w.astype(float, copy=False)
+    if not np.all(np.isfinite(w) & (w > 0)):
+        raise ValueError("Source sample weights must be finite and strictly positive")
+    return w
+
+
+def _normalized_weights(w):
+    # A uniform stage uses the original summation and exact historical ties.
+    if w is None or np.all(w == w[0]):
+        return None
+    scaled = w / np.max(w)
+    return scaled / scaled.sum()
+
+
+def _stage_brier(p, target, mass):
+    if mass is None:
+        return _loss(p, target)
+    squared = np.square(p - target)
+    if target.shape[1] == 1:
+        return float(mass @ squared[:, 0])
+    return 0.5 * float(mass @ squared.sum(axis=1))
+
+
 def _diversity(rows):
     extra = [r for r in rows if r["origin"] == "seed"]
     predictions = tuple(r["fit_prediction_sha256"] for r in rows)
@@ -72,6 +101,7 @@ def _diversity(rows):
 def fit_seed_geometry(
     preds, fit_y, validation_preds, validation_y, *, seed, shape, budgets=(600, 1200),
     fitness=None, on_candidate=None, discovery_fitness=None, gp_validation_top_k=None,
+    discovery_weight=None, validation_weight=None,
 ):
     """Return prefix champions and the complete native pre-evolution initial archive.
 
@@ -93,6 +123,9 @@ def fit_seed_geometry(
     discovery_fitness replaces only the stock GP training score on its usual
     unit scale with three-decimal tournament selection. Validation champions
     still maximize raw held-out Brier skill with raw fit Brier as a tiebreaker.
+    discovery_weight and validation_weight independently weight the built-in
+    Brier scores on their respective rows. Discovery weighting preserves the
+    ordinary unit score and the historical three-decimal tournament selection.
     """
     from okapi import Okapi
     from okapi.operators import (
@@ -123,6 +156,10 @@ def fit_seed_geometry(
         )
     labels, target = _targets(fit_y, n, c)
     val_labels, vt = _targets(validation_y, len(v), c)
+    dw = _normalized_weights(_row_weights(discovery_weight, n))
+    vw = _normalized_weights(_row_weights(validation_weight, len(v)))
+    if (dw is not None or vw is not None) and (fitness is not None or discovery_fitness is not None):
+        raise ValueError("Nonuniform sample weights require the built-in Brier fitness")
     inputs = _bind(v)
     seen = set()
     fit_vectors = set()
@@ -140,7 +177,7 @@ def fit_seed_geometry(
     collecting_init = True
 
     def objective(p, _):
-        val = _loss(p, target)
+        val = _stage_brier(p, target, dw)
         batch_losses.append(val)
         batch_hashes.append(fingerprint(p))
         if on_candidate is not None:
@@ -157,7 +194,7 @@ def fit_seed_geometry(
 
     def validation(t):
         vp = t.do_pred_on_another_tensors(current_tensors=inputs)
-        vl = _loss(vp, vt)
+        vl = _stage_brier(vp, vt, vw)
         return (-vl if fitness is None else custom_score(vp, val_labels)), vl
 
     def remember(t, loss, fit_score, batch_index):

@@ -1,5 +1,6 @@
 """Select and deploy one OKAPI tree using a scalar predictive fitness."""
 
+from functools import partial
 from time import perf_counter
 
 import numpy as np
@@ -11,6 +12,31 @@ from fusionbench.methods.okapi import _task_postprocessing
 
 def _brier_skill(p, labels):
     return 1.0 - 0.5 * np.mean(np.sum((p - np.eye(p.shape[1])[labels]) ** 2, axis=1))
+
+
+def _weighted_brier_skill(p, labels, mass):
+    errors = np.square(p - np.eye(p.shape[1])[labels]).sum(axis=1)
+    return 1.0 - 0.5 * float(mass @ errors)
+
+
+def _weighted_native_skill(p, labels, mass):
+    return _weighted_brier_skill(_full_probability(p), labels, mass)
+
+
+_WEIGHT_STAGES = ("discovery", "validation", "refit")
+
+
+def _selected_stages(stages):
+    if isinstance(stages, str):
+        raise TypeError("Supply weight_stages as a collection of stage names")
+    try:
+        names = tuple(stages)
+        unique = set(names)
+    except TypeError as exc:
+        raise ValueError("Supply weight_stages as a collection of stage names") from exc
+    if len(unique) != len(names) or not unique.issubset(_WEIGHT_STAGES):
+        raise ValueError(f"weight_stages must contain distinct names from {_WEIGHT_STAGES}")
+    return unique
 
 
 def _full_probability(p):
@@ -115,7 +141,9 @@ class NativePatternOKAPI(Method):
         self.class_head = class_head
         self.class_head_max_evaluations = class_head_max_evaluations
         if gp_validation_top_k is not None:
-            from fusionbench.eval.seed_geometry_standard import validate_gp_validation_top_k
+            from fusionbench.eval.seed_geometry_standard import (
+                validate_gp_validation_top_k,
+            )
 
             gp_validation_top_k = validate_gp_validation_top_k(gp_validation_top_k)
         self.gp_validation_top_k = gp_validation_top_k
@@ -131,19 +159,27 @@ class NativePatternOKAPI(Method):
 
     def _training_fitness(self, probabilities, labels):
         """Optional objective bound to this precise training split."""
-        return None
+        return
 
-    def fit(self, fit_preds, fit_y, *, task, n_classes, on_gp_candidate=None):
+    def fit(self, fit_preds, fit_y, *, task, n_classes, on_gp_candidate=None,
+            sample_weight=None, weight_stages=_WEIGHT_STAGES):
         """Fit the model and optionally observe each distinct GP discovery evaluation.
 
         on_gp_candidate(tree, prediction) receives the live program and its
         raw discovery output in first-visit order. Treat both as read-only
         and copy any state that must outlive the callback.
+        sample_weight supplies positive source-row weights for built-in Brier.
+        weight_stages can select discovery, validation and/or full-source head
+        refit. The L2 penalty retains its original source variance and row count.
         """
         from okapi.pattern_features import select_pattern_features
 
         from fusionbench.eval.full_suite_point import fingerprint
-        from fusionbench.eval.seed_geometry_standard import fit_seed_geometry
+        from fusionbench.eval.seed_geometry_standard import (
+            _normalized_weights,
+            _row_weights,
+            fit_seed_geometry,
+        )
         from fusionbench.eval.suite_point_gp import _bind, _full, _targets, predict_tree
 
         if on_gp_candidate is not None and not callable(on_gp_candidate):
@@ -172,6 +208,19 @@ class NativePatternOKAPI(Method):
             np.random.SeedSequence([split_seed, 51])
         ).permutation(n)
         discovery, validation = np.split(order, [7 * n // 10])
+        weights = _row_weights(sample_weight, n)
+        stages = _selected_stages(weight_stages)
+        raw_weights = {
+            stage: weights[rows] if weights is not None and stage in stages else None
+            for stage, rows in (("discovery", discovery), ("validation", validation), ("refit", slice(None)))
+        }
+        mass = {stage: _normalized_weights(w) for stage, w in raw_weights.items()}
+        active_stages = [stage for stage in _WEIGHT_STAGES if mass[stage] is not None]
+        if active_stages and (
+            self.fitness is not None
+            or type(self)._training_fitness is not NativePatternOKAPI._training_fitness
+        ):
+            raise ValueError("Nonuniform sample weights require the built-in Brier fitness")
         self.discovery_indices_ = discovery.copy()
         self.validation_indices_ = validation.copy()
         d, v = x[discovery], x[validation]
@@ -192,6 +241,13 @@ class NativePatternOKAPI(Method):
         refit_objective = self._training_fitness(x, labels)
         discovery_score = native_score if discovery_objective is None else discovery_objective
         refit_score = native_score if refit_objective is None else refit_objective
+        if mass["discovery"] is not None:
+            discovery_score = partial(_weighted_native_skill, mass=mass["discovery"])
+        if mass["refit"] is not None:
+            refit_score = partial(_weighted_native_skill, mass=mass["refit"])
+        validation_score = full_score
+        if mass["validation"] is not None:
+            validation_score = partial(_weighted_brier_skill, mass=mass["validation"])
 
         def fit_head(inputs, fit_labels, bases, objective):
             return _head(inputs, fit_labels, bases, objective, multiclass, self.l2_strength,
@@ -215,6 +271,7 @@ class NativePatternOKAPI(Method):
             budgets=(600,),
             fitness=None if self.fitness is None else native_score,
             on_candidate=collect,
+            **{f"{s}_weight": raw_weights[s] for s in ("discovery", "validation") if mass[s] is not None},
             **({"discovery_fitness": discovery_objective} if discovery_objective is not None else {}),
             **({"gp_validation_top_k": self.gp_validation_top_k} if self.gp_validation_top_k is not None else {}),
         )[600]
@@ -250,7 +307,7 @@ class NativePatternOKAPI(Method):
         aug_seconds = perf_counter() - start
         discovery_trees = {"flat": flat_d, "augmented": aug_d, "gp": gp.val_tree}
         validation_scores = {
-            name: full_score(predict_tree(tree, v), vy)
+            name: validation_score(predict_tree(tree, v), vy)
             for name, tree in discovery_trees.items()
         }
         chosen = max(validation_scores, key=validation_scores.get)
@@ -278,6 +335,7 @@ class NativePatternOKAPI(Method):
         self.discovery_trees_ = discovery_trees
         self.trees_ = {"flat": flat, "augmented": augmented, "gp": gp.val_tree}
         self.counts_ = {
+            "weight_stages": active_stages,
             "discovery_rows": len(d),
             "validation_rows": len(v),
             "refit_rows": n,

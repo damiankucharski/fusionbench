@@ -172,3 +172,31 @@ probabilities = limit_reliance(original, marginal, strength=0.5)
 At strength zero the result equals the ordinary fusion forecast. At strength one it equals the average after substitution. Eight donor reports require eight fusion evaluations for each batch, plus the original evaluation when blending. Donors are selected at the middle rank of each of eight equal probability intervals after sorting source reports lexicographically by their class columns. Duplicate source reports retain their frequency. With one donor per source row the average uses the complete empirical marginal distribution.
 
 Substitution breaks the flagged provider's correlations with the rest of the pool. This can produce report combinations absent from training and can remove information a genuine specialist or gate supplies. The chosen source sample, class ordering and donor count matter when using a finite set of donor reports. Evaluation on separate target data measures the consequences.
+
+## Weight Brier during native search, selection or refit
+
+Pass a positive finite weight for each source row to `NativePatternOKAPI.fit` or `RegularizedNativePatternOKAPI.fit`. For example, a study sampling equal numbers of observations from two environments can ask how the search changes if one environment receives twice the weight. Specify the affected stages explicitly to distinguish a change in the search from a change in the final choice.
+
+```python
+import numpy as np
+from fusionbench.methods.native_pattern import RegularizedNativePatternOKAPI
+
+model = RegularizedNativePatternOKAPI(seed=0, split_seed=0, gp_validation_top_k=8)
+weights = np.where(source_environment == "site_A", 2.0, 1.0)
+model.fit(
+    source_predictions, source_labels, task="binary", n_classes=2,
+    sample_weight=weights, weight_stages=("discovery", "validation"),
+)
+forecasts = model.predict(target_predictions)
+print(model.counts_["weight_stages"])
+```
+
+| Stage | Where the row weights enter |
+| --- | --- |
+| `discovery` | GP fitness and shortlisting, feature screening, optional pair ranking and the discovery heads |
+| `validation` | Selection of the GP finalist and of the flat, augmented or GP family |
+| `refit` | Fitting the flat and augmented heads on all source rows. A selected GP finalist retains the program found during discovery. |
+
+Weights normalize separately on the rows scored at each enabled stage. Uniform weights on a stage use the historical scoring path. The default enables all three stages when weights are supplied. The source split, GP evaluation budget and three-decimal tournament fitness retain their original settings. The unrounded discovery loss determines GP shortlist eligibility. Head regularization still uses the original source feature variances and row count.
+
+The source weights apply to the built-in Brier objective. Custom training objectives manage their own weighting. `counts_["weight_stages"]` lists the stages that actually used nonuniform weights, and `counts_["score_calls"]` records the evaluations. Predicting on a new bank requires only its provider reports.
