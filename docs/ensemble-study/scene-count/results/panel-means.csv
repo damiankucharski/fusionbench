@@ -1,0 +1,11 @@
+suite,scenarios,method,mean_test_brier
+standard-v4,25,seeded,0.3309638350597186
+standard-v4,25,mean,0.39458763797996005
+standard-v4,25,top_n,0.3590092327959768
+standard-v4,25,prob_lr,0.26467219503432
+standard-v4,25,regularized,0.23356532889678555
+historical-24,24,seeded,0.3176546652233397
+historical-24,24,mean,0.3775194588129467
+historical-24,24,top_n,0.34045862007963074
+historical-24,24,prob_lr,0.2518692127439989
+historical-24,24,regularized,0.2193465580676587

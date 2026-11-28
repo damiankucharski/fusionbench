@@ -1,0 +1,29 @@
+{
+  "protocol": "541b4c3",
+  "okapi_revision": "1d7ad2d1660627585329bc584a9c4634915e8bb1",
+  "suite": "standard-v4",
+  "design": "panel",
+  "seeds": [
+    286201,
+    286202
+  ],
+  "methods": [
+    "seeded",
+    "mean",
+    "top_n",
+    "prob_lr",
+    "regularized"
+  ],
+  "workers": 3,
+  "threads_per_worker": 1,
+  "bootstrap_draws": 10000,
+  "bootstrap_seed": 97823,
+  "fit_blocks_per_method": 50,
+  "score_rows": 250,
+  "trajectory_rows": 850,
+  "seconds": 15.166374840999197,
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "scikit_learn": "1.8.0",
+  "accounting": "Only the seeded GP arm is run. Each factorial clone level has one fit shared across both reversal tests; each test score repeats that fit's cost."
+}
