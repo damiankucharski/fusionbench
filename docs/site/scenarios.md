@@ -1,6 +1,6 @@
 # Scenario catalog
 
-Choose a scenario by the assumption you want to test. Each generator returns class probabilities from multiple providers for the same examples, together with class labels. The standard suite contains 24 scenarios, including 21 binary scenarios and three multiclass scenarios. The registry also includes the opt-in three-provider panel below. Use these IDs as registry keys in Python or as scenario names in a transfer configuration.
+Choose a scenario by the assumption you want to test. Each generator returns class probabilities from multiple providers for the same examples, together with class labels. The standard suite contains 25 scenarios, including 22 binary scenarios and three multiclass scenarios. The registry also includes the opt-in three-provider panel below. Use these IDs as registry keys in Python or as scenario names in a transfer configuration.
 
 ## Independent evidence and calibration
 
@@ -174,3 +174,39 @@ This comparison holds provider inputs and roles fixed while changing the conditi
 [Generate rare specialists and redundant pools](rare-and-redundant.md) · [Control environments and fallback](environments-and-fallback.md) · [Run mechanism stress profiles](stress-profiles.md) · [Change only the class prior](prior-shift.md)
 
 For a nested size comparison, `fusionbench.interventions.paired_pool_sizes("needle", [10, 97], n_per_split=512, seed=7)` returns two banks with identical rows, informative providers and oracle. For committee scenarios the size counts independent inputs; for needle and deadweight it counts irrelevant inputs. All sizes are prefixes of the same maximum-size bank. For correlated and saturated pools, `duplicate_provider(dataset, provider=0, copies=4)` in the same module creates a paired control with identical information and posterior. Each additional copy receives a distinct provider ID.
+
+## Cloned shortcut in standard-v4
+
+`cloned_shortcut` lets you vary how many independent signals an ensemble receives and whether those signals still point in the same direction at deployment. Two stable providers vote correctly with probability 0.75 in both domains. Six shortcut providers each vote correctly with probability 0.80 during fitting. Every provider reports its source confidence, including on test. Labels are balanced in expectation.
+
+| Setting | `clone_probability` | `test_reversal_probability` |
+| --- | ---: | ---: |
+| Independent, aligned votes | 0 | 0 |
+| Cloning alone | 1 | 0 |
+| Reversal alone | 0 | 1 |
+| Both mechanisms (default) | 1 | 1 |
+
+On a cloned row all six shortcut reports copy the first shortcut's vote, so their agreement supplies one independent piece of evidence. On a reversed test row every shortcut reports the opposite vote while retaining its confidence. The stable providers keep their independent evidence. Each knob also accepts intermediate probabilities. The hidden events are independent Bernoulli draws per row.
+
+```python
+from itertools import product
+
+import numpy as np
+
+from fusionbench import generate_dataset
+
+banks = {
+    (c, r): generate_dataset(
+        "cloned_shortcut", clone_probability=c, test_reversal_probability=r,
+        n_per_split=512, seed=17,
+    )
+    for c, r in product((0, 1), repeat=2)
+}
+clean = banks[0, 0]
+for bank in banks.values():
+    np.testing.assert_array_equal(bank.test_y, clean.test_y)
+    np.testing.assert_array_equal(bank.test_preds[:, :2], clean.test_preds[:, :2])
+np.testing.assert_array_equal(banks[1, 0].fit_preds, banks[1, 1].fit_preds)
+```
+
+The matched seed keeps labels, underlying votes and stable reports paired across all four settings. Fit and test in each bank use separate rows. The oracle uses the eight reported votes and the known domain law, integrating over the hidden events. At complete reversal it counts an inverted shortcut vote as positive evidence for the opposite class. The source rows alone cannot identify whether this reversal will occur at deployment. Group flags for evaluating subsets are in `bank.meta["evaluation_groups"]`. [Generate and save datasets](generate.md)

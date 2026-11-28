@@ -57,7 +57,7 @@ METHODS = (*ARMS, *CONTROLS)
 BASE_SEED = {1: 2010000, 2: 2110000, 3: 2210000}
 SLOTS = {
     name: spec["seed_slot"]
-    for name, spec in load_preset("standard")["scenarios"].items()
+    for name, spec in load_preset("standard-v1")["scenarios"].items()
 }
 assert len(SLOTS) == 19 and set(SLOTS.values()) == set(range(19))
 assert len(SHIFTS) == 9 and set(SHIFTS) <= set(SLOTS)

@@ -280,7 +280,7 @@ def run(output, workers):
     if not 1 <= workers <= 8:
         raise ValueError("The benchmark supports one to eight concurrent bank workers")
     output.mkdir(parents=True, exist_ok=True)
-    suite = load_preset("standard")
+    suite = load_preset("standard-v1")
     jobs = [
         (spec["seed_slot"], name, r, suite["fit_rows"], suite["test_rows"])
         for name, spec in suite["scenarios"].items()

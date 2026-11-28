@@ -11,6 +11,7 @@ import numpy as np
 
 from fusionbench.scenarios.base import Scenario
 from fusionbench.scenarios.calibration import Miscalibration, MulticlassCommittee
+from fusionbench.scenarios.cloned_shortcut import ClonedShortcut
 from fusionbench.scenarios.committee import Committee, DeadWeight, Needle, Saturated
 from fusionbench.scenarios.compositional_switch import CompositionalSwitch
 from fusionbench.scenarios.correlated import CalibratedSuppressor, CorrelatedRedundancy
@@ -61,13 +62,15 @@ STANDARD_V1_SCENARIOS = MappingProxyType(
 )
 
 STANDARD_V2_SCENARIOS = MappingProxyType({**STANDARD_V1_SCENARIOS, "similar_classes_38": SimilarClasses38})
-STANDARD_SCENARIOS = MappingProxyType({
+STANDARD_V3_SCENARIOS = MappingProxyType({
     **STANDARD_V2_SCENARIOS,
     "rare_specialist": RareSpecialist,
     "redundant_pool": RedundantPool,
     "environment_shortcut": EnvironmentShortcut,
     "selective_fallback": SelectiveFallback,
 })
+
+STANDARD_SCENARIOS = MappingProxyType({**STANDARD_V3_SCENARIOS, "cloned_shortcut": ClonedShortcut})
 
 SCENARIOS: dict[str, type[Scenario]] = {
     **STANDARD_SCENARIOS,

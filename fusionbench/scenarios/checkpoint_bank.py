@@ -28,10 +28,10 @@ selection among equally competent checkpoints in the equal law.
 In the paired signal law, one anonymous provider reports q_gr at all eight
 checkpoints; the other seven providers and all label draws are unchanged.
 The provider is chosen by an independent stream (block=0, channel=1), once
-per bank. All model/data parameters remain identical for A, B, and I.
+per bank. All blocks use the same model and data parameters.
 
 RNGs are NumPy Generator(PCG64(SeedSequence([seed, block_id, channel]))).
-Block IDs 1, 2, 3 denote A, B, I. Channels 0 through 6 draw S, E, Y's
+Block IDs 1, 2, 3, 4 denote A, B, I, F. Channels 0 through 6 draw S, E, Y's
 uniform, U, V, H's innovations, and J's innovations respectively, in
 row-major order. The independent (block=0, channel=0) stream draws one
 permutation per provider in order. Each entry is the positive-class probability; the
@@ -58,7 +58,7 @@ RHO = 0.65
 class Block:
     """P has shape [row, provider, checkpoint]; y and scene have one entry per row.
 
-    Scene IDs are disjoint across A, B and I within each bank. Identify a scene
+    Scene IDs are disjoint across blocks within each bank. Identify a scene
     across multiple banks by (bank seed, scene ID). posterior is the latent
     probability P(Y=1 | z) for auditing; in the signal law it is observed
     through one provider. In the equal law the providers are noisy views of z.
@@ -88,7 +88,7 @@ def _sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
-def _block(seed, block_id, n_scenes, offset, order, signal_index):
+def _block(seed, block_id, n_scenes, offset, stride, order, signal_index):
     rows = ROWS_PER_SCENE
     s = _rng(seed, block_id, 0).standard_normal((n_scenes, 1))
     e = _rng(seed, block_id, 1).standard_normal((n_scenes, rows))
@@ -103,7 +103,7 @@ def _block(seed, block_id, n_scenes, offset, order, signal_index):
     p = _sigmoid(np.take_along_axis(latent_logits, order[None, None, :, :], axis=-1))
     if signal_index is not None:
         p[:, :, signal_index, :] = posterior[:, :, None]
-    scene = np.repeat(np.arange(offset, offset + n_scenes, dtype=np.int64), rows)
+    scene = np.repeat(offset + stride * np.arange(n_scenes, dtype=np.int64), rows)
     return Block(
         p.reshape(-1, PROVIDERS, CHECKPOINTS),
         y.ravel().astype(np.int64),
@@ -123,6 +123,19 @@ def signal_provider_index(seed: int) -> int:
     return int(_rng(_checked_seed(seed), 0, 1).integers(PROVIDERS))
 
 
+def _generate_blocks(seed, law, specs):
+    seed = _checked_seed(seed)
+    if law not in ("equal", "signal"):
+        raise ValueError("law must be 'equal' or 'signal'")
+    signal_index = signal_provider_index(seed) if law == "signal" else None
+    rng = _rng(seed, 0, 0)
+    order = np.stack([rng.permutation(CHECKPOINTS) for _ in range(PROVIDERS)])
+    return {
+        name: _block(seed, block_id, n_scenes, offset, stride, order, signal_index)
+        for name, block_id, n_scenes, offset, stride in specs
+    }
+
+
 def generate_checkpoint_bank(seed: int, *, law: str = "equal") -> dict[str, Block]:
     """Generate 24 A, 24 B, and 256 independent I scenes, each with eight rows.
 
@@ -132,17 +145,59 @@ def generate_checkpoint_bank(seed: int, *, law: str = "equal") -> dict[str, Bloc
     excess relative to the latent oracle, conditional on the generated inputs.
     Pass only frozen provider scores and labels into fusion fitting.
     """
-    seed = _checked_seed(seed)
-    if law not in ("equal", "signal"):
-        raise ValueError("law must be 'equal' or 'signal'")
-    signal_index = signal_provider_index(seed) if law == "signal" else None
-    rng = _rng(seed, 0, 0)
-    order = np.stack([rng.permutation(CHECKPOINTS) for _ in range(PROVIDERS)])
-    return {
-        "A": _block(seed, 1, 24, 0, order, signal_index),
-        "B": _block(seed, 2, 24, 24, order, signal_index),
-        "I": _block(seed, 3, 256, 48, order, signal_index),
-    }
+    return _generate_blocks(
+        seed, law, (("A", 1, 24, 0, 1), ("B", 2, 24, 24, 1), ("I", 3, 256, 48, 1))
+    )
+
+
+def _scene_count(value, name, maximum=None):
+    if (
+        isinstance(value, (bool, np.bool_))
+        or not isinstance(value, Integral)
+        or value < 1
+        or (maximum is not None and value > maximum)
+    ):
+        limit = f" at most {maximum}" if maximum is not None else ""
+        raise ValueError(f"{name} must be a positive integer{limit}")
+    return int(value)
+
+
+def generate_scene_pool(
+    seed: int,
+    *,
+    law: str = "equal",
+    n_fit_scenes: int = 1536,
+    n_audit_scenes: int = 512,
+) -> dict[str, Block]:
+    """Generate checkpoint-selection (A), fit (F) and audit (I) blocks.
+
+    All blocks have eight ordered rows per independent scene. A contains 24
+    scenes with IDs 0 through 23. F and I each contain a positive number of
+    scenes. Scene g, counting from zero, has ID 24+2*g in F and 25+2*g in I.
+    The RNG streams and scene IDs of each block stay fixed when either size changes.
+    Increasing a block extends its existing prefix. A and I use the same
+    checkpoint and label streams as generate_checkpoint_bank for the same
+    seed; I has its own ID range in this layout.
+    """
+    n_fit = _scene_count(n_fit_scenes, "n_fit_scenes")
+    n_audit = _scene_count(n_audit_scenes, "n_audit_scenes")
+    return _generate_blocks(
+        seed,
+        law,
+        (("A", 1, 24, 0, 1), ("F", 4, n_fit, 24, 2), ("I", 3, n_audit, 25, 2)),
+    )
+
+
+def scene_sample_indices(n_scenes: int, rows_per_scene: int) -> NDArray[np.int64]:
+    """Select the first rows in each of the first n_scenes of an eight-row pool.
+
+    For a shortened F pool, request at most the number of scenes it contains.
+    Increasing either count preserves the previously selected set of rows.
+    """
+    n_scenes = _scene_count(n_scenes, "n_scenes")
+    rows = _scene_count(rows_per_scene, "rows_per_scene", ROWS_PER_SCENE)
+    starts = ROWS_PER_SCENE * np.arange(n_scenes, dtype=np.int64)
+    return (starts[:, None] + np.arange(rows, dtype=np.int64)).ravel()
 
 
 def select_checkpoints(block: Block, k: int) -> NDArray[np.int64]:

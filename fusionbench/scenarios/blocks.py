@@ -17,7 +17,7 @@ SHIFTS = {
 
 def default_target_shift(name):
     """Return overrides for the canonical endpoint; a split-aware law can use its own test settings."""
-    return {} if name == "environment_shortcut" else SHIFTS.get(name)
+    return {} if name in ("environment_shortcut", "cloned_shortcut") else SHIFTS.get(name)
 
 
 def draw_block(scenario, seed, index, n, *, split=None):

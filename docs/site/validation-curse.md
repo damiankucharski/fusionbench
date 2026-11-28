@@ -70,3 +70,29 @@ Fit one copy of a fusion method on each source block and evaluate both on the sa
 Use the paired law `generate_checkpoint_bank(seed, law="signal")` to test whether fusion can leave averaging when one provider is more informative. It preserves the labels, scenes and checkpoint outputs of the other seven providers generated with the same seed under `law="equal"`. The designated provider returns the true conditional probability for every checkpoint. Freeze one column per provider before passing inputs to a learner.
 
 Every block exposes `posterior` for evaluation. For binary full-class Brier, the conditional excess loss of a frozen positive-class prediction `p` on the audit inputs is `2 * np.mean((p - bank["I"].posterior) ** 2)`. This averages over possible labels while retaining the finite audit scene sample. On the equal law the posterior uses a latent signal. On the signal law an observable provider attains it. Withhold the posterior and provider identity from model fitting. [Mean founder and positive-control experiment](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/seeded-checkpoint)
+
+### Change the number of independent scenes at a fixed row budget
+
+A scene is a group of observations that share part of their underlying signal and provider errors. `generate_scene_pool` draws separate scenes for checkpoint selection (`A`), fusion training (`F`) and evaluation (`I`). Each scene has eight observations. The fit and audit pool sizes are configurable. Growing a pool preserves its previous rows, labels and scene identifiers.
+
+```python
+import numpy as np
+from fusionbench.scenarios.checkpoint_bank import (
+    generate_scene_pool, scene_sample_indices, select_checkpoints,
+)
+
+pool = generate_scene_pool(42, law="signal", n_fit_scenes=1536, n_audit_scenes=512)
+slots = select_checkpoints(pool["A"], 8)
+providers = np.arange(len(slots))
+fit_p = pool["F"].P[:, providers, slots]  # positive probabilities, one column per model
+fit_y = pool["F"].y
+audit_p = pool["I"].P[:, providers, slots]
+
+for scenes, rows_per_scene in [(24, 8), (192, 1), (192, 8), (1536, 1)]:
+    rows = scene_sample_indices(scenes, rows_per_scene)
+    train_p, train_y = fit_p[rows], fit_y[rows]
+    assert len(np.unique(pool["F"].scene[rows])) == scenes
+    # Fit a fresh fusion rule to train_p and train_y, then score it on audit_p.
+```
+
+The first two designs each contain 192 training rows. Comparing them estimates the effect of sharing scenes under this generator. The middle two designs contain exactly the same 192 scenes. Comparing them measures the value of adding seven observations per scene. For a new fusion method, use the same checkpoint choices and audit inputs across designs and estimate uncertainty over independently generated pool seeds. [Scene-count study](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/scene-count)

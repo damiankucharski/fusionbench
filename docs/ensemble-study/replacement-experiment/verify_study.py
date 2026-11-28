@@ -241,7 +241,7 @@ def barrier():
 
 
 def panel(replay):
-    from fusionbench.scenarios.registry import STANDARD_SCENARIOS
+    from fusionbench.scenarios.registry import STANDARD_V3_SCENARIOS
 
     folder = HERE / "panel/results"
     scores = pd.read_csv(folder / "scores.csv").set_index(["scenario", "rep", "method"])
@@ -253,7 +253,7 @@ def panel(replay):
         k = r["scenario"], r["rep"]
         assert k not in keys
         keys.add(k)
-        offset = list(STANDARD_SCENARIOS).index(k[0]) * 1000 + k[1]
+        offset = list(STANDARD_V3_SCENARIOS).index(k[0]) * 1000 + k[1]
         assert k[1] in range(6) and (r["data_seed"], r["search_seed"]) == (
             5230000 + offset,
             7230000 + offset,

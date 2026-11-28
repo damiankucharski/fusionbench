@@ -13,7 +13,7 @@ from fusionbench.scenarios.registry import STANDARD_SCENARIOS
 
 def test_all_settings_generate_valid_oracle_and_observed_probabilities():
     variants = profiles_api.list_profiles()
-    assert set(variants) == set(STANDARD_SCENARIOS) and len(variants) == 24
+    assert set(variants) == set(STANDARD_SCENARIOS) and len(variants) == 25
     for name, arms in variants.items():
         assert len(arms) == 3 and arms["reference"] == {}
         for kwargs in arms.values():

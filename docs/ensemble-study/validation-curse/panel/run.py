@@ -21,10 +21,10 @@ from fusionbench.methods.search_guard import SearchGuardedNativeOKAPI
 from fusionbench.methods.stacking import StackingLogit, StackingLR
 from fusionbench.methods.validation_guard import GuardedNativeOKAPI
 from fusionbench.scenarios.blocks import draw_block
-from fusionbench.scenarios.registry import STANDARD_SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V3_SCENARIOS
 
 HERE = Path(__file__).resolve().parent
-SUITE = tuple(STANDARD_SCENARIOS)
+SUITE = tuple(STANDARD_V3_SCENARIOS)
 assert len(SUITE) == 24
 
 

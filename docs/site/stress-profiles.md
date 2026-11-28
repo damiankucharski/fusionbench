@@ -1,6 +1,6 @@
 # Run mechanism stress profiles
 
-Every standard scenario has a `reference` profile using its constructor defaults and two named alternatives. A full run evaluates 72 settings across 24 scenarios. Each method learns from the same rows within a setting and receives the same held-out provider probabilities. Full-class Brier is the average sum of squared probability errors per row. Lower values are better. [Scenario definitions](scenarios.md)
+Every standard scenario has a `reference` profile using its constructor defaults and two named alternatives. A full run evaluates 75 settings across 25 scenarios. Each method learns from the same rows within a setting and receives the same held-out provider probabilities. Full-class Brier is the average sum of squared probability errors per row. Lower values are better. [Scenario definitions](scenarios.md)
 
 ```sh
 fusionbench profiles --list --scenario weakest_link similar_classes_38
@@ -30,10 +30,11 @@ Omit `--scenario` to evaluate all standard families. Choose a subset of settings
 | `redundant_pool` | Increase the null pool from 15 to 63 candidates, or give one of the original 15 an informative signal. The fixed role seed keeps the provider order reproducible. |
 | `environment_shortcut` | Retain the training environment mixture at test, or neutralize the shortcut while retaining the default mixture shift. |
 | `selective_fallback` | Compare difficulty-dependent losses of availability with the same quota allocated randomly, or keep the provider available for all rows. |
+| `cloned_shortcut` | Restore independent shortcut votes at fixed test reversal, or keep cloned votes and restore source alignment at test. |
 
 ## Reading the outputs
 
-`cells.csv` records the settings, seeds, provider count, observed label counts, fit and test losses, and the observed-input oracle's test loss where available. `groups.csv` records counts and conditional test loss for the applicable diagnostic groups, including decisive cases, sign flips, rare regions, environment, fallback and classes 3/8. A method's aggregate loss includes every test example once at its sampled frequency.
+`cells.csv` records the settings, seeds, provider count, observed label counts, fit and test losses, and the observed-input oracle's test loss where available. `groups.csv` records counts and conditional test loss for the applicable diagnostic groups, including decisive cases, sign flips, rare regions, environment, shortcut cloning and reversal, fallback and classes 3/8. A method's aggregate loss includes every test example once at its sampled frequency.
 
 `by_profile.csv` averages repeated data seeds within each setting. `by_scenario.csv` averages those settings within a scenario. `macro.csv` then gives each included scenario equal weight. Each summary panel identifies whether it covers reference settings, stress settings, or all selected settings. `paired.csv` reports OKAPI minus each control in test Brier, with a two-sided 95% t interval across the per-seed macro differences when at least two data seeds are supplied. The interval measures variability across generated banks for the fixed scenarios and chosen search seed.
 

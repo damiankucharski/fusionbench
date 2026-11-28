@@ -62,7 +62,7 @@ def test_reliability_selection(results):
 
 def test_max_gap_small(results):
     rel = reliability_summary(results)
-    # The IID check excludes the explicitly shifting environment mixture.
-    shift_name = next(s.name for s in default_suite()
-                      if s._registry_metadata["scenario_id"] == "environment_shortcut")
-    assert rel.loc[rel.scenario != shift_name, "max_abs_gap"].max() < 0.05
+    # Fit/test gaps are intentionally large for explicitly shifted domains.
+    shifted = {s.name for s in default_suite()
+               if s._registry_metadata["scenario_id"] in ("environment_shortcut", "cloned_shortcut")}
+    assert rel.loc[~rel.scenario.isin(shifted), "max_abs_gap"].max() < 0.05

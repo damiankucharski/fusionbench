@@ -465,7 +465,7 @@ def main():
         )
     if r == 3 and args.incumbent_kwargs:
         parser.error("Round 3 uses the original native model as its comparator")
-    versioned = load_preset("standard")["scenarios"]
+    versioned = load_preset("standard-v1")["scenarios"]
     slots = {name: definition["seed_slot"] for name, definition in versioned.items()}
     if sorted(slots.values()) != list(range(19)):
         raise ValueError(

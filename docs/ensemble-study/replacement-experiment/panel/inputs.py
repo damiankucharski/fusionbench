@@ -8,9 +8,9 @@ from fusionbench import get_scenario
 from fusionbench.methods.averaging import SimpleAverage, TopN
 from fusionbench.methods.stacking import StackingLogit, StackingLR
 from fusionbench.scenarios.blocks import draw_block
-from fusionbench.scenarios.registry import STANDARD_SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V3_SCENARIOS
 
-SCENARIOS = tuple(STANDARD_SCENARIOS)
+SCENARIOS = tuple(STANDARD_V3_SCENARIOS)
 REPEATS = 6
 FIT_ROWS = 640
 TEST_ROWS = 1024

@@ -45,6 +45,7 @@ def build(out: Path, version="reference-v1") -> str:
         "reference-v1": SCENARIO_IDS,
         "reference-v2": ("similar_classes_38",),
         "reference-v3": ('rare_specialist', 'redundant_pool', 'environment_shortcut', 'selective_fallback'),
+        "reference-v4": ("cloned_shortcut",),
     }[version]
     for scenario_id in ids:
         dataset = generate_dataset(scenario_id, n_per_split=ROWS, seed=SEED)
@@ -73,6 +74,6 @@ def build(out: Path, version="reference-v1") -> str:
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--out", type=Path, required=True)
-    parser.add_argument("--version", choices=("reference-v1", "reference-v2", "reference-v3"), default="reference-v1")
+    parser.add_argument("--version", choices=("reference-v1", "reference-v2", "reference-v3", "reference-v4"), default="reference-v1")
     args = parser.parse_args()
     print(build(args.out, args.version))

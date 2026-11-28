@@ -110,6 +110,10 @@ _VARIANTS = {
         "stationary_mix": {"test_mix": [0.8, 0.1, 0.1]},
         "stable_only": {"stable_only": True},
     },
+    "cloned_shortcut": {
+        "independent_shortcuts": {"clone_probability": 0},
+        "aligned_test": {"test_reversal_probability": 0},
+    },
     "selective_fallback": {
         "random_missingness": {"mechanism": "random"},
         "always_available": {"fallback_rate": 0},
@@ -151,7 +155,8 @@ def _draw(scenario, scenario_id, seed, split, n):
     y = np.asarray(y).reshape(-1)
     oracle = scenario.bayes_oracle(x, latent)
     masks = {}
-    for key in ("decisive", "material", "region", "fallback", "hard", "flipped"):
+    for key in ("decisive", "material", "region", "fallback", "hard", "flipped",
+                "shortcut_cloned", "shortcut_reversed"):
         if key in latent:
             mask = np.asarray(latent[key])
             if mask.shape == (n,) and mask.dtype.kind == "b":

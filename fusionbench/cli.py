@@ -152,8 +152,10 @@ def cmd_mechanism_transfer(args):
 
 
 def add_transfer_options(parser):
+    from fusionbench.transfer import PRESETS
+
     source = parser.add_mutually_exclusive_group()
-    source.add_argument("--preset", choices=("smoke", "standard", "standard-v1", "standard-v2", "standard-v3"), help="packaged transfer grid")
+    source.add_argument("--preset", choices=PRESETS, help="packaged transfer grid")
     source.add_argument("--config", help="path to a versioned transfer YAML file")
     parser.add_argument("--scenarios", nargs="+", help="registered scenario IDs to include")
     parser.add_argument("--methods", nargs="+", help="registered method IDs")

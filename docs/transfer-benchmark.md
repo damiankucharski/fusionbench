@@ -11,7 +11,7 @@ fusionbench transfer-grid --preset smoke --out results/smoke
 fusionbench transfer-grid --preset standard --out results/standard
 ```
 
-The **smoke** preset uses native_switch (binary, six providers) and multiclass_committee, one replicate, 640 development rows, 192 independent source-validation rows and 2,048 test rows, annotation noise probabilities 0 and 0.15 and stress severity 0.5. The **standard** preset uses all 24 standard scenarios, including `similar_classes_38` (choose `standard-v1` to reproduce the historical 19), eight replicates, the same row counts, noise 0/0.15/0.30, and severities 0.25/0.5/1. Both include arithmetic mean, ranked-prefix Top-N, probability-feature logistic stacking and logit-feature logistic stacking. Top-N ranks individual providers on the noisy fit labels, tests every unweighted prefix on those same rows, and chooses N by Brier.
+The **smoke** preset uses native_switch (binary, six providers) and multiclass_committee, one replicate, 640 development rows, 192 independent source-validation rows and 2,048 test rows, annotation noise probabilities 0 and 0.15 and stress severity 0.5. The **standard** preset uses all 25 standard scenarios, including `cloned_shortcut` (choose `standard-v3` for the previous 24 or `standard-v1` for the original 19), eight replicates, the same row counts, noise 0/0.15/0.30, and severities 0.25/0.5/1. Both include arithmetic mean, ranked-prefix Top-N, probability-feature logistic stacking and logit-feature logistic stacking. Top-N ranks individual providers on the noisy fit labels, tests every unweighted prefix on those same rows, and chooses N by Brier.
 
 ```sh
 fusionbench transfer --preset smoke --out results/smoke-alias

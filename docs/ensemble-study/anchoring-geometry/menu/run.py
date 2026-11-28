@@ -17,7 +17,7 @@ from threadpoolctl import threadpool_limits
 from fusionbench import generate_dataset
 from fusionbench.methods.averaging import TopN
 from fusionbench.methods.stacking import StackingLogit, StackingLR
-from fusionbench.scenarios.registry import STANDARD_SCENARIOS
+from fusionbench.scenarios.registry import STANDARD_V3_SCENARIOS
 
 HERE = Path(__file__).resolve().parent
 FIT_ROWS = 192
@@ -190,7 +190,7 @@ def main():
     parser.add_argument("--out", type=Path, default=HERE / "results")
     out = parser.parse_args().out
     out.mkdir(parents=True, exist_ok=True)
-    suite = tuple(STANDARD_SCENARIOS)
+    suite = tuple(STANDARD_V3_SCENARIOS)
     if len(suite) != 24:
         raise ValueError(
             "The frozen design requires the standard-v3 list of 24 scenarios"
