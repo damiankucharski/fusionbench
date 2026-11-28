@@ -1,0 +1,71 @@
+{
+  "verified_seed": 284100,
+  "search_seed": 1284100,
+  "numeric_threads": 1,
+  "worker_processes": 1,
+  "archive_rows": {
+    "scores": 1536,
+    "checkpoints": 1024,
+    "trajectory": 8704
+  },
+  "recomputed_rows": {
+    "scores": 48,
+    "checkpoints": 32,
+    "trajectory": 272
+  },
+  "unique_fit_inputs": 6,
+  "regenerated_block_hashes": 9,
+  "comparisons": {
+    "numeric": 4584,
+    "text": 104
+  },
+  "primary_brier_paired_bootstrap": {
+    "estimate": 0.003596148909659398,
+    "ci_low": 0.0002682266565762874,
+    "ci_high": 0.007108460848167061
+  },
+  "max_abs_numeric_error": 5.551115123125783e-17,
+  "k1_exact_swap_cancellation": true,
+  "mean_exact_audit_swap_cancellation": true,
+  "inverted_audit": {
+    "brier": {
+      "checkpoint_slots": [
+        2,
+        3,
+        2,
+        6,
+        0,
+        2,
+        7,
+        1
+      ],
+      "selected_program_sha256": "076ddc600119a53089aad3a0742094cdcdcfd6eb0dff0c3afece951a497eea44",
+      "trajectory_sha256": "ed3b95369d2b54abdfa507009fdf8f2092ea995f74b27257ac6e73108718cd65",
+      "initial_population_sha256": "81c20641ee7a9bb5285012d6bf879c92fb4e6781994e262fa60ee4124f913c93",
+      "fit_predictions": "71b53fa6e1625d689bc22d6bdc6408b4f94f91ce30f9680e62dec58aa3c90102",
+      "audit_predictions": "c1402191520f25cc6b0aca5277fdf649ede4ce8e0e31d3f59fb600ec57c87d6d",
+      "audit_brier_original": 0.28065124934993746,
+      "audit_brier_inverted": 1.2857507614174273
+    },
+    "f1": {
+      "checkpoint_slots": [
+        2,
+        3,
+        2,
+        6,
+        0,
+        2,
+        7,
+        1
+      ],
+      "selected_program_sha256": "beb2e10d4bf9137e5d8c536f2343e62ae1b18a6b300434a71dca3d37d8776507",
+      "trajectory_sha256": "7caa389a6744d588d5fb1e2e7486d1501546505e59e493e1624e5ccd669ecf75",
+      "initial_population_sha256": "81c20641ee7a9bb5285012d6bf879c92fb4e6781994e262fa60ee4124f913c93",
+      "fit_predictions": "1ff16e88021713381f9e1ddb4eccca7e53586cd091d32086419698f112643d87",
+      "audit_predictions": "8c67eaec04fe32d9dc0b4e7ba6550761d910761fe82b48d02349cbc7724978a5",
+      "audit_brier_original": 0.30334593711499647,
+      "audit_brier_inverted": 1.1755062374468195
+    }
+  },
+  "wall_seconds": 3.55363345799924
+}

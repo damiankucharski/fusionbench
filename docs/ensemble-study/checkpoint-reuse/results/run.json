@@ -1,0 +1,877 @@
+{
+  "started_utc": "2026-11-28T15:23:18.933318+00:00",
+  "wall_seconds": 53.54155924799852,
+  "protocol_commit": "1ef8a34",
+  "okapi_revision": "1d7ad2d1660627585329bc584a9c4634915e8bb1",
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "sklearn": "1.8.0",
+  "workers": 3,
+  "numeric_threads_per_worker": 1,
+  "banks": [
+    {
+      "seed": 284100,
+      "blocks": {
+        "A": {
+          "probabilities": "b55e0f42c31622ef480a78fc3ab36a6b7cefe8259a1be12edcf1bed6e28bd0aa",
+          "labels": "9c9db2de9c8c741c14c7ef565c9fdc6ba588990778a6deb06a45ad0e44d63165",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 32,
+          "positive_scenes": 15
+        },
+        "B": {
+          "probabilities": "6dc558dca3a8482c297f86bcb546c983c2eb01a046967158c282b05417eb5f03",
+          "labels": "37a2738caaf9d57c8ca8822f551566142fa3bc5b839dbab3252709e97a962991",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 59,
+          "positive_scenes": 19
+        },
+        "I": {
+          "probabilities": "b5896426ca11e83168c469e74f6fb0b160c0e3e22cda61027cf66de9f46363d2",
+          "labels": "763606109e31150bf1e0565d7938be5140ee884363d1f59650c3a6c020e0cf24",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 493,
+          "positive_scenes": 190
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284101,
+      "blocks": {
+        "A": {
+          "probabilities": "e8eae57df3781ffe5a77cf31c43173074b107f4a0f829cde0ba18f84555a8bb5",
+          "labels": "039c518d1192edadb7ad7b5d83c2c00969f846d62766ec437e72c10545f6ad8a",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 42,
+          "positive_scenes": 19
+        },
+        "B": {
+          "probabilities": "84300a176ef48b038b0f81cafe33b599facfe06f8168a11ae11d56bca7dd16f0",
+          "labels": "f6426ed1cc31c0d09c69ad3ab7fe0b2baa32c54f9bbdd53acdb0c87f260ddf72",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 50,
+          "positive_scenes": 18
+        },
+        "I": {
+          "probabilities": "d1767066632dff0cedfff93c9c057885743c3403d56e33943a68dbacb59b776f",
+          "labels": "e884774d8d109872476f0ae7aa8ebcfcaf15073d30ba0dbb18114de49a2da8ea",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 511,
+          "positive_scenes": 193
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284102,
+      "blocks": {
+        "A": {
+          "probabilities": "38720b3e7c33501567be5d12de014c008d3b9871b5a50225a32f06da5a21e990",
+          "labels": "46349d8c232da46db824c3037c89f3092a12e341648b86f6da6a261f1bbd73e3",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 44,
+          "positive_scenes": 16
+        },
+        "B": {
+          "probabilities": "9ecd6c4bae1d52d6558d7eb454f6d5beed898d096da35702deed62bdcddd13ac",
+          "labels": "3eb13079c6afcb24659e96e28ca31ce5208d237a22fb0267d263026446147b2b",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 40,
+          "positive_scenes": 16
+        },
+        "I": {
+          "probabilities": "51e09166cfe32b0d25f46f286ed81ddd9940a1d1fbad3862c4c2cd60286161e6",
+          "labels": "afa4321db0e049627f2f11d9a9cda7c96e07b794ba43bfa9aca5998ba9d7b9b2",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 431,
+          "positive_scenes": 167
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284103,
+      "blocks": {
+        "A": {
+          "probabilities": "aa589fe368c274dfa2de8dca574c2e11d9047b6a96c4a8dfddec56cdab113d75",
+          "labels": "68370dc38c496676c606ce66f99cfeeea05b93038b7059b6a1396631ae026e66",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 58,
+          "positive_scenes": 18
+        },
+        "B": {
+          "probabilities": "3250f7b48e05bfcafb414ad769a93306dadfb3a56c32917ade6f7b50a69ac306",
+          "labels": "77c32673073ff277a2d9be4c26f14992bfb910d9b62d87a8ecd3abdbf41feaec",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 40,
+          "positive_scenes": 17
+        },
+        "I": {
+          "probabilities": "2157a1d64fd4c2edd1bc0f701e314d6af5bb25a8f18ae6bb99e6d55af3db52bb",
+          "labels": "ff6c00a9c6007eff604c309d821657f355ed39788720ca8609a472872a6495f3",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 477,
+          "positive_scenes": 190
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284104,
+      "blocks": {
+        "A": {
+          "probabilities": "f2b13992f016b0dc3e9238420e99d5ba2c6236533d05a74f31e7979844f94481",
+          "labels": "3d42869b8d07363cc93b634ab81d61d5792eebf2be8e3de4a94f79abce545ef0",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 47,
+          "positive_scenes": 17
+        },
+        "B": {
+          "probabilities": "25a10c5b0046a424bba2ad15e84a8906a552c70a919bd728789189af510d2159",
+          "labels": "a137ec71ce78abe95cb8fa32e678730f11b4b154bc41a81c96f853c0fe1a61a5",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 57,
+          "positive_scenes": 19
+        },
+        "I": {
+          "probabilities": "459a785a25351308d8209764f46f54ede6c483d8eba34ddc60993ca16e486e30",
+          "labels": "67fe157ef683541aaf13f5b4e9873bc67424cdc173c98ea8eec821b5b622e213",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 457,
+          "positive_scenes": 177
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284105,
+      "blocks": {
+        "A": {
+          "probabilities": "7c29a9968d03b0d029a27476fe121d86aa26d105128628e289e4be02390eb171",
+          "labels": "8ea250b05d1a33448c2078867f6e4c1b56ab53b364147152525aee799c182098",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 39,
+          "positive_scenes": 18
+        },
+        "B": {
+          "probabilities": "52554e55a38891b031a1aa994c25138a662e7eb89f6565a16ecd8ca3b0018c8b",
+          "labels": "1bdd478d65d43de731816f25ea236363b27559476c1c9dfce6097ccaec15ffab",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 30,
+          "positive_scenes": 16
+        },
+        "I": {
+          "probabilities": "2b0844faebf4fbbe1fb0664b40c848a614bb7d8d05a1126d280353d4986c734a",
+          "labels": "132fc40492ae33a932d5060e28b48a35822fb34befa7440f69d87f67f80926c7",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 513,
+          "positive_scenes": 189
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284106,
+      "blocks": {
+        "A": {
+          "probabilities": "f4f133b9f946779da1283b822642bd4d5ec52f7e5410b1205979b9324d7d6951",
+          "labels": "2f7e2a29e7022c7b417c5952d344f13bdb15cd8b8ece9439758d4480b93d5635",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 39,
+          "positive_scenes": 16
+        },
+        "B": {
+          "probabilities": "b3b366e44def1287adb45302c63717d9ae31e7cc59feb6e6e50eb6b23f5f0494",
+          "labels": "91b1bf6bc8792382299011a534667c789c1693e64c52feb0a6edd3deb16dc4be",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 43,
+          "positive_scenes": 19
+        },
+        "I": {
+          "probabilities": "56baad06bced7da0772083a3c3e56354eba025303e31e693b2cf6d715fecd49a",
+          "labels": "c08a77ab5616003f2360ccdd489cc6c8e5dce5ce9bdb5e4557e020ca310781ab",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 513,
+          "positive_scenes": 195
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284107,
+      "blocks": {
+        "A": {
+          "probabilities": "d97bd5bcf28a197d4163f6cb607cfe46718336f0775f0d2f601e1efd06a33756",
+          "labels": "f62d77d440ee5c1f5ab80f5c2427eca606b151257cadbf166487cf6e1ece918d",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 60,
+          "positive_scenes": 22
+        },
+        "B": {
+          "probabilities": "8271df15262ecc5c932b3a32a6e2a39a58142d6bdcf9454abf7856cf1caaced4",
+          "labels": "5d42b715c59d2817e8aa6d08364181d6739dd6109953f586c8096385d187b905",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 45,
+          "positive_scenes": 20
+        },
+        "I": {
+          "probabilities": "5db40e8dfeedd3c7f0d81772dfc08405111d77b9ae4e0219923256dc0e9dc0f7",
+          "labels": "777ed7003944730e4337154a747fcbfd0f1948709f0c47801bbd01c6cdd4dac9",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 476,
+          "positive_scenes": 182
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284108,
+      "blocks": {
+        "A": {
+          "probabilities": "376d80b896201fcdcc441f4742de02f46b3a6cc0f7e0afa848106cc59e3116e1",
+          "labels": "86099af18dd37905a9dbf6a65a5e0a119ea365e1762880aac1a94ce75f9feaa7",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 51,
+          "positive_scenes": 18
+        },
+        "B": {
+          "probabilities": "178a53d0310ec78b2b6e7f29edc8f84cea4f159e9bd643e2a59b3df0bc050f7a",
+          "labels": "644f816f6c313dd44409a5a4b42855a43d0ac810b3b37194725a59a0a0482b9a",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 30,
+          "positive_scenes": 14
+        },
+        "I": {
+          "probabilities": "dc697fa6b0c1e3d9d8fc18ca651e24786f2b2be8934a80fb57fcd44e423a1519",
+          "labels": "ea1b0039d34ec7c64cb1bed59fec784a230cb48c21863e34928eebfd77aae855",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 481,
+          "positive_scenes": 184
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284109,
+      "blocks": {
+        "A": {
+          "probabilities": "7b114b89816f8443729e7e7d4952cb3d37cfd13e467d84716cc5d7f83575e932",
+          "labels": "f25e35d407864146db64a7fb1b44f5f5cff5ffb82239f4657fa3c2fc799d5fbd",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 64,
+          "positive_scenes": 21
+        },
+        "B": {
+          "probabilities": "afbda015c30566351cc61335e774edd2b18bc8fbb1ed820889fd73b48c488a7b",
+          "labels": "eebca9f6822500b5bcb2ddaeb3a0edba9971f144a1bb9ecbef57f7d14268594a",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 48,
+          "positive_scenes": 17
+        },
+        "I": {
+          "probabilities": "b4d6f936670e698cccb9a4356497006bcc8f8cec53bf8da5f9b52c33f4d9e9d9",
+          "labels": "dbbf454857cbadb8da25caabe80616d67295ba27692608d131649a64c47bb723",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 491,
+          "positive_scenes": 183
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284110,
+      "blocks": {
+        "A": {
+          "probabilities": "585d952f613fa601f9faf204fbc98e158515288e716d07e0925578708de194a2",
+          "labels": "f8b404cb41c421e63593a8a62dae3e31a956cb9907d567bda47c4d465de41ed6",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 37,
+          "positive_scenes": 15
+        },
+        "B": {
+          "probabilities": "8cf1139bd8314efb5089eee04715e6d6347504a725f2c3f647b6a1b4600826d8",
+          "labels": "e1084a6a3272ea4ecefad1568303476703d04b99e9d9e5109d98f9f04847fc97",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 48,
+          "positive_scenes": 17
+        },
+        "I": {
+          "probabilities": "60ff970e34c19062f05d082a485c87cd93a3cb71e40ded382cb5fad67e227cf0",
+          "labels": "8c5f4f799d048fa39586e2c3244bf91d18e3c64e4a37e9edfb9e69d8f01b10df",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 480,
+          "positive_scenes": 180
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284111,
+      "blocks": {
+        "A": {
+          "probabilities": "18edaaab4007d8641c3b4ca1b04e1df74275cec9a687c6909b49371a80444d28",
+          "labels": "ce29351bcc4ffe3a0b10a2aceac8c851218fc204ffc137047f25d95148caf818",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 91,
+          "positive_scenes": 21
+        },
+        "B": {
+          "probabilities": "edfaebb1819baa6dd0bb8306af3294bfaaacf0e595a158c033bb6de1f5b2dc00",
+          "labels": "29ef2b14909a03e7730502a2c2366a2195d0a6d71e8c633fae2a82dcaaba60b8",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 56,
+          "positive_scenes": 18
+        },
+        "I": {
+          "probabilities": "b0ba4814e895888b1a13c2b0f1d7c21b48a613358cd0657db6b83d852f94a086",
+          "labels": "a0e8d1d29cdc4935a39f79683047da7eee8b78829aac5661199aca9574f63419",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 494,
+          "positive_scenes": 188
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284112,
+      "blocks": {
+        "A": {
+          "probabilities": "35b7d11b9a941c94dfe2cf7a15174569b46aca01446f949aad9a5a8d41f1b28b",
+          "labels": "9b6dc9a6b27e0a9b71d07f0d4a224da499a9d61c652ec21341e4d7cd273e620f",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 52,
+          "positive_scenes": 17
+        },
+        "B": {
+          "probabilities": "4d50742f55013846f321791ea3550594a46dbe2eba754c2fe95baf74b80be682",
+          "labels": "ac74d86d6cfe06cf7252a6bc835e755cb2aa1eb61cdfaa71c28b527a42be9de8",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 42,
+          "positive_scenes": 19
+        },
+        "I": {
+          "probabilities": "986f744ca64ff17cb006d44383772d296dc107f6c5c42c0088b77153583e41c9",
+          "labels": "59b3b5d9eb6a8b8ecf804cb910c51954e1b723915f57d69fe68d98b4804e24eb",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 531,
+          "positive_scenes": 193
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284113,
+      "blocks": {
+        "A": {
+          "probabilities": "7df643f3e2fb021dca4ff1a52de995feac2f06357ebcaad118e178a032d0fe5a",
+          "labels": "651ea4c24d11e847c6b1f4159ad483ac87f703045d72ff2357812fe39cce3a6c",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 49,
+          "positive_scenes": 17
+        },
+        "B": {
+          "probabilities": "9ac30c2253bc2715b349035f1be077432c6271bc5cae5e23611794c24738d162",
+          "labels": "b065fdcfa585f05f33345208c94a8e989fd349cea7049e88c56f87504b80f28b",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 45,
+          "positive_scenes": 17
+        },
+        "I": {
+          "probabilities": "a85a1652df92d1282041181c3389c9873a1fe1eabfefdbf8584bba04f64d5883",
+          "labels": "2cf2ceee0df499aac6e8ceb8634c0fc5bce0e76a2d8b47c7e1aa78c5e8ad7b60",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 470,
+          "positive_scenes": 188
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284114,
+      "blocks": {
+        "A": {
+          "probabilities": "e52dddfcca708909c6f7cfd3e997684b9d5d7f9e000901f0740a1b0f68cf7cd7",
+          "labels": "743308aa0b6419f27ff804597103d89219c4b40ed009b2b16f08d1a9c682f3c3",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 55,
+          "positive_scenes": 20
+        },
+        "B": {
+          "probabilities": "bb1b2a600044f18ad3fd9af6ea99ee4df8072a428f4b703773ce77de22d55bf9",
+          "labels": "79520c6e4d5f4fcf1904f1f48721a5608ff0cca14509e882e7329c5dbd911d63",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 42,
+          "positive_scenes": 13
+        },
+        "I": {
+          "probabilities": "418cc26eb7d6092132e186566801fdfba7ad4a0f8ef1f0679ec27110b8df7265",
+          "labels": "a754de05edd32c313b4c35d77f271742607020f0001e1980af09f32d989bcc41",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 540,
+          "positive_scenes": 187
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284115,
+      "blocks": {
+        "A": {
+          "probabilities": "2242bfa686d5eec4eabc4e155451dd18699b8d0dc865dee6f5618a19287521e0",
+          "labels": "c7e6c13bb72f3f1de8f1172704225dd61f754aa3c6565f8b3856c52f060dff40",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 61,
+          "positive_scenes": 21
+        },
+        "B": {
+          "probabilities": "52f75a3f370bce4e79209eac7c0f45fa8099ebf87e1b6df30286587a625ff262",
+          "labels": "41b44ac4bdac1a8dd3633c3146eaccc2e08505d03f730d17173afb8dd4d481bc",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 56,
+          "positive_scenes": 18
+        },
+        "I": {
+          "probabilities": "fe029b6b2766b173732834d878f039edacba4a617c3f4b17a0ad6fc0cf1a4ec3",
+          "labels": "33d03aebc3580f15bbc979764d9416fc589255eea7a2cc31f2449b0d064069ac",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 471,
+          "positive_scenes": 180
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284116,
+      "blocks": {
+        "A": {
+          "probabilities": "f1571776c57db2f220a2af6d354913c41a687437e4d0ae52c44f09a82642c5ac",
+          "labels": "0c14c075962c8f68d416e5e44786b3781453d02593395a5103212f9431ef458f",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 39,
+          "positive_scenes": 14
+        },
+        "B": {
+          "probabilities": "30a0b61f7c7e9d74fb3ff70a12a3b290cdb569290b8cff50bfcfeee524676861",
+          "labels": "349f17dac6c7a3e211a00f0159ecef6d483e436d23ea13849ed6f665f5e2648e",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 42,
+          "positive_scenes": 21
+        },
+        "I": {
+          "probabilities": "1e332551aa0259449b1ca888bd984baf946b7fe35e712547806b44cad3cc5c7e",
+          "labels": "e9b832fb3cf627b810a1bc4654ad0528c374dab2dc2e54abda88e6f114b23160",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 446,
+          "positive_scenes": 185
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284117,
+      "blocks": {
+        "A": {
+          "probabilities": "15662250f220e7365f2d0f30147fb6ae8e3eb51ce3b59320a8356ff654c01463",
+          "labels": "754e31bf76c6d7826533c7ae3513b87505849f45e09ad393f85bfb12e84d81c6",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 37,
+          "positive_scenes": 17
+        },
+        "B": {
+          "probabilities": "578559837af006edd6b3ae5b7728ba18cccc69c607104a332a0516559d02d66d",
+          "labels": "5451471ef971a6574b99aed6016ba4be79c3cfd854baaa5949b42e2e689fe6ee",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 48,
+          "positive_scenes": 21
+        },
+        "I": {
+          "probabilities": "e65d5996fde598d242c5d0eec57db2a63c4d6a2d99911f0855bceeddc0897aea",
+          "labels": "f80d99380374ad04462719e8731c35e46dc205923323bfbfc70e7eb3548f2b65",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 498,
+          "positive_scenes": 192
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284118,
+      "blocks": {
+        "A": {
+          "probabilities": "9165a18fc12347e6bc3f38462e9da436455a5d5e51b059798ef3dffaed2f5d1f",
+          "labels": "2199ebfbb61818b1b1523200f1ec497e53a083901a662b9c5d2165b62f07eaf3",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 33,
+          "positive_scenes": 13
+        },
+        "B": {
+          "probabilities": "4fa3afa650c732e832ee6056cc9f6c0a3e189fa6f76c9ffef2d869fdc95057e9",
+          "labels": "1c9c624dc3037084c88307ef2dfb3e90ad444257cbd8fcb5b5ea6ede2029528f",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 39,
+          "positive_scenes": 17
+        },
+        "I": {
+          "probabilities": "0a82c29d8d36e8b2ad04f3dafeea29983c58a88d603bb421f2fe1974e6c6d543",
+          "labels": "11883ce3aace198fbb7c67b0d3b90a04807c0cd92c163a5522aebfe08dc2c219",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 506,
+          "positive_scenes": 186
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284119,
+      "blocks": {
+        "A": {
+          "probabilities": "4b11e6f3c6fe46ae2b1b44a62fe8c1a1d02366bf1e4626511c9e173e4fc31a2b",
+          "labels": "1ebfdcf91031a710b6ca12a444563fae98e1df8ff199129b6895b4ef36282590",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 42,
+          "positive_scenes": 18
+        },
+        "B": {
+          "probabilities": "59917cde3114323cb20a0bd4e320baa751f2c937fc519f61f72f820ce815d7b1",
+          "labels": "9cc6d73b7832c16d9109ab043004d7158383521db99aeeceae7b29ce30ee7ca5",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 53,
+          "positive_scenes": 16
+        },
+        "I": {
+          "probabilities": "f721bce71de5af0a9a6b5bed4bf49bb23ea1de2af07db1c4c8627a0b358809fa",
+          "labels": "5779c90180d5d1b8c3869e28b4e82b58427a48d9d1a55c29d46d1e9185dd5ae1",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 486,
+          "positive_scenes": 183
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284120,
+      "blocks": {
+        "A": {
+          "probabilities": "d0c812c28a42ffa36994e573ffe74899c20e803896c01684272407fce2358fa4",
+          "labels": "7befd398f88b1f4cae8d80141fff9d5b2dfacb03369e35e8e51a004095474295",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 45,
+          "positive_scenes": 18
+        },
+        "B": {
+          "probabilities": "b94e425728fbc77895c712892a7842e3bf72cb74e45398bfcb02d396e5a11673",
+          "labels": "f2b4b8399d675cdf3a39cae3714528738b45c646e22fb7742ed399f441188c5c",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 50,
+          "positive_scenes": 19
+        },
+        "I": {
+          "probabilities": "7077a1f1d430258750f81d1e5396aa2255225455bdf87c140a2d970d5fa1caf8",
+          "labels": "3f8e7c4d74180900d0afbd0074297f4c6a675012142fef689bc67487ca05cbe1",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 503,
+          "positive_scenes": 188
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284121,
+      "blocks": {
+        "A": {
+          "probabilities": "4f4d272b84d1b351f0142eb6a24613faac043b3aa7b324900f841a08c723e34a",
+          "labels": "ccec7f848930b030c70cdf5f74742c1ebfb6b1e075731a802a87ace5a96b85cc",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 47,
+          "positive_scenes": 21
+        },
+        "B": {
+          "probabilities": "65cf133c11e6a22889c58eb3a4d287d52622c908540c8663af383831d4f17987",
+          "labels": "3fe9c22931b57679a5707c590f733bfe6b4a74395e1269f4b9170475038f49ca",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 50,
+          "positive_scenes": 17
+        },
+        "I": {
+          "probabilities": "0d3748f9b957f27bd8ede2ab7ee5ade9975910a748290d58c013b9095acfcf66",
+          "labels": "32c970014eedb7f6e06fbf60e0293fdaf4160ff2427024998e0bcd2d251f6099",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 484,
+          "positive_scenes": 183
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284122,
+      "blocks": {
+        "A": {
+          "probabilities": "452db2be0ef9a73a1467f0ddd8d2b8ee35682d9be135eabde50881cc2200a9f0",
+          "labels": "38ca15aff05f47f189d567e42798ba9f1004ad241a117cac8eb232d9967c366a",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 49,
+          "positive_scenes": 18
+        },
+        "B": {
+          "probabilities": "53737fd37a377c276f34feef6acfb9aee52da778cf4af9db9648c3e26e689f44",
+          "labels": "48cc465af24aed030f14bf93324a666e2be420d2bd246a31c16587a099e8d37e",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 37,
+          "positive_scenes": 14
+        },
+        "I": {
+          "probabilities": "cbdcb7a132806bc401db5ac85f836e02c8032c2c06c94c9c8f676a86fd91c497",
+          "labels": "850f8478e23046a4647c7d98737027823f398232980bd201ac97aced1aa02cc9",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 543,
+          "positive_scenes": 195
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284123,
+      "blocks": {
+        "A": {
+          "probabilities": "b6077225dca587312b1534f9e81621af219d824a1ae2356454a78a21e38d2538",
+          "labels": "89fdcab99c3c6dcff243416bffd1ad30cded2446e553224ab73b797b0bacb82c",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 39,
+          "positive_scenes": 16
+        },
+        "B": {
+          "probabilities": "f68662b9568ce1707f098d35a4e18d26223ff6bb86cc4f6f4ed6ff94429d0df4",
+          "labels": "0ad357b18796cba9a431c1999a1250fed504185b44153c8f7d079533b10adc70",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 48,
+          "positive_scenes": 18
+        },
+        "I": {
+          "probabilities": "8bb80eff94d83d7b9fc1634dbfdbc329941d6d0e71989c07b142fd7524057d05",
+          "labels": "0c5a033161bdb55337b3bd0f2e49e956f5435d064a62c2eccf34c26c62ea6398",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 468,
+          "positive_scenes": 184
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284124,
+      "blocks": {
+        "A": {
+          "probabilities": "147399ccebea71661b7aa6a783da4b9e619695c50a82fa868e8cf00f7e5bb478",
+          "labels": "73d064f89fdbf565f9ec0509969426e88ba9b69e58fd767636db51cb9f0b89f6",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 46,
+          "positive_scenes": 15
+        },
+        "B": {
+          "probabilities": "ea3b4cc22dc0696b277f2af4a2c093750e2a75813a6e312ca71edd4f49f5d0a8",
+          "labels": "f0328a329c0458eec5bceb57236d985e3db7082575bd2676a446d677335f3911",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 45,
+          "positive_scenes": 22
+        },
+        "I": {
+          "probabilities": "dbdab6ded8776a4f648f6dddb893c5c9d24ead5347d6a32b30be40e2fbd3401d",
+          "labels": "ab27a124ebd8a90ee39c2e43a438900b5d4e2e01806495664e828dd63417a045",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 516,
+          "positive_scenes": 195
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284125,
+      "blocks": {
+        "A": {
+          "probabilities": "253e5aa0962ec9363039d9306a839886a50c35ea6696a11588854c6d1436d2a5",
+          "labels": "b7385f242d340fe6c8fda4989150ddca17f5dcfcb991bc3ec9eca61ca33c9308",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 41,
+          "positive_scenes": 15
+        },
+        "B": {
+          "probabilities": "e57bebb04e05c5430ed026228d6845b137ca4ee69c1fd50cd4422784992f53c6",
+          "labels": "41d8e3d68112db5795f629bcbae3bde285ecfa2658ba048a474c6c3fc0ffe212",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 45,
+          "positive_scenes": 17
+        },
+        "I": {
+          "probabilities": "9bd89dbb2a832014d509f84734f1190cd09d6ebb4a47344691e325e84e3e3d88",
+          "labels": "6fdbcc7536a98d2090bcad4669deb717c4c15cff79eb6fcbc0f27da1f1e78444",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 513,
+          "positive_scenes": 185
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284126,
+      "blocks": {
+        "A": {
+          "probabilities": "0613ece57e8ff4f7df1432c873180ebbf815c838aa3030a3ca91883f2d07b4b0",
+          "labels": "974fa312eaaab553456e54b82a75727a141e7f87c79bc5674de43ee120cd7016",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 47,
+          "positive_scenes": 17
+        },
+        "B": {
+          "probabilities": "86036b27eb5465b1433a67d1e4abd76eacfb57cad69882dcfacee38509e65747",
+          "labels": "30b89e8703afe0e7f63c4581d49de929645c1cc5fe271794715059c5e1d8c272",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 49,
+          "positive_scenes": 18
+        },
+        "I": {
+          "probabilities": "842dd2847d3d9dd8d9f325dfdc5c105288ec2fc0cd7dd544b1681a589b0716b0",
+          "labels": "ea07c1018f8cef1567becd9219257beb1ea4aaaff8002cb6959ae253407c6689",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 445,
+          "positive_scenes": 169
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284127,
+      "blocks": {
+        "A": {
+          "probabilities": "5d9b48271e743147b1f3ecc9d0cf3ff9551640cb5dddd9f83964eaa1b0302128",
+          "labels": "06ecece293c9e8004c08b624eb656afecd5d0f7be6ba0738ab01e746039b3210",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 48,
+          "positive_scenes": 21
+        },
+        "B": {
+          "probabilities": "8971875d13110386307309f528d75d72972c365c5e8e4b9c71997417401b67e5",
+          "labels": "66b2e17cc8f921215c54e91bbdaacf54a6a143cc7ea4fd219bad78b5bb3341fe",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 40,
+          "positive_scenes": 20
+        },
+        "I": {
+          "probabilities": "7a621bcdd18a9719f9fd3dfa04e6af687c1295bcaa2fc29dd947c44ee4256572",
+          "labels": "c05152fb8bfe8d885b6bd577a3e8ae94d13f31ec631d17f30c8095c650d468ce",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 504,
+          "positive_scenes": 196
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284128,
+      "blocks": {
+        "A": {
+          "probabilities": "510f25960b91cf1b4b2608f5a2d71f31438f1ac93e8411275c4572241f72e464",
+          "labels": "97f47db3df9311d2016e6cdd84f92d3cc8df2ecdedf971e6cfb551052c4bc492",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 31,
+          "positive_scenes": 18
+        },
+        "B": {
+          "probabilities": "33549b94fbe85dfd5b01f0f3549a3a159cf5b86b7826636956acfbace8f854cd",
+          "labels": "cf832dd63f1ad8b63159762e638bd4924777443e349b7d9535866d0945c45f3d",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 48,
+          "positive_scenes": 20
+        },
+        "I": {
+          "probabilities": "47197ad46274813c7870e59297685fcf194a09ccb668c61bf37ca2e873f22251",
+          "labels": "2d7202c489ca048e4024bb137f4fe5cb0a6bde20f9e9bbc20f696882a965bdcc",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 510,
+          "positive_scenes": 185
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284129,
+      "blocks": {
+        "A": {
+          "probabilities": "6978617188660dcc144bd36abcaf714d635fc6b80e3f8495bb33c5851fe0ed36",
+          "labels": "3f319ef434a3993a34dc12983588027134790383590ce0503eb15d80d6b66897",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 41,
+          "positive_scenes": 16
+        },
+        "B": {
+          "probabilities": "3fe77d42ee5c31da0029dff5b7652ba4e5de2dffb755c7441effb7e782bbf1b3",
+          "labels": "ab149de2390bb69bf9c3b81a162db03a59658cca42d588511fc6e6dd7b4a0305",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 55,
+          "positive_scenes": 19
+        },
+        "I": {
+          "probabilities": "4a53470c6fb3f72de2779002c9b944a651e4846679a36284c36221d6dce960ce",
+          "labels": "6c1dd3b21121157c48849d9350e6b78974de275eef3633df16173c201c908bba",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 475,
+          "positive_scenes": 190
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284130,
+      "blocks": {
+        "A": {
+          "probabilities": "652640c9ea5e7a78ee12b71ca684cd16f5912ff509d9a0b06bc4a1b38367b569",
+          "labels": "8fe5222cadce107acd3a7f180a3c9aebcb6e255adef88b9a5b3129c5c6381dfe",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 38,
+          "positive_scenes": 19
+        },
+        "B": {
+          "probabilities": "3ec18c79f6417e1fc3445262b2036388c05478cf974b7f00678fe61d380cc9d6",
+          "labels": "94f33d592b605694bab4f97bdc4bd3e62d114c66044e2e84da983a36d8eaa110",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 43,
+          "positive_scenes": 17
+        },
+        "I": {
+          "probabilities": "c0f3c74a4c657bd202889701405928fe16af098f47d4114579f34e282db03939",
+          "labels": "980a5a7d10bdce96cf4d3882f4b6f140eccaec25b528019b21b10f66dae4227c",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 474,
+          "positive_scenes": 184
+        }
+      },
+      "unique_fits_per_procedure": 6
+    },
+    {
+      "seed": 284131,
+      "blocks": {
+        "A": {
+          "probabilities": "e573eb96f87b42a7b5bcbdaf1d33ca94f4cdf35d8db185c17897e41f9fc2ff6f",
+          "labels": "a99f339a3f33eba0cd115c8f4cebd0366436263df2c3d860cc26af46731137c3",
+          "scenes": "b498f05a8d60b4f4d9111c2e905dc1741a747cbc2069f2344de457192df24db5",
+          "positive_rows": 34,
+          "positive_scenes": 16
+        },
+        "B": {
+          "probabilities": "69f155de3c74cdebe00a92bf4d53d9d9bac33ede2cca927077b7e458521e9cdd",
+          "labels": "0ce3120ffa81b4c7fb1eb066bf8b1a6ae5fbeb1574d384ac2126def67f3e5dd1",
+          "scenes": "c75efe38acc2263518e486ac73e90fc9de76bf733aede96f44a2381bbd4f3686",
+          "positive_rows": 57,
+          "positive_scenes": 19
+        },
+        "I": {
+          "probabilities": "f7394e732aff2531bc42e91c9b8c3651a34d3cb6d4881309fde62c160cc334a6",
+          "labels": "78979380330a591f598416e0d027bb72eee05ec1fd0cb3986c6bea8843fc1d91",
+          "scenes": "f33a3d3f32e024685e3d3b7c2817415353b02d4ef53ca6df490dffb782626232",
+          "positive_rows": 511,
+          "positive_scenes": 186
+        }
+      },
+      "unique_fits_per_procedure": 6
+    }
+  ]
+}

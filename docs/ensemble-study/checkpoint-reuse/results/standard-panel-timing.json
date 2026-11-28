@@ -1,0 +1,47 @@
+{
+  "purpose": "Regression replay of published seed 1729 from the four-seed standard-v3 evaluation",
+  "reference_evaluation_commit": "a218ee1071009a5fa3076bb49d3f40e06e6a8d6c",
+  "reference_scores_sha256": "7fd5a1b645211eeb423f71fe954a97c92b322b698700292981eb5621b33e19cf",
+  "python": "3.12.14",
+  "numpy": "2.3.5",
+  "scikit_learn": "1.8.0",
+  "data_seed": 1729,
+  "search_seed": 0,
+  "rows_per_split": 512,
+  "scenarios": 24,
+  "methods": 4,
+  "comparisons": 96,
+  "workers": 2,
+  "numeric_threads_per_worker": 1,
+  "evaluation_wall_seconds": 9.408540693999385,
+  "absolute_tolerance": 1e-12,
+  "max_abs_test_brier_error": 0.0,
+  "max_abs_fit_brier_error": 0.0,
+  "test_scores_within_tolerance": 96,
+  "methods_summary": {
+    "okapi_native_pattern_l2": {
+      "test_brier": 0.219867212525377,
+      "archived_test_brier": 0.219867212525377,
+      "max_abs_test_brier_error": 0.0,
+      "summed_fit_time_s": 16.056292453002243
+    },
+    "simple_average": {
+      "test_brier": 0.37575900800380396,
+      "archived_test_brier": 0.37575900800380396,
+      "max_abs_test_brier_error": 0.0,
+      "summed_fit_time_s": 0.00020356598906801082
+    },
+    "top_n": {
+      "test_brier": 0.3532669098627738,
+      "archived_test_brier": 0.3532669098627738,
+      "max_abs_test_brier_error": 0.0,
+      "summed_fit_time_s": 0.4617837160039926
+    },
+    "stacking_lr": {
+      "test_brier": 0.24696496255090836,
+      "archived_test_brier": 0.24696496255090836,
+      "max_abs_test_brier_error": 0.0,
+      "summed_fit_time_s": 0.06087662600475596
+    }
+  }
+}

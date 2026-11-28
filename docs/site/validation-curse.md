@@ -41,3 +41,26 @@ probabilities = predict_tree(result.tree, X_test)
 ```
 
 A comparison with `open_raw` measures the effect of using a confidence bound for promotion on the same proposal trajectory. Comparing `open_kl` with `strict_kl` measures how admitting unconfirmed offspring changes exploration and eventual deployment. Record the label budget and the final tree's provider dependencies. The confidence calculation assumes a fresh independent block at each step. [Protocol, controls and measured outcomes](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/replacement-experiment)
+
+## Reuse scenes for choosing provider checkpoints
+
+A staged checkpoint bank exposes the observations available *before* choosing which prediction column to keep for each provider. Generate two independent source blocks (A and B) and a fresh audit (I). A and B each contain 24 scenes of eight observations. The audit contains 256 new scenes. All three obey the same law. Each provider has eight correlated checkpoint alternatives with equal marginal competence.
+
+```python
+import numpy as np
+from fusionbench.scenarios.checkpoint_bank import generate_checkpoint_bank, select_checkpoints
+
+bank = generate_checkpoint_bank(seed=42)
+slots = select_checkpoints(bank["A"], k=8)
+providers = np.arange(len(slots))
+
+def frozen_inputs(block):
+    positive = block.P[:, providers, slots]
+    return np.stack([1.0 - positive, positive], axis=-1)
+
+reused_fit = frozen_inputs(bank["A"])
+independent_fit = frozen_inputs(bank["B"])
+fresh_test = frozen_inputs(bank["I"])
+```
+
+Fit one copy of a fusion method on each source block and evaluate both on the same fresh scenes. Then exchange A and B and repeat the comparison. Keep all eight observations from a scene together when creating independent blocks. Setting `k=1` removes checkpoint selection while preserving the predictions of the first slot. This staged protocol complements the 24 standard-v3 fixed-provider scenarios. [Paired study, baselines and replay](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/checkpoint-reuse)
