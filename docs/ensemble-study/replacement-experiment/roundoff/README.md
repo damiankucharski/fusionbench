@@ -1,6 +1,6 @@
 # Sensitivity to numerical ties in raw replacement
 
-The primary verifier found three raw promotions on controlled banks whose empirical gain was zero in exact arithmetic. We reran only open breeding with raw confirmation. A challenger had to exceed the preceding incumbent's gain threshold of **1e−12** in full-class Brier units, in place of the original threshold of zero. The threshold applied both to admission and to the set from which the maximum-gain replacement was chosen. The script patched the selector inside the replay process. All 240 breeding-path hashes matched the primary records. [Primary verifier](../controlled/results/verification.json) · [Replay script](run.py) · [Paired bank results](banks.csv)
+The primary verifier found three raw promotions on controlled banks whose empirical gain was zero in exact arithmetic. We reran only open breeding with raw confirmation. A challenger had to exceed the preceding incumbent's gain threshold of **1e−12** in full-class Brier units, in place of the original threshold of zero. Only offers above the threshold qualified for deployment, and the offer with the highest qualifying gain won. All offers still competed for breeding. The script patched the selector inside the replay process. All 240 breeding-path hashes matched the primary records. [Primary verifier](../controlled/results/verification.json) · [Replay script](run.py) · [Paired bank results](banks.csv)
 
 | Outcome | Primary raw | Raw with tolerance | Primary open KL |
 |---|---:|---:|---:|
