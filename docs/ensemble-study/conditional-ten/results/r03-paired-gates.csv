@@ -1,0 +1,13 @@
+method,event,mixed,case_mix,delta,lo,hi,paired_sources
+gate_sham,activation,0.0,0.0,0.0,0.0,0.0,6
+gate_sham,application,0.0,0.0,0.0,0.0,0.0,6
+gate_sham,correct_shortcut,0.0,0.0,0.0,0.0,0.0,6
+half,activation,1.0,0.0,1.0,1.0,1.0,6
+half,application,1.0,0.0,1.0,1.0,1.0,6
+half,correct_shortcut,1.0,0.0,1.0,1.0,1.0,6
+replicated,activation,1.0,0.0,1.0,1.0,1.0,6
+replicated,application,1.0,0.0,1.0,1.0,1.0,6
+replicated,correct_shortcut,1.0,0.0,1.0,1.0,1.0,6
+single,activation,1.0,0.0,1.0,1.0,1.0,6
+single,application,1.0,0.0,1.0,1.0,1.0,6
+single,correct_shortcut,1.0,0.0,1.0,1.0,1.0,6

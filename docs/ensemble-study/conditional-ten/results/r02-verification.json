@@ -1,0 +1,17 @@
+{
+  "round": 2,
+  "score_rows": 1188,
+  "target_conditions": 132,
+  "uniform_native_hash_pairs": 356,
+  "independent_source_decisions": 468,
+  "source_banks": 78,
+  "native_forecast_hash_pairs": 30,
+  "native_source_refits": 6,
+  "cheap_reference_risks": 15,
+  "source_only_api_replays": 10,
+  "grouped_diagnostic_samples": 6,
+  "paired_intervals": 156,
+  "standard_families": 30,
+  "disjoint_mechanism_groups": 7,
+  "application_profiles": 2
+}

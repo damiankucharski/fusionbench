@@ -8,14 +8,15 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from scipy.stats import beta
+from threadpoolctl import threadpool_limits
+
 from fusionbench.taxonomy import (
     APPLICATION_PROFILES,
     MECHANISM_GROUPS,
     PURPOSE_TAGS,
     scenario_weights,
 )
-from scipy.stats import beta
-from threadpoolctl import threadpool_limits
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "results"

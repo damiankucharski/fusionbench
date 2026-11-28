@@ -1,0 +1,17 @@
+# Reading the conditional weighting results
+
+Each source seed supplies the same source bank and target law to all methods. Lower full-class Brier risk is better. A negative contrast favors the method in the `method` column. The three cheap comparisons are the unweighted arithmetic mean, the best ranked prefix selected on source Brier, and logistic stacking.
+
+| Question | Table in `results/` |
+| --- | --- |
+| Which methods had the lowest risk for this mix of scenarios? | `rXX-levels.csv` lists risk, macro-F1 where defined, and provider count. The group keys `standard`, `equal_cluster`, `multi_site` and `rule_design` refer to the four prespecified weighting schemes. |
+| Which mechanisms or individual generators account for a difference? | `rXX-contrasts.csv` includes each `cluster/<mechanism>` and `standard/<scenario>`, with paired changes and 95% intervals. Overlapping `purpose/<tag>` groups answer separate questions. |
+| Did the screen act on the right sources? | `rXX-gates.csv` counts activations, nonuniform applications and flagged provider roles. `rXX-rates.csv` supplies exact binomial intervals for independent source seeds in a focal design. `rXX-paired-gates.csv` compares mixed and case-mix-only sources at the same generator seeds. |
+| What happened when weights actually changed? | `rXX-decision-effects.csv` gives the number of fitted trees and forecasts that changed, and the number of applied interventions that improved or worsened risk relative to native. Changes of at most 1e−12 count as ties. Each bank counts once per row, even when four endpoint risks are available. |
+| What was selected and confirmed on fresh sources? | `selection.json` records the decision and hash of the R9 scores. `results/confirmation.json` gives the R10 primary contrast, each safety margin, and secondary comparisons to unconditional guarded weighting. |
+
+The standard panels use fixed scenario membership and average independent seed replicates within each scenario. The paired percentile bootstrap resamples these seeds within each scenario 10,000 times and retains the specified scenario weights. It describes uncertainty over new banks from these generators at the fixed optimizer seed. Exploratory cluster, purpose and application-profile intervals are pointwise. No multiple-comparison adjustment is applied to them. The overall confirmation requires all four prespecified inequalities at once. When two policies return identical forecasts on every observed source, the paired risk interval is exactly zero. The exact activation-rate interval still allows rare firings on future sources.
+
+A focal test uses four target laws on shared input patterns. For `max_regret`, each bank's endpoint losses are compared to their respective Bayes risks. The maximum of its two regrets at `s0` and `s100` is taken before averaging over independent sources. This estimand can have a different ordering from the maximum raw Brier risk or from risk at either single endpoint.
+
+The planted shortcut provider exists even in the case-mix-only source design. Its shortcut activity stays constant across those source environments. An activation on that design is a false alarm for *variation in shortcut activity*. On mixed sources, a correct flag requires identifying the planted provider. The source screen selects whether to use case-mix training weights on all providers. Its diagnostic flag does not remove the identified provider from training or deployment.
