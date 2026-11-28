@@ -1,0 +1,9 @@
+{
+  "bank_version": "reference-v5",
+  "banks": {
+    "rare_shortcut_noise": "eb852533e1dadb1642e128e948f151bf325d94654de554694b46438f450bcd2a",
+    "stratified_pool": "1e5767828c32637a75ea876bf9425ffeeeb29af91c3a92408d03c2d68211f341"
+  },
+  "n_per_split": 128,
+  "seed": 1729
+}

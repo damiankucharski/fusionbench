@@ -29,7 +29,7 @@ from fusionbench.methods.registry import FACTORIES
 from fusionbench.scenarios.blocks import SHIFTS, default_target_shift, draw_block  # noqa: F401 (public historical shift catalog)
 from fusionbench.scenarios.registry import SCENARIOS, _validated_defaults
 
-PRESETS = ("smoke", "standard", "standard-v1", "standard-v2", "standard-v3", "standard-v4")
+PRESETS = ("smoke", "standard", "standard-v1", "standard-v2", "standard-v3", "standard-v4", "standard-v5")
 CONFIG_KEYS = {
     "schema_version",
     "base_seed",
@@ -49,7 +49,7 @@ def load_preset(name="smoke"):
     """Read a version-1 configuration shipped inside the installed package."""
     if name not in PRESETS:
         raise ValueError(f"Unknown preset {name!r}; choose from {', '.join(PRESETS)}")
-    version = {"smoke": "smoke-v1", "standard": "standard-v4"}.get(name, name)
+    version = {"smoke": "smoke-v1", "standard": "standard-v5"}.get(name, name)
     path = resources.files("fusionbench").joinpath("presets", f"{version}.yaml")
     return yaml.safe_load(path.read_text(encoding="utf-8"))
 

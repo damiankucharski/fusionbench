@@ -114,6 +114,14 @@ _VARIANTS = {
         "independent_shortcuts": {"clone_probability": 0},
         "aligned_test": {"test_reversal_probability": 0},
     },
+    "stratified_pool": {
+        "equal_pool": {"specialization": 0},
+        "strong_specialization": {"specialization": 0.75},
+    },
+    "rare_shortcut_noise": {
+        "source_like_test": {"region_test": 0.05, "shortcut_test": 1.0, "provider_noise_test": 0.0},
+        "clean_test_providers": {"provider_noise_test": 0.0},
+    },
     "selective_fallback": {
         "random_missingness": {"mechanism": "random"},
         "always_available": {"fallback_rate": 0},
@@ -156,7 +164,7 @@ def _draw(scenario, scenario_id, seed, split, n):
     oracle = scenario.bayes_oracle(x, latent)
     masks = {}
     for key in ("decisive", "material", "region", "fallback", "hard", "flipped",
-                "shortcut_cloned", "shortcut_reversed"):
+                "shortcut_cloned", "shortcut_reversed", "high_amplitude"):
         if key in latent:
             mask = np.asarray(latent[key])
             if mask.shape == (n,) and mask.dtype.kind == "b":

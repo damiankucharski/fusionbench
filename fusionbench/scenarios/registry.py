@@ -28,6 +28,7 @@ from fusionbench.scenarios.mixture import GatedExperts
 from fusionbench.scenarios.multiclass_provider_panel import MulticlassProviderPanel
 from fusionbench.scenarios.native_switch import NativeCloseSwitch, NativeSwitch
 from fusionbench.scenarios.polarity import PolarityFault
+from fusionbench.scenarios.rare_shortcut_noise import RareShortcutNoise
 from fusionbench.scenarios.rare_specialist import RareSpecialist
 from fusionbench.scenarios.redundant_pool import RedundantPool
 from fusionbench.scenarios.selective_fallback import SelectiveFallback
@@ -35,6 +36,7 @@ from fusionbench.scenarios.shared_confusion_panel import (
     SharedConfusionPanel,
     SimilarClasses38,
 )
+from fusionbench.scenarios.stratified_pool import StratifiedPool
 from fusionbench.types import Dataset
 
 STANDARD_V1_SCENARIOS = MappingProxyType(
@@ -70,7 +72,13 @@ STANDARD_V3_SCENARIOS = MappingProxyType({
     "selective_fallback": SelectiveFallback,
 })
 
-STANDARD_SCENARIOS = MappingProxyType({**STANDARD_V3_SCENARIOS, "cloned_shortcut": ClonedShortcut})
+STANDARD_V4_SCENARIOS = MappingProxyType({**STANDARD_V3_SCENARIOS, "cloned_shortcut": ClonedShortcut})
+STANDARD_V5_SCENARIOS = MappingProxyType({
+    **STANDARD_V4_SCENARIOS,
+    "rare_shortcut_noise": RareShortcutNoise,
+    "stratified_pool": StratifiedPool,
+})
+STANDARD_SCENARIOS = STANDARD_V5_SCENARIOS
 
 SCENARIOS: dict[str, type[Scenario]] = {
     **STANDARD_SCENARIOS,

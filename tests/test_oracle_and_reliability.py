@@ -64,5 +64,5 @@ def test_max_gap_small(results):
     rel = reliability_summary(results)
     # Fit/test gaps are intentionally large for explicitly shifted domains.
     shifted = {s.name for s in default_suite()
-               if s._registry_metadata["scenario_id"] in ("environment_shortcut", "cloned_shortcut")}
+               if s._registry_metadata["scenario_id"] in ("environment_shortcut", "cloned_shortcut", "rare_shortcut_noise")}
     assert rel.loc[~rel.scenario.isin(shifted), "max_abs_gap"].max() < 0.05

@@ -1,6 +1,6 @@
 # Scenario catalog
 
-Choose a scenario by the assumption you want to test. Each generator returns class probabilities from multiple providers for the same examples, together with class labels. The standard suite contains 25 scenarios, including 22 binary scenarios and three multiclass scenarios. The registry also includes the opt-in three-provider panel below. Use these IDs as registry keys in Python or as scenario names in a transfer configuration.
+Choose a scenario by the assumption you want to test. Each generator returns class probabilities from multiple providers for the same examples, together with class labels. The standard suite contains 27 scenarios, including 24 binary scenarios and three multiclass scenarios. The registry also includes the opt-in three-provider panel below. Use these IDs as registry keys in Python or as scenario names in a transfer configuration.
 
 ## Independent evidence and calibration
 
@@ -210,3 +210,51 @@ np.testing.assert_array_equal(banks[1, 0].fit_preds, banks[1, 1].fit_preds)
 ```
 
 The matched seed keeps labels, underlying votes and stable reports paired across all four settings. Fit and test in each bank use separate rows. The oracle uses the eight reported votes and the known domain law, integrating over the hidden events. At complete reversal it counts an inverted shortcut vote as positive evidence for the opposite class. The source rows alone cannot identify whether this reversal will occur at deployment. Group flags for evaluating subsets are in `bank.meta["evaluation_groups"]`. [Generate and save datasets](generate.md)
+
+## Rare specialist, shortcut and noise in standard-v5
+
+`rare_shortcut_noise` has four binary providers. A generalist votes correctly on 75% of cases before corruption. A specialist votes correctly on 95% inside its region and 50% outside. A routing cue identifies the region. An active shortcut votes correctly on 90% of cases, while an inactive shortcut emits a fair vote with the same reported confidence. The label and provider noise controls use independent draws. All eight settings accept probabilities from zero to one.
+
+| Mechanism | Fit knob and default | Test knob and default | Meaning |
+| --- | --- | --- | --- |
+| Region prevalence | `region_fit=0.05` | `region_test=0.50` | Probability of drawing a case from the specialist's region |
+| Shortcut availability | `shortcut_fit=1` | `shortcut_test=0` | Probability that the shortcut is active on a row |
+| Provider noise | `provider_noise_fit=0` | `provider_noise_test=0.20` | Probability of independently flipping each generalist or specialist vote |
+| Label noise | `label_noise_fit=0` | `label_noise_test=0` | Probability of flipping the observed label after generating the reports |
+
+The following comparison uses the same random draws to isolate the combined deployment change. The source-like bank retains the fit settings at test. Both banks have exactly the same fit rows.
+
+```python
+import numpy as np
+from fusionbench import generate_dataset, load_reference_dataset
+
+options = {"n_per_split": 512, "seed": 41}
+shifted = generate_dataset("rare_shortcut_noise", **options)
+source_like = generate_dataset(
+    "rare_shortcut_noise", region_test=0.05, shortcut_test=1,
+    provider_noise_test=0, **options,
+)
+np.testing.assert_array_equal(shifted.fit_preds, source_like.fit_preds)
+np.testing.assert_array_equal(shifted.fit_y, source_like.fit_y)
+reference = load_reference_dataset("rare_shortcut_noise")
+```
+
+`fit_oracle` and `test_oracle` give the exact probability of the **observed** label given the four reports under the corresponding split law. For an exact finite-support calculation, `get_scenario("rare_shortcut_noise").support("test")` returns every report vector, its mass and the corresponding positive-class posterior. The region membership for subgroup scoring is available in dataset metadata under `evaluation_groups`.
+
+The standard data generator uses the fit law for fitting and the test law for held-out evaluation. In the optional transfer grid, the clean condition instead draws fresh rows from the fit law. Canonical-shift severity 1 uses the full test law. Intermediate severity selects complete rows from a mixture of these two domains. The benchmark varies the region prevalence, shortcut and noise independently to measure which changes transfer. [Factorial experiment](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/transfer-factorial) · [Transfer-grid settings](transfer.md)
+
+## Same-population stratified pool in standard-v5
+
+`stratified_pool` emits eight binary forecasts with independent, equally likely signs before stratification. On each row all eight positive-class probabilities are either 0.5 ± 0.15 or 0.5 ± 0.35. The probability of a positive label is a weighted average of the arithmetic mean and the first provider. The parameter `specialization` controls the first provider's weight in this mixture (default 0.25, range 0–1). At zero the mean is the exact posterior. At one, the first provider is the exact posterior.
+
+Fit and test use the same distribution. Both splits balance the four strata formed by report amplitude and realized label. When the sample size is not divisible by four, a random subset of strata receives one extra observation each. This lets you vary training size and specialization while holding the population and its composition fixed. The row-level group `high_amplitude` is saved for evaluation. The 512 report vectors have equal population mass, so methods can also be scored against their exact population Brier loss.
+
+```python
+from fusionbench import generate_dataset, get_scenario
+
+bank = generate_dataset("stratified_pool", specialization=0.25, n_per_split=512, seed=7)
+reports, mass, positive_probability = get_scenario("stratified_pool").support()
+assert reports.shape == (512, 8, 2)
+```
+
+The [matched-population study and directional transfer experiment](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/transfer-factorial) use these two standard-v5 scenarios.

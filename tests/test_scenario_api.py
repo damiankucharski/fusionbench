@@ -35,7 +35,7 @@ def test_public_datasets_match_historical_generator_and_oracle(scenario_id):
     assert dataset.meta["fusionbench_version"] == __version__
     assert dataset.meta["parameters"] == {}
     for split in ("fit", "test"):
-        if scenario_id in ("environment_shortcut", "cloned_shortcut"):
+        if scenario_id in ("environment_shortcut", "cloned_shortcut", "rare_shortcut_noise"):
             x, y, latent = historical.sample_split(rows, rng, split=split)
         else:
             x, y, latent = historical._generate(rows, rng)
