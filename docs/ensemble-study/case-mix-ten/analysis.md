@@ -9,8 +9,9 @@ For maximum regret, subtract each world's own full-information Bayes Brier from 
 | `rXX-levels.csv`, `rXX-families.csv` | Absolute risk and per-family means. Use `metric` to distinguish ordinary Brier, worst Brier and maximum regret. |
 | `rXX-contrasts.csv` | Paired risk differences, including comparisons with simple averaging, ranked Top-N, logistic stacking, unrestricted weighting and clipping. |
 | `rXX-profile-pairs.csv` | Profile minus mixed on matched source seeds, both in absolute risk and relative to the unweighted native procedure. |
+| `rXX-scene-groups.csv` | Standard macro Brier and paired changes on the three clustered-scene families and the other 27, with row and group effective counts. |
 | `rXX-support.csv` | Observed environment/context cell coverage on each source bank, before seeing evaluation outcomes. |
-| `rXX-weights.csv`, `rXX-reasons.csv` | Effective source size, weight concentration, choice of full/clipped/uniform weights and fraction of cases where a configuration changed the fit. The `changed_*` fields are counts of banks. |
+| `rXX-weights.csv`, `rXX-reasons.csv` | Effective source size, weight concentration, choice of full/clipped/uniform weights and whether a configuration changed the fit. The `changed_*` fields are counts of banks. |
 | `r03-stage-pairs.csv`, `r04-stage-pairs.csv` | Exact within-bank comparisons of weighting at individual stages against ordinary native and full weighting. |
 
 The row-level effective sample size is the squared sum of weights divided by their sum of squares. A cap bounds each raw ratio before the weights are normalized to mean one. For scene-grouped data the supplementary group count uses the same formula after aggregating weights within each source scene. Its ratio is relative to the number of distinct groups. Neither count measures target representativeness.

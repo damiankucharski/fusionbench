@@ -57,6 +57,10 @@ def focal(ax, contrasts, support, pop):
     ys = np.arange(len(FAMILIES))
     fit = contrasts[(contrasts.world == "max_regret") & (contrasts.method == "full")]
     fit = fit.set_index("family").loc[list(FAMILIES)]
+    guarded = contrasts[
+        (contrasts.world == "max_regret") & (contrasts.method == "guarded")
+    ]
+    guarded = guarded.set_index("family").loc[list(FAMILIES)]
     counts = (
         support[
             (support.endpoint == "max_regret")
@@ -84,11 +88,12 @@ def focal(ax, contrasts, support, pop):
         rtol=0,
         atol=1e-12,
     )
-    draw_points(ax, fit, ys - 0.20, BLUE, "o")
-    draw_points(ax, counts, ys, RED, "s")
+    draw_points(ax, guarded, ys - 0.28, "#252933", "^")
+    draw_points(ax, fit, ys - 0.10, BLUE, "o")
+    draw_points(ax, counts, ys + 0.08, RED, "s")
     ax.scatter(
         theory.delta_max_regret_vs_unweighted * 1000,
-        ys + 0.20,
+        ys + 0.26,
         s=30,
         ec=PURPLE,
         fc="white",
@@ -97,7 +102,7 @@ def focal(ax, contrasts, support, pop):
         zorder=3,
     )
     labels(ax, list(FAMILIES.values()), "Change in worst endpoint regret (×1,000)")
-    ax.set_title("A   Full weighting across eight source profiles", loc="left", pad=13)
+    ax.set_title("A   Weighting across eight source profiles", loc="left", pad=13)
     handles = [
         Line2D(
             [],
@@ -110,9 +115,10 @@ def focal(ax, contrasts, support, pop):
             label=label,
         )
         for marker, color, face, label in (
-            ("o", BLUE, BLUE, "Native OKAPI"),
-            ("s", RED, RED, "16-pattern table"),
-            ("D", PURPLE, "white", "Population Bayes"),
+            ("^", "#252933", "#252933", "OKAPI, guarded"),
+            ("o", BLUE, BLUE, "OKAPI, full"),
+            ("s", RED, RED, "16-cell table, full"),
+            ("D", PURPLE, "white", "Population Bayes, full"),
         )
     ]
     ax.legend(
@@ -120,7 +126,7 @@ def focal(ax, contrasts, support, pop):
         loc="upper center",
         bbox_to_anchor=(0.5, -0.10),
         frameon=False,
-        ncol=3,
+        ncol=4,
         fontsize=8.6,
         columnspacing=1.6,
         handlelength=0.8,

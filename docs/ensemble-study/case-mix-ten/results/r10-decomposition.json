@@ -1,0 +1,12 @@
+{
+  "sources": 160,
+  "verified_forecasts": 1920,
+  "max_abs_error_against_archived_excess": 4.371503159461554e-16,
+  "scores_sha256": "3b9a9898549b5d0ddf157999977ea6b7efef9e0dd828ccd20539b49b0bf35015",
+  "trace_sha256": "3bad0bb8f3083afe71d0e7e20e8f3eac7495505017500aa3601e55485fc262a9",
+  "rows": 96,
+  "independent_seeds": 20,
+  "bootstrap_draws": 10000,
+  "bootstrap_seed": 103010,
+  "max_abs_identity_error": 4.683753385137379e-17
+}

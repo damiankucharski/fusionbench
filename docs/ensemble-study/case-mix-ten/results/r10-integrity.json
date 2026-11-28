@@ -1,0 +1,8 @@
+{
+  "sources": 340,
+  "target_conditions": 820,
+  "score_rows": 5740,
+  "maximum_midpoint_error": 4.440892098500626e-16,
+  "guard_decisions_verified": 340,
+  "source_weight_records_verified": 2380
+}

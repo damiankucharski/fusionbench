@@ -1,0 +1,25 @@
+{
+  "round": 10,
+  "source_banks": 340,
+  "target_conditions": 820,
+  "score_rows": 5740,
+  "standard_families": 30,
+  "paired_intervals": 72,
+  "oracle_brier": {
+    "s0": 0.23217084639498436,
+    "s50": 0.2059100779404559,
+    "s100": 0.10894618226032772,
+    "specialist80": 0.1325811247047294
+  },
+  "recreated_weight_vectors": 40,
+  "cheap_brier_replays": 15,
+  "native_prediction_hash_pairs": 15,
+  "native_source_refits": 6,
+  "jeffreys_table_risks": 96,
+  "conditional_joint_cells": 512,
+  "chosen_on_r9": "guarded",
+  "selection_commit": "2f1e7b50524102c4f14224ab9c8ac2e88ae36f87",
+  "all_pass": false,
+  "analytic_source_policies": 36,
+  "all_final_focal_forecast_risks": 4480
+}

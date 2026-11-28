@@ -1,0 +1,37 @@
+{
+  "chosen": "guarded",
+  "r09_sha256": "ffdada2ba930bc9112353288413efab48ff2a46e0a204ac11460059d030362e0",
+  "checks": {
+    "mixed/max_regret": {
+      "delta": -0.019282924842293495,
+      "lo": -0.02581706908212115,
+      "hi": -0.012309728237012246,
+      "upper_limit": 0.0,
+      "passed": true
+    },
+    "standard": {
+      "delta": 0.0008913466955971465,
+      "lo": -0.0003749832109720536,
+      "hi": 0.002241172484326336,
+      "upper_limit": 0.005,
+      "passed": true
+    },
+    "case_mix/specialist80": {
+      "delta": 0.01232337150028211,
+      "lo": 0.0019463402231510464,
+      "hi": 0.024939722239757368,
+      "upper_limit": 0.01,
+      "passed": false
+    },
+    "mixed/s0": {
+      "delta": 0.00949021764156845,
+      "lo": -0.0005055646154760038,
+      "hi": 0.019410750430769588,
+      "upper_limit": 0.01,
+      "passed": false
+    }
+  },
+  "primary_pass": true,
+  "all_guardrails_pass": false,
+  "all_pass": false
+}

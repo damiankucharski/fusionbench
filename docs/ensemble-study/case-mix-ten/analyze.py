@@ -290,6 +290,39 @@ def source_summary(raw):
     return pd.DataFrame(result), pd.concat(reasons, ignore_index=True)
 
 
+def scene_groups(raw, r):
+    """Standard scenarios with real training-scene IDs, separated from row-level banks."""
+    std = raw[raw.cohort == "standard"].copy()
+    std["ess_fraction"] = std.ess / std.n_fit
+    std["group_ess_fraction"] = std.group_ess / std.groups
+    families = {"grouped_rare_event", "shared_error_bloc", "rare_scene_specialist"}
+    out = []
+    for name, part in (
+        ("grouped3", std[std.family.isin(families)]),
+        ("other27", std[~std.family.isin(families)]),
+    ):
+        wide = risk_matrix(part)
+        w = bootstrap(wide.index, r)
+        d = wide.sub(wide.native, axis=0)
+        lo, hi = np.quantile(w @ d.to_numpy(), [0.025, 0.975], axis=0)
+        t = part.groupby("method")[
+            [
+                "brier",
+                "ess",
+                "ess_fraction",
+                "groups",
+                "group_ess",
+                "group_ess_fraction",
+            ]
+        ].mean()
+        out.append(
+            t.join(pd.DataFrame({"delta_native": d.mean(), "lo": lo, "hi": hi}))
+            .reset_index()
+            .assign(group=name, banks=len(wide))
+        )
+    return pd.concat(out, ignore_index=True)
+
+
 def select(raw):
     std = risk_matrix(raw[raw.cohort == "standard"])
     cases = risk_matrix(
@@ -384,6 +417,8 @@ def main():
         "reasons": reasons,
     }
     tables["profile-pairs"] = profile_effects(raw, r)
+    with threadpool_limits(limits=1):
+        tables["scene-groups"] = scene_groups(raw, r)
     if r in (3, 4):
         tables["stage-pairs"] = stage_comparisons(raw, r)
     for name, frame in tables.items():
