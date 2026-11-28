@@ -8,7 +8,7 @@ Each fitted rule receives the source provider predictions, their labels, and sou
 | Eight paired rare-event settings | 8 / 8 / 16 | Toggle provider heterogeneity (0 or .65), shared residual error (0 or .65) and local specialist strength (0 or .85) independently |
 | Two scarce-scene controls | 8 / 8 / 16 | Increase source coverage from 16 to 128 scenes under the earlier clustered law |
 | Two stratified controls | 8 / 8 / 16 | Weak or strong specialization, 128 balanced source draws and exact test risk on a finite support |
-| Two indistinguishable source laws | 0 / 0 / 16 | Fit data and test predictions identical, test label probability different |
+| Two target laws with identical source data | 0 / 0 / 16 | Fit data and test predictions identical, test label probability different |
 
 Each round uses `610000 + 1000 * round` as its base seed. The offsets are 0 for the rare-event factorial, 100 for the two scarce-scene controls, 200 for the stratified controls, 400 for the standard suite and 800 for the indistinguishable pair. This gives 216, 186 and 404 conditions. The eight rare-event settings at the same seed share both splits' labels, latent events and specialist regions. Treating the settings as eight independent repeats would understate uncertainty.
 
@@ -16,7 +16,7 @@ In the factorial, each fit contains 16 scenes of eight examples and each test co
 
 ## A target change that training diagnostics cannot identify
 
-At each row draw three independent positive-class probabilities uniformly from .05 to .95. Both worlds draw their source labels with probability equal to the first provider, and expose the exact same source examples and labels. They also share every test prediction. In world A the test labels have probability $q_A=p_0$. In world B the probability is $q_B=(p_0+p_1+p_2)/3$. Using a shared uniform draw for the two test labels reduces the variance of comparisons while preserving each world's law.
+At each row draw three independent positive-class probabilities uniformly from .05 to .95. Both worlds draw their source labels with probability equal to the first provider, and expose the exact same source examples and labels. They also share every test prediction. In world A the test labels have probability $q_A=p_0$. In world B the probability is $q_B=(p_0+p_1+p_2)/3$. Using a shared uniform draw makes the paired test labels differ only when that draw falls between the two event probabilities.
 
 For a shared forecast $p$, its expected **full-class** Brier loss above the Bayes forecast on a binary row is $2(p-q)^2$. Completing the square gives
 

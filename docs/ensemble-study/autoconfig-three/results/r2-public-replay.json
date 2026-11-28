@@ -1,0 +1,68 @@
+[
+  {
+    "cohort": "factorial",
+    "family": "h0c0s0",
+    "seed": 612000,
+    "classes": 2,
+    "groups": 16,
+    "method": "tree_rule",
+    "action": "flat",
+    "fit_sha256": "b2ca69da6720b67d258e0bce0182f5adf3594bdbbc5b3233c09c540a3e20be71",
+    "audit_sha256": "5917b8beb49b22c2fda5bbedad51242d82d81965edc81d63f722d8ff507576aa"
+  },
+  {
+    "cohort": "factorial",
+    "family": "h0c0s0",
+    "seed": 612000,
+    "classes": 2,
+    "groups": 16,
+    "method": "cv_rule",
+    "action": "mean",
+    "fit_sha256": "4289ac27c998a4b272bb0a528dc5d0fcc88e4892d6bb73e81ee92f2a41f0d63f",
+    "audit_sha256": "a668b3c9526a84b4acb1b5ce1c501dc4d536d9d5350a663b6adacdd0b35d1ba4"
+  },
+  {
+    "cohort": "standard",
+    "family": "correlated",
+    "seed": 612400,
+    "classes": 2,
+    "groups": null,
+    "method": "tree_rule",
+    "action": "flat",
+    "fit_sha256": "a2464790187b2b7757db9d77a843d28caa81f1a6bfd6b17716093f257b6c7894",
+    "audit_sha256": "b0be346cb99152682147aa354491dde3b1c727b10c2a5713b86d52927dddef42"
+  },
+  {
+    "cohort": "standard",
+    "family": "correlated",
+    "seed": 612400,
+    "classes": 2,
+    "groups": null,
+    "method": "cv_rule",
+    "action": "flat",
+    "fit_sha256": "a2464790187b2b7757db9d77a843d28caa81f1a6bfd6b17716093f257b6c7894",
+    "audit_sha256": "b0be346cb99152682147aa354491dde3b1c727b10c2a5713b86d52927dddef42"
+  },
+  {
+    "cohort": "standard",
+    "family": "similar_classes_38",
+    "seed": 612400,
+    "classes": 10,
+    "groups": null,
+    "method": "tree_rule",
+    "action": "flat",
+    "fit_sha256": "d0ceb95b76a90f1884bf86e5f886c4c59153a35ac19736a2586437e2d9bb27be",
+    "audit_sha256": "f0c7d0211fd17c02b3d83d57a8b5ea8639159918260619f3a834b22c1e7e1791"
+  },
+  {
+    "cohort": "standard",
+    "family": "similar_classes_38",
+    "seed": 612400,
+    "classes": 10,
+    "groups": null,
+    "method": "cv_rule",
+    "action": "flat",
+    "fit_sha256": "d0ceb95b76a90f1884bf86e5f886c4c59153a35ac19736a2586437e2d9bb27be",
+    "audit_sha256": "f0c7d0211fd17c02b3d83d57a8b5ea8639159918260619f3a834b22c1e7e1791"
+  }
+]

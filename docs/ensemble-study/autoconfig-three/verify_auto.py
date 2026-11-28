@@ -25,13 +25,23 @@ BASELINES = PAST["OLD"]
 KEY = ["cohort", "family", "seed"]
 ACTIONS = ["mean", "top_n", "cal_mean", "flat", "cal_pull"]
 HELDOUT = {
-    "grouped_rare_event", "shared_error_bloc", "rare_scene_specialist", "cloned_shortcut",
-    "parity", "similar_classes_38",
+    "grouped_rare_event",
+    "shared_error_bloc",
+    "rare_scene_specialist",
+    "cloned_shortcut",
+    "parity",
+    "similar_classes_38",
 }
 GROUPED = {"grouped_rare_event", "shared_error_bloc", "rare_scene_specialist"}
 FEATURES = [
-    "disagreement", "quality_spread", "gain_best", "residual_alignment",
-    "effective_rank", "local_complementarity", "calibration_slope", "mean_brier",
+    "disagreement",
+    "quality_spread",
+    "gain_best",
+    "residual_alignment",
+    "effective_rank",
+    "local_complementarity",
+    "calibration_slope",
+    "mean_brier",
 ]
 ALL_FEATURES = [*FEATURES, "gain_best_se", "independent_units"]
 MEASURES = ["brier", "expected_brier", "macro_f1", "ap"]
@@ -43,8 +53,11 @@ def table(r, name):
 
 def equal(actual, expected):
     np.testing.assert_allclose(
-        np.asarray(actual, dtype=float), np.asarray(expected, dtype=float),
-        rtol=0, atol=5e-12, equal_nan=True,
+        np.asarray(actual, dtype=float),
+        np.asarray(expected, dtype=float),
+        rtol=0,
+        atol=5e-12,
+        equal_nan=True,
     )
 
 
@@ -54,7 +67,12 @@ def expected_keys(r):
     assert len(families) == 30 and HELDOUT <= families
     cohorts = [
         ("standard", families, 400, (4, 3, 6)[r - 1]),
-        ("factorial", [f"h{h}c{c}s{s}" for h, c, s in product(range(2), repeat=3)], 0, n),
+        (
+            "factorial",
+            [f"h{h}c{c}s{s}" for h, c, s in product(range(2), repeat=3)],
+            0,
+            n,
+        ),
         ("clustered", ["scene16", "scene128"], 100, n),
         ("controlled", ["weak", "strong"], 200, n),
     ]
@@ -63,7 +81,9 @@ def expected_keys(r):
     base = 610000 + 1000 * r
     return {
         (cohort, f, base + offset + i)
-        for cohort, fs, offset, count in cohorts for f in fs for i in range(count)
+        for cohort, fs, offset, count in cohorts
+        for f in fs
+        for i in range(count)
     }
 
 
@@ -83,20 +103,33 @@ def explicit_features(b):
     centered = (x.transpose(1, 0, 2) - 1 / k).reshape(m, -1)
     eigen = np.linalg.eigvalsh(centered @ centered.T)
     energy = np.sum((avg - 1 / k) ** 2)
-    slope = ((avg - 1 / k) * (target - 1 / k)).sum() / energy if energy > n * np.finfo(float).eps else 1
+    slope = (
+        ((avg - 1 / k) * (target - 1 / k)).sum() / energy
+        if energy > n * np.finfo(float).eps
+        else 1
+    )
     tied = np.abs(quality - quality.min()) <= 1e-12
     g = ensemble_loss - losses[tied].mean(0)
     groups = b.groups if b.groups is not None else np.arange(n)
     ids, inv = np.unique(groups, return_inverse=True)
     count = len(ids)
     residual_sums = np.bincount(inv, weights=g - g.mean())
-    se = np.linalg.norm(residual_sums) / n * np.sqrt(count / (count - 1)) if count > 1 else 0
+    se = (
+        np.linalg.norm(residual_sums) / n * np.sqrt(count / (count - 1))
+        if count > 1
+        else 0
+    )
     return [
-        np.mean(np.sum((x - avg[:, None, :]) ** 2, axis=2)), quality.std(),
-        ensemble_loss.mean() - quality.min(), cos[np.triu_indices(m, 1)].mean() if m > 1 else 0,
+        np.mean(np.sum((x - avg[:, None, :]) ** 2, axis=2)),
+        quality.std(),
+        ensemble_loss.mean() - quality.min(),
+        cos[np.triu_indices(m, 1)].mean() if m > 1 else 0,
         eigen.sum() ** 2 / (m * (eigen @ eigen)) if np.any(eigen) else 0,
-        quality.min() - losses.min(0).mean(), np.clip(slope, -4, 4), ensemble_loss.mean(),
-        se, count,
+        quality.min() - losses.min(0).mean(),
+        np.clip(slope, -4, 4),
+        ensemble_loss.mean(),
+        se,
+        count,
     ]
 
 
@@ -107,7 +140,8 @@ def verify_fingerprint(b, row):
     rng = np.random.default_rng(b.context["seed"] + 97)
     rows, providers, classes = (rng.permutation(dim) for dim in (n, m, k))
     fp = pool_fingerprint(
-        b.x[rows][:, providers][:, :, classes], np.argsort(classes)[b.y[rows]],
+        b.x[rows][:, providers][:, :, classes],
+        np.argsort(classes)[b.y[rows]],
         groups=b.groups[rows] if b.groups is not None else None,
     )
     equal([fp[name] for name in ALL_FEATURES], independent)
@@ -119,37 +153,66 @@ def follow(row, node):
     return node["action"]
 
 
-def check_node(frame, node, depth=0):
+def independent_node(frame, depth=0):
     # All eligible R1 families contributed exactly four banks. Preserve these original
     # weights in descendants instead of reweighting a family after every split.
     costs = frame[ACTIONS].mean()
     best_action = costs.idxmin()
-    assert node["banks"] == len(frame) and node["families"] == frame.family.nunique()
-    assert node["action"] == best_action
-    equal([node["mean_losses"][c] for c in ACTIONS], costs)
+    node = {
+        "banks": len(frame),
+        "families": frame.family.nunique(),
+        "action": best_action,
+        "mean_losses": dict(costs),
+    }
     chosen = None
     best_gain = 0
     if depth < 2:
         for name in FEATURES:
             unique, counts = np.unique(frame[name], return_counts=True)
-            for i in sorted(set(np.searchsorted(counts.cumsum(), np.arange(1, 5) * .2 * len(frame)))):
+            for i in sorted(
+                set(
+                    np.searchsorted(
+                        counts.cumsum(), np.array([0.2, 0.4, 0.6, 0.8]) * len(frame)
+                    )
+                )
+            ):
                 if i + 1 == len(unique):
                     continue
                 threshold = unique[i] / 2 + unique[i + 1] / 2
-                parts = (frame[frame[name] <= threshold], frame[frame[name] > threshold])
-                if any(len(p) < len(frame) / 8 or p.family.nunique() < 4 for p in parts):
+                parts = (
+                    frame[frame[name] <= threshold],
+                    frame[frame[name] > threshold],
+                )
+                if any(
+                    len(p) < len(frame) / 8 or p.family.nunique() < 4 for p in parts
+                ):
                     continue
-                gain = costs.min() - sum(p[ACTIONS].sum().min() for p in parts) / len(frame)
-                if gain >= .001 and gain > best_gain + 1e-12:
+                gain = costs.min() - sum(p[ACTIONS].sum().min() for p in parts) / len(
+                    frame
+                )
+                if gain >= 0.001 and gain > best_gain + 1e-12:
                     chosen, best_gain = (name, threshold, parts), gain
-    if chosen is None:
-        assert "feature" not in node
-        return
-    feature, threshold, parts = chosen
-    assert node["feature"] == feature
-    equal([node["threshold"], node["gain"]], [threshold, best_gain])
-    for part, child in zip(parts, ("left", "right"), strict=True):
-        check_node(part, node[child], depth + 1)
+    if chosen is not None:
+        feature, threshold, parts = chosen
+        node.update(feature=feature, threshold=threshold, gain=best_gain)
+        for part, child in zip(parts, ("left", "right"), strict=True):
+            node[child] = independent_node(part, depth + 1)
+    return node
+
+
+def compare_node(actual, expected):
+    assert actual.keys() == expected.keys()
+    for key in actual:
+        if key in ("left", "right"):
+            compare_node(actual[key], expected[key])
+        elif key == "mean_losses":
+            equal(
+                [actual[key][a] for a in ACTIONS], [expected[key][a] for a in ACTIONS]
+            )
+        elif key in ("gain", "threshold"):
+            equal(actual[key], expected[key])
+        else:
+            assert actual[key] == expected[key]
 
 
 def verify_policy():
@@ -162,13 +225,38 @@ def verify_policy():
     fps, scores = table(1, "fingerprints"), table(1, "scores")
     src = fps[(fps.cohort == "standard") & fps.family.isin(family_set)]
     raw = scores[(scores.cohort == "standard") & scores.family.isin(family_set)]
-    risk = raw.pivot(index=["family", "seed"], columns="method", values="brier")[ACTIONS]
-    frame = src.set_index(["family", "seed"])[FEATURES].join(risk).sort_index().reset_index()
-    assert len(frame) == frozen["row_count"] == 96 and frame.groupby("family").size().eq(4).all()
-    assert sha256(frame.to_csv(index=False).encode()).hexdigest() == frozen["training_sha256"]
+    risk = raw.pivot(index=["family", "seed"], columns="method", values="brier")[
+        ACTIONS
+    ]
+    frame = (
+        src.set_index(["family", "seed"])[FEATURES]
+        .join(risk)
+        .sort_index()
+        .reset_index()
+    )
+    assert (
+        len(frame) == frozen["row_count"] == 96
+        and frame.groupby("family").size().eq(4).all()
+    )
+    assert (
+        sha256(frame.to_csv(index=False).encode()).hexdigest()
+        == frozen["training_sha256"]
+    )
     policy = frozen["policy"]
     assert policy["features"] == FEATURES and policy["actions"] == ACTIONS
-    check_node(frame, policy["tree"])
+    compare_node(policy["tree"], independent_node(frame))
+    loo = table(1, "leave-family-out").set_index(["held_family", "seed"])
+    assert len(loo) == len(frame) and loo.index.is_unique
+    for held_family, rows in frame.groupby("family"):
+        fitted = independent_node(frame[frame.family != held_family])
+        for _, row in rows.iterrows():
+            archived = loo.loc[held_family, int(row.seed)]
+            action, const = follow(row, fitted), fitted["action"]
+            assert action == archived.action and const == archived.constant
+            equal(
+                [archived.tree_brier, archived.constant_brier, archived.oracle_brier],
+                [row[action], row[const], row[ACTIONS].min()],
+            )
     assert frozen["constant"] == frame[ACTIONS].mean().idxmin()
     return frozen
 
@@ -182,13 +270,24 @@ def verify_routes(rows, fp, frozen):
         action = rows.at[method, "action"]
         assert action in ACTIONS
         if method != "cv_rule":
-            assert action == {"constant": fixed, "tree_rule": follow(fp, frozen["policy"]["tree"]),
-                              "portfolio_oracle": oracle}[method]
+            assert (
+                action
+                == {
+                    "constant": fixed,
+                    "tree_rule": follow(fp, frozen["policy"]["tree"]),
+                    "portfolio_oracle": oracle,
+                }[method]
+            )
         for col in ("fit_hash", "test_hash"):
             assert rows.at[method, col] == rows.at[action, col], (method, action, col)
-        equal(rows.loc[method, [*MEASURES, "fit_brier", "nodes", "providers"]],
-              rows.loc[action, [*MEASURES, "fit_brier", "nodes", "providers"]])
-    return sum(m in rows.index for m in ("constant", "tree_rule", "cv_rule", "portfolio_oracle"))
+        equal(
+            rows.loc[method, [*MEASURES, "fit_brier", "nodes", "providers"]],
+            rows.loc[action, [*MEASURES, "fit_brier", "nodes", "providers"]],
+        )
+    return sum(
+        m in rows.index
+        for m in ("constant", "tree_rule", "cv_rule", "portfolio_oracle")
+    )
 
 
 def verify_witness(pairs):
@@ -201,7 +300,7 @@ def verify_witness(pairs):
         pa, pb = a.audit_x[:, 0, 1], a.audit_x[:, :, 1].mean(1)
         equal(a.q, pa)
         equal(b.q, pb)
-        bound = .5 * np.mean((pa - pb) ** 2)
+        bound = 0.5 * np.mean((pa - pb) ** 2)
         bounds.append(bound)
         for bank in (a, b):
             equal(bank.context["common_rule_excess_bound"], bound)
@@ -212,14 +311,22 @@ def verify_witness(pairs):
             assert ar.at[m, "action"] == br.at[m, "action"]
             assert ar.at[m, "test_hash"] == br.at[m, "test_hash"]
             assert ar.at[m, "fit_hash"] == br.at[m, "fit_hash"]
-            excess = np.mean([ar.at[m, "expected_brier"] - np.mean(2 * pa * (1 - pa)),
-                              br.at[m, "expected_brier"] - np.mean(2 * pb * (1 - pb))])
+            excess = np.mean(
+                [
+                    ar.at[m, "expected_brier"] - np.mean(2 * pa * (1 - pa)),
+                    br.at[m, "expected_brier"] - np.mean(2 * pb * (1 - pb)),
+                ]
+            )
             assert excess + 5e-12 >= bound, (m, excess, bound)
             excesses.setdefault(m, []).append(excess)
     assert len(pairs) == 16
-    return {"paired_sources": len(pairs), "mean_exact_lower_bound": np.mean(bounds),
-            "min_exact_lower_bound": min(bounds), "max_exact_lower_bound": max(bounds),
-            "mean_excess_over_bayes": {m: np.mean(v) for m, v in excesses.items()}}
+    return {
+        "paired_sources": len(pairs),
+        "mean_exact_lower_bound": np.mean(bounds),
+        "min_exact_lower_bound": min(bounds),
+        "max_exact_lower_bound": max(bounds),
+        "mean_excess_over_bayes": {m: np.mean(v) for m, v in excesses.items()},
+    }
 
 
 def check_banks(r, frozen):
@@ -231,12 +338,30 @@ def check_banks(r, frozen):
     grouped = scores.groupby(KEY, sort=False)
     assert set(grouped.groups) == keys
     counts, paired, witness = Counter(), {}, {}
+    traces = [
+        json.loads(line)
+        for line in (OUT / f"r{r}-decisions.jsonl").read_text().splitlines()
+    ]
+    traces = {tuple(row[k] for k in KEY): row for row in traces}
+    assert set(traces) == keys
+    audited = set()
     for b in banks(r):
         key = tuple(b.context[k] for k in KEY)
         rows = grouped.get_group(key).set_index("method")
         PAST["check_bank"](b, rows, paired)
         verify_fingerprint(b, features.loc[key])
         counts["banks"] += 1
+        if r >= 2:
+            verify_trace(b, rows, traces[key])
+            counts["cv_choice_traces"] += 1
+            if key[0] not in audited:
+                check_fold_scores(b, traces[key]["cv"])
+                audited.add(key[0])
+                counts["independent_cv_replays"] += 1
+        if counts["banks"] == 1:
+            counts["source_only_guarded_rule_replays"] = outcome_probe(
+                r, b, rows, frozen
+            )
         counts["routed_hash_pairs"] += verify_routes(rows, features.loc[key], frozen)
         fit, test = BASELINES["controls"](b.x, b.y, [b.x, b.audit_x])
         for name in ("mean", "top_n", "lr"):
@@ -257,13 +382,55 @@ def verify_trace(b, rows, trace):
     risks = cv["oof_brier"]
     best = min(ACTIONS, key=risks.get)
     assert cv["best"] == best and cv["oof_fits"] == 15
-    eligible = [a for a in ACTIONS if risks[a] - risks[best] <= cv["paired_se"][a] + 1e-12]
+    eligible = [
+        a for a in ACTIONS if risks[a] - risks[best] <= cv["paired_se"][a] + 1e-12
+    ]
     assert cv["eligible"] == eligible and rows.at["cv_rule", "action"] == eligible[0]
     n_units = len(np.unique(b.groups)) if b.groups is not None else len(b.y)
     assert n_units == cv["n_units"] and len(cv["folds"]) == 3
     assert sum(f["held_units"] for f in cv["folds"]) == n_units
     assert sum(f["held_rows"] for f in cv["folds"]) == len(b.y)
     assert all(f["held_rows"] + f["train_rows"] == len(b.y) for f in cv["folds"])
+
+
+def check_fold_scores(b, trace):
+    from sklearn.model_selection import KFold, StratifiedKFold
+    from fusionbench.methods.auto_configuration import fit_actions
+
+    x, y, groups = b.x, b.y, b.groups
+    units = (
+        np.arange(len(y))
+        if groups is None
+        else np.unique(groups, return_inverse=True)[1]
+    )
+    if groups is not None:
+        order = np.random.default_rng(3107).permutation(len(np.unique(groups)))
+        folds = [
+            (np.flatnonzero(~np.isin(units, ids)), np.flatnonzero(np.isin(units, ids)))
+            for ids in np.array_split(order, 3)
+        ]
+    else:
+        cls = (
+            StratifiedKFold if np.unique(y, return_counts=True)[1].min() >= 3 else KFold
+        )
+        folds = list(cls(3, shuffle=True, random_state=3107).split(x, y))
+    held_order = np.concatenate([held for _, held in folds])
+    np.testing.assert_array_equal(np.sort(held_order), np.arange(len(y)))
+    losses = np.empty((len(y), len(ACTIONS)))
+    for (train, held), fold in zip(folds, trace["folds"], strict=True):
+        assert not set(units[train]) & set(units[held])
+        assert len(held) == fold["held_rows"] and len(train) == fold["train_rows"]
+        models = fit_actions(
+            x[train], y[train], groups=None if groups is None else groups[train]
+        )
+        for i, a in enumerate(ACTIONS):
+            pred = models[a].predict(x[held])
+            losses[held, i] = np.square(pred - np.eye(x.shape[-1])[y[held]]).sum(1)
+    independent = pd.DataFrame(losses, columns=ACTIONS).groupby(units).mean()
+    means = independent.mean()
+    se = independent.subtract(independent[means.idxmin()], axis=0).sem()
+    equal([trace["oof_brier"][a] for a in ACTIONS], means)
+    equal([trace["paired_se"][a] for a in ACTIONS], se)
 
 
 def outcome_probe(r, b, rows, frozen):
@@ -285,6 +452,7 @@ def outcome_probe(r, b, rows, frozen):
     changed = SimpleNamespace(**vars(b))
     changed.audit_y = (b.audit_y + 1) % b.x.shape[2]
     changed.q = None if b.q is None else 1 - b.q
+
     # The runner is allowed to read scores, hashes and simulator metadata only after fitting.
     def source_fit(*args, **kwargs):
         assert not phase["scoring"]
@@ -295,7 +463,10 @@ def outcome_probe(r, b, rows, frozen):
         return original(r, bank, models)
 
     original = run_auto.score_models
-    with patch("portfolio.fit_actions", source_fit), patch.object(run_auto, "score_models", scoring):
+    with (
+        patch("portfolio.fit_actions", source_fit),
+        patch.object(run_auto, "score_models", scoring),
+    ):
         altered, _, _ = run_auto.measure((r, Guard(), frozen if r > 1 else None))
     altered = pd.DataFrame(altered).set_index("method")
     methods = rows.index.difference(["portfolio_oracle"])
@@ -303,7 +474,10 @@ def outcome_probe(r, b, rows, frozen):
         for k in ("action", "fit_hash", "test_hash"):
             assert altered.at[name, k] == rows.at[name, k], (name, k)
     assert abs(altered.at["mean", "brier"] - rows.at["mean", "brier"]) > 1e-7
-    assert abs(altered.at["mean", "expected_brier"] - rows.at["mean", "expected_brier"]) > 1e-7
+    assert (
+        abs(altered.at["mean", "expected_brier"] - rows.at["mean", "expected_brier"])
+        > 1e-7
+    )
     return len(methods)
 
 
@@ -322,14 +496,20 @@ def check_summaries(r):
     contrasts = table(r, "contrasts").query("metric == 'brier'")
     levels = table(r, "levels").set_index(["group", "method"])
     fam = table(r, "families").set_index(["family", "method"]).sort_index()
-    expected = scores[scores.cohort == "standard"].groupby(["family", "method"])[MEASURES].mean()
+    expected = (
+        scores[scores.cohort == "standard"]
+        .groupby(["family", "method"])[MEASURES]
+        .mean()
+    )
     equal(fam.loc[expected.index, MEASURES], expected)
     assert set(fam.index) == set(expected.index)
     mix = table(r, "action-mix").set_index(["group", "method"]) if r >= 2 else None
     checked = 0
     checks = {}
     for name, part in panels(scores):
-        values = part.pivot(index=["family", "seed"], columns="method", values="brier").sort_index()
+        values = part.pivot(
+            index=["family", "seed"], columns="method", values="brier"
+        ).sort_index()
         family_n = values.index.get_level_values("family").nunique()
         reps = values.index.get_level_values("seed").nunique()
         costs = values[ACTIONS]
@@ -347,7 +527,7 @@ def check_summaries(r):
         simulated = {m: values[m].to_numpy()[indices].mean(1) for m in methods}
         for row in contrasts[contrasts.group == name].itertuples():
             diff = simulated[row.method] - simulated[row.reference]
-            lo, hi = np.quantile(diff, [.025, .975])
+            lo, hi = np.quantile(diff, [0.025, 0.975])
             delta = avg[row.method] - avg[row.reference]
             equal([row.delta, row.lo, row.hi], [delta, lo, hi])
             assert row.resampling_units == len(values)
@@ -357,17 +537,44 @@ def check_summaries(r):
         if mix is None:
             continue
         for method in mix.loc[name].index:
-            chosen = part[part.method == method].set_index(["family", "seed"]).loc[costs.index, "action"]
-            frequencies = chosen.value_counts(normalize=True).reindex(ACTIONS, fill_value=0)
+            chosen = (
+                part[part.method == method]
+                .set_index(["family", "seed"])
+                .loc[costs.index, "action"]
+            )
+            frequencies = chosen.value_counts(normalize=True).reindex(
+                ACTIONS, fill_value=0
+            )
             random_loss = costs.mean() @ frequencies
-            within_loss = np.mean([
-                frame.mean() @ chosen.loc[f].value_counts(normalize=True).reindex(ACTIONS, fill_value=0)
-                for f, frame in ((f, costs.xs(f)) for f in costs.index.get_level_values("family").unique())
-            ])
+            within_loss = np.mean(
+                [
+                    frame.mean()
+                    @ chosen.loc[f]
+                    .value_counts(normalize=True)
+                    .reindex(ACTIONS, fill_value=0)
+                    for f, frame in (
+                        (f, costs.xs(f))
+                        for f in costs.index.get_level_values("family").unique()
+                    )
+                ]
+            )
             rec = mix.loc[name, method]
-            equal([rec.actual, rec.expected_random, rec.delta_actual_minus_random,
-                   rec.expected_within_family_random, rec.delta_actual_minus_within_family_random],
-                  [avg[method], random_loss, avg[method] - random_loss, within_loss, avg[method] - within_loss])
+            equal(
+                [
+                    rec.actual,
+                    rec.expected_random,
+                    rec.delta_actual_minus_random,
+                    rec.expected_within_family_random,
+                    rec.delta_actual_minus_within_family_random,
+                ],
+                [
+                    avg[method],
+                    random_loss,
+                    avg[method] - random_loss,
+                    within_loss,
+                    avg[method] - within_loss,
+                ],
+            )
     assert checked == len(contrasts)
     return checked, checks
 
@@ -385,27 +592,54 @@ def verify_lock(r, checks):
     for name, h in lock["sha256"].items():
         assert sha256((OUT / name).read_bytes()).hexdigest() == h
     files = [OUT / "r1-policy.json"] + ([HERE / "selection.json"] if r == 3 else [])
-    git_root = Path(subprocess.check_output(["git", "rev-parse", "--show-toplevel"], cwd=HERE, text=True).strip())
+    git_root = Path(
+        subprocess.check_output(
+            ["git", "rev-parse", "--show-toplevel"], cwd=HERE, text=True
+        ).strip()
+    )
     commits = {}
     for file in files:
         path = file.relative_to(git_root)
-        commit = subprocess.check_output(["git", "log", "-1", "--format=%H", "--diff-filter=A", "--", str(path)],
-                                         cwd=git_root, text=True).strip()
+        commit = subprocess.check_output(
+            ["git", "log", "-1", "--format=%H", "--diff-filter=A", "--", str(path)],
+            cwd=git_root,
+            text=True,
+        ).strip()
         assert commit
-        blob = subprocess.check_output(["git", "show", f"{commit}:{path}"], cwd=git_root)
+        blob = subprocess.check_output(
+            ["git", "show", f"{commit}:{path}"], cwd=git_root
+        )
         assert blob == file.read_bytes()
-        next_score = OUT / ("r2-scores.csv" if file == OUT / "r1-policy.json" else "r3-scores.csv")
-        assert subprocess.run(["git", "cat-file", "-e", f"{commit}:{next_score.relative_to(git_root)}"],
-                              cwd=git_root, capture_output=True).returncode != 0
+        next_score = OUT / (
+            "r2-scores.csv" if file == OUT / "r1-policy.json" else "r3-scores.csv"
+        )
+        assert (
+            subprocess.run(
+                [
+                    "git",
+                    "cat-file",
+                    "-e",
+                    f"{commit}:{next_score.relative_to(git_root)}",
+                ],
+                cwd=git_root,
+                capture_output=True,
+            ).returncode
+            != 0
+        )
         commits[file.name] = commit
     result = {"chosen_on_r2_trained24": lock["chosen"], "frozen_input_commits": commits}
     if r == 3:
         confirm = json.loads((OUT / "confirmation.json").read_text())
         chosen = lock["chosen"]
         passes = [checks[g, chosen][2] < 0 for g in ("standard", "heldout6")]
-        passes.append(checks["scene16", chosen][2] <= .005)
-        assert confirm["chosen"] == chosen and confirm["generalization_pass"] == all(passes)
-        assert [confirm[k] for k in ("standard_pass", "heldout_pass", "scene16_within_limit")] == passes
+        passes.append(checks["scene16", chosen][2] <= 0.005)
+        assert confirm["chosen"] == chosen and confirm["generalization_pass"] == all(
+            passes
+        )
+        assert [
+            confirm[k]
+            for k in ("standard_pass", "heldout_pass", "scene16_within_limit")
+        ] == passes
         for g, rec in confirm["changes_vs_constant"].items():
             equal([rec["delta"], rec["lo"], rec["hi"]], checks[g, chosen])
         result["generalization_pass"] = all(passes)
@@ -421,8 +655,13 @@ def main():
         policy = verify_policy()
         result = check_banks(r, policy)
         num_contrasts, checks = check_summaries(r)
-        result.update(round=r, independent_paired_brier_intervals=num_contrasts,
-                      verified_policy_training_banks=96, verified_policy_training_families=24)
+        result.update(
+            round=r,
+            independent_paired_brier_intervals=num_contrasts,
+            verified_policy_training_banks=96,
+            verified_policy_training_families=24,
+            verified_leave_family_out_fits=24,
+        )
         if r >= 2:
             result.update(verify_lock(r, checks))
     result["verification_seconds"] = perf_counter() - start

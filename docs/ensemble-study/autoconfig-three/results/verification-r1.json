@@ -1,0 +1,14 @@
+{
+  "counts": {
+    "banks": 216,
+    "source_only_guarded_rule_replays": 8,
+    "routed_hash_pairs": 0,
+    "independently_refitted_cheap_controls": 648
+  },
+  "round": 1,
+  "independent_paired_brier_intervals": 476,
+  "verified_policy_training_banks": 96,
+  "verified_policy_training_families": 24,
+  "verified_leave_family_out_fits": 24,
+  "verification_seconds": 5.436368681999738
+}

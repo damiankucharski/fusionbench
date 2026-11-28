@@ -40,6 +40,8 @@ def draw():
     choices = pd.read_csv(OUT / "r3-scores.csv", usecols=["method", "action"])
     (comparator,) = choices.loc[choices.method == "constant", "action"].unique()
     label = {"tree_rule": "Fingerprint rule", "cv_rule": "Cross-validated rule"}[chosen]
+    other = "cv_rule" if chosen == "tree_rule" else "tree_rule"
+    other_label = "cross-validated" if other == "cv_rule" else "fingerprint"
     fig = plt.figure(figsize=(13.4, 10.4))
     gs = fig.add_gridspec(
         2,
@@ -54,10 +56,14 @@ def draw():
         bottom=0.13,
     )
     ax = fig.add_subplot(gs[:, 0])
-    family = families[families.method == chosen].sort_values("delta_constant")
+    family = (
+        families.pivot(index="family", columns="method", values="delta_constant")
+        .sort_values([chosen, other])
+        .reset_index()
+    )
     from summarize_auto import HELDOUT
 
-    vals = family.delta_constant.to_numpy()
+    vals = family[chosen].to_numpy()
     face = [GREEN if v < -1e-12 else RED if v > 1e-12 else GREY for v in vals]
     ix = np.arange(len(family))
     ax.barh(ix, vals, color=face, height=0.61)
@@ -68,6 +74,15 @@ def draw():
         color=GREY,
         zorder=4,
     )
+    ax.scatter(
+        family[other],
+        ix,
+        s=20,
+        facecolors="none",
+        edgecolors=DARK,
+        linewidths=0.8,
+        zorder=5,
+    )
     ax.set_yticks(
         ix, [n + (" *" if n in HELDOUT else "") for n in family.family], fontsize=8.5
     )
@@ -76,23 +91,33 @@ def draw():
     ax.axvline(0, lw=0.9, color=DARK)
     ax.set_title("Changes by scenario", loc="left", size=14, pad=16)
     ax = fig.add_subplot(gs[0, 1])
-    c = diff[
-        (diff.method == chosen)
-        & (diff.reference == "constant")
-        & (diff.metric == "brier")
-    ].set_index("group")
+    c = diff[(diff.reference == "constant") & (diff.metric == "brier")].set_index(
+        ["group", "method"]
+    )
     for i, g in enumerate(GROUPS):
-        lo, mean, hi = c.loc[g, ["lo", "delta", "hi"]]
-        col = GREEN if mean < -1e-12 else RED if mean > 1e-12 else GREY
-        ax.hlines(i, lo, hi, color=col, lw=2)
-        ax.scatter(mean, i, color=col, s=27, zorder=3)
+        for rule, y in ((chosen, i - 0.12), (other, i + 0.12)):
+            lo, mean, hi = c.loc[(g, rule), ["lo", "delta", "hi"]]
+            col = (
+                (GREEN if mean < -1e-12 else RED if mean > 1e-12 else GREY)
+                if rule == chosen
+                else DARK
+            )
+            ax.hlines(y, lo, hi, color=col, lw=1.5)
+            ax.scatter(
+                mean,
+                y,
+                edgecolors=col,
+                facecolors=col if rule == chosen else "white",
+                s=24,
+                zorder=3,
+            )
     ax.axvline(0, lw=0.9, color=DARK)
     ax.set_yticks(np.arange(len(GROUPS)), list(GROUPS.values()), fontsize=9)
     ax.set_ylim(len(GROUPS) - 0.4, -0.6)
     ax.set_title("Paired changes and 95% intervals", loc="left", size=14, pad=16)
     ax.set_xlabel("Change in held-out Brier")
     ax = fig.add_subplot(gs[1, 1])
-    frequencies = counts[counts.method == chosen].pivot(
+    frequencies = counts[counts.method == "cv_rule"].pivot(
         index="group", columns="action", values="fraction"
     )
     yy = np.arange(len(GROUPS))
@@ -106,7 +131,7 @@ def draw():
     ax.xaxis.set_major_formatter(PercentFormatter(xmax=1, decimals=0))
     ax.set_yticks(yy, list(GROUPS.values()), fontsize=9)
     ax.invert_yaxis()
-    ax.set_title("Which action was selected?", loc="left", size=14, pad=16)
+    ax.set_title("Cross-validated configuration choices", loc="left", size=14, pad=16)
     ax.legend(
         ncol=3,
         loc="lower center",
@@ -132,7 +157,7 @@ def draw():
     fig.text(
         0.045,
         0.911,
-        f"{label} versus fixed {ACTIONS[comparator][0].lower()} on fresh round-three banks. Lower Brier is better.",
+        f"Filled marks show the selected {label.lower()} versus fixed {ACTIONS[comparator][0].lower()}. Open circles show the {other_label} alternative. Lower Brier is better.",
         size=12,
         color=DARK,
     )

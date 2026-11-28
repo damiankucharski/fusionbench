@@ -1,0 +1,12 @@
+{
+  "chosen": "tree_rule",
+  "trained24_risks": {
+    "tree_rule": 0.274596192729796,
+    "cv_rule": 0.2748193426957995
+  },
+  "sha256": {
+    "r1-policy.json": "cc7dd3762b41a9b0a2597b4b585c7f6911ed0bcccbbb6a061946f74cee3efdb8",
+    "r2-scores.csv": "67dde1cbcabe5767653a06fd1bdd33915311b807cb26a2e0929e67feb397b672",
+    "r2-levels.csv": "3ba432cb27c5a17db8ba0de8189cded5bee31e36524514cbc18401688ec637f9"
+  }
+}

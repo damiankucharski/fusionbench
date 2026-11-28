@@ -1,0 +1,4 @@
+factor,feature,score_direction,balanced_accuracy,sensitivity,specificity,descriptive_auc,correct,cell_banks,independent_seeds
+h,quality_spread,1,0.6875,0.5625,0.8125,0.7841796875,44,64,8
+c,disagreement,-1,0.84375,0.8125,0.875,0.96484375,54,64,8
+s,local_complementarity,1,0.5,0.75,0.25,0.49755859375,32,64,8
