@@ -1,0 +1,17 @@
+family,method,role,evidence,flagged_banks,mean_direct_gain,mean_routing_gain,mean_strength
+mixed,adaptive,shortcut,both,1,0.09640686035156243,0.025781250000000006,0.0
+mixed,adaptive,shortcut,direct_only,11,0.06332857998934652,-0.0008522727272727272,0.25
+mixed,half,shortcut,both,1,0.09640686035156243,0.025781250000000006,0.5
+mixed,half,shortcut,direct_only,11,0.06332857998934652,-0.0008522727272727272,0.5
+mixed,hard,shortcut,both,1,0.09640686035156243,0.025781250000000006,1.0
+mixed,hard,shortcut,direct_only,11,0.06332857998934652,-0.0008522727272727272,1.0
+mixed,protect,shortcut,both,1,0.09640686035156243,0.025781250000000006,0.0
+mixed,protect,shortcut,direct_only,11,0.06332857998934652,-0.0008522727272727272,0.0
+mixed,shuffled_evidence,shortcut,neither,10,-0.1722335815429689,-0.005625000000000001,0.75
+mixed,shuffled_evidence,shortcut,routing_only,2,-0.16575592041015635,0.023437500000000003,0.0
+reversed,adaptive,shortcut,direct_only,12,0.06608510335286451,0.003515625000000001,0.25
+reversed,half,shortcut,direct_only,12,0.06608510335286451,0.003515625000000001,0.5
+reversed,hard,shortcut,direct_only,12,0.06608510335286451,0.003515625000000001,1.0
+reversed,protect,shortcut,direct_only,12,0.06608510335286451,0.003515625000000001,0.0
+reversed,shuffled_evidence,shortcut,neither,11,-0.1740543434836649,-0.0012784090909090916,0.75
+reversed,shuffled_evidence,shortcut,routing_only,1,-0.13924987792968763,0.09375000000000001,0.0

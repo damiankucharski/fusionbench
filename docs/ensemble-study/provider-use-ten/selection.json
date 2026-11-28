@@ -1,0 +1,19 @@
+{
+  "chosen": "protect",
+  "mixed_max_regret": {
+    "protect": 0.0861906729239207,
+    "adaptive": 0.09574562902058498,
+    "half": 0.10892520820589773
+  },
+  "standard_delta_native": {
+    "protect": 4.2958842879070594e-05,
+    "adaptive": -0.0009778031370210822,
+    "half": 0.0024679647129215417
+  },
+  "eligible": [
+    "protect",
+    "adaptive",
+    "half"
+  ],
+  "r09_sha256": "1b770bbc9f2c23d414a894ad0550eb3f7b76682677af083125f487c3aa9d4ed1"
+}
