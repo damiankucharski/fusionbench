@@ -12,6 +12,14 @@ When known, the clean-domain posterior supplies a performance reference for prob
 
 The default IID interface uses 50,000 fit and 50,000 test rows sampled at the same parameters. Ranking agreement is an empirical question even under this matched design. The transfer protocol can vary development labels, provider outputs and, where specified, the test generator. These are distinct evaluations of the same scenario framework.
 
+## Which comparisons should carry into a benchmark paper?
+
+A fusion benchmark serves different research questions. A planted XOR or threshold rule lets us ask whether a method can learn a specified operation. Across-site changes in provider reliability, repeated observations from the same scene and a small number of independent scenes let us study transfer or variance. Success on a planted rule establishes a capability. Estimating performance in a specific deployment also requires evidence about which mechanisms occur there, how often they occur and how costly errors are.
+
+Keep the uniform-over-scenarios summary for continuity. Publish the per-scenario results and prespecified mechanism groups alongside it. Adding more variations of one planted rule increases its share of a uniform scenario average even if an application gives that rule the same importance as before. A researcher can freeze a subset, allocate total weights to groups, or declare individual scenario weights before evaluating a method. The same data and forecasts can then answer several well-defined questions. For every reported profile, record the suite and taxonomy versions, generator settings, weights, data seeds and reference methods. A claim about a deployment additionally needs validation on representative external predictions.
+
+The public **mechanisms-v1** taxonomy covers all 30 **standard-v6** scenarios. Primary groups form a partition. The overlapping purpose tags distinguish capability probes, operational stress cases and references. [Membership, scoring examples and selection API](docs/site/mechanism-groups.md) · [Paired OKAPI case study](docs/ensemble-study/conditional-ten/README.md)
+
 ## Initial scenario taxonomy
 
 - **Conditionally independent** (logit-sum optimal → logistic stacker near-oracle):

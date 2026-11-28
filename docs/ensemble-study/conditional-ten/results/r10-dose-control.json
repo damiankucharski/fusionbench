@@ -1,0 +1,28 @@
+{
+  "unique_missing_fits": 80,
+  "source_reuse": {
+    "registered_half": 134,
+    "new_fit": 80,
+    "registered_uniform": 2
+  },
+  "reference_fits": [
+    {
+      "family": "mixed",
+      "seed": 1150100,
+      "method": "native",
+      "world_forecasts_checked": 4,
+      "fit_hash": "b98778b766ec19a0ff747a7f1a41a850cc9597e6724817c404a3c7be10d39cab"
+    },
+    {
+      "family": "mixed",
+      "seed": 1150100,
+      "method": "half",
+      "world_forecasts_checked": 4,
+      "fit_hash": "6396a9056fd5cbc6b94b69d17d1cf551b1e3b3a6b124fe5d793537a0a594d01b"
+    }
+  ],
+  "round": 10,
+  "sources": 216,
+  "worlds_per_source": 4,
+  "seconds": 35.48802393999358
+}

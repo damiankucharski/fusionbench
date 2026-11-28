@@ -1,0 +1,89 @@
+{
+  "chosen": "replicated",
+  "r09_sha256": "33a338145388c7d4a537f8b090c5db6ece5e64144a50653d19310a5453003ae0",
+  "checks": {
+    "mixed/max_regret": {
+      "delta": -0.016741450357147716,
+      "lo": -0.029315703105805474,
+      "hi": -0.002662989615629234,
+      "upper_limit": 0.0,
+      "passed": true
+    },
+    "standard": {
+      "delta": 0.00019644194327919656,
+      "lo": -0.00020976816237562758,
+      "hi": 0.000611343496896663,
+      "upper_limit": 0.005,
+      "passed": true
+    },
+    "case_mix/specialist80": {
+      "delta": 0.0,
+      "lo": 0.0,
+      "hi": 0.0,
+      "upper_limit": 0.01,
+      "passed": true
+    },
+    "mixed/s0": {
+      "delta": 0.008706630829331914,
+      "lo": -0.004858335526120964,
+      "hi": 0.02172311085757863,
+      "upper_limit": 0.01,
+      "passed": false
+    }
+  },
+  "primary_pass": true,
+  "all_guardrails_pass": false,
+  "all_pass": false,
+  "secondary_vs_guarded": {
+    "cluster/evidence_calibration": {
+      "delta": -0.00043866512292950596,
+      "lo": -0.0020143019934555657,
+      "hi": 0.001121298981700931
+    },
+    "cluster/pool_selection": {
+      "delta": -0.0018845406157735004,
+      "lo": -0.005988873013970507,
+      "hi": 0.0022601360305603436
+    },
+    "cluster/error_dependence": {
+      "delta": -0.00012310841847108211,
+      "lo": -0.0006769851378437367,
+      "hi": 0.00033911606728063005
+    },
+    "cluster/structured_rules": {
+      "delta": -0.012337891633774736,
+      "lo": -0.02202318718278738,
+      "hi": -0.005303050084940574
+    },
+    "cluster/context_routing": {
+      "delta": -0.00032590539293052626,
+      "lo": -0.0009777161787915788,
+      "hi": 0.0
+    },
+    "cluster/transfer_shift": {
+      "delta": 0.0,
+      "lo": 0.0,
+      "hi": 0.0
+    },
+    "cluster/grouped_sampling": {
+      "delta": -0.0007788975425338366,
+      "lo": -0.002786445586299386,
+      "hi": 0.0012184839879155853
+    },
+    "case_mix/specialist80": {
+      "delta": -0.0019481508426710307,
+      "lo": -0.009466100231151754,
+      "hi": 0.005127788393262086
+    },
+    "case_mix/max_regret": {
+      "delta": -0.003215622437686436,
+      "lo": -0.01109682568577211,
+      "hi": 0.004796305579968206
+    },
+    "mixed/max_regret": {
+      "delta": 0.0,
+      "lo": 0.0,
+      "hi": 0.0
+    }
+  }
+}

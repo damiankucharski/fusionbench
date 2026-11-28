@@ -1,0 +1,25 @@
+{
+  "taxonomy_version": "mechanisms-v1",
+  "preset": "standard-v6",
+  "families": 30,
+  "seeds_per_family": 8,
+  "method_count": 8,
+  "aggregates_checked": [
+    "standard",
+    "equal_cluster",
+    "multi_site",
+    "rule_design",
+    "cluster/evidence_calibration",
+    "cluster/pool_selection",
+    "cluster/error_dependence",
+    "cluster/structured_rules",
+    "cluster/context_routing",
+    "cluster/transfer_shift",
+    "cluster/grouped_sampling",
+    "purpose/capability_probe",
+    "purpose/operational_stress",
+    "purpose/reference"
+  ],
+  "absolute_risks_checked": 112,
+  "max_abs_error": 1.1102230246251565e-16
+}

@@ -1,0 +1,20 @@
+{
+  "round": 10,
+  "score_rows": 8832,
+  "target_conditions": 1104,
+  "uniform_native_hash_pairs": 2627,
+  "independent_source_decisions": 2280,
+  "source_banks": 456,
+  "native_forecast_hash_pairs": 25,
+  "native_source_refits": 6,
+  "cheap_reference_risks": 15,
+  "source_only_api_replays": 8,
+  "grouped_diagnostic_samples": 24,
+  "paired_intervals": 156,
+  "standard_families": 30,
+  "disjoint_mechanism_groups": 7,
+  "application_profiles": 2,
+  "chosen_in_r9": "replicated",
+  "selection_commit": "a3162f736ee9a8e8310fdb7f62014a0935725f67",
+  "all_pass": false
+}
