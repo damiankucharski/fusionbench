@@ -1,0 +1,8 @@
+family,method,role,evidence,flagged_banks,mean_direct_gain,mean_routing_gain,mean_strength
+mixed,adaptive,shortcut,direct_only,6,0.06068857828776034,0.0007812500000000002,0.25
+mixed,half,shortcut,direct_only,6,0.06068857828776034,0.0007812500000000002,0.5
+mixed,half_d2,shortcut,direct_only,6,0.06068857828776034,0.0007812500000000002,0.5
+mixed,half_d32,shortcut,direct_only,6,0.06068857828776034,0.0007812500000000002,0.5
+mixed,hard,shortcut,direct_only,6,0.06068857828776034,0.0007812500000000002,1.0
+mixed,protect,shortcut,direct_only,6,0.06068857828776034,0.0007812500000000002,0.0
+mixed,shuffled_evidence,shortcut,neither,6,-0.1735704549153647,0.0027343750000000007,0.75

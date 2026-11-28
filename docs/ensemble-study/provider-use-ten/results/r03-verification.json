@@ -4,6 +4,8 @@
   "cheap_full_brier_replays": 15,
   "independent_focal_joint_rows": 64,
   "guarded_source_only_hash_pairs": 9,
+  "source_trace_decisions": 420,
+  "exact_minimax_regret": 0.03567674135239581,
   "round": 3,
   "score_rows": 1080,
   "audited_conditions": 120,

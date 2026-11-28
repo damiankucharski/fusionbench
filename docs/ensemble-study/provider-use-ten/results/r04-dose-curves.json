@@ -1,0 +1,42 @@
+{
+  "round": 4,
+  "cohort": "mixed",
+  "sources": 6,
+  "flagged_sources": 6,
+  "target_worlds": [
+    "s0",
+    "s50",
+    "s100",
+    "specialist80"
+  ],
+  "reconstruction_strengths": [
+    0,
+    0.5,
+    1
+  ],
+  "held_back_strengths": [
+    0.25,
+    0.75
+  ],
+  "checks_of_measured_quarter_losses": 48,
+  "largest_absolute_check_error": 3.885780586188048e-16,
+  "strength_zero_minimizers": 6,
+  "interior_minimizers": 0,
+  "strength_one_minimizers": 0,
+  "mean_native_max_regret": 0.08028201339226493,
+  "mean_optimal_max_regret": 0.08028201339226493,
+  "mean_gain_over_native": 0.0,
+  "population_minimax_regret": 0.03567674135239582,
+  "mean_excess_over_population_minimax": 0.04460527203986911,
+  "s100_binding_at_zero": 6,
+  "s100_binding_with_positive_slope_at_zero": 6,
+  "s100_slope_range_at_zero": [
+    0.02827250171393747,
+    0.06014103697121431
+  ],
+  "s0_slope_range_at_zero": [
+    -0.07539944676913601,
+    -0.011815211777847168
+  ],
+  "interpretation": "In every fitted source the active-shortcut endpoint sets the larger Bayes-relative loss at zero attenuation. The loss at that endpoint increases immediately as attenuation increases. Its convexity then makes zero the optimum for the whole interval. The population minimax predictor can change each report pattern independently; the attainable dose curve is restricted to one line from the fitted native predictor."
+}

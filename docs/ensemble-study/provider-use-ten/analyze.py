@@ -62,6 +62,16 @@ def check_input(raw, r):
         or raw[["test_hash", "fit_hash"]].isna().any().any()
     ):
         raise ValueError("Missing score or forecast identity")
+    identity = [
+        "source_x_hash",
+        "source_y_hash",
+        "test_x_hash",
+        "target_hash",
+        "n_fit",
+        "n_screen",
+    ]
+    if not raw.groupby(KEY)[identity].nunique().eq(1).all().all():
+        raise ValueError("Compared methods used different source or target data")
     standard = raw[raw.cohort == "standard"]
     focus = raw[raw.cohort == "focus"]
     gate = raw[raw.cohort == "gate_control"]

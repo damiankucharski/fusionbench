@@ -4,6 +4,7 @@ import argparse
 import gzip
 import json
 import subprocess
+from functools import lru_cache
 from hashlib import sha256
 from pathlib import Path
 from runpy import run_path
@@ -278,13 +279,19 @@ def layout(r, raw):
     return len(expected), len(raw.groupby(KEY))
 
 
+@lru_cache(maxsize=4)
+def paired_indices(r, families, seeds):
+    i = np.random.default_rng(93000 + r).integers(seeds, size=(10_000, families, seeds))
+    i += (np.arange(families) * seeds)[None, :, None]
+    return i
+
+
 def paired(frame, r, method, reference):
     frame = frame.sort_index()
     d = (frame[method] - frame[reference]).to_numpy()
     f = len(frame.index.unique("family"))
     n = len(d) // f
-    i = np.random.default_rng(93000 + r).integers(n, size=(10_000, f, n))
-    i += (np.arange(f) * n)[None, :, None]
+    i = paired_indices(r, f, n)
     return [d.mean(), *np.quantile(d[i].mean(axis=(1, 2)), [0.025, 0.975])]
 
 
