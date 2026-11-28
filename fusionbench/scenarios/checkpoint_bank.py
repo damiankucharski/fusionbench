@@ -14,6 +14,8 @@ sqrt(1 - 0.65**2) times an independent standard Gaussian innovation. All
 noise families and label uniforms are independent of each other and of S,E.
 Sharing S, U, and H across the eight rows of a scene creates within-scene
 dependence. Distinct scenes are independent conditional on the bank's order.
+The scene pool can change the fraction of provider error variance shared by
+rows within a scene while preserving the one-row joint law of all checkpoints.
 
 Each provider gets one uniformly random permutation of eight latent times.
 It is held fixed across all rows and blocks in the bank. Thus released
@@ -43,7 +45,7 @@ choice.
 from __future__ import annotations
 
 from dataclasses import dataclass
-from numbers import Integral
+from numbers import Integral, Real
 
 import numpy as np
 from numpy.typing import NDArray
@@ -88,7 +90,7 @@ def _sigmoid(x):
     return 1 / (1 + np.exp(-x))
 
 
-def _block(seed, block_id, n_scenes, offset, stride, order, signal_index):
+def _block(seed, block_id, n_scenes, offset, stride, order, signal_index, scales):
     rows = ROWS_PER_SCENE
     s = _rng(seed, block_id, 0).standard_normal((n_scenes, 1))
     e = _rng(seed, block_id, 1).standard_normal((n_scenes, rows))
@@ -99,7 +101,14 @@ def _block(seed, block_id, n_scenes, offset, stride, order, signal_index):
     v = _rng(seed, block_id, 4).standard_normal((n_scenes, rows, PROVIDERS, 1))
     h = _time_noise(_rng(seed, block_id, 5), (n_scenes, 1, PROVIDERS))
     j = _time_noise(_rng(seed, block_id, 6), (n_scenes, rows, PROVIDERS))
-    latent_logits = 1.3 * z[:, :, None, None] + 0.5 * u + 0.5 * v + 0.85 * h + 0.5 * j
+    static_scene, static_row, ar_scene, ar_row = scales
+    latent_logits = (
+        1.3 * z[:, :, None, None]
+        + static_scene * u
+        + static_row * v
+        + ar_scene * h
+        + ar_row * j
+    )
     p = _sigmoid(np.take_along_axis(latent_logits, order[None, None, :, :], axis=-1))
     if signal_index is not None:
         p[:, :, signal_index, :] = posterior[:, :, None]
@@ -123,15 +132,38 @@ def signal_provider_index(seed: int) -> int:
     return int(_rng(_checked_seed(seed), 0, 1).integers(PROVIDERS))
 
 
-def _generate_blocks(seed, law, specs):
+def _residual_scales(scene_error_share):
+    if scene_error_share is None:
+        return 0.5, 0.5, 0.85, 0.5
+    if (
+        isinstance(scene_error_share, (bool, np.bool_))
+        or not isinstance(scene_error_share, Real)
+        or not 0 <= scene_error_share <= 1
+    ):
+        raise ValueError("scene_error_share must be None or a real number in [0, 1]")
+    share = float(scene_error_share)
+    static_var = 0.5**2 + 0.5**2
+    ar_var = 0.85**2 + 0.5**2
+    return (
+        np.sqrt(static_var * share),
+        np.sqrt(static_var * (1 - share)),
+        np.sqrt(ar_var * share),
+        np.sqrt(ar_var * (1 - share)),
+    )
+
+
+def _generate_blocks(seed, law, specs, scene_error_share=None):
     seed = _checked_seed(seed)
     if law not in ("equal", "signal"):
         raise ValueError("law must be 'equal' or 'signal'")
     signal_index = signal_provider_index(seed) if law == "signal" else None
+    scales = _residual_scales(scene_error_share)
     rng = _rng(seed, 0, 0)
     order = np.stack([rng.permutation(CHECKPOINTS) for _ in range(PROVIDERS)])
     return {
-        name: _block(seed, block_id, n_scenes, offset, stride, order, signal_index)
+        name: _block(
+            seed, block_id, n_scenes, offset, stride, order, signal_index, scales
+        )
         for name, block_id, n_scenes, offset, stride in specs
     }
 
@@ -168,6 +200,7 @@ def generate_scene_pool(
     law: str = "equal",
     n_fit_scenes: int = 1536,
     n_audit_scenes: int = 512,
+    scene_error_share: float | None = None,
 ) -> dict[str, Block]:
     """Generate checkpoint-selection (A), fit (F) and audit (I) blocks.
 
@@ -178,6 +211,17 @@ def generate_scene_pool(
     Increasing a block extends its existing prefix. A and I use the same
     checkpoint and label streams as generate_checkpoint_bank for the same
     seed; I has its own ID range in this layout.
+
+    With scene_error_share=None, use the original residual coefficients
+    (.5, .5, .85, .5) for U, V, H and J. A numeric share s in [0, 1] assigns
+    fraction s of each component's variance to shared scene noise, and the
+    remainder to independent row noise. For any two latent checkpoint times
+    of one provider separated by d, the covariance of their residual logits
+    in the same row is C(d) = .5 + (.85**2 + .5**2) * .65**d. Across two rows
+    of the same scene it is s*C(d). The noise is Gaussian, so all numeric
+    shares and the historical setting have the same single-row joint law.
+    Changing s reuses the same primitive draws. The scene signal in z, true
+    posterior, label draws, and planted signal provider retain their values.
     """
     n_fit = _scene_count(n_fit_scenes, "n_fit_scenes")
     n_audit = _scene_count(n_audit_scenes, "n_audit_scenes")
@@ -185,6 +229,7 @@ def generate_scene_pool(
         seed,
         law,
         (("A", 1, 24, 0, 1), ("F", 4, n_fit, 24, 2), ("I", 3, n_audit, 25, 2)),
+        scene_error_share=scene_error_share,
     )
 
 

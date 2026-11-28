@@ -96,3 +96,9 @@ for scenes, rows_per_scene in [(24, 8), (192, 1), (192, 8), (1536, 1)]:
 ```
 
 The first two designs each contain 192 training rows. Comparing them estimates the effect of sharing scenes under this generator. The middle two designs contain exactly the same 192 scenes. Comparing them measures the value of adding seven observations per scene. For a new fusion method, use the same checkpoint choices and audit inputs across designs and estimate uncertainty over independently generated pool seeds. [Scene-count study](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/scene-count)
+
+### Vary the provider error shared by observations from one scene
+
+Use `generate_scene_pool(42, law="signal", scene_error_share=0.5)` to place half of each provider's residual variance at scene level. Values from zero to one preserve the distribution of the provider's checkpoint predictions for a single row. They change how much error persists across the other rows in the same scene. The scene's influence on the event probability remains present at zero. `None` uses the original coefficients, which allocate different shares to static errors and checkpoint-specific errors.
+
+For a paired experiment, use the same seed and freeze the selected checkpoint columns before changing the share. Compare training on one observation per scene with training on several observations from each scene. The variance of the difference in losses for a specific pair of rules can respond differently from the test loss of an adaptive fusion procedure. [Paired study and data](https://github.com/damiankucharski/fusionbench/tree/research/ensemble-mechanisms-stability/docs/ensemble-study/scene-dependence)
