@@ -563,6 +563,24 @@ def check_sample(r, raw, traces):
     return dict(totals), bayes
 
 
+def final_law_replay(raw, traces):
+    """Every final focal forecast is saved in canonical vote-pattern order."""
+    bits = np.indices((2, 2, 2, 2)).reshape(4, -1).T
+    x = np.stack((1 - bits, bits), axis=2)
+    targets = {
+        k: PRIOR["independent_joint"](x, np.arange(4), *settings)
+        for k, settings in WORLDS.items()
+    }
+    total = 0
+    for row in raw[raw.cohort == "focus"].itertuples():
+        trace = traces[(row.cohort, row.family, row.seed)]
+        prediction = np.array(trace["exact_forecasts"][row.method])
+        assert prediction.shape == (16, 2) and digest(prediction) == row.test_hash
+        close(PRIOR["brier"](prediction, None, targets[row.world]), row.brier)
+        total += 1
+    return total
+
+
 def population_audit():
     """Independently sum the joint over environment, observed cue, report, label."""
     cells = np.indices((2, 2, 2, 2)).reshape(4, -1).T
@@ -644,6 +662,7 @@ def main(r):
         rec.update(registered_outcome(r, panels, bayes))
     if r == 10:
         rec["analytic_source_policies"] = population_audit()
+        rec["all_final_focal_forecast_risks"] = final_law_replay(raw, traces)
     (OUT / f"r{r:02}-verification.json").write_text(
         json.dumps(rec, indent=2, allow_nan=False) + "\n"
     )
